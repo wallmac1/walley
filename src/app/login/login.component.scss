@@ -1,0 +1,52 @@
+.fullPage {
+    height: 80vh;
+    font-family: "Karla", sans-serif;
+    background-color: #002D5D;
+    min-width: 300px;
+}
+
+.loginCard {
+    max-width: 450px;
+}
+
+.cardHeader {
+    border-bottom: 1px solid lightgrey;
+}
+
+.customButton {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.customButton:hover {
+    color: white;
+    background-color: #002D5D;
+    border-color: #002D5D;
+}
+
+.error {
+    border: 1px solid #DC3545 !important;
+}
+
+.form-group {
+    position: relative;
+}
+
+#togglePassword {
+    position: absolute;
+    top: 70%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2;
+    /* Assicura che l'icona sia sopra l'input */
+}
+
+.form-control {
+    padding-right: 30px;
+    /* Aggiungi un padding per evitare che il testo dell'input sovrapponga l'icona */
+}
+
+.link {
+    font-size: small;
+}
