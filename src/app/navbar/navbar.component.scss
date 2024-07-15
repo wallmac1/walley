@@ -1,0 +1,103 @@
+.navbar {
+    background-color: #002D5D;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.toggler:hover {
+    cursor: pointer;
+}
+
+.navbarIcon,
+.navbarVoice {
+    color: white;
+}
+
+.navbarVoice {
+    font-size: medium;
+}
+
+.navbarElement {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.navbar-menu {
+    display: flex;
+    margin-left: auto;
+}
+
+.navbarElement {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.navbarIcon {
+    margin-right: 8px;
+}
+
+.navbarElement:hover {
+    cursor: pointer;
+}
+
+mat-sidenav-container {
+    height: 100%;
+}
+
+mat-sidenav {
+    min-width: 250px;
+    background-color: #002D5D;
+
+    @media screen and (min-width: 600px) {
+        padding-top: 4rem;
+    }
+
+}
+
+mat-nav-list {
+    padding: 0px;
+}
+
+mat-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+    height: 35px !important;
+}
+
+.menuItem3 {
+    height: 25px !important;
+}
+
+.menuVoice,
+.expand-icon {
+    color: white;
+}
+
+.menuItem:hover {
+
+    .menuVoice,
+    .expand-icon {
+        color: #b4d8ff;
+    }
+}
+
+.menuItem3:hover {
+    .menuVoice,
+    .expand-icon {
+        color: #b4d8ff;
+    }
+}
+
+.expand-icon {
+    padding-top: 7px;
+    padding-left: 3px;
+}

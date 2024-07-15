@@ -1,0 +1,67 @@
+<mat-toolbar class="navbar">
+    <div class="container-fluid d-flex align-items-center">
+        <div class="toggler" (click)="toggleMenu()">
+            <img src="assets/img/W_icon.png" style="width: 40px; height: auto;">
+        </div>
+        <div class="inputBar" style="margin-left: 30px; width: 300px;">
+            <input type="text" matInput class="form-control" [formControl]="inputForm" placeholder="Ricerca">
+        </div>
+
+        <div class="navbar-menu d-flex">
+            <div class="navbarElement d-flex align-items-center">
+                <i class="bi bi-house navbarIcon"></i>
+                <span class="navbarVoice">Home</span>
+            </div>
+            <div class="navbarElement d-flex align-items-center">
+                <i class="bi bi-calendar4 navbarIcon"></i>
+                <span class="navbarVoice">Agenda</span>
+            </div>
+            <div class="navbarElement d-flex align-items-center">
+                <i class="bi bi-bell navbarIcon"></i>
+                <span class="navbarVoice">Notifiche</span>
+            </div>
+            <div class="navbarElement d-flex align-items-center">
+                <i class="bi bi-person navbarIcon"></i>
+                <span class="navbarVoice">Profile</span>
+            </div>
+            <div class="d-none d-lg-flex align-items-center" style="margin-left: 20px;">
+                <img src="assets/img/logoWeco.png" style="height: 15px;">
+            </div>
+        </div>
+    </div>
+</mat-toolbar>
+
+
+
+<mat-sidenav-container autosize>
+    <mat-sidenav [opened]="isCollapsed" mode="side">
+        <mat-nav-list>
+            <ng-container *ngFor="let itemOne of menu">
+                <mat-list-item class="entry menuItem" (click)="toggleItem(itemOne)">
+                    <span class="menuVoice">{{ itemOne.name }}</span>
+                    <mat-icon *ngIf="itemOne.itemTwo.length > 0" class="expand-icon">{{ itemOne.isExpanded ?
+                        'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+                </mat-list-item>
+                <mat-nav-list class="entry" *ngIf="itemOne.isExpanded" style="margin-left: 20px;">
+                    <ng-container *ngFor="let itemTwo of itemOne.itemTwo">
+                        <mat-list-item class="menuItem" (click)="toggleItem(itemTwo)">
+                            <span class="menuVoice">{{ itemTwo.name }}</span>
+                            <mat-icon *ngIf="itemTwo.itemThree.length > 0" class="expand-icon">{{ itemTwo.isExpanded ?
+                                'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+                        </mat-list-item>
+                        <mat-nav-list class="entry" *ngIf="itemTwo.isExpanded" style="margin-left: 20px;">
+                            <ng-container *ngFor="let itemThree of itemTwo.itemThree">
+                                <mat-list-item class="menuItem3">
+                                    <span class="menuVoice">{{ itemThree.name }}</span>
+                                </mat-list-item>
+                            </ng-container>
+                        </mat-nav-list>
+                    </ng-container>
+                </mat-nav-list>
+            </ng-container>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <h2>Content</h2>
+    </mat-sidenav-content>
+</mat-sidenav-container>
