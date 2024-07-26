@@ -1,0 +1,20 @@
+//RADIO BUTTON
+
+// Stile di base per i radio button
+.btn-check + .btn {
+    border-color: #002D5D;
+    color: #002D5D;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+// Stile per il radio button attivo (selezionato)
+.btn-check:checked + .btn {
+    background-color: #002D5D;
+    color: white;
+}
+
+// FORM
+
+label {
+    font-weight: bold;
+}
