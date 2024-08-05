@@ -1,0 +1,17 @@
+.btn {
+    background-color: #fff;
+    border-color: #002D5D;
+    color: #002D5D;
+    margin-bottom: 24px;
+
+    &:hover {
+        background-color: #002D5D;
+        color: #fff;
+    }
+}
+
+.success {
+    min-height: 60px;
+    background-color: green;
+    color: #fff;
+}

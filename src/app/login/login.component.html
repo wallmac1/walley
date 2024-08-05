@@ -1,4 +1,4 @@
-<div class="container-fluid fullPage" style="min-width: 350px;">
+<div class="container-fluid fullPage" style="min-width: 350px; min-height: 85vh;">
   <div class="row p-2- p-md-3 p-lg-4 p-xl-5 justify-content-center align-items-center" style="height: 100%;">
     <div class="col-7 col-xxl-8 d-none d-lg-inline">
 
@@ -34,14 +34,20 @@
                 </div>
                 <div class="col-12 form-check form-switch mb-4">
                   <input class="form-check-input" type="checkbox" role="switch" id="rememberMe" formControlName="rememberMe" (change)="onSwitchChange()">
-                  <label class="form-check-label" for="rememberMe" style="font-size: small;">Ricordami</label>
+                  <label class="form-check-label" for="rememberMe" style="font-size: small;">Remember Me</label>
                 </div>
                 <div class="col-12 text-center">
-                  <button [class.disabled]="loginForm.invalid" class="btn btn-outline-primary customButton mb-4"
+                  <button [class.disabled]="loginForm.invalid" class="btn btn-outline-primary customButton mb-2"
                     (click)="login()">Login
                   </button>
                 </div>
               </form>
+            </div>
+
+            <div class="row justify-content-center align-items-center mb-2">
+              <div class="col-12 text-center">
+                <span class="link"><a href="recoverPassword" style="color: rgb(141, 135, 135);">Forgot Password?</a></span>
+              </div>
             </div>
 
             <div class="row justify-content-center align-items-center">
