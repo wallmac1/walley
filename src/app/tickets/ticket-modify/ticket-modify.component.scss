@@ -1,0 +1,45 @@
+// Ticket Title & Desctiption
+.ticketTitle {
+    margin-left: 1.7rem;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.ticketDescription {
+    font-size: medium;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.modifyIcon {
+    font-size: medium;
+    position: relative; 
+    top: -20px; 
+    left: 10px;
+}
+
+.modifySup:hover {
+    cursor: pointer;
+}
+
+// Mat-Tab Titles & Icons
+.title {
+    font-size: large;
+    font-weight: bold;
+}
+
+.titleIcon {
+    font-size: large;
+    margin-left: 1rem;
+}
+
+.mat-mdc-tab-group {
+    --mdc-tab-indicator-active-indicator-color: #002D5D;
+    --mat-tab-header-active-label-text-color: #002D5D;
+    --mat-tab-header-active-ripple-color: #002D5D;
+    --mat-tab-header-inactive-ripple-color: #002D5D;
+    --mat-tab-header-active-focus-label-text-color: #002D5D;
+    --mat-tab-header-active-hover-label-text-color: #002D5D;
+    --mat-tab-header-active-focus-indicator-color: #002D5D;
+    --mat-tab-header-active-hover-indicator-color: #002D5D; 
+}

@@ -1,22 +1,3 @@
-// RADIO BUTTON
-
-// Base style for radio button
-.btn-check+.btn {
-    border-color: #002D5D;
-    color: #002D5D;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.btn-check:hover+.btn:hover {
-    color: white;
-}
-
-// Style for the active radio button
-.btn-check:checked+.btn {
-    background-color: #002D5D;
-    color: white;
-}
-
 // FORM
 
 label {
@@ -41,6 +22,25 @@ label {
     border-color: #86b7fe;
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+// RADIO BUTTON
+
+// Base style for radio button
+.btn-check+.btn {
+    border-color: #002D5D;
+    color: #002D5D;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-check:hover+.btn:hover {
+    color: white;
+}
+
+// Style for the active radio button
+.btn-check:checked+.btn {
+    background-color: #002D5D;
+    color: white;
 }
 
 // Remove mat-select arrow and place the bootstrap one
@@ -79,10 +79,4 @@ label {
 .btn-outline-primary:hover {
     background-color: #002D5D;
     color: white;
-}
-
-// Textarea placeholder
-textarea::placeholder {
-    color: black;
-    opacity: 0.5;
 }

@@ -1,4 +1,5 @@
 export interface Client {
+    rifidanacliforprodati: number,
     id: number,
-    name: string,
+    denominazione: string,
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Client } from '../interfaces/client';
 import { Department } from '../interfaces/department';
@@ -9,6 +9,11 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
+import {MatSelect, MatSelectModule} from '@angular/material/select'; 
+import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
+import { map, Observable, startWith } from 'rxjs';
+import { Router } from '@angular/router';
+import { TicketsInfoService } from '../services/tickets-info.service';
 
 @Component({
   selector: 'app-ticket-new',
@@ -20,7 +25,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatLabel,
     MatOption,
     MatButtonModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSelectModule,
+    MatAutocompleteModule
   ],
   templateUrl: './ticket-new.component.html',
   styleUrl: './ticket-new.component.scss'
@@ -30,31 +37,14 @@ export class TicketNewComponent {
   today: Date = new Date();
   formattedDate: string = this.today.toISOString().split('T')[0];
 
-  clients: Client[] = [
-    { id: 1, name: 'Client A' },
-    { id: 2, name: 'Client B' }
-  ];
-
-  locations: Location[] = [
-    { id: 1, address: '123 Main St', number: '1A', city: 'City A' },
-    { id: 2, address: '456 Elm St', number: '2B', city: 'City B' }
-  ];
-
-  departments: Department[] = [
-    { id: 1, name: 'Department A' },
-    { id: 2, name: 'Department B' }
-  ];
-
-  profiles: Profile[] = [
-    { id: 1, nickname: 'Profile A' },
-    { id: 2, nickname: 'Profile B' }
-  ];
+  @ViewChild('select1') select1!: MatSelect;
+  @ViewChild('select2') select2!: MatSelect;
 
   ticketForm = new FormGroup({
     internal: new FormControl<number>(0, Validators.required),
-    date: new FormControl<string>(this.formattedDate), //Non modificabile
-    client: new FormControl<Client | null>(null, Validators.required),
-    location: new FormControl<Location | null>(null, Validators.required),
+    date_ticket: new FormControl<string>(this.formattedDate), //Non modificabile
+    client: new FormControl<Client | string>('', Validators.required),
+    location: new FormControl<Location | null>(null),
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null, Validators.required),
     department: new FormControl<Department[] | null>(null),
@@ -62,12 +52,40 @@ export class TicketNewComponent {
     keepinformed: new FormControl<Profile[] | null>(null)
   })
 
-  constructor() {
-    this.print()
+  //inputClient = new FormControl<string>('');
+
+  constructor(private router: Router, public ticketInfoService: TicketsInfoService) {
+    this.ticketForm.get("date_ticket")?.disable();
   }
 
   print() {
     console.log(this.ticketForm.getRawValue())
+  }
+
+  openSelect(id: number) {
+    if(id == 1) {
+      this.select1.open();
+    }
+    else if( id == 2) {
+      this.select2.open();
+    }
+  }
+
+  internalExternalLogic() {
+    const internal = this.ticketForm.get("internal")?.value;
+    if(internal == 1) {
+      this.ticketForm.get("client")?.setValue(null);
+      this.ticketForm.get("client")?.disable();
+      this.ticketForm.get("location")?.setValue(null);
+    }
+    else {
+      this.ticketForm.get("client")?.enable();
+    }
+  }
+
+  save() {
+    // SAVE THE TICKET, GET THE ID BACK AND NAVIGATE TO MODIFICATION PAGE
+    this.router.navigate(["modifyTicket"]);
   }
 
 }

@@ -1,1 +1,36 @@
-<p>ticket-modify works!</p>
+<div class="container-fluid p-1 p-sm-2 p-md-3 p-lg-4 p-xl-5">
+    <div class="row justify-content-center align-items-center mt-2 mb-4" style="position: relative;">
+        <div class="col-12 text-center">
+            <span class="ticketTitle">{{ticketGeneralForm.get("title")?.value}}</span>
+            <sup class="modifySup ms-2" (click)="modifyTitleDescription()"><i class="bi bi-pencil modifyIcon"></i></sup>
+        </div>
+        <div class="col-12 text-center mt-3">
+            <span class="ticketDescription">{{ticketGeneralForm.get("description")?.value}}</span>
+        </div>       
+    </div>
+
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span class="title">Ticket Info</span>
+                <i class="bi bi-info-circle titleIcon"></i>
+            </ng-template>
+            <ng-template matTabContent>
+                <app-ticket-info></app-ticket-info>
+            </ng-template>
+        </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span class="title">Works & Messages</span>
+                <i class="bi bi-chat-left-text titleIcon"></i>
+            </ng-template>
+            <ng-template matTabContent>
+                <app-ticket-timeline></app-ticket-timeline>
+            </ng-template>
+        </mat-tab>
+
+    </mat-tab-group>
+</div>
+
+  
