@@ -1,0 +1,179 @@
+<div *ngFor="let work of ticketWorks; let i = index" class="single-timeline-area">
+    <div class="timeline-date wow fadeInLeft d-none d-md-flex" data-wow-delay="0.1s"
+        style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+        <p class="text-center" style="font-weight: bold;">{{work.date}}</p>
+    </div>
+
+    <!-- Lavorazione -->
+    <div *ngIf="work.type == 0; else messageBlock" class="row">
+        <div class="col-12">
+            <div class="single-timeline-content d-flex wow fadeInLeft" data-wow-delay="0.3s"
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
+                <div [formGroup]="getWorkFormGroup(i)" class="timeline-text">
+
+                    <div class="row justify-content-end align-items-center mb-2">
+                        <div class="col-12 text-end">
+                            <span style="font-style: italic; font-size: small; color: gray;">Date and Time Creation:
+                                {{work.dateTime}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-evenly align-items-center">
+                        <div class="col-12 col-sm-6 col-lg-3 mt-2">
+                            <label for="user" class="form-label">User</label>
+                            <input type="text" class="form-control" formControlName="user" readonly>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-3 mt-2">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" class="form-control" formControlName="date">
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-3 mt-2">
+                            <label for="workTime" class="form-label">Work Time</label>
+                            <select type="text" class="form-select" formControlName="workTime">
+                                <option [value]="null" disabled>Select a working time</option>
+                                <option *ngFor="let workTime of time" [ngValue]="workTime">{{workTime}}</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-3 mt-2">
+                            <label for="price" class="form-label">Price</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" formControlName="price">
+                                <span class="input-group-text" id="basic-addon2">€</span>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea type="text" class="form-control" formControlName="description"
+                                rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <div *ngIf="work.attached.length > 0; else noAttachedBlock"
+                        class="row justify-content-center align-items-center mt-2">
+                        <div *ngFor="let picture of work.attached" class="col-2 mt-2 ms-4 me-4 text-center">
+                            <img *ngIf="isImage(picture); else documentBlock" class="attachedFile"
+                                src="assets/img/{{picture}}" [matTooltip]="picture">
+                            <i class="bi bi-trash"></i>
+                            <ng-template #documentBlock>
+                                <img class="attachedFile" src="assets/img/generic.png" [matTooltip]="picture">
+                            </ng-template>
+                        </div>
+                        <button class="btn btn-sm btn-primary" style="border-radius: 65%;"
+                            style="position: absolute; right: 40px; width: 32px;">
+                            +
+                        </button>
+                    </div>
+                    <ng-template #noAttachedBlock>
+                        <div class="row justify-content-center align-items-center mt-2">
+                            <div class="col-12 mt-1 text-center">
+                                <span>No Attached Files Available</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary" style="border-radius: 65%;"
+                                style="position: absolute; right: 40px; width: 32px;">
+                                +
+                            </button>
+                        </div>
+                    </ng-template>
+
+                    <div class="row justify-content-center align-items-center mt-2"
+                        style="border-top: 1px solid lightgray;">
+                        <div class="col-6 text-center">
+                            <button class="btn btn-sm btn-primary mt-3" style="width: 80px;" (click)="save(i)">
+                                Save
+                            </button>
+                        </div>
+                        <div class="col-6 text-center">
+                            <button class="btn btn-sm btn-primary mt-2" style="width: 80px;" (click)="reset(i)">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messaggio -->
+    <ng-template #messageBlock>
+        <div class="row">
+            <div class="col-12">
+                <div class="single-timeline-content d-flex wow fadeInLeft" data-wow-delay="0.3s"
+                    style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;"
+                    [ngStyle]="{ 'background-color': getCardBackgroundColor(i) }">
+                    <div [formGroup]="getWorkFormGroup(i)" class="timeline-text" style="width: 100%;">
+
+                        <div class="row justify-content-evenly align-items-center mb-2">
+                            <div class="col-6 text-start">
+                                <span style="font-style: italic; font-size: small; color: gray;">
+                                    Created By:
+                                    {{work.user.nickname}}
+                                </span>
+                            </div>
+
+                            <div class="col-6 text-end">
+                                <span style="font-style: italic; font-size: small; color: gray;">
+                                    Date and Time Creation:
+                                    {{work.dateTime}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-evenly align-items-center">
+                            <div class="col-12 mt-2">
+                                <input class="me-2" type="checkbox" id="public" formControlName="public">
+                                <label for="public" class="form-label">Public</label>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea type="text" class="form-control" formControlName="description"
+                                    rows="4"></textarea>
+                            </div>
+                        </div>
+
+                        <div *ngIf="work.attached.length > 0; else noAttachedBlock"
+                            class="row justify-content-center align-items-center mt-2">
+                            <div *ngFor="let picture of work.attached" class="col-2 mt-2 ms-4 me-4 text-center">
+                                <img *ngIf="isImage(picture); else documentBlock" class="attachedFile"
+                                    src="assets/img/{{picture}}" [matTooltip]="picture">
+                                <i class="bi bi-trash"></i>
+                                <ng-template #documentBlock>
+                                    <img class="attachedFile" src="assets/img/generic.png" [matTooltip]="picture">
+                                </ng-template>
+                            </div>
+                            <button class="btn btn-sm btn-primary" style="border-radius: 65%;"
+                                style="position: absolute; right: 40px; width: 32px;">
+                                +
+                            </button>
+                        </div>
+                        <ng-template #noAttachedBlock>
+                            <div class="row justify-content-center align-items-center mt-2">
+                                <div class="col-12 mt-1 text-center">
+                                    <span>No Attached Files Available</span>
+                                </div>
+                                <button class="btn btn-sm btn-primary" style="border-radius: 65%;"
+                                    style="position: absolute; right: 40px; width: 32px;">
+                                    +
+                                </button>
+                            </div>
+                        </ng-template>
+
+                        <div class="row justify-content-center align-items-center mt-2"
+                            style="border-top: 1px solid lightgray;">
+                            <div class="col-6 text-center">
+                                <button class="btn btn-sm btn-primary mt-3" style="width: 80px;" (click)="save(i)">
+                                    Save
+                                </button>
+                            </div>
+                            <div class="col-6 text-center">
+                                <button class="btn btn-sm btn-primary mt-2" style="width: 80px;" (click)="reset(i)">
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>

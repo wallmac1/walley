@@ -1,15 +1,15 @@
-<div class="container-fluid p-1 p-sm-2 p-md-3 p-lg-4 p-xl-5">
-    <div class="row justify-content-center align-items-center mt-2 mb-4" style="position: relative;">
+<div class="container-fluid mt-5 pt-4 p-lg-4 p-xl-5">
+    <div class="row justify-content-center align-items-center mt-2 mb-2" style="position: relative;">
         <div class="col-12 text-center">
             <span class="ticketTitle">{{ticketGeneralForm.get("title")?.value}}</span>
             <sup class="modifySup ms-2" (click)="modifyTitleDescription()"><i class="bi bi-pencil modifyIcon"></i></sup>
         </div>
         <div class="col-12 text-center mt-3">
             <span class="ticketDescription">{{ticketGeneralForm.get("description")?.value}}</span>
-        </div>       
+        </div>
     </div>
 
-    <mat-tab-group>
+    <mat-tab-group class="equal-width-tabs">
         <mat-tab>
             <ng-template mat-tab-label>
                 <span class="title">Ticket Info</span>
@@ -29,8 +29,19 @@
                 <app-ticket-timeline></app-ticket-timeline>
             </ng-template>
         </mat-tab>
-
     </mat-tab-group>
-</div>
+<!-- 
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="Short tab">
+            <div class="example-small-box mat-elevation-z4">
+                Small content
+            </div>
+        </mat-tab>
+        <mat-tab label="Long tab">
+            <div class="example-large-box mat-elevation-z4">
+                Large content
+            </div>
+        </mat-tab>
+    </mat-tab-group> -->
 
-  
+</div>

@@ -85,7 +85,7 @@ export class TicketNewComponent {
 
   save() {
     // SAVE THE TICKET, GET THE ID BACK AND NAVIGATE TO MODIFICATION PAGE
-    this.router.navigate(["modifyTicket"]);
+    this.router.navigate(["modifyTicket", 0]);
   }
 
 }

@@ -7,9 +7,8 @@ import { NewPasswordComponent } from './new-password/new-password.component';
 import { TicketModifyComponent } from './tickets/ticket-modify/ticket-modify.component';
 
 export const routes: Routes = [
-    { path: "", redirectTo: "home", pathMatch: "full" },
+    { path: "", redirectTo: "newTicket", pathMatch: "full" },
     { path: "login", component: LoginComponent },
-    { path: "home", component: NavbarComponent},
     { path: "newTicket", component: TicketNewComponent },
     { path: "recoverPassword", component: RecoverPasswordComponent },
     { path: "modifyTicket/:id", component: TicketModifyComponent },

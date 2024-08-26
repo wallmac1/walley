@@ -13,8 +13,8 @@
 
 .modifyIcon {
     font-size: medium;
-    position: relative; 
-    top: -20px; 
+    position: relative;
+    top: -20px;
     left: 10px;
 }
 
@@ -26,6 +26,7 @@
 .title {
     font-size: large;
     font-weight: bold;
+    width: 200px !important;
 }
 
 .titleIcon {
@@ -41,5 +42,6 @@
     --mat-tab-header-active-focus-label-text-color: #002D5D;
     --mat-tab-header-active-hover-label-text-color: #002D5D;
     --mat-tab-header-active-focus-indicator-color: #002D5D;
-    --mat-tab-header-active-hover-indicator-color: #002D5D; 
+    --mat-tab-header-active-hover-indicator-color: #002D5D;
 }
+
