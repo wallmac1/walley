@@ -1,6 +1,6 @@
-<form [formGroup]="ticketInfoForm" class="p-3">
+<form [formGroup]="ticketInfoForm" class="p-3 text-center">
     <div class="row justify-content-center align-items-center mt-4">
-        <div class="col-6 btn-group diagonal-divider" role="group"
+        <div class="col-12 col-md-6 btn-group diagonal-divider" role="group"
             aria-label="Basic radio toggle button group" (change)="internalExternalLogic()">
             <input type="radio" class="btn-check" id="internal" autocomplete="off" formControlName="internal"
                 [value]="1">

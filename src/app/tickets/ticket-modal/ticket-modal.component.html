@@ -1,5 +1,5 @@
-<!-- Modal -->
-<div class="container-fluid">
+<!-- Title Modal -->
+<div *ngIf="id == 0" class="container-fluid">
     <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
         <div class="col-12 text-center mt-2 mb-2">
             <span class="title">Edit Title and Description</span>
@@ -8,7 +8,7 @@
     
     <div mat-dialog-content>
         <div class="row justify-content-center align-items-center p-1">
-            <form [formGroup]="editForm">
+            <form [formGroup]="editTitleForm">
                 <div class="col-12 mt-2 mb-3">
                     <label for="title" class="mb-1" style="font-weight: bold;">Title</label>
                     <input id="title" type="text" class="form-control" formControlName="title">
@@ -27,6 +27,43 @@
             </div>
             <div class="col-4 text-start ms-2">
                 <button class="btn btn-outline-primary" color="primary" (click)="save()">Save</button>
+            </div>
+    </div>
+</div>
+
+<!-- Status Modal -->
+<div *ngIf="id == 1" class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
+        <div class="col-12 text-center mt-2 mb-2">
+            <span class="title">Edit Status</span>
+        </div>
+    </div>
+    
+    <div mat-dialog-content>
+        <div class="row justify-content-center align-items-center p-1">
+            <form [formGroup]="editStatusForm">
+                <div class="col-12 mt-2 mb-3">
+                    <label for="statusid" class="mb-1" style="font-weight: bold;">Status</label>
+                    <select id="statusid" class="form-select" formControlName="statusid" (change)="onStatusSelected()">
+                        <option *ngFor="let status of statusList" [ngValue]="status.id">{{status.name}}</option>
+                    </select>
+                </div>
+                <div class="col-12 mt-2 mb-2">
+                    <label for="substatusid" class="mb-1" style="font-weight: bold;">Substatus</label>
+                    <select id="substatusid" class="form-select" formControlName="substatusid">
+                        <option *ngFor="let substatus of substatusList" [ngValue]="substatus.id">{{substatus.name}}</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row justify-content-center align-items-center mt-2 mb-3">
+            <div class="col-4 text-end me-2">
+                <button class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
+            </div>
+            <div class="col-4 text-start ms-2">
+                <button class="btn btn-outline-primary" color="primary" (click)="save()" [disabled]="editStatusForm.invalid">Save</button>
             </div>
     </div>
 </div>

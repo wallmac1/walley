@@ -14,6 +14,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { Router } from '@angular/router';
 import { TicketsInfoService } from '../services/tickets-info.service';
+import { ConnectServerService } from '../../services/connect-server.service';
+import { Connect } from '../../classes/connect';
 
 @Component({
   selector: 'app-ticket-new',
@@ -54,7 +56,8 @@ export class TicketNewComponent {
 
   //inputClient = new FormControl<string>('');
 
-  constructor(private router: Router, public ticketInfoService: TicketsInfoService) {
+  constructor(private router: Router, public ticketInfoService: TicketsInfoService,
+    private connectServerService: ConnectServerService) {
     this.ticketForm.get("date_ticket")?.disable();
   }
 
@@ -83,9 +86,21 @@ export class TicketNewComponent {
     }
   }
 
+  setNewTicketOnServer() {
+    const obj_infoticket = this.ticketForm.getRawValue();
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/insertTicket', {obj_infoticket: obj_infoticket}).
+      subscribe((val: any) => {
+        console.log(val);
+        if (val) {
+          this.router.navigate(["modifyTicket", val]);
+          //console.log("Tickets", val.data.listTickets)
+        }
+      })
+  }
+
   save() {
     // SAVE THE TICKET, GET THE ID BACK AND NAVIGATE TO MODIFICATION PAGE
-    this.router.navigate(["modifyTicket", 0]);
+    this.setNewTicketOnServer();
   }
 
 }

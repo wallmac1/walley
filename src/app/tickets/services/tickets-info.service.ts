@@ -33,8 +33,8 @@ export class TicketsInfoService {
   ticketsList: Ticket[] = [
     {
         id: 1,
-        status: { id: 1, title: 'Open' },
-        subStatus: { id: 1, refStatusId: 1, title: 'Pending Approval' },
+        status: { id: 1, name: 'Open' },
+        subStatus: { id: 1, name: 'Pending Approval' },
         internal: 1,
         title: 'Preventivo nuovo sito web PFUT',
         description: 'Network is down in the main office.',
@@ -48,8 +48,8 @@ export class TicketsInfoService {
     },
     {
         id: 2,
-        status: { id: 2, title: 'In Progress' },
-        subStatus: { id: 2, refStatusId: 2, title: 'Work in Progress' },
+        status: { id: 2, name: 'In Progress' },
+        subStatus: { id: 2, name: 'Work in Progress' },
         internal: 0,
         title: 'Client Software Upgrade',
         description: 'Upgrade the software for the external client.',
@@ -63,8 +63,8 @@ export class TicketsInfoService {
     },
     {
         id: 3,
-        status: { id: 3, title: 'Closed' },
-        subStatus: { id: 3, refStatusId: 3, title: 'Resolved' },
+        status: { id: 3, name: 'Closed' },
+        subStatus: { id: 3, name: 'Resolved' },
         internal: 1,
         title: 'Update Security Policies',
         description: 'Update the security policies to comply with new regulations.',

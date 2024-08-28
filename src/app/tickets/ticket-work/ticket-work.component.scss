@@ -15,6 +15,7 @@ body {
     }
 }
 .single-timeline-area .timeline-date {
+    width: 120px;
     position: absolute;
     height: 100%;
     top: 0;
@@ -31,6 +32,7 @@ body {
     -ms-flex-pack: end;
     justify-content: flex-end;
     padding-right: 40px;
+    color: #949dc2;
 }
 .single-timeline-area .timeline-date::after {
     position: absolute;
@@ -64,7 +66,7 @@ body {
 .single-timeline-area .single-timeline-content {
     position: relative;
     z-index: 1;
-    padding: 5px 30px 25px;
+    padding: 5px 30px 10px;
     border-radius: 6px;
     margin-bottom: 15px;
     margin-top: 15px;
@@ -109,6 +111,7 @@ body {
 
 .form-label {
     font-weight: bold;
+    margin-bottom: 0;
 }
 
 .attachedFile {

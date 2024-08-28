@@ -3,7 +3,7 @@ import { Department } from "./department";
 import { Location } from "./location";
 import { Profile } from "./profile";
 import { Status } from "./status";
-import { SubStatus } from "./sub-status";
+import { SubStatus } from "./substatus";
 
 export interface Ticket {
     id: number;

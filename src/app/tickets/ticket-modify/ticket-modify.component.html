@@ -1,11 +1,56 @@
 <div class="container-fluid mt-5 pt-4 p-lg-4 p-xl-5">
     <div class="row justify-content-center align-items-center mt-2 mb-2" style="position: relative;">
-        <div class="col-12 text-center">
-            <span class="ticketTitle">{{ticketGeneralForm.get("title")?.value}}</span>
-            <sup class="modifySup ms-2" (click)="modifyTitleDescription()"><i class="bi bi-pencil modifyIcon"></i></sup>
+        <!-- Status Card -->
+        <div class="col-12 col-sm-6 col-lg-3 text-center order-2 order-lg-1 mt-4">
+            <div class="card text-center" style="border-color: #002D5D;">
+                <div class="card-header" style="background-color: #002D5D; color: white; position: relative; font-weight: bold;">
+                    <i class="bi bi-circle-fill mt-2 me-2" [ngStyle]="{ 'color': getBackgroundColor()}"
+                        style="position: absolute; left: 20%; top: 0; left: 20%;">
+                    </i>
+                    Status
+                    <sup class="modifySup ms-2" (click)="modifyPopup(1)" style="position: absolute; top: 70%;">
+                        <i class="bi bi-pencil modifyIcon" style="color: white;"></i>
+                    </sup>
+                </div>
+                <div class="card-body p-1">
+                    <p class="card-text" style="position: relative;">
+                        {{status.name}}<br>
+                        <span class="mt-2" style="font-size: small;">{{substatus.name}}</span><br>
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="col-12 text-center mt-3">
-            <span class="ticketDescription">{{ticketGeneralForm.get("description")?.value}}</span>
+
+        <!-- Title and Description -->
+        <div class="col-12 col-lg-6 text-center order-1 order-lg-2">
+            <div class="col-12 text-center">
+                <span class="ticketTitle">{{ticketGeneralForm.get("title")?.value}}</span>
+                <sup class="modifySup ms-2" (click)="modifyPopup(0)">
+                    <i class="bi bi-pencil modifyIcon"></i>
+                </sup>
+            </div>
+            <div class="col-12 text-center mt-3">
+                <span class="ticketDescription"
+                    style="font-size: small;">{{ticketGeneralForm.get("description")?.value}}</span>
+            </div>
+        </div>
+
+        <!-- Client Card -->
+        <div class="col-12 col-sm-6 col-lg-3 text-center order-3 mt-4">
+            <div class="card text-center" style="border-color: #002D5D;">
+                <div class="card-header" style="background-color: #002D5D; color: white; font-weight: bold;">
+                    Client
+                </div>
+                <div class="card-body p-1">
+                    <p class="card-text">
+                        <span *ngIf="internal; else externalBlock" class="mt-2">Internal</span>
+                        <ng-template #externalBlock>
+                            <span>{{client.name}}</span><br>
+                        </ng-template>
+                        <span>{{client.headquarter}}</span>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -30,7 +75,7 @@
             </ng-template>
         </mat-tab>
     </mat-tab-group>
-<!-- 
+    <!-- 
     <mat-tab-group dynamicHeight>
         <mat-tab label="Short tab">
             <div class="example-small-box mat-elevation-z4">

@@ -98,7 +98,7 @@
         <div class="row justify-content-center align-items-center mt-2">
             <!-- Submit button -->
             <div class="col-12 text-center">
-                <button type="submit" class="btn btn-outline-primary" (click)="save()" [disabled]="!ticketForm.valid">Submit</button>
+                <button type="submit" class="btn btn-outline-primary" (click)="save()" [disabled]="ticketForm.invalid">Submit</button>
             </div>
         </div>
     </form>

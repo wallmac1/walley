@@ -7,7 +7,7 @@ import { Profile } from '../interfaces/profile';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { TicketsInfoService } from '../services/tickets-info.service';
 import { Status } from '../interfaces/status';
-import { SubStatus } from '../interfaces/sub-status';
+import { SubStatus } from '../interfaces/substatus';
 import { Location } from '../interfaces/location';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { CommonModule } from '@angular/common';

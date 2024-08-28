@@ -18,11 +18,25 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class TicketWorkComponent {
 
+  ticketStatus = {
+    actualstatusid: null,
+    actualstatus: null,
+  }
+
   ticketWorks: Work[] = [];
-  time: any[] = [
-    "30 minuti", "1 ora", "1 ora e 30 minuti", "2 ore", "2 ore e 30 minuti", "3 ore", "3 ore e 30 minuti",
-    "4 ore", "4 ore e 30 minuti", "5 ore"
+  hours: string[] = [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
   ];
+  minutes: string[] = [
+    "00", "15", "30", "45"
+  ];
+
+  statusForm = new FormGroup({
+    nextstatus: new FormControl<number | null>(null, Validators.required),
+    actualsubstatus: new FormControl<number | null>(null, Validators.required),
+    user: new FormControl<string | null>(null, Validators.required),
+    dateTime: new FormControl<Date | null>(null, Validators.required)
+  })
 
   workFormArray: FormArray;
   fb = new FormBuilder()
@@ -34,14 +48,17 @@ export class TicketWorkComponent {
       const workGroup = this.fb.group({
         user: [work.user.nickname, Validators.required],
         date: [this.dateToISO(work.date!), Validators.required],
-        workTime: [work.worktime, Validators.required],
+        hours: [work.hours, Validators.required],
+        minutes: [work.minutes, Validators.required],
         description: [work.description, Validators.required],
         price: [work.price, Validators.required],
+        price_total: [work.price_total, Validators.required],
         attached: [work.attached, Validators.required],
         public: [work.public, Validators.required],
       });
       this.workFormArray.push(workGroup);
     });
+
   }
 
   getWorkFormGroup(index: number): FormGroup {
@@ -67,9 +84,27 @@ export class TicketWorkComponent {
   }
 
   getCardBackgroundColor(index: number): string {
-    // A questo punto, work dovrebbe essere un oggetto con un controllo `public`
     const isPublic = this.getWorkFormGroup(index).get('public')?.value;
-    return isPublic ? '#FFFFE0' : 'transparent'; // Giallo pastello, cambia se necessario
+    return isPublic ? '#f8ad77' : '#FED0AF';
+  }
+
+  getCardBackgroundColorStatus(index: number): string {
+    const actualStatus = this.ticketWorks[index].status?.actualid;
+    let selectedColor = "white"
+    if(actualStatus == 0) {           // Nuovo
+      selectedColor = "#99CFE7";
+    }
+    else if(actualStatus == 1) {      // Lavorazione
+      selectedColor = "#DAED93"
+    }
+    else if(actualStatus == 2) {      // Attesa
+      selectedColor = "#FFFFE0"
+    }
+    else if(actualStatus == 3) {      //Chiuso
+      selectedColor = "#ECD0DF"
+    }
+
+    return selectedColor;
   }
 
 

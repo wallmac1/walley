@@ -8,11 +8,34 @@ export class TicketWorksService {
 
   tickets: Work[] = [
     {
+      type: 2,
+      id: 20,
+      dateTime: "30/07/2024 alle 09:00",
+      description: "",
+      date: '29-07-2024',
+      user: {
+        id: 105,
+        nickname: 'Francesco Galli',
+      },
+      status: {
+        previousid: 0,
+        previous: "Working",
+        actualid: 3,
+        actual: "Closed"
+      },
+      substatus: {
+        id: 10,
+        actual: "Risolto"
+      },
+      attached: [],
+    },
+    {
       type: 0,
       id: 1,
       dateTime: "26/08/2024 alle 15:40",
       date: '24-08-2024',
-      worktime: "1 ora",
+      hours: "1",
+      minutes: "15",
       price: '200',
       user: {
         id: 101,
@@ -27,7 +50,8 @@ export class TicketWorksService {
       dateTime: "22/08/2024 alle 10:30",
       date: '20-08-2024',
       price: '150',
-      worktime: "2 ore",
+      hours: "2",
+      minutes: "30",
       user: {
         id: 102,
         nickname: 'Laura Bianchi',
@@ -40,7 +64,8 @@ export class TicketWorksService {
       id: 3,
       dateTime: "24/08/2024 alle 18:00",
       date: '10-08-2024',
-      worktime: "30 minuti",
+      hours: "5",
+      minutes: "00",
       price: '100',
       user: {
         id: 103,
@@ -54,7 +79,8 @@ export class TicketWorksService {
       id: 7,
       dateTime: "24/08/2024 alle 18:00",
       date: '09-08-2024',
-      worktime: "30 minuti",
+      hours: "7",
+      minutes: "45",
       price: '100',
       user: {
         id: 103,
@@ -65,11 +91,56 @@ export class TicketWorksService {
       description: 'Manutenzione e controllo della caldaia con sostituzione del filtro.'
     },
     {
+      type: 2,
+      id: 11,
+      dateTime: "30/07/2024 alle 09:00",
+      description: "",
+      date: '29-07-2024',
+      user: {
+        id: 105,
+        nickname: 'Francesco Galli',
+      },
+      status: {
+        previousid: 2,
+        previous: "Waiting",
+        actualid: 1,
+        actual: "Working"
+      },
+      substatus: {
+        id: 0,
+        actual: "Merce da Consegnare"
+      },
+      attached: [],
+    },
+    {
+      type: 2,
+      id: 12,
+      dateTime: "30/07/2024 alle 09:00",
+      description: "",
+      date: '29-07-2024',
+      user: {
+        id: 105,
+        nickname: 'Francesco Galli',
+      },
+      status: {
+        previousid: 1,
+        previous: "Working",
+        actualid: 2,
+        actual: "Waiting"
+      },
+      substatus: {
+        id: 2,
+        actual: "Richiesta Preventivo"
+      },
+      attached: [],
+    },
+    {
       type: 0,
       id: 4,
       dateTime: "06/08/2024 alle 15:40",
       date: '05-08-2024',
-      worktime: "1 ora e 30 minuti",
+      hours: "10",
+      minutes: "30",
       price: '80',
       user: {
         id: 104,
@@ -83,7 +154,8 @@ export class TicketWorksService {
       id: 5,
       dateTime: "30/07/2024 alle 09:10",
       date: '29-07-2024',
-      worktime: "5 ore",
+      hours: "5",
+      minutes: "15",
       price: '500',
       user: {
         id: 105,
@@ -91,6 +163,28 @@ export class TicketWorksService {
       },
       attached: ['example.pdf'],
       description: 'Ristrutturazione completa del bagno, inclusa sostituzione piastrelle e sanitari.'
+    },
+    {
+      type: 2,
+      id: 10,
+      dateTime: "30/07/2024 alle 09:00",
+      description: "",
+      date: '29-07-2024',
+      user: {
+        id: 105,
+        nickname: 'Francesco Galli',
+      },
+      status: {
+        previousid: 0,
+        previous: "New",
+        actualid: 1,
+        actual: "Working"
+      },
+      substatus: {
+        id: 0,
+        actual: "Merce da Consegnare"
+      },
+      attached: [],
     }
   ];
 
