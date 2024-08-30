@@ -115,11 +115,15 @@ body {
 }
 
 .attachedFile {
-    height: 80px;
-    width: 60px;
+    height: 70px;
+    width: 48px;
     overflow: hidden;
     object-fit: cover;
     border: 1px solid lightgray;
+}
+
+.attachedFile:hover {
+    cursor: pointer;
 }
 
 .btn-primary {

@@ -1,97 +1,102 @@
-<form [formGroup]="ticketInfoForm" class="p-3 text-center">
-    <div class="row justify-content-center align-items-center mt-4">
-        <div class="col-12 col-md-6 btn-group diagonal-divider" role="group"
-            aria-label="Basic radio toggle button group" (change)="internalExternalLogic()">
-            <input type="radio" class="btn-check" id="internal" autocomplete="off" formControlName="internal"
-                [value]="1">
-            <label class="btn btn-outline-primary" for="internal">Internal</label>
+<div style="max-width: 1100px; margin: 0 auto;">
+    <form [formGroup]="ticketInfoForm" class="p-3 text-center">
+        <div class="row justify-content-center align-items-center mt-3">
+            <div class="col-12 col-md-6 btn-group diagonal-divider" role="group"
+                aria-label="Basic radio toggle button group" (change)="internalExternalLogic()">
+                <input type="radio" class="btn-check" id="internal" autocomplete="off" formControlName="internal"
+                    [value]="1">
+                <label class="btn btn-outline-primary" for="internal">Internal</label>
 
-            <input type="radio" class="btn-check" id="external" autocomplete="off" formControlName="internal"
-                [value]="0">
-            <label class="btn btn-outline-primary" for="external">External</label>
-        </div>
-    </div>
-
-    <div class="row justify-content-center align-items-center mt-5">
-        <!-- Date field (read-only) -->
-        <div class="col-12 col-md-6 mb-3 mb-md-4">
-            <label for="date_ticket" class="form-label">Date</label>
-            <input type="text" id="date_ticket" class="form-control" formControlName="date_ticket" readonly>
-        </div>
-
-        <!-- Client field (visible only if "External" is selected) -->
-        <div class="col-12 col-md-6 mb-3 mb-md-4">
-            <label for="client" class="form-label">Client</label>
-            <sup>*</sup>
-            <input class="form-control" id="client" formControlName="client" [value]="clientDenomination">
-        </div>
-
-        <!-- Location field (visible only if "External" is selected) -->
-        <div class="col-12 col-md-6 mb-3 mb-md-4">
-            <label for="location" class="form-label">Location</label>
-            <select id="location" class="form-select" formControlName="location">
-                <option [ngValue]="null">No headquarter</option>
-                <option *ngFor="let location of ticketInfoService.locations" [ngValue]="location.id">{{location.city}},
-                    {{location.address}}</option>
-            </select>
-        </div>
-
-        <!-- Department field -->
-        <div class="col-12 col-md-6 mb-3 mb-md-4">
-            <label for="department" class="form-label">Department</label>
-            <div class="selection">
-                <mat-select #select1 formControlName="department" multiple>
-                    @for (department of ticketInfoService.departments; track ticketInfoService.departments) {
-                    <mat-option class="selectOptions" [value]="department.id">{{department.name}}</mat-option>
-                    }
-                </mat-select>
-                <i class="bi bi-chevron-down" (click)="openSelect(1)"></i>
+                <input type="radio" class="btn-check" id="external" autocomplete="off" formControlName="internal"
+                    [value]="0">
+                <label class="btn btn-outline-primary" for="external">External</label>
             </div>
         </div>
 
-        <!-- In charge field -->
-        <div class="col-12 col-md-6 mb-3 mb-md-4">
-            <label for="incharge" class="form-label">In Charge</label>
-            <select id="incharge" class="form-select" formControlName="incharge">
-                <option [ngValue]="null" disabled>Select a person</option>
-                <option *ngFor="let profile of ticketInfoService.profiles" [ngValue]="profile.id">{{profile.nickname}}</option>
-            </select>
-        </div>
+        <div class="row justify-content-center align-items-center mt-3">
+            <!-- Date field (read-only) -->
+            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
+                <label for="date_ticket" class="form-label" style="margin-bottom: 0.1rem !important;">Date</label>
+                <input type="text" id="date_ticket" class="form-control" formControlName="date_ticket" readonly>
+            </div>
 
-        <!-- Keep Informed field -->    
-        <div class="col-12 col-md-6 mb-3 mb-md-4">
-            <label for="keepinformed" class="form-label">Keep Informed</label><br>
-            <div class="selection">
-                <mat-select #select2 formControlName="keepinformed" multiple>
-                    @for (profile of ticketInfoService.profiles; track ticketInfoService.profiles) {
-                    <mat-option class="selectOptions" [value]="profile.id">{{profile.nickname}}</mat-option>
-                    }
-                </mat-select>
-                <i class="bi bi-chevron-down" (click)="openSelect(2)"></i>
+            <!-- Customer field (visible only if "External" is selected) -->
+            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
+                <label for="customer" class="form-label" style="margin-bottom: 0.1rem !important;">Customer</label>
+                <sup>*</sup>
+                <input class="form-control" id="customer" formControlName="customer" [value]="clientDenomination">
+            </div>
+
+            <!-- Location field (visible only if "External" is selected) -->
+            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
+                <label for="location" class="form-label" style="margin-bottom: 0.1rem !important;">Location</label>
+                <select id="location" class="form-select" formControlName="location">
+                    <option [ngValue]="null">No headquarter</option>
+                    <option *ngFor="let location of ticketInfoService.locations" [ngValue]="location.id">
+                        {{location.city}},
+                        {{location.address}}</option>
+                </select>
+            </div>
+
+            <!-- Department field -->
+            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
+                <label for="department" class="form-label" style="margin-bottom: 0.1rem !important;">Department</label>
+                <div class="selection">
+                    <mat-select #select1 formControlName="department" multiple>
+                        @for (department of ticketInfoService.departments; track ticketInfoService.departments) {
+                        <mat-option class="selectOptions" [value]="department.id">{{department.name}}</mat-option>
+                        }
+                    </mat-select>
+                    <i class="bi bi-chevron-down" (click)="openSelect(1)"></i>
+                </div>
+            </div>
+
+            <!-- In charge field -->
+            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
+                <label for="incharge" class="form-label" style="margin-bottom: 0.1rem !important;">In Charge</label>
+                <select id="incharge" class="form-select" formControlName="incharge">
+                    <option [ngValue]="null" disabled>Select a person</option>
+                    <option *ngFor="let user of ticketInfoService.users" [ngValue]="user.id">{{user.nickname}}</option>
+                </select>
+            </div>
+
+            <!-- Keep Informed field -->
+            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
+                <label for="keepinformed" class="form-label" style="margin-bottom: 0.1rem !important;">Keep Informed</label><br>
+                <div class="selection">
+                    <mat-select #select2 formControlName="keepinformed" multiple>
+                        @for (user of ticketInfoService.users; track ticketInfoService.users) {
+                        <mat-option class="selectOptions" [value]="user.id">{{user.nickname}}</mat-option>
+                        }
+                    </mat-select>
+                    <i class="bi bi-chevron-down" (click)="openSelect(2)"></i>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="col-12 mb-md-5 text-start" style="margin-bottom: 0.5rem !important;">
+                <label for="note" class="form-label" style="margin-bottom: 0.1rem !important;">Note</label><br>
+                <textarea id="note" class="form-control" formControlName="note" rows="3"
+                    placeholder="Write a temporary note"></textarea>
             </div>
         </div>
 
-        <!-- Notes -->    
-        <div class="col-12 mb-3 mb-md-5">
-            <label for="note" class="form-label">Note</label><br>
-            <textarea id="note" class="form-control" formControlName="note" 
-            rows="3" placeholder="Write a temporary note"></textarea>
+        <div *ngIf="!ticketInfoForm.valid" class="row justify-content-center align-items-center">
+            <div class="col-12 text-center">
+                <span style="font-style: italic; opacity: 0.7; font-size: small;">* Compile all the mandatory fields to
+                    enable ticket submission</span>
+            </div>
         </div>
-    </div>
 
-    <div *ngIf="!ticketInfoForm.valid" class="row justify-content-center align-items-center">
-        <div class="col-12 text-center">
-            <span style="font-style: italic; opacity: 0.7; font-size: small;">* Compile all the mandatory fields to enable ticket submission</span>
+        <div class="row justify-content-center align-items-center mt-1">
+            <!-- Submit & Refresh button -->
+            <div class="col-6 text-end">
+                <button type="submit" class="btn btn-outline-primary me-2" (click)="save()"
+                    [disabled]="!ticketInfoForm.valid">Submit</button>
+            </div>
+            <div class="col-6 text-start">
+                <button type="submit" class="btn btn-outline-primary ms-2" (click)="refresh()">Refresh</button>
+            </div>
         </div>
-    </div>
-
-    <div class="row justify-content-center align-items-center mt-1">
-        <!-- Submit & Refresh button -->
-        <div class="col-6 text-end">
-            <button type="submit" class="btn btn-outline-primary me-2" (click)="save()" [disabled]="!ticketInfoForm.valid">Submit</button>
-        </div>
-        <div class="col-6 text-start">
-            <button type="submit" class="btn btn-outline-primary ms-2" (click)="refresh()">Refresh</button>
-        </div>
-    </div>
-</form>
+    </form>
+</div>

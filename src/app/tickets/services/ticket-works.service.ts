@@ -10,7 +10,7 @@ export class TicketWorksService {
     {
       type: 2,
       id: 20,
-      dateTime: "30/07/2024 alle 09:00",
+      dateTime: "30/07/2024 09:00",
       description: "",
       date: '29-07-2024',
       user: {
@@ -32,7 +32,7 @@ export class TicketWorksService {
     {
       type: 0,
       id: 1,
-      dateTime: "26/08/2024 alle 15:40",
+      dateTime: "26/08/2024 15:40",
       date: '24-08-2024',
       hours: "1",
       minutes: "15",
@@ -41,13 +41,13 @@ export class TicketWorksService {
         id: 101,
         nickname: 'Giovanni Rossi',
       },
-      attached: ['pic1.jpg', 'pic2.jpg'],
+      attached: ['pic1.jpg', 'pic2.jpg', 'pic2.jpg', 'pic2.jpg', 'pic1.jpg', 'pic1.jpg', 'wallnet.png', 'trial.jpeg'],
       description: 'Installazione completa di impianto elettrico per abitazione unifamiliare.'
     },
     {
       type: 0,
       id: 2,
-      dateTime: "22/08/2024 alle 10:30",
+      dateTime: "22/08/2024 10:30",
       date: '20-08-2024',
       price: '150',
       hours: "2",
@@ -62,7 +62,7 @@ export class TicketWorksService {
     {
       type: 0,
       id: 3,
-      dateTime: "24/08/2024 alle 18:00",
+      dateTime: "24/08/2024 18:00",
       date: '10-08-2024',
       hours: "5",
       minutes: "00",
@@ -77,7 +77,7 @@ export class TicketWorksService {
     {
       type: 1,
       id: 7,
-      dateTime: "24/08/2024 alle 18:00",
+      dateTime: "24/08/2024 18:00",
       date: '09-08-2024',
       hours: "7",
       minutes: "45",
@@ -93,7 +93,7 @@ export class TicketWorksService {
     {
       type: 2,
       id: 11,
-      dateTime: "30/07/2024 alle 09:00",
+      dateTime: "30/07/2024 09:00",
       description: "",
       date: '29-07-2024',
       user: {
@@ -115,7 +115,7 @@ export class TicketWorksService {
     {
       type: 2,
       id: 12,
-      dateTime: "30/07/2024 alle 09:00",
+      dateTime: "30/07/2024 09:00",
       description: "",
       date: '29-07-2024',
       user: {
@@ -137,7 +137,7 @@ export class TicketWorksService {
     {
       type: 0,
       id: 4,
-      dateTime: "06/08/2024 alle 15:40",
+      dateTime: "06/08/2024 15:40",
       date: '05-08-2024',
       hours: "10",
       minutes: "30",
@@ -167,7 +167,7 @@ export class TicketWorksService {
     {
       type: 2,
       id: 10,
-      dateTime: "30/07/2024 alle 09:00",
+      dateTime: "30/07/2024 09:00",
       description: "",
       date: '29-07-2024',
       user: {

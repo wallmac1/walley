@@ -9,9 +9,12 @@ import { TicketTimelineComponent } from "../ticket-timeline/ticket-timeline.comp
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { TicketModalComponent } from '../ticket-modal/ticket-modal.component';
-import { Title } from '@angular/platform-browser';
 import { ConnectServerService } from '../../services/connect-server.service';
-import { Connect } from '../../classes/connect';
+import { Ticket } from '../interfaces/ticket';
+import { Status } from '../interfaces/status';
+import { MatIcon } from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu'; 
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-ticket-modify',
@@ -23,7 +26,10 @@ import { Connect } from '../../classes/connect';
     TicketInfoComponent,
     TicketTimelineComponent,
     MatLabel,
-    MatFormField
+    MatFormField,
+    MatIcon,
+    MatMenuModule,
+    MatButton 
   ],
   templateUrl: './ticket-modify.component.html',
   styleUrl: './ticket-modify.component.scss'
@@ -32,54 +38,30 @@ export class TicketModifyComponent {
 
   isStatusOpen = false;
   internal: boolean = false;
-  client = {
-    name: "Client Name",
-    headquarter: "Client Headquarter"
-  };
-  status = {
-    id: 1,
-    name: "Working"
-  };
-  substatus = {
-    id: 1,
-    name: "Doing things"
-  };
-  statusList = [
-    { id: 1, name: "Working" },
-    { id: 2, name: "Waiting" },
-    { id: 3, name: "Closed" }
-  ]
 
-  statusForm = new FormGroup({
-    statusid: new FormControl<number | null>(null, Validators.required),
-    substatusid: new FormControl<number | null>(null, Validators.required),
-  })
+  status: Status | null = null;
 
   ticketGeneralForm = new FormGroup({
-    title: new FormControl<string | null>("Ticket", Validators.required),
-    description: new FormControl<string | null>("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur egestas luctus metus, eget pretium nulla feugiat in. Morbi blandit massa vitae nisl hendrerit ornare. Morbi tincidunt, metus nec lobortis imperdiet, lorem sapien aliquam dolor, eget suscipit justo nunc in tellus. Ut eget justo augue. Fusce quis convallis sapien. Morbi nibh massa, bibendum in congue a, eleifend ut neque. Nullam ut felis ac nibh pellentesque efficitur. Proin sed porttitor quam. Nulla facilisi. ", Validators.required),
-    statusid: new FormControl<number | null>(1, Validators.required)
-  })
+    title: new FormControl<string | null>(null, Validators.required),
+    description: new FormControl<string | null>(null, Validators.required),
+  });
+
+  ticketInfo: Ticket | null = null;
 
   ticketId: number | null = null;
 
   constructor(private route: ActivatedRoute, public ticketInfoService: TicketsInfoService, public dialog: MatDialog,
     private connectServerService: ConnectServerService) {
-    // CHIAMATA AL SERVER PER OTTENERE I VALORI DEL TICKET
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
-        this.ticketId = +id;
+        this.ticketId = parseInt(id);
       }
     });
 
     if (this.ticketId) {
-      this.ticketGeneralForm.patchValue(ticketInfoService.getTicket(this.ticketId)!);
-      this.statusForm.get('statusid')?.setValue(this.status.id);
-      this.statusForm.get('substatusid')?.setValue(this.substatus.id);
+      this.getInfoTicketFromServer();
     }
-
-    this.getInfoTicketFromServer();
 
   }
 
@@ -87,22 +69,23 @@ export class TicketModifyComponent {
     this.isStatusOpen = !this.isStatusOpen;
   }
 
-  getBackgroundColor(): string {
-    let color = "white";
-    if (this.status.id == 0) {
-      color = "#99CFE7";
-    }
-    else if (this.status.id == 1) {
-      color = "#DAED93";
-    }
-    else if (this.status.id == 2) {
-      color = "#FFFFE0";
-    }
-    else if (this.status.id == 3) {
-      color = "#ECD0DF";
-    }
-    return color;
-  }
+  // getBackgroundColor(): string {
+  //   let color = "white";
+  //   const id = this.statusForm.get("status")?.value!.id;
+  //   if (id == 0) {
+  //     color = "#99CFE7";
+  //   }
+  //   else if (id == 1) {
+  //     color = "#DAED93";
+  //   }
+  //   else if (id == 2) {
+  //     color = "#FFFFE0";
+  //   }
+  //   else if (id == 3) {
+  //     color = "#ECD0DF";
+  //   }
+  //   return color;
+  // }
 
   modifyPopup(i: number): void {
     if (i == 0) {
@@ -118,9 +101,17 @@ export class TicketModifyComponent {
       });
     }
     else if (i == 1) {
+      let subid;
+      if (this.status?.substatus) {
+        subid = this.status?.substatus.id;
+      }
+      else {
+        subid = null;
+      }
+      const statusForm = { statusid: this.status?.id, substatusid: subid }
       const dialogRef = this.dialog.open(TicketModalComponent, {
         width: '450px',
-        data: { form: this.statusForm.value, index: i }
+        data: { form: statusForm, index: i }
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -132,24 +123,28 @@ export class TicketModifyComponent {
 
   }
 
-  setInfoTicketOnServer() {
-    
+  private setInfoTicketOnServer() {
+
   }
 
-  getInfoTicketFromServer() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/listStatusTicket', {}).
-      subscribe((val: any) => {
-        console.log(val);
-        if (val) {
-          this.status = val;
-          //console.log("Tickets", val.data.listTickets)
-        }
-      })
+  private getInfoTicketFromServer() {
+    if (this.ticketInfoService.ticketInfo && this.ticketInfoService.ticketInfo.id == this.ticketId) {
+      this.ticketInfo = this.ticketInfoService.ticketInfo;
+      this.ticketGeneralForm.get("title")?.setValue(this.ticketInfoService.ticketInfo.title);
+      this.ticketGeneralForm.get("description")?.setValue(this.ticketInfoService.ticketInfo.description!);
+      this.status = this.ticketInfoService.ticketInfo.status;
+    }
+    else {
+      this.ticketInfoService.getInfoTicketFromServer(this.ticketId!)
+        .subscribe((val: any) => {
+          if (val) {
+            this.ticketInfo = val;
+            this.ticketGeneralForm.get("title")?.setValue(val.title);
+            this.ticketGeneralForm.get("description")?.setValue(val.description);
+            this.status = val.status;
+          }
+        })
+    }
   }
-
-
-  save() { }
-
-  cancel() { }
 
 }

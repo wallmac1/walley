@@ -13,13 +13,19 @@
 
                     <div class="row justify-content-end align-items-center mb-2">
                         <div class="col-6 text-start">
-                            <span style="font-style: italic; font-size: small; color: gray;">Created by:
+                            <span style="font-style: italic; font-size: small; color: gray;">
+                                <span class="d-none d-md-inline">
+                                    Created by:
+                                </span>
                                 {{work.user.nickname}}
                             </span>
                         </div>
 
                         <div class="col-6 text-end">
-                            <span style="font-style: italic; font-size: small; color: gray;">Date and Time Creation:
+                            <span style="font-style: italic; font-size: small; color: gray;">
+                                <span class="d-none d-md-inline">
+                                    Date and Time Creation:
+                                </span>
                                 {{work.dateTime}}
                             </span>
                         </div>
@@ -30,21 +36,22 @@
                             <label for="date" class="form-label">Date</label>
                             <input type="date" class="form-control" formControlName="date">
                         </div>
-                        <div class="col-12 col-sm-6 col-lg-3 mt-2">
+                        <div class="col-12 col-sm-6 col-lg-4 mt-2 ps-lg-0">
                             <div class="row p-0">
                                 <label for="hours" class="form-label">Work Time</label>
-                                <div class="col-6 p-0">
+                                <div class="col-6 pe-0">
                                     <div class="input-group">
                                         <select id="hours" class="form-select" formControlName="hours">
                                             <option [value]="null" disabled>Select Hours</option>
-                                            <option *ngFor="let workTime of hours" [ngValue]="workTime">{{workTime}}
+                                            <option *ngFor="let workTime of hours" [ngValue]="workTime">
+                                                {{workTime}}
                                             </option>
                                         </select>
 
                                         <label class="input-group-text" for="hours">h</label>
                                     </div>
                                 </div>
-                                <div class="col-6 p-0">
+                                <div class="col-6 ps-0">
                                     <div class="input-group">
                                         <select id="minutes" class="form-select" formControlName="minutes">
                                             <option [value]="null" disabled>Select Minutes</option>
@@ -56,7 +63,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-6 col-lg-3 mt-2">
+                        <div class="col-12 col-sm-6 col-lg-2 mt-2 ps-lg-0 pe-lg-0">
                             <label for="price" class="form-label">Price</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" formControlName="price">
@@ -66,7 +73,7 @@
                         <div class="col-12 col-sm-6 col-lg-3 mt-2">
                             <label for="price_total" class="form-label">Total</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" formControlName="price_total" readonly>
+                                <input type="text" class="form-control" formControlName="price_total">
                                 <span class="input-group-text" id="basic-addon1">€</span>
                             </div>
                         </div>
@@ -79,40 +86,38 @@
 
                     <div *ngIf="work.attached.length > 0; else noAttachedBlock"
                         class="row justify-content-center align-items-center mt-2">
-                        <div *ngFor="let picture of work.attached" class="col-2 mt-2 ms-4 me-4 text-center">
+                        <div *ngFor="let picture of work.attached" class="col-3 col-sm-2 col-lg-1 mt-2 text-center">
                             <img *ngIf="isImage(picture); else documentBlock" class="attachedFile"
-                                src="assets/img/{{picture}}" [matTooltip]="picture">
+                                src="assets/img/{{picture}}" [matTooltip]="picture" (click)="openFullscreenModal(picture)">
                             <i class="bi bi-trash"></i>
                             <ng-template #documentBlock>
-                                <img class="attachedFile" src="assets/img/generic.png" [matTooltip]="picture">
+                                <img class="attachedFile" src="assets/img/generic.png" [matTooltip]="picture"
+                                (click)="openFullscreenModal(picture)">
                             </ng-template>
                         </div>
-                        <button class="btn btn-sm btn-primary" style="border-radius: 65%;"
-                            style="position: absolute; right: 40px; width: 32px;">
-                            +
-                        </button>
                     </div>
                     <ng-template #noAttachedBlock>
                         <div class="row justify-content-center align-items-center mt-2">
                             <div class="col-12 mt-1 text-center">
                                 <span>No Attached Files Available</span>
                             </div>
-                            <button class="btn btn-sm btn-primary" style="border-radius: 65%;"
-                                style="position: absolute; right: 40px; width: 32px;">
-                                +
-                            </button>
                         </div>
                     </ng-template>
 
                     <div class="row justify-content-center align-items-center mt-2"
                         style="border-top: 1px solid lightgray;">
-                        <div class="col-6 text-center">
-                            <button class="btn btn-sm btn-primary mt-3" style="width: 80px;" (click)="save(i)">
+                        <div class="col-4 text-center">
+                            <button class="btn btn-sm btn-primary mt-3" style="max-width: 80px; min-width: 70px;" (click)="save(i)">
                                 Save
                             </button>
                         </div>
-                        <div class="col-6 text-center">
-                            <button class="btn btn-sm btn-primary mt-2" style="width: 80px;" (click)="reset(i)">
+                        <div class="col-4 text-center">
+                            <button class="btn btn-sm btn-primary mt-3" style="width: 50px">
+                                <i class="bi bi-upload"></i>
+                            </button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button class="btn btn-sm btn-primary mt-3" style="max-width: 80px; min-width: 70px;" (click)="reset(i)">
                                 Reset
                             </button>
                         </div>
@@ -133,27 +138,31 @@
                     <div class="row justify-content-evenly align-items-center mb-2">
                         <div class="col-6 text-start">
                             <span style="font-style: italic; font-size: small; color: gray;">
-                                Created By:
+                                <span class="d-none d-md-inline">
+                                    Created By:
+                                </span>
                                 {{work.user.nickname}}
                             </span>
                         </div>
 
                         <div class="col-6 text-end">
                             <span style="font-style: italic; font-size: small; color: gray;">
-                                Date and Time Creation:
+                                <span class="d-none d-md-inline">
+                                    Date and Time Creation:
+                                </span>
                                 {{work.dateTime}}
                             </span>
                         </div>
                     </div>
 
                     <div class="row justify-content-evenly align-items-center">
-                        <div class="col-10">
+                        <div class="col-12 col-md-10">
                             <label for="description" class="form-label">Description</label>
                             <textarea type="text" class="form-control" formControlName="description"
                                 rows="4"></textarea>
                         </div>
 
-                        <div class="col-2">
+                        <div class="col-12 col-md-2">
                             <input class="me-2" type="checkbox" id="public" formControlName="public">
                             <label for="public" class="form-label">Public</label>
                         </div>
@@ -161,40 +170,39 @@
 
                     <div *ngIf="work.attached.length > 0; else noAttachedBlock"
                         class="row justify-content-center align-items-center mt-2">
-                        <div *ngFor="let picture of work.attached" class="col-2 mt-2 ms-4 me-4 text-center">
+                        <div *ngFor="let picture of work.attached"
+                            class="col-3 col-sm-2 col-lg-1 mt-2 ms-4 me-4 text-center">
                             <img *ngIf="isImage(picture); else documentBlock" class="attachedFile"
-                                src="assets/img/{{picture}}" [matTooltip]="picture">
+                                src="assets/img/{{picture}}" [matTooltip]="picture" (click)="openFullscreenModal(picture)">
                             <i class="bi bi-trash"></i>
                             <ng-template #documentBlock>
-                                <img class="attachedFile" src="assets/img/generic.png" [matTooltip]="picture">
+                                <img class="attachedFile" src="assets/img/generic.png" [matTooltip]="picture"
+                                (click)="openFullscreenModal(picture)">
                             </ng-template>
                         </div>
-                        <button class="btn btn-sm btn-primary" style="border-radius: 65%;"
-                            style="position: absolute; right: 40px; width: 32px;">
-                            +
-                        </button>
                     </div>
                     <ng-template #noAttachedBlock>
                         <div class="row justify-content-center align-items-center mt-2">
                             <div class="col-12 mt-1 text-center">
                                 <span>No Attached Files Available</span>
                             </div>
-                            <button class="btn btn-sm btn-primary" style="border-radius: 65%;"
-                                style="position: absolute; right: 40px; width: 32px;">
-                                +
-                            </button>
                         </div>
                     </ng-template>
 
                     <div class="row justify-content-center align-items-center mt-2"
                         style="border-top: 1px solid lightgray;">
-                        <div class="col-6 text-center">
-                            <button class="btn btn-sm btn-primary mt-3" style="width: 80px;" (click)="save(i)">
+                        <div class="col-4 text-center">
+                            <button class="btn btn-sm btn-primary mt-3" style="max-width: 80px; min-width: 70px;" (click)="save(i)">
                                 Save
                             </button>
                         </div>
-                        <div class="col-6 text-center">
-                            <button class="btn btn-sm btn-primary mt-2" style="width: 80px;" (click)="reset(i)">
+                        <div class="col-4 text-center">
+                            <button class="btn btn-sm btn-primary mt-3" style="width: 50px">
+                                <i class="bi bi-upload"></i>
+                            </button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button class="btn btn-sm btn-primary mt-3" style="max-width: 80px; min-width: 70px;" (click)="reset(i)">
                                 Reset
                             </button>
                         </div>
@@ -213,21 +221,25 @@
                 <div [formGroup]="getWorkFormGroup(i)" class="timeline-text" style="width: 100%;">
 
                     <div class="row justify-content-evenly align-items-center mb-2">
-                        <div class="col-12 col-sm-6 text-start">
+                        <div class="col-6 text-start">
                             <span style="font-style: italic; font-size: small; color: gray;">
-                                Updated By:
+                                <span class="d-none d-md-inline">
+                                    Updated By:
+                                </span>
                                 {{work.user.nickname}}
                             </span>
                         </div>
 
-                        <div class="col-12 col-sm-6 text-end">
+                        <div class="col-6 text-end">
                             <span style="font-style: italic; font-size: small; color: gray;">
-                                Date and Time Creation:
+                                <span class="d-none d-md-inline">
+                                    Date and Time Creation:
+                                </span>
                                 {{work.dateTime}}
                             </span>
                         </div>
 
-                        <div class="col-12 col-sm-6 text-start mt-2">
+                        <div class="col-12 col-sm-6 text-center text-sm-start mt-2">
                             <span>
                                 Actual Status:
                                 <span style="font-weight: bold;">
@@ -236,7 +248,7 @@
                             </span>
                         </div>
 
-                        <div class="col-12 col-sm-6 text-end mt-2">
+                        <div class="col-12 col-sm-6 text-center text-sm-end mt-2">
                             <span>
                                 Previous Status:
                                 <span style="font-weight: bold;">

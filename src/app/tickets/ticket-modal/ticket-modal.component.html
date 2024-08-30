@@ -45,6 +45,7 @@
                 <div class="col-12 mt-2 mb-3">
                     <label for="statusid" class="mb-1" style="font-weight: bold;">Status</label>
                     <select id="statusid" class="form-select" formControlName="statusid" (change)="onStatusSelected()">
+                        <option *ngIf="editStatusForm.get('statusid')!.value == 1" [ngValue]="1" disabled>New</option>
                         <option *ngFor="let status of statusList" [ngValue]="status.id">{{status.name}}</option>
                     </select>
                 </div>

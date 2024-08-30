@@ -34,6 +34,8 @@ export class TicketModalComponent {
     substatusid: new FormControl<number | null>(null)
   });
 
+  ticketid: number | null = null;
+
   id: number | null = null;
 
   constructor(public dialogRef: MatDialogRef<TicketModalComponent>,
@@ -42,17 +44,19 @@ export class TicketModalComponent {
     // Inizializza il form con i dati passati al dialog
     this.id = data.index;
 
-    this.disableSubStatus();
-
     if (this.id == 0) {
       this.editTitleForm.patchValue(data.form);
     }
     else if (this.id == 1) {
+      this.getStatusFromServer();
       this.editStatusForm.patchValue(data.form);
+      //console.log(this.editStatusForm.value);
+      //console.log(data.form);
+      if(data.form.statusid && data.form.statusid != 1) {
+        this.getSubStatusFromServer(data.form.statusid);
+      }
+      this.disableSubStatus();
     }
-
-    this.getStatusFromServer();
-
   }
 
   onStatusSelected() {
@@ -81,20 +85,42 @@ export class TicketModalComponent {
       })
   }
 
+  setStatusOnServer() {
+    const status = this.editStatusForm.getRawValue()
+    this.connectServerService.postRequest(Connect.urlServerLara, "status/setStatus",
+      { statusid: status.statusid, substatusid: status.substatusid, ticketid: this.ticketid })
+      .subscribe((val: any) => {
+        this.dialogRef.close(val);
+      })
+  }
+
+  setTitleDescriptionOnServer() {
+    const titleDescription = this.editTitleForm.getRawValue();
+    this.connectServerService.postRequest(Connect.urlServerLara, "status/setStatus",
+      { title: titleDescription.title, description: titleDescription.description, ticketid: this.ticketid })
+      .subscribe((val: any) => {
+        this.dialogRef.close(val);
+      })
+  }
+
   enableSubStatus() {
     this.editStatusForm.get("substatusid")?.enable();
   }
 
   disableSubStatus() {
-    this.editStatusForm.get("substatusid")?.disable();
+    //console.log("Status", this.editStatusForm.get("statusid")?.value)
+    if (this.editStatusForm.get("statusid")?.value || this.editStatusForm.get("statusid")?.value == 4 || this.editStatusForm.get("statusid")?.value == 1) {
+      this.editStatusForm.get("substatusid")?.disable();
+    }
   }
 
-  save(): void {
+  async save(): Promise<void> {
     if (this.id == 0) {
+      this.setTitleDescriptionOnServer();
       this.dialogRef.close(this.editTitleForm.value);
     }
     else if (this.id == 1) {
-      this.dialogRef.close(this.editStatusForm.value);
+      this.setStatusOnServer();
     }
 
   }

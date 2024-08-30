@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginComponent {
     rememberMe: new FormControl<number>(0, Validators.required)
   })
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   onSwitchChange(): void {
     const isChecked = this.loginForm.get('rememberMe')?.value;
@@ -32,8 +33,14 @@ export class LoginComponent {
   }
 
   async login() {
-    console.log(this.loginForm.getRawValue());
-    this.valid = !this.valid;
+    // await this.authService.loginUser(
+    //   this.loginForm.get('email')?.value!,
+    //   this.loginForm.get('password')?.value!);
+    // if (this.authService.getToken() != null) {
+    //   this.router.navigate(['/newTicket']);
+    // }
+    this.authService.loginServer(this.loginForm.get('email')?.value!,
+   this.loginForm.get('password')?.value!, true);
   }
 
   seePassword() {

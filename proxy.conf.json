@@ -1,0 +1,11 @@
+{
+    "/proxylink": {
+        "target": "http://localhost.walldev",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug",
+        "pathRewrite": {
+            "^/proxylink": ""
+        }
+    }
+}

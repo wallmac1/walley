@@ -1,0 +1,6 @@
+<div class="container-fluid modal-container p-0">
+    <img *ngIf="isImage; else documentBlock" [src]="data" alt="Allegato" class="modal-image">
+    <ng-template #documentBlock>
+        <img src="assets/img/generic.png" alt="Allegato Generico" class="modal-image">
+    </ng-template>
+</div>

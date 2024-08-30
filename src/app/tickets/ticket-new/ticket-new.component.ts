@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client } from '../interfaces/client';
+import { Customer } from '../interfaces/customer';
 import { Department } from '../interfaces/department';
-import { Profile } from '../interfaces/profile';
+import { User } from '../interfaces/user';
 import { Location } from '../interfaces/location';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption } from '@angular/material/core';
@@ -45,13 +45,13 @@ export class TicketNewComponent {
   ticketForm = new FormGroup({
     internal: new FormControl<number>(0, Validators.required),
     date_ticket: new FormControl<string>(this.formattedDate), //Non modificabile
-    client: new FormControl<Client | string>('', Validators.required),
+    customer: new FormControl<Customer | string>('', Validators.required),
     location: new FormControl<Location | null>(null),
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null, Validators.required),
-    department: new FormControl<Department[] | null>(null),
-    incharge: new FormControl<Profile | null>(null),
-    keepinformed: new FormControl<Profile[] | null>(null)
+    department: new FormControl<number[] | null>(null),
+    incharge: new FormControl<number | null>(null),
+    keepinformed: new FormControl<User[] | null>(null)
   })
 
   //inputClient = new FormControl<string>('');
@@ -59,6 +59,8 @@ export class TicketNewComponent {
   constructor(private router: Router, public ticketInfoService: TicketsInfoService,
     private connectServerService: ConnectServerService) {
     this.ticketForm.get("date_ticket")?.disable();
+    ticketInfoService.getUsersFromServer();
+    ticketInfoService.getDepartmentFromServer();
   }
 
   print() {
@@ -77,22 +79,23 @@ export class TicketNewComponent {
   internalExternalLogic() {
     const internal = this.ticketForm.get("internal")?.value;
     if(internal == 1) {
-      this.ticketForm.get("client")?.setValue(null);
-      this.ticketForm.get("client")?.disable();
+      this.ticketForm.get("customer")?.setValue(null);
+      this.ticketForm.get("customer")?.disable();
       this.ticketForm.get("location")?.setValue(null);
     }
     else {
-      this.ticketForm.get("client")?.enable();
+      this.ticketForm.get("customer")?.enable();
     }
   }
 
   setNewTicketOnServer() {
     const obj_infoticket = this.ticketForm.getRawValue();
+    obj_infoticket.customer = {id: 57, rifidanacliforprodati: 5, denominazione: "Wallnet Snc"}
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/insertTicket', {obj_infoticket: obj_infoticket}).
       subscribe((val: any) => {
-        console.log(val);
+        //console.log(val);
         if (val) {
-          this.router.navigate(["modifyTicket", val]);
+          this.router.navigate(["modifyTicket", val.valore.id]);
           //console.log("Tickets", val.data.listTickets)
         }
       })

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { TicketWorksService } from '../services/ticket-works.service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
+import { ImageModalComponent } from '../image-modal/image-modal.component';
 
 @Component({
   selector: 'app-ticket-work',
@@ -41,7 +43,7 @@ export class TicketWorkComponent {
   workFormArray: FormArray;
   fb = new FormBuilder()
 
-  constructor(private ticketWorksService: TicketWorksService) {
+  constructor(private ticketWorksService: TicketWorksService, public dialog: MatDialog) {
     this.ticketWorks = ticketWorksService.getTicketWorks();
     this.workFormArray = this.fb.array([]);
     this.ticketWorks.forEach(work => {
@@ -83,9 +85,21 @@ export class TicketWorkComponent {
     
   }
 
+  openFullscreenModal(attachment: string): void {
+    this.dialog.open(ImageModalComponent, {
+      data: `assets/img/${attachment}`,
+      panelClass: 'fullscreen-modal',
+    });
+  }
+
+  // isImage(fileName: string): boolean {
+  //   const ext = fileName.split('.').pop()?.toLowerCase();
+  //   return ext === 'jpg' || ext === 'jpeg' || ext === 'png' || ext === 'gif';
+  // }
+
   getCardBackgroundColor(index: number): string {
     const isPublic = this.getWorkFormGroup(index).get('public')?.value;
-    return isPublic ? '#f8ad77' : '#FED0AF';
+    return isPublic ? '#9BDBE7' : '#CCEFF1';
   }
 
   getCardBackgroundColorStatus(index: number): string {

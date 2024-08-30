@@ -1,4 +1,4 @@
-import { Profile } from "./profile";
+import { User } from "./user";
 
 export interface Work {
     type: number;
@@ -9,7 +9,7 @@ export interface Work {
     minutes?: string;
     price?: string;
     price_total?: string;
-    user: Profile;
+    user: User;
     public?: number;
     attached: string[];
     description: string;

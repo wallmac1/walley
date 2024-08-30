@@ -21,11 +21,11 @@
                 <input type="text" id="date_ticket" class="form-control" formControlName="date_ticket" readonly>
             </div>
 
-            <!-- Client field (visible only if "External" is selected) -->
+            <!-- Customer field (visible only if "External" is selected) -->
             <div class="col-12 col-md-6 mb-3" *ngIf="ticketForm.get('internal')!.value === 0">
-                <label for="client" class="form-label">Client</label>
+                <label for="customer" class="form-label">Customer</label>
                 <sup>*</sup>
-                <input class="form-control" id="client" formControlName="client">
+                <input class="form-control" id="customer" formControlName="customer">
             </div>
 
             <!-- Location field (visible only if "External" is selected) -->
@@ -71,7 +71,7 @@
                 <label for="incharge" class="form-label">In Charge</label>
                 <select id="incharge" class="form-select" formControlName="incharge">
                     <option [ngValue]="null" disabled>Select a person</option>
-                    <option *ngFor="let profile of ticketInfoService.profiles" [ngValue]="profile.id">{{profile.nickname}}</option>
+                    <option *ngFor="let profile of ticketInfoService.users" [ngValue]="profile.id">{{profile.nickname}}</option>
                 </select>
             </div>
 
@@ -80,7 +80,7 @@
                 <label for="keepinformed" class="form-label">Keep Informed</label><br>
                 <div class="selection">
                     <mat-select #select2 formControlName="keepinformed" multiple>
-                        @for (profile of ticketInfoService.profiles; track ticketInfoService.profiles) {
+                        @for (profile of ticketInfoService.users; track ticketInfoService.users) {
                         <mat-option class="selectOptions" [value]="profile.id">{{profile.nickname}}</mat-option>
                         }
                     </mat-select>
