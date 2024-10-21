@@ -5,8 +5,9 @@ import { RecoverPasswordComponent } from './recover-password/recover-password.co
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { TicketModifyComponent } from './tickets/ticket-modify/ticket-modify.component';
 import { DeleteComponent } from './settings/menu/delete/delete.component';
-import { AuthorizationsComponent } from './wecare/authorizations/authorizations.component';
-import { SystemsListComponent } from './wecare/systems-list/systems-list.component';
+import { AuthorizationsComponent } from './weco/authorizations/authorizations.component';
+import { SystemsListComponent } from './weco/systems-list/systems-list.component';
+import { AssistanceComponent } from './weco/assistance/assistance.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -17,5 +18,6 @@ export const routes: Routes = [
     { path: "newPassword", component: NewPasswordComponent },
     { path: "menu/delete", component: DeleteComponent },
     { path: "authorizations", component: AuthorizationsComponent },
-    { path: "systemList", component: SystemsListComponent }
+    { path: "systemList", component: SystemsListComponent },
+    { path: "assistance", component: AssistanceComponent }
 ];

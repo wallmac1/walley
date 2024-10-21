@@ -35,7 +35,7 @@
 
 
 <mat-sidenav-container autosize>
-    <mat-sidenav [opened]="isCollapsed" mode="side">
+    <mat-sidenav [opened]="isCollapsed" mode="over">
         <mat-nav-list>
             <ng-container *ngFor="let itemOne of menu">
                 <mat-list-item class="entry menuItem" (click)="toggleItem(itemOne)">
@@ -62,7 +62,7 @@
             </ng-container>
         </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content class="content-wrapper">
         <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,0 +1,30 @@
+.title {
+    background-color: #002D5D;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: white;
+    border-radius: 15px;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.errorMessage {
+    color: red;
+    font-size: x-small;
+}
+
+.inputTitle {
+    font-weight: bold;
+    font-size: medium;
+}
+
+.formField {
+    margin-top: 0.5rem;
+}
+
+.rowFields {
+    padding: 1rem;
+    border-bottom: 1px solid lightgray;
+}
