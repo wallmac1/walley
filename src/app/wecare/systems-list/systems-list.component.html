@@ -1,0 +1,42 @@
+<div class="container p-1 p-md-2 p-lg-3 mt-5" style="min-height: 80%; min-width: 350px; max-width: 1400px;">
+    <div class="row p-1 justify-content-center align-items-center text-center"
+        style="margin-left: 0 !important; margin-right: 0 !important;">
+        <div class="col-8 text-center">
+            <span style="font-weight: bold; font-size: x-large;">
+                LISTA IMPIANTI
+            </span>
+        </div>
+
+        <div class="col-12 col-lg-10 mt-2">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Data Inserimento</th>
+                        <th>Operatore</th>
+                        <th>Impianto</th>
+                        <th>Stato Impianto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let system of systemList; let i = index">
+                        <!-- Campo come stringa: date -->
+                        <td>{{ system.date }}</td>
+
+                        <!-- Campo come stringa: denomination -->
+                        <td>{{ system.denomination}}</td>
+
+                        <!-- Campo come stringa: title -->
+                        <td>{{ system.title }}</td>
+
+                        <!-- Campo come stringa: status -->
+                        <td>
+                            <i class="bi bi-circle-fill me-2"
+                                [ngStyle]="{'color': '#'+system.status.color}"></i>
+                            {{ system.status.name }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+<div class="container-fluid p-1 p-sm-2 p-md-3 p-lg-4" style="max-width: 1200px;">
+    <form [formGroup]="deletionForm">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12 mt-3 mb-2 text-center">
+                <span class="title">LEVEL 0</span>
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 mb-2 text-center">
+                <select class="form-select" formControlName="levelZero" aria-label="Default select example"
+                    (change)="onSelect($event)">
+                    <option [value]="null" selected disabled>Seleziona una voce che contiene sottovoci</option>
+                    <option *ngFor="let voice of levelZeroSubVoices" [ngValue]="voice">{{voice.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center borderBottom">
+            <div class="col-12  mt-2 mb-2">
+                <div class="container p-xs-0 p-sm-1 p-md-2 p-lg-3">
+                    <div *ngFor="let voice of levelZeroLastVoices"
+                        class="row justify-content-center align-items-center mb-1">
+                        <div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xxl-4" style="height: 100%;">
+                            <span class="ms-5" style="font-size: larger;">{{voice.name}}</span>
+                        </div>
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xxl-2 text-center">
+                            <button class="btn btn-outline-danger buttonTrash" (click)="deleteVoice(0, voice)">
+                                <i class="bi bi-trash trashIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="deletionForm.get('levelZero')!.value != null">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 mt-3 mb-2 text-center">
+                    <span class="title">LEVEL 1</span>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-6 mb-2 text-center">
+                    <select class="form-select" formControlName="levelOne" aria-label="Default select example"
+                        (change)="onSelect($event)">
+                        <option [value]="null" selected disabled>Seleziona una voce che contiene sottovoci</option>
+                        <option *ngFor="let voice of levelOneSubVoices" [ngValue]="voice">{{voice.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center borderBottom">
+                <div class="col-12  mt-2 mb-2">
+                    <div class="container p-xs-0 p-sm-1 p-md-2 p-lg-3">
+                        <div *ngFor="let voice of levelOneLastVoices"
+                            class="row justify-content-center align-items-center mb-1">
+                            <div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xxl-4" style="height: 100%;">
+                                <span class="ms-5" style="font-size: larger;">{{voice.name}}</span>
+                            </div>
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xxl-2 text-center">
+                                <button class="btn btn-outline-danger buttonTrash" (click)="deleteVoice(1, voice)">
+                                    <i class="bi bi-trash trashIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="deletionForm.get('levelOne')!.value != null">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 mt-3 mb-2 text-center">
+                    <span class="title">LEVEL 2</span>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center borderBottom">
+                <div class="col-12  mt-2 mb-2">
+                    <div class="container p-xs-0 p-sm-1 p-md-2 p-lg-3">
+                        <div *ngFor="let voice of levelTwoLastVoices"
+                            class="row justify-content-center align-items-center mb-1">
+                            <div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xxl-4" style="height: 100%;">
+                                <span class="ms-5" style="font-size: larger;">{{voice.name}}</span>
+                            </div>
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xxl-2 text-center">
+                                <button class="btn btn-outline-danger buttonTrash" (click)="deleteVoice(2, voice)">
+                                    <i class="bi bi-trash trashIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

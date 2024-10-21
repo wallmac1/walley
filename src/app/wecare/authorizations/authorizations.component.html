@@ -1,0 +1,79 @@
+<div class="container p-1 p-md-2 p-lg-3 mt-5" style="min-height: 80%; min-width: 350px; max-width: 1400px;">
+    <div class="row p-1 justify-content-center align-items-center text-center"
+        style="margin-left: 0 !important; margin-right: 0 !important;">
+        <div class="col-8 text-center">
+            <span style="font-weight: bold; font-size: x-large;">
+                PAGINA ACCESSI
+            </span>
+        </div>
+        <div class="col-12 p-1 p-md-2 p-lg-3">
+            <span>
+                Pagina per l'assegnazione dei permessi.
+            </span>
+        </div>
+
+        <!-- <div class="col-12 p-1 p-md-2 p-lg-3">
+            <form [formGroup]="userForm">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <label for="id" class="form-label" style="font-weight: bold;">
+                            Seleziona Utente
+                        </label>
+                        <select class="form-select mb-2" aria-label="Default select example" formControlName="id">
+                            <option [ngValue]="null" disabled>Seleziona Utente</option>
+                            <option *ngFor="let option of usersList" [ngValue]="option.id" class="form-control">
+                                {{option.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div> -->
+
+        <div class="col-12 col-lg-10 mt-2">
+            <form [formGroup]="authorizationsForm">
+                <div formArrayName="authorizations">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Nome e Cognome</th>
+                                <th>Paese</th>
+                                <th>Autorizzazione</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let authorization of authorizations.controls; let i = index"
+                                [formGroupName]="i">
+                                <!-- Campo come stringa: email -->
+                                <td>{{ authorization.get('email')?.value }}</td>
+
+                                <!-- Campo come stringa: name & surname -->
+                                <td>
+                                    {{ authorization.get('name')?.value }}
+                                    {{ authorization.get('surname')?.value }}
+                                </td>
+
+                                <!-- Campo come stringa: country -->
+                                <td>{{ authorization.get('country')?.value }}</td>
+
+                                <!-- Checkbox Bootstrap per authorization -->
+                                <td>
+                                    <div class="form-check d-flex justify-content-center">
+                                        <input class="form-check-input" type="checkbox" formControlName="permission">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 text-center">
+            <button class="btn btn-outline-dark" (click)="save()">
+                Salva
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+.borderBottom {
+    border-bottom: 1px solid lightgray;
+    margin-bottom: 1rem;
+}
+
+.borderAround {
+    border: 1px solid lightgray;
+}
+
+.title {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.trashIcon {
+    color: red;
+}
+
+.btn:hover .trashIcon {
+    color: white;
+}
