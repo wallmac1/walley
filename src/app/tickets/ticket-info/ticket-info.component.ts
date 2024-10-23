@@ -77,7 +77,7 @@ export class TicketInfoComponent {
   }
 
   get clientDenomination(): string | null {
-    return this.ticketInfoForm.get('customer')?.value?.denominazione || null;
+    return this.ticketInfoForm.get('customer')?.value?.denomination || null;
   }
 
   print() {

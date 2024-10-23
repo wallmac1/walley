@@ -1,8 +1,13 @@
-<div class="container-fluid p-1 p-md-2 p-lg-3" style="min-height: 84%; max-width: 1400px; min-width: 350px;">
+<div class="container-fluid p-1 p-md-2 p-lg-3" style="min-height: 100%; max-width: 1400px; min-width: 350px;">
     <div class="row justify-content-center align-items-center">
         <div class="col-12 text-center mt-1">
             <span class="title">
                 ASSISTENZA
+            </span>
+        </div>
+        <div class="col-12 text-center mt-2">
+            <span style="font-size: small;">
+                Tutti i campi presenti nel form sono obbligatori
             </span>
         </div>
     </div>
@@ -13,13 +18,20 @@
                 <label class="form-label inputTitle" for="customer">
                     Cliente
                 </label>
-                <input class="form-control" type="text" id="customer" formControlName="customer"
+                <input class="form-control" [matAutocomplete]="customer" type="text" id="customer" formControlName="customer"
                     [class.is-invalid]="assistanceForm.get('customer')?.invalid && (assistanceForm.get('customer')?.dirty || submitted)">
                 <div *ngIf="assistanceForm.get('customer')?.invalid && assistanceForm.get('customer')?.dirty"
                     class="errorMessage">
                     Inserisci una data corretta
                 </div>
             </div>
+            <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                <mat-option *ngFor="let option of customers$ | async" [value]="option.id">
+                  <div>
+                    {{option.denomination}}
+                  </div>
+                </mat-option>
+            </mat-autocomplete>
         </div>
 
         <div class="row align-items-center rowFields">
@@ -51,7 +63,8 @@
                 <label class="form-label inputTitle" for="customer">
                     Tipologia
                 </label>
-                <select class="form-select" id="type" formControlName="type">
+                <select class="form-select" id="type" formControlName="type"
+                [class.is-invalid]="assistanceForm.get('type')?.invalid && (assistanceForm.get('type')?.dirty || submitted)">
                     <option [value]="null" disabled>--</option>
                     <option [value]="1">LV</option>
                     <option [value]="2">HV</option>
@@ -59,61 +72,61 @@
             </div>
         </div>
 
-        <div class="row align-items-center justify-content-center rowFields">
-            <div formArrayName="inverters">
-                <div *ngFor="let inverter of inverters.controls; let i = index" class="col-12 col-md-6"
+        <div formArrayName="inverters" class="rowFields">
+            <div class="row align-items-center p-1">
+                <div *ngFor="let inverter of inverters.controls; let i = index" class="col-12 col-lg-6 mt-2"
                     [formGroupName]="i">
                     <mat-card style="min-height: 100%;">
-                        <mat-card-header style="border-bottom: 2px solid lightgray;" class="bg-primary bg-opacity-10 pt-0">
-                            <mat-card-title style="font-weight: bold; font-size: medium;">
-                                <div *ngIf="i != 0" class="col-12 removeButton">
-                                    <!-- Rimuovi -->
-                                    <button class="btn btn-sm btn-danger me-2 mt-2" (click)="removeInverter(i)">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                    <label class="d-none d-md-inline" style="font-weight: bold;">Inverter {{i +
-                                        1}}</label><br>
-                                </div>
-                                <div class="col-12 mt-2 text-center">
-                                    <span class="subTitle">Inverter</span>
-                                </div>
-                            </mat-card-title>
+                        <mat-card-header style="border-bottom: 2px solid lightgray;"
+                            class="bg-primary bg-opacity-10 pt-0">
+                            <!-- <mat-card-title style="font-weight: bold; font-size: medium;"> -->
+                            <div class="col-6 mt-2">
+                                <span class="subTitle">Inverter {{i+1}}</span>
+                            </div>
+                            <!-- Rimuovi -->
+                            <div class="col-6 mb-2 removeButton text-end">
+                                <button class="btn btn-sm btn-danger me-2 mt-2" (click)="removeInverter(i)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                            <!-- </mat-card-title> -->
                         </mat-card-header>
 
-                        <mat-card-content class="pb-2 pl-0 pr-0">
+                        <mat-card-content class="cardContent">
                             <div class="row">
-                                <div class="col-12 col-sm-6 col-md-4 formField">
+                                <div class="col-12 col-sm-6 col-md-4 p-1 formField">
                                     <label class="form-label inputTitle" for="model-{{i}}">
                                         Modello
                                     </label>
-                                    <select class="form-select" id="model-{{i}}" formControlName="model">
+                                    <select class="form-select" id="model-{{i}}" formControlName="model"
+                                    [class.is-invalid]="inverter.get('model')?.invalid && (inverter.get('model')?.dirty || submitted)">
                                         <option [value]="null" disabled>--</option>
                                         <option [value]="1">LV</option>
                                         <option [value]="2">HV</option>
                                     </select>
                                 </div>
 
-                                <div class="col-6 col-sm-6 col-md-4 formField">
+                                <div class="col-12 col-sm-6 col-md-4 p-1 formField">
                                     <label class="form-label inputTitle" for="serialNumber-{{i}}">
                                         Serial Number
                                     </label>
                                     <input class="form-control" type="text" id="serialNumber-{{i}}"
                                         formControlName="serialNumber"
-                                        [class.is-invalid]="assistanceForm.get('serialNumber')?.invalid && (assistanceForm.get('serialNumber')?.dirty || submitted)">
-                                    <div *ngIf="assistanceForm.get('serialNumber')?.invalid && assistanceForm.get('serialNumber')?.dirty"
+                                        [class.is-invalid]="inverter.get('serialNumber')?.invalid && (inverter.get('serialNumber')?.dirty || submitted)">
+                                    <div *ngIf="inverter.get('serialNumber')?.invalid && inverter.get('serialNumber')?.dirty"
                                         class="errorMessage">
                                         Inserisci una SN corretto
                                     </div>
                                 </div>
 
-                                <div class="col-6 col-sm-6 col-md-4  formField">
+                                <div class="col-12 col-sm-6 col-md-4 p-1 formField">
                                     <label class="form-label inputTitle" for="firmware-{{i}}">
                                         Firmware
                                     </label>
                                     <input class="form-control" type="text" id="firmware-{{i}}"
                                         formControlName="firmware"
-                                        [class.is-invalid]="assistanceForm.get('firmware')?.invalid && (assistanceForm.get('firmware')?.dirty || submitted)">
-                                    <div *ngIf="assistanceForm.get('firmware')?.invalid && assistanceForm.get('firmware')?.dirty"
+                                        [class.is-invalid]="inverter.get('firmware')?.invalid && (inverter.get('firmware')?.dirty || submitted)">
+                                    <div *ngIf="inverter.get('firmware')?.invalid && inverter.get('firmware')?.dirty"
                                         class="errorMessage">
                                         Inserisci un FM corretto
                                     </div>
@@ -130,9 +143,98 @@
                     <i class="bi bi-plus"></i>
                 </button>
             </div>
-
         </div>
 
+        <div formArrayName="batteries" class="rowFields">
+            <div class="row align-items-center p-1">
+                <div *ngFor="let battery of batteries.controls; let i = index" class="col-12 col-lg-6 mt-2"
+                    [formGroupName]="i">
+                    <mat-card style="min-height: 100%;">
+                        <mat-card-header style="border-bottom: 2px solid lightgray;"
+                            class="bg-success bg-opacity-10 pt-0">
+                            <!-- <mat-card-title style="font-weight: bold; font-size: medium;"> -->
+                            <div class="col-6 mt-2">
+                                <span class="subTitle">Batteria {{i+1}}</span>
+                            </div>
+                            <!-- Rimuovi -->
+                            <div class="col-6 mb-2 removeButton text-end">
+                                <button class="btn btn-sm btn-danger me-2 mt-2" (click)="removeBattery(i)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                            <!-- </mat-card-title> -->
+                        </mat-card-header>
 
+                        <mat-card-content class="cardContent">
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-4 p-1 formField">
+                                    <label class="form-label inputTitle" for="model-{{i}}">
+                                        Modello
+                                    </label>
+                                    <select class="form-select" id="model-{{i}}" formControlName="model"
+                                    [class.is-invalid]="battery.get('model')?.invalid && (battery.get('model')?.dirty || submitted)">
+                                        <option [value]="null" disabled>--</option>
+                                        <option [value]="1">LV</option>
+                                        <option [value]="2">HV</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-md-4 p-1 formField">
+                                    <label class="form-label inputTitle" for="serialNumber-{{i}}">
+                                        Serial Number
+                                    </label>
+                                    <input class="form-control" type="text" id="serialNumber-{{i}}"
+                                        formControlName="serialNumber"
+                                        [class.is-invalid]="battery.get('serialNumber')?.invalid && (battery.get('serialNumber')?.dirty || submitted)">
+                                    <div *ngIf="battery.get('serialNumber')?.invalid && battery.get('serialNumber')?.dirty"
+                                        class="errorMessage">
+                                        Inserisci una SN corretto
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-md-4 p-1 formField">
+                                    <label class="form-label inputTitle" for="firmware-{{i}}">
+                                        Firmware
+                                    </label>
+                                    <input class="form-control" type="text" id="firmware-{{i}}"
+                                        formControlName="firmware"
+                                        [class.is-invalid]="battery.get('firmware')?.invalid && (battery.get('firmware')?.dirty || submitted)">
+                                    <div *ngIf="battery.get('firmware')?.invalid && battery.get('firmware')?.dirty"
+                                        class="errorMessage">
+                                        Inserisci un FM corretto
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+
+            <div class="col-12 mt-2 text-center">
+                <button class="btn btn-outline-dark mb-2" style="max-width: 300px;" (click)="addBattery()">
+                    <span class="me-2">Aggiungi Batteria</span>
+                    <i class="bi bi-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="row justify-content-center align-items-center rowFields">
+            <div class="col-12 formField">
+                <label class="form-label inputTitle" for="comment">
+                    Commento Tecnico
+                </label>
+                <textarea class="form-control" formControlName="comment" rows="3"
+                [class.is-invalid]="assistanceForm.get('comment')?.invalid && (assistanceForm.get('comment')?.dirty || submitted)">
+                </textarea>
+            </div>
+        </div>
     </form>
+
+    <div class="row justify-content-center align-items-center p-2 mt-2 mb-5">
+        <div class="col-12 col-sm-6 col-md-4 text-center">
+            <button class="btn btn-outline-dark" (click)="save()">
+                Salva
+            </button>
+        </div>
+    </div>
 </div>

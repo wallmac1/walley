@@ -90,7 +90,7 @@ export class TicketNewComponent {
 
   setNewTicketOnServer() {
     const obj_infoticket = this.ticketForm.getRawValue();
-    obj_infoticket.customer = {id: 57, rifidanacliforprodati: 5, denominazione: "Wallnet Snc"}
+    obj_infoticket.customer = {id: 57, rifidanacliforprodati: 5, denomination: "Wallnet Snc"}
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/insertTicket', {obj_infoticket: obj_infoticket}).
       subscribe((val: any) => {
         //console.log(val);

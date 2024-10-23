@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { System } from '../../interfaces/system';
+import { System } from '../../../interfaces/system';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-systems-list',
@@ -17,10 +18,16 @@ export class SystemsListComponent {
 
   displayedColumns: string[] = ['date', 'user', 'system_name', 'system_status'];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     // CHIAMATA AL SERVER PER OTTENERE LA LISTA DI OGGETTI
+  }
+
+  goTo(idsystem: number) {
+    // DISABILITATO TEMPORANEAMENTE
+    // const url = idsystem.toString();
+    // this.router.navigate(['systemReview', idsystem])
   }
 
   systemList: System[] = [

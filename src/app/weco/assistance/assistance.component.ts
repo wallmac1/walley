@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import {MatCardModule} from '@angular/material/card'; 
+import { Customer } from '../../tickets/interfaces/customer';
+import { Observable } from 'rxjs';
+import { identifierName } from '@angular/compiler';
 
 @Component({
   selector: 'app-assistance',
@@ -9,12 +13,20 @@ import {MatCardModule} from '@angular/material/card';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule
+    MatCardModule,
+    MatAutocompleteModule
   ],
   templateUrl: './assistance.component.html',
   styleUrl: './assistance.component.scss'
 })
 export class AssistanceComponent {
+
+  customers$!: Observable<Customer[]>;
+  // customers$ = [
+  //   {identifierName: 'Luigi', id: 1, denomination: 'LU'},
+  //   {identifierName: 'Marco', id: 2, denomination: 'MA'},
+  //   {identifierName: 'Mattia', id: 3, denomination: 'MT'},
+  // ]
 
   submitted = false;
 
@@ -64,13 +76,22 @@ export class AssistanceComponent {
   }
 
   removeInverter(index: number) {
+    this.inverters.removeAt(index);
+  }
 
+  removeBattery(index: number) {
+    this.batteries.removeAt(index);
+  }
+
+  displayCustomerName(customer?: Customer): string {
+    return customer ? customer.denomination : '';
   }
 
   save() {
     this.submitted = true;
     if(this.assistanceForm.valid) {
       // SALVA IL FORM
+      console.log(this.assistanceForm.getRawValue())
     }
   }
 
