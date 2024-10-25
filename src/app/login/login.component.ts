@@ -15,7 +15,9 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  valid: boolean = true;
+
+  invalidCredentials = false;
+  submitted = false;
   toggled: boolean = true;
   type: string = 'password'
 
@@ -39,8 +41,12 @@ export class LoginComponent {
     // if (this.authService.getToken() != null) {
     //   this.router.navigate(['/newTicket']);
     // }
-    this.authService.loginServer(this.loginForm.get('email')?.value!,
-   this.loginForm.get('password')?.value!, true);
+    this.submitted = true;
+    if(this.loginForm.valid) {
+      this.authService.loginServer(this.loginForm.get('email')?.value!,
+      this.loginForm.get('password')?.value!, true);
+      this.invalidCredentials = true;
+    }
   }
 
   seePassword() {

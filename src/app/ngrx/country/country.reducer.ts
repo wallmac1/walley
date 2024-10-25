@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { Country } from '../../interfaces/country';
 import { loadCountriesSuccess } from './country.actions';
+import { Country } from '../../weco/interfaces/country';
 
 export interface CountryState {
   countries: Country[];

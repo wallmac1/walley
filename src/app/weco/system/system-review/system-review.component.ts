@@ -69,7 +69,7 @@ export class SystemReviewComponent {
   systemInfo: SystemInfoFull = this.initSystem();
   imagesStep2: Image[] = [];
   imagesStep3: Image[] = [];
-  urlServerLara = Connect.urlServerLara;
+  urlServerLaraWecare = Connect.urlServerLaraWecare;
   customerCountry: string = '';
   installerCountry: string = '';
   countriesList: Country[] = [];
@@ -104,7 +104,7 @@ export class SystemReviewComponent {
   }
 
   getStepOne() {
-    this.connectServerService.getRequest<ApiResponse<{ stepOne: StepOne }>>(Connect.urlServerLaraApi,
+    this.connectServerService.getRequest<ApiResponse<{ stepOne: StepOne }>>(Connect.urlServerLaraWecare,
       'system/infoStepOne', { id: this.idsystem }).
       subscribe((val: ApiResponse<{ stepOne: StepOne }>) => {
         if (val.data && val.data.stepOne) {
@@ -114,7 +114,7 @@ export class SystemReviewComponent {
   }
 
   getStepTwo() {
-    this.connectServerService.getRequest<ApiResponse<{ stepTwo: StepTwo }>>(Connect.urlServerLaraApi, 'system/infoStepTwo', { id: this.idsystem }).
+    this.connectServerService.getRequest<ApiResponse<{ stepTwo: StepTwo }>>(Connect.urlServerLaraWecare, 'system/infoStepTwo', { id: this.idsystem }).
       subscribe((val: ApiResponse<{ stepTwo: StepTwo }>) => {
         if (val.data && val.data.stepTwo) {
           this.systemInfo!.stepTwo = val.data.stepTwo;
@@ -124,7 +124,7 @@ export class SystemReviewComponent {
   }
 
   getStepThree() {
-    this.connectServerService.getRequest<ApiResponse<{ stepThree: StepThree }>>(Connect.urlServerLaraApi, 'system/infoStepThree', { id: this.idsystem }).
+    this.connectServerService.getRequest<ApiResponse<{ stepThree: StepThree }>>(Connect.urlServerLaraWecare, 'system/infoStepThree', { id: this.idsystem }).
       subscribe((val: ApiResponse<{ stepThree: StepThree }>) => {
         if (val.data.stepThree) {
           this.systemInfo!.stepThree = val.data.stepThree;
@@ -138,7 +138,7 @@ export class SystemReviewComponent {
       stepFour: StepFour,
       stepInverter: InverterData,
       stepCluster: ClusterData
-    }>>(Connect.urlServerLaraApi, 'system/infoStepFour',
+    }>>(Connect.urlServerLaraWecare, 'system/infoStepFour',
       {
         id: this.idsystem
       })
@@ -157,7 +157,7 @@ export class SystemReviewComponent {
   getStepFive() {
     this.connectServerService.getRequest<ApiResponse<{
       stepFive: StepFive,
-    }>>(Connect.urlServerLaraApi, 'system/infoStepFive',
+    }>>(Connect.urlServerLaraWecare, 'system/infoStepFive',
       {
         id: this.idsystem
       })
@@ -174,7 +174,7 @@ export class SystemReviewComponent {
   getStepSix() {
     this.connectServerService.getRequest<ApiResponse<{
       stepSix: StepSix,
-    }>>(Connect.urlServerLaraApi, 'system/infoStepSix',
+    }>>(Connect.urlServerLaraWecare, 'system/infoStepSix',
       {
         id: this.idsystem
       })
@@ -190,7 +190,7 @@ export class SystemReviewComponent {
 
   getStepStatus() {
     this.connectServerService.getRequest<ApiResponse<{ stepStatusList: StepStatus[] }>>(
-      Connect.urlServerLaraApi, 'system/listStepSystemStatus', { idsystem: this.idsystem })
+      Connect.urlServerLaraWecare, 'system/listStepSystemStatus', { idsystem: this.idsystem })
       .subscribe((val: ApiResponse<{ stepStatusList: StepStatus[] }>) => {
         if (val.data) {
           this.stepStatusList = val.data.stepStatusList;
@@ -209,7 +209,7 @@ export class SystemReviewComponent {
     // console.log("Received 1")
     if (this.idsystem > 0) {
       this.connectServerService.getRequest<ApiResponse<{ status: { id: number, name: string, color: string } }>>
-        (Connect.urlServerLaraApi, 'system/systemState', { idsystem: this.idsystem })
+        (Connect.urlServerLaraWecare, 'system/systemState', { idsystem: this.idsystem })
         .subscribe((val: ApiResponse<{ status: { id: number, name: string, color: string } }>) => {
           if (val.data) {
             this.systemStatus = val.data.status;
@@ -230,7 +230,7 @@ export class SystemReviewComponent {
   }
 
   getImages(step: number) {
-    this.connectServerService.getRequest<ApiResponse<{ listFiles: Image[] }>>(Connect.urlServerLaraApi, 'system/filesList',
+    this.connectServerService.getRequest<ApiResponse<{ listFiles: Image[] }>>(Connect.urlServerLaraWecare, 'system/filesList',
       {
         idsystem: this.idsystem,
         step_position: step
@@ -327,7 +327,7 @@ export class SystemReviewComponent {
   }
 
   setStepStatus(step: number, message: string | null, status: number) {
-    this.connectServerService.postRequest<ApiResponse<any>>(Connect.urlServerLaraApi, 'system/changeStepStatus', 
+    this.connectServerService.postRequest<ApiResponse<any>>(Connect.urlServerLaraWecare, 'system/changeStepStatus', 
       {idsystem: this.idsystem, step: step, message: message, status: status})
       .subscribe((val: ApiResponse<any>) => {
         if(val) {

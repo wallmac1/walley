@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { Status } from '../interfaces/step-status';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserState } from '../../../ngrx/user/user.reducer';
 import { Store } from '@ngrx/store';
+import { Status } from '../../interfaces/step-status';
 
 @Component({
   selector: 'app-error-message',

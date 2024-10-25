@@ -53,7 +53,7 @@ export class ConnectServerService {
   }
 
   getRequestCountry(): Observable<Country[]> {
-    return this.getRequest<Country[]>(Connect.urlServerLaraApi, 'user/countriesList', {})
+    return this.getRequest<Country[]>(Connect.urlServerLara, 'infoworld/countriesList', {})
       .pipe(map((val: Country[]) => val.sort((a, b) => a.common_name.localeCompare(b.common_name))));
   }
 

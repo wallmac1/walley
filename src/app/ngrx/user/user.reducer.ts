@@ -1,11 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 import * as UserActions from './user.actions';
-import { PermissionsUser } from '../../interfaces/permissions-user';
-import { User } from '../../pages/profile/interfaces/user';
+import { User } from '../../interfaces/user';
 
 export interface UserState {
   userInfo: User | null;
-  permissions: PermissionsUser | null;
+  permissions: Permissions | null;
   error: string | null;
 }
 
