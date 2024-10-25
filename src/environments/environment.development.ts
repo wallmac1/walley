@@ -5,7 +5,7 @@ export const environment = {
         siteKey: '6Lfv8QwpAAAAAChGzdMQzmbzJMMUbZJxb3QFI7ll',
     },
     urlserver: {
-        laravelApi: '/proxylink/',
+        laravelApi: '/proxylink/api/wecareweb/',
         laravel: '/proxylink/'
     }
 }

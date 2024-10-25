@@ -1,0 +1,82 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.INSTALLATIONDATE" | translate}}: </span>
+      <p class="content">
+        {{ stepFour?.product_installdate | date: (currentLanguage === 'it' ? 'dd/MM/yyyy' : 'yyyy-MM-dd') }}
+      </p>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.SYSCOMPOSITION" | translate}}: </span>
+      <p *ngIf="stepFour?.product_systemcomposition == 1" class="content">Inverter</p>
+      <p *ngIf="stepFour?.product_systemcomposition == 3" class="content">Inverter / Batteries</p>
+      <p *ngIf="stepFour?.product_systemcomposition == null" class="content">--</p>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.WECOCOMPONENTS" | translate}}: </span>
+      <p *ngIf="stepFour?.product_systemweco == 1" class="content">Inverter</p>
+      <p *ngIf="stepFour?.product_systemweco == 2" class="content">Batteries</p>
+      <p *ngIf="stepFour?.product_systemweco == 3" class="content">Inverter / Batteries</p>
+
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3" *ngIf="stepFour?.product_systemcomposition == 3 &&
+          stepFour?.product_systemweco != null && stepFour?.product_systemweco != 3">
+      <!--
+            <p *ngIf="stepFour?.product_brand; else emptyFieldBrand" class="content">{{stepFour?.product_brand}}</p>
+            <ng-template #emptyFieldBrand>
+                <p class="content">-</p>
+            </ng-template> -->
+      <span class="subtitles" *ngIf="stepFour?.product_systemweco == 1">
+        {{"SYSTEM.READONLY.OTHERBRANDBATT" | translate}}</span>
+      <span class="subtitles" *ngIf="stepFour?.product_systemweco == 2">{{"SYSTEM.READONLY.OTHERBRANDINV" |
+        translate}}</span>
+      <p *ngIf="stepFour?.product_brand; else emptyFieldBrand" class="content">{{stepFour?.product_brand}}</p>
+      <ng-template #emptyFieldBrand>
+        <p class="content">-</p>
+      </ng-template>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.HYBRID" | translate}}: </span>
+      <p class="content">{{stepFour?.inverter_hybrid ? 'Si' : 'No'}}</p>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.ONLINE" | translate}}: </span>
+      <p class="content">{{stepFour?.inverter_online ? 'Si' : 'No'}}</p>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.VOLTAGE" | translate}}: </span>
+      <p *ngIf="stepFour?.str_refidwecaresystemvolt; else emptyFieldVolt" class="content">
+        {{stepFour?.str_refidwecaresystemvolt}}</p>
+      <ng-template #emptyFieldVolt>
+        <p class="content">-</p>
+      </ng-template>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.MODEL" | translate}}: </span>
+      <p *ngIf="stepFour?.str_system_model; else emptyFieldModel" class="content">{{stepFour?.str_system_model}}</p>
+      <ng-template #emptyFieldModel>
+        <p class="content">-</p>
+      </ng-template>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.TYPE" | translate}}: </span>
+      <p *ngIf="stepFour?.str_refidwecaresystemtype; else emptyFieldType" class="content">
+        {{stepFour?.str_refidwecaresystemtype}}</p>
+      <ng-template #emptyFieldType>
+        <p class="content">-</p>
+      </ng-template>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.SINGLEBATTERY" | translate}}: </span>
+      <p class="content">{{stepFour?.cluster_singlebattery ? 'Si' : 'No'}}</p>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+      <span class="subtitles">{{"SYSTEM.READONLY.CLUSTERNUMBER" | translate}}: </span>
+      <p *ngIf="stepFour?.cluster_numberdevices; else emptyFieldBatteries" class="content">
+        {{stepFour?.cluster_numberdevices}}</p>
+      <ng-template #emptyFieldBatteries>
+        <p class="content">0</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

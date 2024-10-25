@@ -1,0 +1,68 @@
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-12 col-md-6 col-lg-4 col-xxl-4 px-0 px-md-2 mb-2"
+            *ngFor="let inverter of stepFive?.inverters_list; let i = index">
+            <mat-card style="min-height: 100%;">
+                <mat-card-header style="border-bottom: 2px solid lightgray;" class="bg-primary bg-opacity-10">
+                    <mat-card-title style="font-weight: bold; font-size: medium;">
+                        {{ "SYSTEM.READONLY.INVERTER" | translate}} {{i+1}}
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="pb-2 pl-0 pr-0">
+                    <div class="container-fluid pb-3">
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <span class="subtitles">{{"SYSTEM.READONLY.SERIALNUMBER" | translate}}: </span>
+                                <p class="content">{{inverter.serialnumber}}</p>
+                            </div>
+                            <div class="col-12">
+                                <span class="subtitles">{{"SYSTEM.READONLY.MODEL" | translate}}: </span>
+                                <p class="content">{{inverter.model}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="row mt-4">
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-4 px-0 px-md-2 mb-2"
+      *ngFor="let formGroup of stepFive?.inverters_list; let i = index" formArrayName="inverters_list">
+      <mat-card class="mb-4">
+        <div [formGroupName]="i">
+          <mat-card-header style="border-bottom: 2px solid lightgray;" class="bg-primary bg-opacity-10">
+            <mat-card-title style="font-weight: bold; font-size: medium;">
+              {{ "SYSTEM.STEPFIVE.INVERTER" | translate}} {{i+1}}
+            </mat-card-title>
+            Aggiungi il pulsante "X" per rimuovere
+            <button type="button" class="close" (click)="removeInverter(i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content class="pb-2 pl-0 pr-0">
+            <div class="container-fluid pb-3">
+              <div class="row">
+                <div class="col-12">
+                  <label class="mt-2" style="font-weight: bold; font-size: medium;">
+                    {{ "SYSTEM.STEPFIVE.SERIALNUMBER" | translate}}
+                  </label>
+                </div>
+                <div class="col-12">
+                  <input class="form-control" type="text" formControlName="serialnumber">
+                  <app-scanner-selector class="cameraIcon"
+                    (barcodeScanned)="onBarcodeScanned($event, i)"></app-scanner-selector>
+                </div>
+                <div class="col-12">
+                  <label class="mt-2" style="font-weight: bold; font-size: medium;">{{
+                    "SYSTEM.STEPFIVE.MODEL" | translate}}</label>
+                  <input class="form-control" type="text" formControlName="model">
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </div>
+      </mat-card>
+    </div>
+  </div> -->

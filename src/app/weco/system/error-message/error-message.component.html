@@ -1,0 +1,17 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 col-xl-6 card" style="background-color: lightgray;">
+            <div class="card-body pt-2 pb-1 px-0">
+              <h6 class="card-title mb-0" style="border-bottom: 1px solid black;">
+                <span class="fw-bold">Commento del Tecnico WECO </span> - 
+                <span class="card-subtitle text-mute" style="font-size: small;">
+                    {{error[0].message_date | date: (currentLanguage === 'it' ? 'dd/MM/yyyy' : 'yyyy-MM-dd')}}
+                </span>
+              </h6>
+              <p class="card-text">{{error[0].message}}</p>
+            </div>
+          </div>
+    </div>
+</div>
+
+

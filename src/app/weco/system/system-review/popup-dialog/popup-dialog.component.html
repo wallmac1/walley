@@ -1,0 +1,17 @@
+<h2 mat-dialog-title [ngStyle]="{'background-color': data.color}">
+    {{ data.title }}
+</h2>
+
+<mat-dialog-content class="pt-2 pb-2">
+    <p>{{ data.message }}</p>
+    <textarea class="form-control" *ngIf="data.textArea" rows="4" [formControl]="comment"
+    [class.is-invalid]="comment.invalid && (comment.dirty || submitted)"></textarea>
+    <div *ngIf="comment.invalid && (comment.dirty || submitted)" style="font-size: x-small; color: red;">
+        Inserisci un commento per inviare la revisione dello step
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="justify-content-end">
+    <button class="btn btn-outline-success me-2" (click)="onConfirm()">{{ data.actionOne }}</button>
+    <button class="btn btn-outline-danger" (click)="onCancel()">{{ data.actionTwo }}</button>
+</mat-dialog-actions>

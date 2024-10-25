@@ -8,6 +8,7 @@ import { DeleteComponent } from './settings/menu/delete/delete.component';
 import { AuthorizationsComponent } from './weco/authorizations/authorizations.component';
 import { SystemsListComponent } from './weco/system/systems-list/systems-list.component';
 import { AssistanceComponent } from './weco/assistance/assistance.component';
+import { SystemReviewComponent } from './weco/system/system-review/system-review.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -19,5 +20,6 @@ export const routes: Routes = [
     { path: "menu/delete", component: DeleteComponent },
     { path: "authorizations", component: AuthorizationsComponent },
     { path: "systemsList", component: SystemsListComponent },
-    { path: "assistance", component: AssistanceComponent }
+    { path: "assistance", component: AssistanceComponent },
+    { path: "systemReview/:id", component: SystemReviewComponent }
 ];

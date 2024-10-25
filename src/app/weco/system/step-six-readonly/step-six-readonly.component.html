@@ -1,0 +1,104 @@
+<div class="col-12">
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <div *ngFor="let cluster of stepSix?.clusters_list;let i = index;" class="mb-4 col-12 col-sm-6 col-lg-4">
+        <mat-card style="min-height: 100%;">
+          <mat-card-header class="bg-success bg-opacity-10">
+            <mat-card-title style="font-weight: bold; font-size: medium;">
+              <span>{{ "SYSTEM.READONLY.CLUSTER" | translate }} {{i + 1}}</span>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngFor="let battery of cluster.batteries;let j = index">
+              <div class="row">
+                <div class="col-12" style="margin-top: 0px; margin-bottom: 0px;padding-top: 0px; padding-bottom: 0px;"
+                  [ngClass]="{'mt-2': j == 0}">
+                  <span class="" *ngIf="battery.masterorslave == 1">
+                    <span class="subtitles" *ngIf="cluster.batteries.length > 1">{{"SYSTEM.READONLY.MASTER" |
+                      translate}}: </span>
+                    <span class="subtitles" *ngIf="cluster.batteries.length == 1">{{"SYSTEM.READONLY.BATTERY" |
+                      translate}}: </span>
+                    <p class="content">{{battery.serialnumber}}</p>
+                  </span>
+                </div>
+                <div class="col-12" *ngIf="battery.masterorslave == 0">
+                  <span class="subtitles">{{"SYSTEM.READONLY.SLAVE" | translate}}: </span>
+                  <p class="content">{{battery.serialnumber}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <span class="subtitles">{{"SYSTEM.READONLY.INVERTER" | translate}}: </span>
+                <p class="content">
+                  <span *ngFor="let inverter of cluster.inverters; let i = index">
+                    <span *ngIf="i > 0">,</span><span> {{inverter.serialnumber}}</span>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="col-12">
+    <div class="container-fluid mt-4">
+      <div class="row">
+        <div *ngFor="let cluster of getClusterFieldAsFormArray(stepSixForm).controls ;let i = index;"
+          formArrayName='clusters_list' class="mb-4 col-12 col-sm-6 col-lg-4">
+          <div [formGroupName]="i">
+            <mat-card>
+              <mat-card-header class="bg-success bg-opacity-10">
+                <mat-card-title style="font-weight: bold; font-size: medium;">
+                  <span *ngIf="stepFourService.cluster_singlebattery === 0; else elseEmpty">{{ "SYSTEM.STEPSIX.CLUSTER"
+                    | translate }} {{i + 1}}</span>
+                  <ng-template #elseEmpty>{{ "SYSTEM.STEPSIX.CLUSTER" | translate }} {{i + 1}}</ng-template>
+                </mat-card-title>
+                Aggiungi il pulsante "X" per rimuovere
+                <button type="button" class="close" (click)="removeCluster(i)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-card-header>
+              <mat-card-content>
+                <div *ngFor="let bat of cluster.get('batteries').controls;let j = index" formArrayName="batteries">
+                  <div [formGroupName]="j" class="row">
+                    <div class="col-12"
+                      style="margin-top: 0px; margin-bottom: 0px;padding-top: 0px; padding-bottom: 0px;"
+                      [ngClass]="{'mt-2': j == 0}">
+                      <span class="" *ngIf="cluster.get('batteries').controls.length > 1">
+                        {{getStrMasterSlave(bat.get('masterorslave').value)}}
+                      </span>
+                    </div>
+                    <div class="col-12">
+                      <label style="font-weight: bold; font-size: medium;" for="sn-{{i}}-{{j}}">
+                        {{ "SYSTEM.STEPSIX.SERIALNUMBER" | translate }}
+                      </label>
+                      <input id="sn-{{i}}-{{j}}" class="form-control" type="text" formControlName="serialnumber">
+                    </div>
+                  </div>
+                </div>
+                <label class="mt-2" style="font-weight: bold; font-size: medium;" for="inverters">
+                  {{ "SYSTEM.STEPSIX.CONNECTEDINVERTER" | translate }}
+                </label>
+                <mat-form-field class="col-12" appearance="outline">
+                  <mat-select formControlName="inverters" multiple>
+                    @for (inverter of view_inverterslist; track inverter) {
+                    <mat-option [value]="inverter.id">{{inverter.serialnumber}}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </mat-card-content>
+
+              <div class="field my-4 col-12">
+            <p-multiSelect [options]="listaInverter" formControlName="inverter" optionLabel="sn"
+              placeholder="Select inverter"></p-multiSelect>
+          </div>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->

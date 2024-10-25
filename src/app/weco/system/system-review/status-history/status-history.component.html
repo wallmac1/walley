@@ -1,0 +1,19 @@
+<div class="container-fluid">
+    <div *ngFor="let status of statusList" class="row justify-content-center align-items-top">
+        <div class="col-12 col-md-3">
+            <span class="contentText">
+                - &#40;{{status.message_date}}&#41; {{status.name}}:
+            </span>
+        </div>
+        <div class="col-12 col-md-8">
+            <p *ngIf="status.message; else emptyBlock" class="contentText p-1 mb-0">
+                {{status.message}}
+            </p>
+            <ng-template #emptyBlock>
+                <p class="contentText p-1 mb-0">
+                    -- Nessun Messaggio --
+                </p>
+            </ng-template>
+        </div>
+    </div>
+</div>

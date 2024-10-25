@@ -1,0 +1,19 @@
+.mat-mdc-form-field {
+    margin-top: 16px;
+}
+.arrowBtn {
+  position: absolute !important;
+  margin-top: 16px;
+  margin-left: 50px;
+  z-index: 100;
+}
+
+.arrowBtn:hover {
+  color: white;
+}
+
+.inline-bordered {
+  display: inline;
+  font-weight: bold;
+  border-bottom: 1px solid #ca2314;
+}

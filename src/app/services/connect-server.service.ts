@@ -1,12 +1,16 @@
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, lastValueFrom, map } from 'rxjs';
+import { Country } from '../weco/interfaces/country';
+import { Connect } from '../classes/connect';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConnectServerService {
 
+  readonly sanitizer = inject(DomSanitizer);
   constructor(private http: HttpClient) { }
 
   postRequest<T>(urlServer: string, urlFunction: string, parametri: object): Observable<any> {
@@ -46,6 +50,22 @@ export class ConnectServerService {
     } else {
       return 30000; // Timeout di 30 secondi per gli altri tipi di richieste (PUT, DELETE, ecc.)
     }
+  }
+
+  getRequestCountry(): Observable<Country[]> {
+    return this.getRequest<Country[]>(Connect.urlServerLaraApi, 'user/countriesList', {})
+      .pipe(map((val: Country[]) => val.sort((a, b) => a.common_name.localeCompare(b.common_name))));
+  }
+
+  // Metodo per ottenere l'immagine con token Bearer
+  // Metodo per ottenere l'immagine con autenticazione (token gestito dall'interceptor)
+  getImageWithToken(imageUrl: string): Observable<SafeUrl> {
+    return this.http.get(imageUrl, { responseType: 'blob' }).pipe(
+      map(blob => {
+        const objectURL = URL.createObjectURL(blob);
+        return this.sanitizer.bypassSecurityTrustUrl(objectURL);
+      })
+    );
   }
 
 }

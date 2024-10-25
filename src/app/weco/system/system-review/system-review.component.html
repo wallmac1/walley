@@ -1,0 +1,368 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 p-2 text-center">
+            <h2 class="inline-bordered">
+                {{systemInfo.stepOne.system_name}}
+            </h2>
+        </div>
+
+        <div class="col-12 fst-italic text-center p-1 p-md-2 p-lg-3">
+            {{systemInfo.stepOne!.system_description}}
+        </div>
+
+        <div class="col-12 text-center mt-2">
+            <span class="fw-bold">
+                {{"SYSTEM.SYSTEMMANAGEMENT.STATUS" | translate}}:
+            </span>
+            <span *ngIf="systemStatus" class="ms-1">
+                <i class="bi bi-circle-fill" style="font-size: large;" [ngStyle]="{'color':  '#'+systemStatus.color}">
+                </i>
+            </span>
+            <span class="ms-1">
+                {{systemStatus?.name}}
+            </span>
+        </div>
+
+        <div class="col-12 p-0">
+            <mat-stepper *ngIf="stepStatusList.length > 0" orientation="vertical" [linear]="false" #stepper>
+
+                <mat-step errorMessage="Incomplete">
+                    <ng-template matStepLabel>
+                        <span style="font-weight: bold;">{{"SYSTEM.SYSTEMMANAGEMENT.SYSANDCUSTINFO" | translate}}</span>
+                        <span class="ms-4">
+                            <i *ngIf="stepStatusList[0].listStepStatus[0].idstepstatus == 10"
+                                class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[0].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[0].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[0].listStepStatus[0].idstepstatus == 15"
+                                class="bi bi-check-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[0].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[0].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[0].listStepStatus[0].idstepstatus == 5"
+                                class="bi bi-question-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color': '#'+stepStatusList[0].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[0].listStepStatus[0].name">
+                            </i>
+                        </span>
+                    </ng-template>
+                    <ng-template matStepContent>
+                        <app-step-one-readonly #stepOne (formEmit)="onFormOneReceived($event)"
+                            (nextStep)="stepper.next()" [idsystem]="idsystem" [countriesList]="countriesList"
+                            [stepOne]="systemInfo.stepOne">
+                        </app-step-one-readonly>
+                        <app-status-history [statusList]="stepStatusList[0].listStepStatus"></app-status-history>
+                        <div *ngIf="stepStatusList[0].listStepStatus[0].idstepstatus == 5; else approvedBlock"
+                            class="row justify-content-center align-items-center mt-1">
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-success" (click)="approveStep(1)">
+                                    Approva Step
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-danger" (click)="refuseStep(1)">
+                                    Rifiuta Step
+                                </button>
+                            </div>
+                        </div>
+                        <ng-template #approvedBlock>
+                            <div class="row justify-content-center align-items-center mt-2">
+                                <div class="col-12 col-sm-6 col-md-4 text-center">
+                                    <button class="btn btn-outline-warning" (click)="waitingStep(1)">
+                                        Metti in Attesa
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </mat-step>
+
+                <mat-step errorMessage="Incomplete">
+                    <ng-template matStepLabel>
+                        <span style="font-weight: bold;">
+                            {{"SYSTEM.SYSTEMMANAGEMENT.INSTALLATIONSITE" | translate}}
+                        </span>
+                        <span class="ms-4">
+                            <i *ngIf="stepStatusList[1].listStepStatus[0].idstepstatus == 10"
+                                class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[1].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[1].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[1].listStepStatus[0].idstepstatus == 15"
+                                class="bi bi-check-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[1].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[1].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[1].listStepStatus[0].idstepstatus == 5"
+                                class="bi bi-question-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[1].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[1].listStepStatus[0].name">
+                            </i>
+                        </span>
+                    </ng-template>
+                    <ng-template matStepContent>
+                        <app-step-two-readonly #stepTwo
+                            (nextStep)="stepper.next()" [countriesList]="countriesList" [idsystem]="idsystem"
+                            [stepTwo]="systemInfo.stepTwo">
+                        </app-step-two-readonly>
+                        <app-status-history [statusList]="stepStatusList[1].listStepStatus"></app-status-history>
+                        <div *ngIf="stepStatusList[1].listStepStatus[0].idstepstatus == 5; else approvedBlock"
+                            class="row justify-content-center align-items-center mt-1">
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-success" (click)="approveStep(2)">
+                                    Approva Step
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-danger" (click)="refuseStep(2)">
+                                    Rifiuta Step
+                                </button>
+                            </div>
+                        </div>
+                        <ng-template #approvedBlock>
+                            <div class="row justify-content-center align-items-center mt-2">
+                                <div class="col-12 col-sm-6 col-md-4 text-center">
+                                    <button class="btn btn-outline-warning" (click)="waitingStep(2)">
+                                        Metti in Attesa
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </mat-step>
+
+                <mat-step errorMessage="Incomplete">
+                    <ng-template matStepLabel>
+                        <span style="font-weight: bold;">
+                            {{"SYSTEM.SYSTEMMANAGEMENT.TECHNICIANINFO" | translate}}
+                        </span>
+                        <span class="ms-4">
+                            <i *ngIf="stepStatusList[2].listStepStatus[0].idstepstatus == 10"
+                                class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[2].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[2].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[2].listStepStatus[0].idstepstatus == 15"
+                                class="bi bi-check-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[2].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[2].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[2].listStepStatus[0].idstepstatus == 5"
+                                class="bi bi-question-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[2].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[2].listStepStatus[0].name">
+                            </i>
+                        </span>
+                    </ng-template>
+                    <ng-template matStepContent>
+                        <app-step-three-readonly #stepThree 
+                            (nextStep)="stepper.next()" [stepThree]="systemInfo.stepThree"
+                            [countriesList]="countriesList" [idsystem]="idsystem">
+                        </app-step-three-readonly>
+                        <app-status-history [statusList]="stepStatusList[2].listStepStatus"></app-status-history>
+                        <div *ngIf="stepStatusList[2].listStepStatus[0].idstepstatus == 5; else approvedBlock"
+                            class="row justify-content-center align-items-center mt-1">
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-success" (click)="approveStep(3)">
+                                    Approva Step
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-danger" (click)="refuseStep(3)">
+                                    Rifiuta Step
+                                </button>
+                            </div>
+                        </div>
+                        <ng-template #approvedBlock>
+                            <div class="row justify-content-center align-items-center mt-2">
+                                <div class="col-12 col-sm-6 col-md-4 text-center">
+                                    <button class="btn btn-outline-warning" (click)="waitingStep(3)">
+                                        Metti in Attesa
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </mat-step>
+
+                <mat-step errorMessage="Incomplete">
+                    <ng-template matStepLabel>
+                        <span style="font-weight: bold;">
+                            {{"SYSTEM.SYSTEMMANAGEMENT.DEVICESINFO" | translate}}
+                        </span>
+                        <span class="ms-4">
+                            <i *ngIf="stepStatusList[3].listStepStatus[0].idstepstatus == 10"
+                                class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[3].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[3].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[3].listStepStatus[0].idstepstatus == 15"
+                                class="bi bi-check-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[3].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[3].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[3].listStepStatus[0].idstepstatus == 5"
+                                class="bi bi-question-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[3].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[3].listStepStatus[0].name">
+                            </i>
+                        </span>
+                    </ng-template>
+                    <ng-template matStepContent>
+                        <app-step-four-readonly #stepFour
+                            (nextStep)="stepper.next()" [stepFour]="systemInfo.stepFour" [idsystem]="idsystem">
+                        </app-step-four-readonly>
+                        <app-status-history [statusList]="stepStatusList[3].listStepStatus"></app-status-history>
+                        <div *ngIf="stepStatusList[3].listStepStatus[0].idstepstatus == 5; else approvedBlock"
+                            class="row justify-content-center align-items-center mt-1">
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-success" (click)="approveStep(4)">
+                                    Approva Step
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-danger" (click)="refuseStep(4)">
+                                    Rifiuta Step
+                                </button>
+                            </div>
+                        </div>
+                        <ng-template #approvedBlock>
+                            <div class="row justify-content-center align-items-center mt-2">
+                                <div class="col-12 col-sm-6 col-md-4 text-center">
+                                    <button class="btn btn-outline-warning" (click)="waitingStep(4)">
+                                        Metti in Attesa
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </mat-step>
+
+                <mat-step errorMessage="Incomplete">
+                    <ng-template matStepLabel>
+                        <span style="font-weight: bold;">
+                            {{"SYSTEM.SYSTEMMANAGEMENT.INVERTER" | translate}}
+                        </span>
+                        <span class="ms-4">
+                            <i *ngIf="stepStatusList[4].listStepStatus[0].idstepstatus == 10"
+                                class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[4].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[4].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[4].listStepStatus[0].idstepstatus == 15"
+                                class="bi bi-check-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[4].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[4].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[4].listStepStatus[0].idstepstatus == 5"
+                                class="bi bi-question-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[4].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[4].listStepStatus[0].name">
+                            </i>
+                        </span>
+                    </ng-template>
+                    <ng-template matStepContent>
+                        <app-step-five-readonly #stepFive
+                            (nextStep)="stepper.next()" [stepFive]="systemInfo.stepFive" [idsystem]="idsystem">
+                        </app-step-five-readonly>
+                        <app-status-history [statusList]="stepStatusList[4].listStepStatus"></app-status-history>
+                        <div *ngIf="stepStatusList[4].listStepStatus[0].idstepstatus == 5; else approvedBlock"
+                            class="row justify-content-center align-items-center mt-1">
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-success" (click)="approveStep(5)">
+                                    Approva Step
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-danger" (click)="refuseStep(5)">
+                                    Rifiuta Step
+                                </button>
+                            </div>
+                        </div>
+                        <ng-template #approvedBlock>
+                            <div class="row justify-content-center align-items-center mt-2">
+                                <div class="col-12 col-sm-6 col-md-4 text-center">
+                                    <button class="btn btn-outline-warning" (click)="waitingStep(5)">
+                                        Metti in Attesa
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </mat-step>
+
+                <mat-step *ngIf="systemInfo.stepFour.product_systemcomposition == 3 && stepStatusList.length > 4"
+                    errorMessage="Incomplete">
+                    <ng-template matStepLabel>
+                        <span style="font-weight: bold;">
+                            {{"SYSTEM.SYSTEMMANAGEMENT.BATTERIES" | translate}}
+                        </span>
+                        <span class="ms-4">
+                            <i *ngIf="stepStatusList[5].listStepStatus[0].idstepstatus == 10"
+                                class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[5].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[5].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[5].listStepStatus[0].idstepstatus == 15"
+                                class="bi bi-check-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[5].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[5].listStepStatus[0].name">
+                            </i>
+                            <i *ngIf="stepStatusList[5].listStepStatus[0].idstepstatus == 5"
+                                class="bi bi-question-circle-fill" style="font-size: large;"
+                                [ngStyle]="{'color':  '#'+stepStatusList[5].listStepStatus[0].color}"
+                                [matTooltip]="stepStatusList[5].listStepStatus[0].name">
+                            </i>
+                        </span>
+                    </ng-template>
+                    <ng-template matStepContent>
+                        <app-step-six-readonly #stepSix
+                            (nextStep)="stepper.next()" [stepSix]="systemInfo.stepSix" [idsystem]="idsystem">
+                        </app-step-six-readonly>
+                        <app-status-history [statusList]="stepStatusList[5].listStepStatus"></app-status-history>
+                        <div *ngIf="stepStatusList[5].listStepStatus[0].idstepstatus == 5; else approvedBlock"
+                            class="row justify-content-center align-items-center mt-1">
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-success" (click)="approveStep(6)">
+                                    Approva Step
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 text-center mt-1">
+                                <button class="btn btn-outline-danger" (click)="refuseStep(6)">
+                                    Rifiuta Step
+                                </button>
+                            </div>
+                        </div>
+                        <ng-template #approvedBlock>
+                            <div class="row justify-content-center align-items-center mt-2">
+                                <div class="col-12 col-sm-6 col-md-4 text-center">
+                                    <button class="btn btn-outline-warning" (click)="waitingStep(6)">
+                                        Metti in Attesa
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </mat-step>
+            </mat-stepper>
+            <div class="row justify-content-center align-items-center p-1 p-sm-2 p-md-3">
+                <div class="col-12 col-md-4 text-center mt-2">
+                    <button class="btn btn-outline-success">
+                        Approvare
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 text-center mt-2">
+                    <button class="btn btn-outline-danger">
+                        Non Approvare
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 text-center mt-2">
+                    <button class="btn btn-outline-warning">
+                        Richiedi Modifica
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

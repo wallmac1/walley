@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="subtitles">{{"SYSTEM.READONLY.COUNTRY" | translate}}: </span>
+            <p class="content">{{country_name}}</p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="subtitles">{{"SYSTEM.READONLY.ADDRESS" | translate}}: </span>
+            <p class="content">{{stepTwo?.location_address}}</p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="subtitles">{{"SYSTEM.READONLY.CITY" | translate}}: </span>
+            <p class="content">{{stepTwo?.location_city}}</p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="subtitles">{{"SYSTEM.READONLY.POSTALCODE" | translate}}: </span>
+            <p class="content">{{stepTwo?.location_postalcode}}</p>
+        </div>
+
+        <div *ngIf="imagesStep.length > 0" class="col-12 mb-2 text-center">
+            <span class="subtitles">{{"SYSTEM.READONLY.ATTACHEDFILES" | translate}}</span>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row justify-content-center mt-2">
+                <ng-container *ngFor="let image2 of imagesStep">
+                    <div *ngIf="image2.src" class="col-xs-12 col-sm-6 col-md-2 mb-4 text-center"
+                        style="width: 100px; height: 100px;">
+                        <!-- L'URL sicuro è già gestito nel componente -->
+                        <img [src]="image2.src" [alt]="image2.title" class="img-fluid thumbnailImg">
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
