@@ -142,7 +142,32 @@
       "REQUEST": "Request the approval of the system to get access to all the services and request extend the warranty of inverters.",
       "COMPLETE": "Concludi ogni step per richiedere l'approvazione dell'impianto al tecnico Weco.",
       "CANNOTMODIFY": "You can't modify a system that is under approval",
-      "OVERVIEW": "System Overview"
+      "OVERVIEW": "System Overview",
+      "STATUSCHRONOLOGY": "Status Chronology",
+      "BUTTONS": {
+        "APPROVE": "Approve Step",
+        "REFUSE": "Refuse Step",
+        "WAITING": "On Hold",
+        "REPLYTOREQUEST": "Reply to Request"
+      },
+      "TABLE": {
+        "DATE": "Date",
+        "STATUS": "Status",
+        "MESSAGE": "Message"
+      },
+      "WARRANTYPOPUP": {
+        "REPLY": "Reply to Request",
+        "REQUESTMODIFICATION": "Request customer modification",
+        "ATTENTION": "Attention: this message will be read by the customer",
+        "EXTENDWARRANTY": "Extend Warranty",
+        "STARTWARRANTY": "Warranty Start",
+        "ENDWARRANTY": "Warranty End",
+        "BATTERIES": "Batteries",
+        "INVERTER": "Inverter",
+        "REFUSEWARRANTY": "Refuse Warranty",
+        "SAVE": "Save",
+        "CANCEL": "Cancel"
+      }
     },
     "SYSTEMLIST": {
       "TITLE": "SYSTEMS LIST",

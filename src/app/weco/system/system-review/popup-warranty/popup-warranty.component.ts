@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { ConnectServerService } from '../../../../services/connect-server.service';
 import { Connect } from '../../../../classes/connect';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-popup-warranty',
@@ -16,7 +17,8 @@ import { Connect } from '../../../../classes/connect';
     MatDialogActions,
     MatDialogClose,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './popup-warranty.component.html',
   styleUrl: './popup-warranty.component.scss'

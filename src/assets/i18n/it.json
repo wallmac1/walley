@@ -142,7 +142,32 @@
       "REQUEST": "Richiedi l'approvazione del impianto per accedere a tutti i servizi e richiedere l'estensione di garanzia degli inverter.",
       "COMPLETE": "Concludi ogni passaggio per richiedere l'approvazione dell'impianto al tecnico Weco.",
       "CANNOTMODIFY": "Non puoi modificare un impianto in fase di approvazione",
-      "OVERVIEW": "Panoramica dell'impianto"
+      "OVERVIEW": "Panoramica dell'impianto",
+      "STATUSCHRONOLOGY": "Cronologia Stati Impianto",
+      "BUTTONS": {
+        "APPROVE": "Approva Step",
+        "REFUSE": "Rifiuta Step",
+        "WAITING": "Metti in Attesa",
+        "REPLYTOREQUEST": "Rispondi alla Richiesta"
+      },
+      "TABLE": {
+        "DATE": "Data",
+        "STATUS": "Stato",
+        "MESSAGE": "Messaggio"
+      },
+      "WARRANTYPOPUP": {
+        "REPLY": "Rispondi alla Richiesta",
+        "REQUESTMODIFICATION": "Richiedi modifica da parte del cliente",
+        "ATTENTION": "Attenzione: questo messaggio verrà letto dal cliente",
+        "EXTENDWARRANTY": "Estendi Garanzia",
+        "STARTWARRANTY": "Inizio Garanzia",
+        "ENDWARRANTY": "Fine Garanzia",
+        "BATTERIES": "Batterie",
+        "INVERTER": "Inverter",
+        "REFUSEWARRANTY": "Rifiuta Garanzia",
+        "SAVE": "Salva",
+        "CANCEL": "Annulla"
+      }
     },
     "SYSTEMLIST": {
       "TITLE": "LISTA IMPIANTI",
