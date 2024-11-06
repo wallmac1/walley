@@ -131,11 +131,45 @@ export class PopupWarrantyComponent {
     });
   }
 
+  convertValues() {
+    const booleanResults = this.warrantyForm.getRawValue();
+    let results = {
+      customer_modification: 0,
+      modification_text: booleanResults.modification_text,
+      extend_battery: 0,
+      date_startbattery: booleanResults.date_endbattery,
+      date_endbattery: booleanResults.date_endbattery,
+      extend_inverter: 0,
+      date_startinverter: booleanResults.date_startinverter,
+      date_endinverter: booleanResults.date_endinverter,
+      dont_extendbattery: 0,
+      dont_extendinverter: 0,
+      warranty_text: booleanResults.warranty_text
+    }
+    if (booleanResults.customer_modification == true) {
+      results.customer_modification = 1;
+    }
+    if (booleanResults.extend_battery == true) {
+      results.extend_battery = 1;
+    }
+    if (booleanResults.extend_inverter == true) {
+      results.extend_inverter = 1;
+    }
+    if (booleanResults.dont_extendbattery == true) {
+      results.dont_extendbattery = 1;
+    }
+    if (booleanResults.dont_extendinverter == true) {
+      results.dont_extendinverter = 1;
+    }
+    return results
+  }
+
   // Chiude il dialogo e restituisce "Conferma"
   onConfirm(): void {
     this.submitted = true;
     if (this.comment.valid) {
-      this.dialogRef.close(this.warrantyForm.getRawValue());
+      const results = this.convertValues();
+      this.dialogRef.close(results);
     }
   }
 
