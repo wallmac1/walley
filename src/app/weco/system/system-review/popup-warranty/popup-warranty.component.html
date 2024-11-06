@@ -1,0 +1,134 @@
+<div style="min-width: 600px;">
+    <h2 mat-dialog-title class="bg-primary bg-gradient text-light">
+        Rispondi alla Richiesta
+    </h2>
+
+    <mat-dialog-content class="pt-2 pb-2 mt-2">
+        <div class="container-fluid">
+            <div [formGroup]="warrantyForm" class="row justify-content-center align-items-center">
+                <!-- CHECKBOX 1 -->
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="customer_modification"
+                            formControlName="customer_modification">
+                        <label class="form-check-label" for="customer_modification">
+                            Richiedi modifica da parte del cliente
+                        </label>
+                    </div>
+                </div>
+                <!-- TEXTAREA 1 -->
+                <div class="col-12 mt-2">
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="modification_text"
+                            formControlName="modification_text"></textarea>
+                        <label for="modification_text">Attenzione: questo messaggio verrà letto dal cliente</label>
+                    </div>
+                </div>
+
+                <!-- EXTEND WARRANTY -->
+                <div class="col-12 mt-2">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 mb-1">
+                            <span style="color: black; font-weight: bold;">Estendi Garanzia</span>
+                        </div>
+                    </div>
+                    <!-- Batteria -->
+                    <div class="row justify-content-center align-items-center" *ngIf="product_systemweco == 2">
+                        <div class="col-4"></div>
+                        <div class="col-4 col-md-3 text-center" style="font-size: small;">Inizio Garanzia</div>
+                        <div class="col-4 col-md-3 text-center" style="font-size: small;">Fine Garanzia</div>
+                    </div>
+                    <div class="row justify-content-center align-items-center" *ngIf="product_systemweco != 1">
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="extend_battery"
+                                    formControlName="extend_battery">
+                                <label class="form-check-label" for="extend_battery">Batterie</label>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-3">
+                            <input type="date" class="form-control" formControlName="date_startbattery"
+                                placeholder="Data inizio">
+                        </div>
+                        <div class="col-4 col-md-3">
+                            <input type="date" class="form-control" formControlName="date_endbattery"
+                                placeholder="Data fine">
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center align-items-center" *ngIf="product_systemweco != 2">
+                        <div class="col-4"></div>
+                        <div class="col-4 col-md-3 text-center" style="font-size: small;">Inizio Garanzia</div>
+                        <div class="col-4 col-md-3 text-center" style="font-size: small;">Fine Garanzia</div>
+                    </div>
+
+                    <!-- Inverter -->
+                    <div class="row justify-content-center align-items-center" *ngIf="product_systemweco != 2">
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="extend_inverter"
+                                    formControlName="extend_inverter">
+                                <label class="form-check-label" for="extend_inverter">Inverter</label>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-3">
+                            <input type="date" class="form-control" formControlName="date_startinverter"
+                                placeholder="Data inizio">
+                        </div>
+                        <div class="col-4 col-md-3">
+                            <input type="date" class="form-control" formControlName="date_endinverter"
+                                placeholder="Data fine">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DON'T EXTEND WARRANTY -->
+                <div class="col-12">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 mb-1">
+                            <span style="color: black; font-weight: bold;">Rifiuta Garanzia</span>
+                        </div>
+                    </div>
+                    <!-- Batteria -->
+                    <div class="row justify-content-center align-items-center" *ngIf="product_systemweco != 1">
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="dont_extendbattery"
+                                    formControlName="dont_extendbattery">
+                                <label class="form-check-label" for="dont_extendbattery">Batterie</label>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-3"></div>
+                        <div class="col-4 col-md-3"></div>
+                    </div>
+                    <!-- Inverter -->
+                    <div class="row justify-content-center align-items-center" *ngIf="product_systemweco != 2">
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="dont_extendinverter"
+                                    formControlName="dont_extendinverter">
+                                <label class="form-check-label" for="dont_extendinverter">Inverter</label>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-3"></div>
+                        <div class="col-4 col-md-3"></div>
+                    </div>
+                </div>
+
+                <!-- TEXTAREA 2 -->
+                <div class="col-12 mt-2">
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="warranty_text"
+                            formControlName="warranty_text"></textarea>
+                        <label for="warranty_text">Attenzione: questo messaggio verrà letto dal cliente</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="justify-content-end">
+        <button class="btn btn-outline-success me-2" (click)="onConfirm()">Salva</button>
+        <button class="btn btn-outline-danger" (click)="onCancel()">Annulla</button>
+    </mat-dialog-actions>
+</div>

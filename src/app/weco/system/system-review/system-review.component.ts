@@ -30,6 +30,8 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
 import { StepOneReadonlyComponent } from '../step-one-readonly/step-one-readonly.component';
 import { StepTwoReadonlyComponent } from '../step-two-readonly/step-two-readonly.component';
 import { StepThreeReadonlyComponent } from '../step-three-readonly/step-three-readonly.component';
+import { PopupWarrantyComponent } from './popup-warranty/popup-warranty.component';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-system-review',
@@ -46,7 +48,8 @@ import { StepThreeReadonlyComponent } from '../step-three-readonly/step-three-re
     StepFiveReadonlyComponent,
     StepSixReadonlyComponent,
     StatusHistoryComponent,
-    TranslateModule
+    TranslateModule,
+    MatTableModule
 ],
   templateUrl: './system-review.component.html',
   styleUrl: './system-review.component.scss'
@@ -62,9 +65,11 @@ export class SystemReviewComponent {
   @ViewChild('stepSix') obj_stepSix!: StepSixReadonlyComponent;
 
   modalImageUrl: string = '';
+  displayedColumns: string[] = ['date', 'status', 'message'];
 
   // TODO: MODIFICARE SYSTEM STATUS CON QUELLO REALE
-  systemStatus: { id: number, name: string, color: string } | null = null;
+  systemStatusList: { id: number, name: string, color: string, message: string | null,
+    message_date: string | null }[] = [];
   idsystem: number = 0;
   systemInfo: SystemInfoFull = this.initSystem();
   imagesStep2: Image[] = [];
@@ -105,7 +110,7 @@ export class SystemReviewComponent {
 
   getStepOne() {
     this.connectServerService.getRequest<ApiResponse<{ stepOne: StepOne }>>(Connect.urlServerLaraWecare,
-      'system/infoStepOne', { id: this.idsystem }).
+      'systems/infoStepOne', { id: this.idsystem }).
       subscribe((val: ApiResponse<{ stepOne: StepOne }>) => {
         if (val.data && val.data.stepOne) {
           this.systemInfo!.stepOne = val.data.stepOne;
@@ -114,7 +119,7 @@ export class SystemReviewComponent {
   }
 
   getStepTwo() {
-    this.connectServerService.getRequest<ApiResponse<{ stepTwo: StepTwo }>>(Connect.urlServerLaraWecare, 'system/infoStepTwo', { id: this.idsystem }).
+    this.connectServerService.getRequest<ApiResponse<{ stepTwo: StepTwo }>>(Connect.urlServerLaraWecare, 'systems/infoStepTwo', { id: this.idsystem }).
       subscribe((val: ApiResponse<{ stepTwo: StepTwo }>) => {
         if (val.data && val.data.stepTwo) {
           this.systemInfo!.stepTwo = val.data.stepTwo;
@@ -124,7 +129,7 @@ export class SystemReviewComponent {
   }
 
   getStepThree() {
-    this.connectServerService.getRequest<ApiResponse<{ stepThree: StepThree }>>(Connect.urlServerLaraWecare, 'system/infoStepThree', { id: this.idsystem }).
+    this.connectServerService.getRequest<ApiResponse<{ stepThree: StepThree }>>(Connect.urlServerLaraWecare, 'systems/infoStepThree', { id: this.idsystem }).
       subscribe((val: ApiResponse<{ stepThree: StepThree }>) => {
         if (val.data.stepThree) {
           this.systemInfo!.stepThree = val.data.stepThree;
@@ -138,7 +143,7 @@ export class SystemReviewComponent {
       stepFour: StepFour,
       stepInverter: InverterData,
       stepCluster: ClusterData
-    }>>(Connect.urlServerLaraWecare, 'system/infoStepFour',
+    }>>(Connect.urlServerLaraWecare, 'systems/infoStepFour',
       {
         id: this.idsystem
       })
@@ -157,7 +162,7 @@ export class SystemReviewComponent {
   getStepFive() {
     this.connectServerService.getRequest<ApiResponse<{
       stepFive: StepFive,
-    }>>(Connect.urlServerLaraWecare, 'system/infoStepFive',
+    }>>(Connect.urlServerLaraWecare, 'systems/infoStepFive',
       {
         id: this.idsystem
       })
@@ -174,7 +179,7 @@ export class SystemReviewComponent {
   getStepSix() {
     this.connectServerService.getRequest<ApiResponse<{
       stepSix: StepSix,
-    }>>(Connect.urlServerLaraWecare, 'system/infoStepSix',
+    }>>(Connect.urlServerLaraWecare, 'systems/infoStepSix',
       {
         id: this.idsystem
       })
@@ -190,7 +195,7 @@ export class SystemReviewComponent {
 
   getStepStatus() {
     this.connectServerService.getRequest<ApiResponse<{ stepStatusList: StepStatus[] }>>(
-      Connect.urlServerLaraWecare, 'system/listStepSystemStatus', { idsystem: this.idsystem })
+      Connect.urlServerLaraWecare, 'systems/listStepSystemStatus', { idsystem: this.idsystem })
       .subscribe((val: ApiResponse<{ stepStatusList: StepStatus[] }>) => {
         if (val.data) {
           this.stepStatusList = val.data.stepStatusList;
@@ -209,13 +214,11 @@ export class SystemReviewComponent {
     // console.log("Received 1")
     if (this.idsystem > 0) {
       this.connectServerService.getRequest<ApiResponse<{ status: { id: number, name: string, color: string } }>>
-        (Connect.urlServerLaraWecare, 'system/systemState', { idsystem: this.idsystem })
-        .subscribe((val: ApiResponse<{ status: { id: number, name: string, color: string } }>) => {
+        (Connect.urlServerLaraWecare, 'systems/systemStatusList', { idsystem: this.idsystem })
+        .subscribe((val: ApiResponse<{ statusList: { id: number, name: string, color: string, message: string | null,
+          message_date: string | null }[] }>) => {
           if (val.data) {
-            this.systemStatus = val.data.status;
-            if (this.systemStatus.id == 3) {
-              // CHIAMATA AL SERVER PER SAPERE QUALI SONO GLI STEP INVALIDI E RECUPERARE LE TEXTAREA
-            }
+            this.systemStatusList = val.data.statusList;
           }
         })
     }
@@ -230,7 +233,7 @@ export class SystemReviewComponent {
   }
 
   getImages(step: number) {
-    this.connectServerService.getRequest<ApiResponse<{ listFiles: Image[] }>>(Connect.urlServerLaraWecare, 'system/filesList',
+    this.connectServerService.getRequest<ApiResponse<{ listFiles: Image[] }>>(Connect.urlServerLaraWecare, 'systems/filesList',
       {
         idsystem: this.idsystem,
         step_position: step
@@ -327,13 +330,90 @@ export class SystemReviewComponent {
   }
 
   setStepStatus(step: number, message: string | null, status: number) {
-    this.connectServerService.postRequest<ApiResponse<any>>(Connect.urlServerLaraWecare, 'system/changeStepStatus', 
+    this.connectServerService.postRequest<ApiResponse<any>>(Connect.urlServerLaraWecare, 'systems/changeStepStatus', 
       {idsystem: this.idsystem, step: step, message: message, status: status})
       .subscribe((val: ApiResponse<any>) => {
         if(val) {
           this.getSystem();
         }
       })
+  }
+
+  setSystemStatus(message: string | null, status: number) {
+    this.connectServerService.postRequest<ApiResponse<any>>(Connect.urlServerLaraWecare, 'systems/changeSystemStatus', 
+      {idsystem: this.idsystem, message: message, status: status})
+      .subscribe((val: ApiResponse<any>) => {
+        if(val) {
+          this.getSystem();
+        }
+      })
+  }
+
+  approveSystem() {
+    const dialogRef = this.dialog.open(PopupDialogComponent, {
+      data: {
+        title: "Approva Impianto",
+        color: "#E7F3ED",
+        message: "Inserisci un commento con le motivazioni dell'approvazione dell'impianto",
+        textArea: true,
+        actionOne: "Invia",
+        actionTwo: "Annulla"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.action == 1) {
+        this.setSystemStatus(result.content, 10);
+      }
+    });
+  }
+
+  dontApproveSystem() {
+    const dialogRef = this.dialog.open(PopupDialogComponent, {
+      data: {
+        title: "Non Approvare Sistema",
+        color: "#EF9A9A",
+        message: "Inserisci un commento con le motivazioni della non approvazione dell'impianto, questa azione è irreversibile!",
+        textArea: true,
+        actionOne: "Invia",
+        actionTwo: "Annulla"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.action == 1) {
+        this.setSystemStatus(result.content, 10);
+      }
+    });
+  }
+
+  requestModification() {
+    const dialogRef = this.dialog.open(PopupDialogComponent, {
+      data: {
+        title: "Richiedi Modifica",
+        color: "#FFF9C4",
+        message: "Sei sicuro di voler mettere l'impianto in attesa di una modifica del cliente?",
+        textArea: false,
+        actionOne: "Conferma",
+        actionTwo: "Annulla"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.action == 1) {
+        this.setSystemStatus(null, 5);
+      }
+    });
+  }
+
+  warrantyExtension() {
+    const dialogRef = this.dialog.open(PopupWarrantyComponent, {data: {idsystem: this.idsystem, product_systemweco: this.systemInfo.stepFour.product_systemweco}});
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        //CHIAMATA AL SERVER PER SALVARE I DATI
+      }
+    });
   }
 
   private initSystem() {

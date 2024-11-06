@@ -7,6 +7,6 @@ export const environment = {
     urlserver: {
         laravelApi: '/proxylink/',
         laravel: '/proxylink/',
-        laravelWecare: '/proxylink/wecare/'
+        laravelWecare: '/proxylink/'
     }
 }

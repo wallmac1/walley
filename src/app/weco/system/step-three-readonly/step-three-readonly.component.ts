@@ -75,7 +75,7 @@ export class StepThreeReadonlyComponent {
 
 
   getImages() {
-    this.connectServerService.getRequest<ApiResponse<{ listFiles: Image[] }>>(Connect.urlServerLaraWecare, 'system/filesList',
+    this.connectServerService.getRequest<ApiResponse<{ listFiles: Image[] }>>(Connect.urlServerLaraWecare, 'systems/filesList',
       {
         idsystem: this.idsystem,
         step_position: 3
