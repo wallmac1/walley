@@ -407,7 +407,9 @@ export class SystemReviewComponent {
   }
 
   warrantyExtension() {
-    const dialogRef = this.dialog.open(PopupWarrantyComponent, {data: {idsystem: this.idsystem, product_systemweco: this.systemInfo.stepFour.product_systemweco}});
+    const dialogRef = this.dialog.open(PopupWarrantyComponent, {
+      data: {idsystem: this.idsystem, product_systemweco: this.systemInfo.stepFour.product_systemweco}
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
