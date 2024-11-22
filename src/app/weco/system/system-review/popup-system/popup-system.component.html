@@ -1,0 +1,61 @@
+<div style="min-width: 600px;">
+    <h2 mat-dialog-title class="bg-primary bg-gradient text-light">
+        {{"SYSTEM.SYSTEMMANAGEMENT.REPLYPOPUP.REPLY" | translate}}
+    </h2>
+
+    <mat-dialog-content class="pt-2 pb-2 mt-2">
+        <div class="container-fluid">
+            <div [formGroup]="statusForm" class="row align-items-center">
+                <!-- CUSTOMER MODIFICATION -->
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="customer_modification"
+                            formControlName="customer_modification">
+                        <label class="form-check-label" for="customer_modification"
+                            style="color: black; font-weight: bold;">
+                            {{"SYSTEM.SYSTEMMANAGEMENT.REPLYPOPUP.REQUESTMODIFICATION" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <!-- TEXTAREA -->
+                <div class="col-12 mt-2">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="modification_text"
+                        formControlName="modification_text" [class.is-invalid]="submitted && statusForm.invalid">
+                    </textarea>
+                    <span class="ms-2" *ngIf="submitted && statusForm.invalid" style="color: red; font-size: small;">
+                        {{"SYSTEM.SYSTEMMANAGEMENT.REPLYPOPUP.COMPILE" | translate}}<br>
+                    </span>
+                    <label for="modification_text" style="font-size: small; color: lightgrey;">
+                        {{"SYSTEM.SYSTEMMANAGEMENT.REPLYPOPUP.ATTENTION" | translate}}
+                    </label>
+                </div>
+
+                <!-- COMPLETE SYSTEM -->
+                <div class="col-12 mt-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="system_complete"
+                            formControlName="system_complete">
+                        <label class="form-check-label" for="system_complete" style="color: black; font-weight: bold;">
+                            {{"SYSTEM.SYSTEMMANAGEMENT.REPLYPOPUP.COMPLETESYSTEM" | translate}}
+                        </label>
+                    </div>
+                    <div>
+                        <p>
+                            {{"SYSTEM.SYSTEMMANAGEMENT.REPLYPOPUP.COMPLETESYSTEMMESSAGE" | translate}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="justify-content-end">
+        <button class="btn btn-outline-success me-2" (click)="onConfirm()"
+            [disabled]="statusForm.get('customer_modification')?.value != true && statusForm.get('system_complete')?.value != true">
+            {{"SYSTEM.SYSTEMMANAGEMENT.REPLYPOPUP.SAVE" | translate}}
+        </button>
+        <button class="btn btn-outline-danger" (click)="onCancel()">
+            {{"SYSTEM.SYSTEMMANAGEMENT.REPLYPOPUP.CANCEL" | translate}}
+        </button>
+    </mat-dialog-actions>
+</div>

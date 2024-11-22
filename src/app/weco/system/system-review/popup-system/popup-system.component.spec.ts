@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PopupWarrantyComponent } from './popup-warranty.component';
+import { PopupSystemComponent } from './popup-system.component';
 
 describe('PopupWarrantyComponent', () => {
-  let component: PopupWarrantyComponent;
-  let fixture: ComponentFixture<PopupWarrantyComponent>;
+  let component: PopupSystemComponent;
+  let fixture: ComponentFixture<PopupSystemComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PopupWarrantyComponent]
+      imports: [PopupSystemComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PopupWarrantyComponent);
+    fixture = TestBed.createComponent(PopupSystemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

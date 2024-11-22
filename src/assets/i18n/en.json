@@ -155,18 +155,17 @@
         "STATUS": "Status",
         "MESSAGE": "Message"
       },
-      "WARRANTYPOPUP": {
+      "REPLYPOPUP": {
         "REPLY": "Reply to Request",
         "REQUESTMODIFICATION": "Request customer modification",
         "ATTENTION": "Attention: this message will be read by the customer",
-        "EXTENDWARRANTY": "Extend Warranty",
-        "STARTWARRANTY": "Warranty Start",
-        "ENDWARRANTY": "Warranty End",
         "BATTERIES": "Batteries",
         "INVERTER": "Inverter",
-        "REFUSEWARRANTY": "Refuse Warranty",
         "SAVE": "Save",
-        "CANCEL": "Cancel"
+        "CANCEL": "Cancel",
+        "COMPILE": "Complete this field",
+        "COMPLETESYSTEM": "The System Has All Required Data",
+        "COMPLETESYSTEMMESSAGE": "Once that all data will be confirmed, it will be possibile to open a ticket. Moreover you could validate the warranty and extend it in case all requirements are granted"
       }
     },
     "SYSTEMLIST": {

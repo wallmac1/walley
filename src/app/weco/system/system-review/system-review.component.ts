@@ -29,32 +29,12 @@ import { StepSix } from '../../interfaces/step-six';
 import { StepOneReadonlyComponent } from '../step-one-readonly/step-one-readonly.component';
 import { StepTwoReadonlyComponent } from '../step-two-readonly/step-two-readonly.component';
 import { StepThreeReadonlyComponent } from '../step-three-readonly/step-three-readonly.component';
-import { PopupWarrantyComponent } from './popup-warranty/popup-warranty.component';
+import { PopupSystemComponent } from './popup-system/popup-system.component';
 import { MatTableModule } from '@angular/material/table';
-import {MatAccordion, MatExpansionModule} from '@angular/material/expansion'; 
-
-interface WarrantyInfo {
-  listInverter: {
-    id: number,
-    serialnumber: string,
-    inverter_date: string,
-    warranty_limit: string,
-    warrantyinverter_end: string;
-    warrantyinverter_endextension: string;
-  }[];
-  warrantyInvertervalid: number | null;
-  warrantyInverterExtended: number | null;
-  warrantyInverterValidComment: string | null;
-  warrantyInverterExtendedComment: string | null;
-  listBatteries: {
-    id: number,
-    serialnumber: string,
-    battery_date: string,
-    warranty_limit: string,
-  }[];
-  warrantyBatteryValid: number | null;
-  warrantyBatteryValidComment: number | null;
-}
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+import { InverterComponent } from "./warranty/inverter/inverter.component"; 
+import { WarrantyBatteryForm, WarrantyInfo, WarrantyInverterForm } from '../../interfaces/warranty-info';
+import { BatteryComponent } from "./warranty/battery/battery.component";
 
 @Component({
   selector: 'app-system-review',
@@ -73,7 +53,9 @@ interface WarrantyInfo {
     StatusHistoryComponent,
     TranslateModule,
     MatTableModule,
-    MatExpansionModule
+    MatExpansionModule,
+    InverterComponent,
+    BatteryComponent
 ],
   templateUrl: './system-review.component.html',
   styleUrl: './system-review.component.scss'
@@ -126,11 +108,11 @@ export class SystemReviewComponent {
   }
 
   getWarranty() {
-    this.connectServerService.getRequest<ApiResponse<{ load: WarrantyInfo }>>(Connect.urlServerLaraWecare,
+    this.connectServerService.getRequest<ApiResponse<WarrantyInfo>>(Connect.urlServerLaraWecare,
       'systems/infoWarrantyOnInverter', { idsystem: this.idsystem }).
-      subscribe((val: ApiResponse<{ load: WarrantyInfo }>) => {
-        if (val.data && val.data.load) {
-          this.warrantyInfo = val.data.load;
+      subscribe((val: ApiResponse<WarrantyInfo>) => {
+        if (val.data) {
+          this.warrantyInfo = val.data;
           console.log(this.warrantyInfo)
         }
       })
@@ -303,6 +285,14 @@ export class SystemReviewComponent {
     }
   }
 
+  confirmI(warrantyInverterForm: WarrantyInverterForm) {
+    console.log(warrantyInverterForm);
+  }
+
+  confirmB(warrantyBatteryForm: WarrantyBatteryForm) {
+    console.log(warrantyBatteryForm);
+  }
+
   setImage(img: Image) {
     // this.modalImageUrl = img.src;
     this.modalImageUrl = '';
@@ -446,8 +436,8 @@ export class SystemReviewComponent {
     });
   }
 
-  warrantyExtension() {
-    const dialogRef = this.dialog.open(PopupWarrantyComponent, {
+  replySystem() {
+    const dialogRef = this.dialog.open(PopupSystemComponent, {
       data: {idsystem: this.idsystem, product_systemweco: this.systemInfo.stepFour.product_systemweco}
     });
 

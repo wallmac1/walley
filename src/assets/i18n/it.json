@@ -155,18 +155,17 @@
         "STATUS": "Stato",
         "MESSAGE": "Messaggio"
       },
-      "WARRANTYPOPUP": {
+      "REPLYPOPUP": {
         "REPLY": "Rispondi alla Richiesta",
         "REQUESTMODIFICATION": "Richiedi modifica da parte del cliente",
         "ATTENTION": "Attenzione: questo messaggio verrà letto dal cliente",
-        "EXTENDWARRANTY": "Estendi Garanzia",
-        "STARTWARRANTY": "Inizio Garanzia",
-        "ENDWARRANTY": "Fine Garanzia",
         "BATTERIES": "Batterie",
         "INVERTER": "Inverter",
-        "REFUSEWARRANTY": "Rifiuta Garanzia",
         "SAVE": "Salva",
-        "CANCEL": "Annulla"
+        "CANCEL": "Annulla",
+        "COMPILE": "Complilare questo campo",
+        "COMPLETESYSTEM": "L'Impianto Contiene Tutti i Dati Richiesti",
+        "COMPLETESYSTEMMESSAGE": "Una volta confermati tutti i dati sarà possibile l'apertura di ticket da parte del cliente. Inoltre potrai validare o meno la garanzia ed estenderla se i requisiti necessari sono soddisfatti"
       }
     },
     "SYSTEMLIST": {
