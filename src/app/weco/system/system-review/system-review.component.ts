@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, viewChild, ViewChild } from '@angular/core';
 import { SystemInfoFull } from '../../interfaces/system-info-full';
 import { Connect } from '../../../classes/connect';
 import { StepStatus } from '../../interfaces/step-status';
@@ -26,12 +26,35 @@ import { Country } from '../../interfaces/country';
 import { ApiResponse } from '../../interfaces/api-response';
 import { StepFive } from '../../interfaces/step-five';
 import { StepSix } from '../../interfaces/step-six';
-import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { StepOneReadonlyComponent } from '../step-one-readonly/step-one-readonly.component';
 import { StepTwoReadonlyComponent } from '../step-two-readonly/step-two-readonly.component';
 import { StepThreeReadonlyComponent } from '../step-three-readonly/step-three-readonly.component';
 import { PopupWarrantyComponent } from './popup-warranty/popup-warranty.component';
 import { MatTableModule } from '@angular/material/table';
+import {MatAccordion, MatExpansionModule} from '@angular/material/expansion'; 
+
+interface WarrantyInfo {
+  listInverter: {
+    id: number,
+    serialnumber: string,
+    inverter_date: string,
+    warranty_limit: string,
+    warrantyinverter_end: string;
+    warrantyinverter_endextension: string;
+  }[];
+  warrantyInvertervalid: number | null;
+  warrantyInverterExtended: number | null;
+  warrantyInverterValidComment: string | null;
+  warrantyInverterExtendedComment: string | null;
+  listBatteries: {
+    id: number,
+    serialnumber: string,
+    battery_date: string,
+    warranty_limit: string,
+  }[];
+  warrantyBatteryValid: number | null;
+  warrantyBatteryValidComment: number | null;
+}
 
 @Component({
   selector: 'app-system-review',
@@ -49,13 +72,16 @@ import { MatTableModule } from '@angular/material/table';
     StepSixReadonlyComponent,
     StatusHistoryComponent,
     TranslateModule,
-    MatTableModule
+    MatTableModule,
+    MatExpansionModule
 ],
   templateUrl: './system-review.component.html',
   styleUrl: './system-review.component.scss'
 })
 export class SystemReviewComponent {
   readonly dialog = inject(MatDialog);
+
+  isOpen: boolean = false;
 
   @ViewChild('stepOne') obj_stepOne!: StepOneReadonlyComponent;
   @ViewChild('stepTwo') obj_stepTwo!: StepTwoReadonlyComponent;
@@ -79,6 +105,8 @@ export class SystemReviewComponent {
   installerCountry: string = '';
   countriesList: Country[] = [];
 
+  warrantyInfo: WarrantyInfo | null = null;
+
   stepStatusList: StepStatus[] = [];
 
   constructor(private route: ActivatedRoute, private connectServerService: ConnectServerService,
@@ -92,8 +120,20 @@ export class SystemReviewComponent {
     if (this.idsystem > 0) {
       this.systemInfo!.id = this.idsystem;
       this.getSystem();
+      this.getWarranty();
       //this.stepFourService.setSystemsValues();
     }
+  }
+
+  getWarranty() {
+    this.connectServerService.getRequest<ApiResponse<{ load: WarrantyInfo }>>(Connect.urlServerLaraWecare,
+      'systems/infoWarrantyOnInverter', { idsystem: this.idsystem }).
+      subscribe((val: ApiResponse<{ load: WarrantyInfo }>) => {
+        if (val.data && val.data.load) {
+          this.warrantyInfo = val.data.load;
+          console.log(this.warrantyInfo)
+        }
+      })
   }
 
   getSystem() {
