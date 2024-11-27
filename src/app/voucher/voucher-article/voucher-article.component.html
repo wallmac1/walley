@@ -1,0 +1,39 @@
+<mat-expansion-panel class="mt-2">
+    <mat-expansion-panel-header>
+        <mat-panel-title style="font-size: large;">
+            Articolo {{index+1}}
+            <i class="bi bi-trash ms-2" style="color: red;" (click)="deleteArticle(index)"></i>
+        </mat-panel-title>
+        <mat-panel-description class="align-items-right">
+
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- FORM -->
+    <div [formGroup]="line" class="row justify-content-center align-items-center">
+        <div class="col-7 mt-2">
+            <label class="form-label" for="quantity">
+                Quantità
+            </label>
+            <input type="text" class="form-control" formControlName="quantity" id="quantity">
+        </div>
+        <div class="col-5 mt-2">
+            <label class="form-label" for="refidunit">
+                Unità di misura
+            </label>
+            <select type="text" class="form-select" formControlName="refidunit" id="refidunit">
+                <option [ngValue]="null">Seleziona unità</option>
+                <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">
+                    {{unit.acronym}}
+                </option>
+            </select>
+        </div>
+        <div class="col-12 mt-2">
+            <label class="form-label" for="description">
+                Descrizione
+            </label>
+            <textarea type="text" class="form-control" formControlName="description" id="description">
+                    </textarea>
+        </div>
+    </div>
+</mat-expansion-panel>
