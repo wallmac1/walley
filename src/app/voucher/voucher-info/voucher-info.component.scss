@@ -26,14 +26,14 @@
 }
 
 .element {
-    padding-top: 0.4rem;
+    padding-top: 0.2rem;
 
     @media screen and (min-width: 768px) {
-        padding-top: 0.6rem;
+        padding-top: 0.4rem;
     }
 
     @media screen and (min-width: 992px) {
-        padding-top: 1rem;
+        padding-top: 0.6rem;
     }
 }
 

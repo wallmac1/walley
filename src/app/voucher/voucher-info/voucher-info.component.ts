@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { VoucherWorkComponent } from "../voucher-work/voucher-work.component";
 import { VoucherArticleComponent } from "../voucher-article/voucher-article.component";
 import { Voucher } from '../interfaces/voucher';
@@ -13,6 +13,7 @@ import { Connect } from '../../classes/connect';
 import { ConnectServerService } from '../../services/connect-server.service';
 import { Work } from '../../tickets/interfaces/work';
 import { Lines } from '../interfaces/lines';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-voucher-info',
@@ -22,15 +23,13 @@ import { Lines } from '../interfaces/lines';
     CommonModule,
     VoucherWorkComponent,
     VoucherArticleComponent,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    TranslateModule
   ],
   templateUrl: './voucher-info.component.html',
   styleUrl: './voucher-info.component.scss'
 })
 export class VoucherInfoComponent {
-
-  // @ViewChild(VoucherArticleComponent) articleComponent!: VoucherArticleComponent;
-  // @ViewChild(VoucherWorkComponent) workComponent!: VoucherWorkComponent;
 
   filteredCustomer$!: Observable<Customer[]>;
   submitted: boolean = false;
@@ -41,8 +40,8 @@ export class VoucherInfoComponent {
   linesForm!: FormGroup;
 
   voucherForm = new FormGroup({
-    progressive: new FormControl<string | null>(null, Validators.required),
-    voucher_date: new FormControl<string | null>(null, Validators.required),
+    progressive: new FormControl<string | null>({value: null, disabled: true}, Validators.required),
+    voucher_date: new FormControl<string | null>({value: null, disabled: true}, Validators.required),
     customer: new FormControl<Customer | null>(null, Validators.required),
     location: new FormControl<string | null>(null, Validators.required),
     notes: new FormControl<string | null>(null),
@@ -67,6 +66,22 @@ export class VoucherInfoComponent {
     this.searchCustomer();
   }
 
+  numberWithCommaValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+  
+      if (!value) {
+        return null; // Se il campo è vuoto, consideralo valido
+      }
+  
+      // Controlla se il valore soddisfa i criteri
+      const regex = /^\d*(,\d{0,2})?$/; // Regex: numeri con al massimo una virgola e due cifre dopo di essa
+      const isValid = regex.test(value);
+  
+      return isValid ? null : { invalidNumber: true }; // Restituisci l'errore se non valido
+    };
+  }
+
   get linesArray(): FormArray {
     return this.linesForm.get('lines') as FormArray;
   }
@@ -83,33 +98,37 @@ export class VoucherInfoComponent {
     })
   }
 
-  addLine() {
-    this.linesArray.push(this.createLineEmpty());
+  addLine(type: number) {
+    this.linesArray.insert(0, this.createLineEmpty(type));
   }
 
   private createLine(line: Lines): FormGroup {
-    console.log("CREATA LINEA")
     return this.fb.group({
       id: [line.id],
       type_line: [line.type_line],
       description: [line.description],
-      quantity: [line.quantity],
-      refidunit: [line.refidunit]
+      quantity: [line.quantity, [this.numberWithCommaValidator(), Validators.required]],
+      refidunit: [line.refidunit, Validators.required]
     })
   }
 
-  private createLineEmpty(): FormGroup {
+  private createLineEmpty(type: number): FormGroup {
     return this.fb.group({
       id: [0],
-      type_line: [2],
+      type_line: [type],
       description: [null],
-      quantity: [null],
-      refidunit: [null]
+      quantity: [null, [this.numberWithCommaValidator(), Validators.required]],
+      refidunit: [null, Validators.required]
     })
   }
 
-  deleteArticle(i: number) {
+  deleteLine(i: number) {
     this.linesArray.removeAt(i);
+  }
+
+  saveLine(i: number) {
+    // Chiama il server e salva la linea specifica
+    console.log(this.linesArray.at(i).value);
   }
 
   displayCustomerName(customer?: Customer): string {
@@ -253,11 +272,11 @@ export class VoucherInfoComponent {
   }
 
   addWork() {
-    //this.workComponent.addWork();
+    this.addLine(1);
   }
 
   addArticle() {
-    //this.articleComponent.addArticle();
+    this.addLine(2);
   }
 
   createVoucher() {

@@ -426,5 +426,25 @@
       "IMPORT": "Import",
       "SUBMIT": "Submit"
     }
+  },
+  "VOUCHER": {
+    "VOUCHER": "Voucher",
+    "STATUS": "Status",
+    "NUMBER": "Number",
+    "DATE": "Date",
+    "CUSTOMER": "Customer",
+    "NOTES": "Notes",
+    "CREATEVOUCHER": "Create Voucher",
+    "SAVE": "Save",
+    "WORK": "Work",
+    "ARTICLE": "Article",
+    "DELETE": "Delete",
+    "CLOSE": "Close",
+    "QUANTITY": "Quantity",
+    "MEASUREMENTUNIT": "Measurement Unit",
+    "DESCRIPTION": "Description",
+    "QUANTITYERROR": "Quantity is a numerical field with at max two decimals",
+    "QUANTITYERROR2": "Quantity is required",
+    "UNITERROR": "Measurment unit is required"
   }
 }

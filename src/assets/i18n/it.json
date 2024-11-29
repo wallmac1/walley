@@ -403,5 +403,25 @@
       "NO": "No",
       "BATTERY": "Batteria"
     }
+  },
+  "VOUCHER": {
+    "VOUCHER": "Buoni Di Lavoro",
+    "STATUS": "Stato",
+    "NUMBER": "Numero",
+    "DATE": "Data",
+    "CUSTOMER": "Cliente",
+    "NOTES": "Note",
+    "CREATEVOUCHER": "Crea Buono di Lavoro",
+    "SAVE": "Salva",
+    "WORK": "Lavoro",
+    "ARTICLE": "Articolo",
+    "DELETE": "Elimina",
+    "CLOSE": "Chiudi",
+    "QUANTITY": "Quantità",
+    "MEASUREMENTUNIT": "Unità di Misura",
+    "DESCRIPTION": "Descrizione",
+    "QUANTITYERROR": "Quantità è un campo numerico con al massimo due decimali dopo la virgola",
+    "QUANTITYERROR2": "Quantità è richiesta",
+    "UNITERROR": "Unità di misura è richiesta"
   }
 }

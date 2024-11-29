@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Lines, MeasurementUnit } from '../interfaces/lines';
 import { Line } from 'ngx-extended-pdf-viewer';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-voucher-article',
@@ -11,7 +12,8 @@ import { Line } from 'ngx-extended-pdf-viewer';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    TranslateModule
   ],
   templateUrl: './voucher-article.component.html',
   styleUrl: './voucher-article.component.scss'
@@ -19,9 +21,11 @@ import { Line } from 'ngx-extended-pdf-viewer';
 export class VoucherArticleComponent {
 
   @Input() line!: FormGroup;
-  @Input() index: number = 0;
+  @Input() index: number = -1;
   @Output() delete = new EventEmitter<number>();
+  @Output() save = new EventEmitter<number>();
 
+  submitted = false;
   measurmentUnit: MeasurementUnit[] = [];
 
   constructor(private fb: FormBuilder) {}
@@ -32,6 +36,14 @@ export class VoucherArticleComponent {
 
   deleteArticle(i: number) {
     this.delete.emit(this.index);
+  }
+
+  saveArticle(i: number) {
+    this.submitted = true;
+    if(this.line.valid) {
+      this.submitted = false;
+      this.save.emit(this.index);
+    }
   }
 
   private getMeasurmentUnits() {
