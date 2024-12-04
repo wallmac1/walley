@@ -44,7 +44,7 @@ export class VoucherInfoComponent {
     voucher_date: new FormControl<string | null>({value: null, disabled: true}, Validators.required),
     customer: new FormControl<Customer | null>(null, Validators.required),
     location: new FormControl<string | null>(null, Validators.required),
-    notes: new FormControl<string | null>(null),
+    note: new FormControl<string | null>(null),
   })
 
   constructor(private route: ActivatedRoute, private connectServerService: ConnectServerService,
@@ -150,7 +150,7 @@ export class VoucherInfoComponent {
         id: 1,
         denomination: 'ACME Corporation'
       },
-      notes: 'Something about the voucher'
+      note: 'Something about the voucher'
     };
     this.voucherId = this.voucher.id;
     this.voucherForm.patchValue(this.voucher);

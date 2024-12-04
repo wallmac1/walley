@@ -9,5 +9,5 @@ export interface Voucher {
     location: string;
     location_field: string;
     customer: Customer;
-    notes: string;
+    note: string;
 }
