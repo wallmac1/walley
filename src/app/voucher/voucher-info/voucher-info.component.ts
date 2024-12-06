@@ -4,7 +4,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Reacti
 import { VoucherWorkComponent } from "../voucher-work/voucher-work.component";
 import { VoucherArticleComponent } from "../voucher-article/voucher-article.component";
 import { Voucher } from '../interfaces/voucher';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, debounceTime, filter, map, of, startWith, switchMap } from 'rxjs';
 import { Customer } from '../../tickets/interfaces/customer';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -14,6 +14,7 @@ import { ConnectServerService } from '../../services/connect-server.service';
 import { Work } from '../../tickets/interfaces/work';
 import { Lines } from '../interfaces/lines';
 import { TranslateModule } from '@ngx-translate/core';
+import { Line } from 'ngx-extended-pdf-viewer';
 
 @Component({
   selector: 'app-voucher-info',
@@ -31,6 +32,13 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class VoucherInfoComponent {
 
+  currentDate = new Date();
+
+  voucher_label: { voucher_labelreference: string, voucher_labellocation: string } = {
+    voucher_labelreference: 'Riferimento Documento',
+    voucher_labellocation: 'Luogo'
+  }
+
   filteredCustomer$!: Observable<Customer[]>;
   submitted: boolean = false;
 
@@ -40,44 +48,76 @@ export class VoucherInfoComponent {
   linesForm!: FormGroup;
 
   voucherForm = new FormGroup({
-    progressive: new FormControl<string | null>({value: null, disabled: true}, Validators.required),
-    voucher_date: new FormControl<string | null>({value: null, disabled: true}, Validators.required),
+    progressive: new FormControl<string | null>({ value: null, disabled: true }, Validators.required),
+    voucher_date: new FormControl<string | null>({ value: null, disabled: true }, Validators.required),
     customer: new FormControl<Customer | null>(null, Validators.required),
     location: new FormControl<string | null>(null, Validators.required),
     note: new FormControl<string | null>(null),
+    reference: new FormControl<string | null>(null)
   })
 
   constructor(private route: ActivatedRoute, private connectServerService: ConnectServerService,
-    private fb: FormBuilder) { 
-      this.linesForm = this.fb.group({
-        lines: this.fb.array([])
-      })
-    }
+    private fb: FormBuilder, private router: Router) {
+    this.linesForm = this.fb.group({
+      lines: this.fb.array([])
+    })
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
-      if (id) {
+      if (id && parseInt(id) != 0) {
         this.voucherId = +id;
         this.getVoucher();
-        this.getLines();
+      }
+      else {
+        this.emptyVoucherInit();
       }
     });
     this.searchCustomer();
   }
 
+  emptyVoucherInit() {
+    const day = String(this.currentDate.getDate()).padStart(2, '0'); // Giorno con due cifre
+    const month = String(this.currentDate.getMonth() + 1).padStart(2, '0'); // Mese con due cifre (i mesi partono da 0)
+    const year = String(this.currentDate.getFullYear()).slice(-2); // Ultime due cifre dell'anno
+    const formattedDate = `${day}-${month}-${year}`;
+
+    this.voucher = {
+      id: 0,
+      progressive: '',
+      status: {
+        id: 0,
+        name: '',
+        color: ''
+      },
+      voucher_year: this.currentDate.getFullYear().toString(),
+      voucher_date: formattedDate,
+      reference: '',
+      location: '',
+      note: '',
+      customer: {
+        id: 0,
+        rifidanacliforprodati: 0,
+        denominazione: '',
+      },
+    }
+
+    this.voucherForm.patchValue(this.voucher!);
+  }
+
   numberWithCommaValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
-  
+
       if (!value) {
         return null; // Se il campo è vuoto, consideralo valido
       }
-  
+
       // Controlla se il valore soddisfa i criteri
       const regex = /^\d*(,\d{0,2})?$/; // Regex: numeri con al massimo una virgola e due cifre dopo di essa
       const isValid = regex.test(value);
-  
+
       return isValid ? null : { invalidNumber: true }; // Restituisci l'errore se non valido
     };
   }
@@ -90,10 +130,10 @@ export class VoucherInfoComponent {
     return this.linesArray.at(index) as FormGroup;
   }
 
-  addLines() {
+  addLines(lines: Lines[]) {
     this.linesArray.clear();
-    this.lines.forEach((line: Lines) => {
-      console.log("AGGIUNGI LINEA")
+    lines.forEach((line: Lines) => {
+      line.quantity = line.quantity.replace('.', ',');
       this.linesArray.push(this.createLine(line))
     })
   }
@@ -104,117 +144,118 @@ export class VoucherInfoComponent {
 
   private createLine(line: Lines): FormGroup {
     return this.fb.group({
-      id: [line.id],
+      idvoucherline: [line.idvoucherline],
       type_line: [line.type_line],
       description: [line.description],
       quantity: [line.quantity, [this.numberWithCommaValidator(), Validators.required]],
-      refidunit: [line.refidunit, Validators.required]
+      refidum: [line.refidum, Validators.required]
     })
   }
 
   private createLineEmpty(type: number): FormGroup {
     return this.fb.group({
-      id: [0],
+      idvoucherline: [0],
       type_line: [type],
       description: [null],
       quantity: [null, [this.numberWithCommaValidator(), Validators.required]],
-      refidunit: [null, Validators.required]
+      refidum: [null, Validators.required]
     })
   }
 
   deleteLine(i: number) {
-    this.linesArray.removeAt(i);
+    const line = this.linesArray.at(i).getRawValue();
+    if(line.idvoucherline != 0) {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/deleteVoucherLine', 
+      { idvoucher: this.voucherId, idvoucherline: line.idvoucherline })
+        .subscribe((val: ApiResponse<any>) => {
+          if(val) {
+            this.linesArray.removeAt(i)
+          }
+        })
+    }
+    else {
+      this.linesArray.removeAt(i)
+    }
   }
 
   saveLine(i: number) {
     // Chiama il server e salva la linea specifica
-    console.log(this.linesArray.at(i).value);
+    const line = this.linesArray.at(i).getRawValue();
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine', 
+      { idvoucher: this.voucherId, idvoucherline: line.idvoucherline, quantity: parseFloat(line.quantity), 
+        type_line: line.type_line, description: line.description, refidum: line.refidum})
+        .subscribe((val: ApiResponse<any>) => {
+          if(val) {
+            if(val.data.idvoucherline) {
+              line.idvoucherline = val.data.idvoucherline
+            }
+            this.getLineServer(line.idvoucherline, i);
+          }
+        })
   }
 
-  displayCustomerName(customer?: Customer): string {
-    return customer ? customer.denomination : '';
+  getLineServer(idvoucherline: number, index: number) {
+    //voucherLineInfo
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'voucher/voucherLineInfo', {
+      idvoucher: this.voucherId, idvoucherline: idvoucherline})
+        .subscribe((val: ApiResponse<any>) => {
+          if(val) {
+            let line = val.data.voucherInfoLine;
+            line.quantity = line.quantity.replace('.', ',');
+            this.linesArray.at(index).patchValue(line);
+          }
+        })
+  }
+
+  saveVoucher() {
+    const formValues = this.voucherForm.getRawValue();
+    let refidregcussuppro = 0;
+    let refidregcussupprodata = 0;
+    refidregcussuppro = formValues.customer!.id!;
+    refidregcussupprodata = formValues.customer!.rifidanacliforprodati!;
+
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucher',
+      {
+        refidregcussuppro: refidregcussuppro, refidregcussupprodata: refidregcussupprodata, location: formValues.location,
+        note: formValues.note, reference: formValues.reference, id: this.voucherId
+      })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          if(this.voucherId == 0) {
+            this.voucherId = val.data.idvoucher;
+          }
+          this.getVoucher();
+        }
+      })
   }
 
   private getVoucher() {
     // CHIAMATA AL SERVER PER PRENDERE IL VOUCHER
-    this.voucher = {
-      id: 1,
-      progressive: '001',
-      status: 'Active',
-      voucher_year: '2024',
-      voucher_date: '2024-11-27',
-      location: 'Rome',
-      location_field: 'Cantiere',
-      customer: {
-        rifidanacliforprodati: 12345,
-        id: 1,
-        denomination: 'ACME Corporation'
-      },
-      note: 'Something about the voucher'
-    };
-    this.voucherId = this.voucher.id;
-    this.voucherForm.patchValue(this.voucher);
-    this.getLines();
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'voucher/voucherInfo', { id: this.voucherId })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          this.voucher = val.data.voucherInfo;
+          this.voucherForm.patchValue(this.voucher!);
+          this.addLines(val.data.voucherInfoLine);
+        }
+      })
   }
 
-  private getLines() {
-    // CHIAMATA AL SERVER PER PRENDERE I LAVORI E GLI ARTICOLI
-    this.lines = [
-      {
-        id: 1,
-        type_line: 1,
-        description: 'General description of the work or article',
-        quantity: "10",
-        refidunit: 1,
-        user_created: {
-          id: 101,
-          nickname: "worker_01",
-          datetime: "2024-11-27T10:30:00Z"
-        },
-        user_updated: {
-          id: 102,
-          nickname: "manager_01",
-          datetime: "2024-11-28T15:45:00Z"
+  deleteVoucher() {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/deleteVoucher', {id: this.voucherId})
+      .subscribe((val: ApiResponse<any>) => {
+        if(val) {
+          this.router.navigate(['voucherList']);
         }
-      },
-      {
-        id: 2,
-        type_line: 2,
-        description: 'General description of the work or article',
-        quantity: "25",
-        refidunit: 2,
-        user_created: {
-          id: 103,
-          nickname: "worker_02",
-          datetime: "2024-11-26T09:20:00Z"
-        },
-        user_updated: {
-          id: 104,
-          nickname: "manager_02",
-          datetime: "2024-11-27T14:10:00Z"
-        }
-      },
-      {
-        id: 3,
-        type_line: 1,
-        description: 'General description of the work or article',
-        quantity: "5",
-        refidunit: 1,
-        user_created: {
-          id: 105,
-          nickname: "worker_03",
-          datetime: "2024-11-25T08:00:00Z"
-        },
-        user_updated: {
-          id: 106,
-          nickname: "manager_03",
-          datetime: "2024-11-26T12:30:00Z"
-        }
-      }
-    ];
-    if (this.lines.length > 0) {
-      this.addLines();
-    }
+      })
+  }
+
+  closeVoucher() {
+    this.router.navigate(['voucherList']);
+  }
+
+  displayCustomerName(customer?: Customer): string {
+    return customer ? customer.denominazione! : '';
   }
 
   // private filterLines(lines: Lines[]) {
@@ -222,7 +263,7 @@ export class VoucherInfoComponent {
   //     this.works = lines.filter(line => line.type_line === 1); // Lavori
   //     this.articles = lines.filter(line => line.type_line === 2); // Articoli
   //   }
-    
+
   // }
 
   private searchCustomer() {
@@ -231,7 +272,7 @@ export class VoucherInfoComponent {
       this.filteredCustomer$ = customer_field.valueChanges
         .pipe(
           startWith(''),
-          map(value => typeof value === 'string' ? value : value?.denomination || ''),
+          map(value => typeof value === 'string' ? value : value?.denominazione || ''),
           filter(value => value.length > 0),
           debounceTime(600),
           switchMap((value: string) =>
@@ -251,20 +292,17 @@ export class VoucherInfoComponent {
     // Esempio di una lista di tre clienti
     const customers: Customer[] = [
       {
-        rifidanacliforprodati: 12345,
-        id: 1,
-        denomination: 'ACME Corporation'
+        rifidanacliforprodati: 39,
+        id: 88,
+        denominazione: 'Pippo Poppo',
+        codicefiscale: "23323NLDSKNSDNKL",
+        cognome: "poppo",
+        data_nascita: null,
+        email: null,
+        nome: "Pippo",
+        piva: null,
+        telefono: null
       },
-      {
-        rifidanacliforprodati: 67890,
-        id: 2,
-        denomination: 'Global Solutions'
-      },
-      {
-        rifidanacliforprodati: 11223,
-        id: 3,
-        denomination: 'Tech Innovations'
-      }
     ];
 
     // Restituisce la lista come Observable
@@ -277,14 +315,6 @@ export class VoucherInfoComponent {
 
   addArticle() {
     this.addLine(2);
-  }
-
-  createVoucher() {
-    
-  }
-
-  saveVoucher() {
-
   }
 
 }

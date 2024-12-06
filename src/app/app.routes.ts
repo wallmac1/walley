@@ -10,6 +10,7 @@ import { SystemsListComponent } from './weco/system/systems-list/systems-list.co
 import { AssistanceComponent } from './weco/assistance/assistance.component';
 import { SystemReviewComponent } from './weco/system/system-review/system-review.component';
 import { VoucherInfoComponent } from './voucher/voucher-info/voucher-info.component';
+import { VoucherListComponent } from './voucher/voucher-list/voucher-list.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -23,5 +24,6 @@ export const routes: Routes = [
     { path: "systemsList", component: SystemsListComponent },
     { path: "assistance", component: AssistanceComponent },
     { path: "systemReview/:id", component: SystemReviewComponent },
-    { path: "voucher/:id", component: VoucherInfoComponent }
+    { path: "voucher/:id", component: VoucherInfoComponent },
+    { path: "voucherList", component: VoucherListComponent }
 ];

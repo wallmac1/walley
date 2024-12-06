@@ -25,11 +25,8 @@ import { MatButton } from '@angular/material/button';
     ReactiveFormsModule,
     TicketInfoComponent,
     TicketTimelineComponent,
-    MatLabel,
-    MatFormField,
     MatIcon,
     MatMenuModule,
-    MatButton 
   ],
   templateUrl: './ticket-modify.component.html',
   styleUrl: './ticket-modify.component.scss'

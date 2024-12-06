@@ -1,9 +1,9 @@
 export interface Lines {
-    id: number;
+    idvoucherline: number;
     type_line: number;
     description: string;
     quantity: string;
-    refidunit: number;
+    refidum: number;
     user_created: {
         id: number;
         nickname: string;

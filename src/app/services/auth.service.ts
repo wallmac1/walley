@@ -12,6 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AuthService {
 
+  invalidCredentials = false
   private userSubject = new Subject<User | null>();
   getInfoUserLogged(): Observable<User | null> {
     return this.userSubject.asObservable();
@@ -46,8 +47,13 @@ export class AuthService {
           password: password_send,
         }).subscribe((esito: any) => {
           // console.log('login!', esito);
-          localStorage.setItem('authOk', 'YES');
-          this.router.navigate(['/newTicket']);
+          if (esito) {
+            localStorage.setItem('authOk', 'YES');
+            this.router.navigate(['/newTicket']);
+          }
+          else {
+            this.invalidCredentials = true;
+          }
         });
       }
     );

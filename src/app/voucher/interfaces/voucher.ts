@@ -1,13 +1,15 @@
 import { Customer } from "../../tickets/interfaces/customer";
+import { Status } from "./status";
+
 
 export interface Voucher {
     id: number;
     progressive: string;
-    status: string;
+    status: Status;
     voucher_year: string;
     voucher_date: string;
+    reference: string;
     location: string;
-    location_field: string;
     customer: Customer;
     note: string;
 }

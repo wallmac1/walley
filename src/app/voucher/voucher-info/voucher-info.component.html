@@ -17,64 +17,84 @@
     </div>
 
     <!-- GENERIC FORM -->
-    <div [formGroup]="voucherForm" class="row justify-content-center align-items-center p-1"
-        style="position: relative;">
-        <!-- Number -->
-        <div class="col-6 mt-2 element">
-            <label class="subtitle form-label" for="progressive">
-                {{"VOUCHER.NUMBER" | translate}}<sup>*</sup>
-            </label>
-            <div class="form-group d-flex align-items-center gap-2">
-                <input type="text" class="form-control" formControlName="progressive" style="max-width: 100px;">
-                / {{voucher?.voucher_year}}
+    <div [formGroup]="voucherForm" class="p-1" style="position: relative;">
+        <div class="row align-items-center">
+            <!-- Number -->
+            <div class="col-6 mt-2 element">
+                <label class="subtitle form-label" for="progressive">
+                    {{"VOUCHER.NUMBER" | translate}}<sup>*</sup>
+                </label>
+                <div class="form-group d-flex align-items-center gap-2">
+                    <input type="text" class="form-control" formControlName="progressive" style="max-width: 100px;">
+                    / {{voucher?.voucher_year}}
+                </div>
+            </div>
+            <!-- Date -->
+            <div class="col-6 mt-2 element">
+                <label class="subtitle form-label" for="voucher_date">
+                    {{"VOUCHER.DATE" | translate}}<sup>*</sup>
+                </label>
+                <input type="text" class="form-control" formControlName="voucher_date" style="max-width: 120px;">
             </div>
         </div>
-        <!-- Date -->
-        <div class="col-6 mt-2 element">
-            <label class="subtitle form-label" for="voucher_date">
-                {{"VOUCHER.DATE" | translate}}<sup>*</sup>
-            </label>
-            <input type="text" class="form-control" formControlName="voucher_date" style="max-width: 120px;">
+
+        <div class="row align-items-center">
+            <!-- Customer -->
+            <div class="col-12 col-md-6 mt-2 element">
+                <label class="subtitle form-label" for="customer">
+                    {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
+                </label>
+                <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
+                    formControlName="customer" [class.is-invalid]="voucherForm.get('customer')?.invalid && submitted">
+                <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                    <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
+                        <div>
+                            {{option.denominazione}}
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
         </div>
-        <!-- Customer -->
-        <div class="col-12 col-sm-6 mt-2 element">
-            <label class="subtitle form-label" for="customer">
-                {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
-            </label>
-            <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
-                formControlName="customer" [class.is-invalid]="voucherForm.get('customer')?.invalid && submitted">
-            <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
-                <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
-                    <div>
-                        {{option.denomination}}
-                    </div>
-                </mat-option>
-            </mat-autocomplete>
+
+        <div class="row align-items-center">
+            <!-- Location -->
+            <div class="col-12 col-sm-6 mt-2 element">
+                <label class="subtitle form-label" for="location">
+                    {{voucher_label.voucher_labellocation}}
+                </label>
+                <input type="text" class="form-control" formControlName="location">
+            </div>
+            <!-- Invoice Reference -->
+            <div class="col-12 col-sm-6 mt-2 element">
+                <label class="subtitle form-label" for="reference">
+                    {{voucher_label.voucher_labelreference}}
+                </label>
+                <input type="text" class="form-control" formControlName="reference">
+            </div>
         </div>
-        <!-- Location -->
-        <div class="col-12 col-sm-6 mt-2 element">
-            <label class="subtitle form-label" for="location">
-                {{voucher?.location_field}}
-            </label>
-            <input type="text" class="form-control" formControlName="location">
+
+        <div class="row align-items-center">
+            <!-- Note -->
+            <div class="col-12 mt-2 element">
+                <label class="subtitle form-label" for="note">
+                    {{"VOUCHER.NOTES" | translate}}
+                </label>
+                <textarea type="text" class="form-control" formControlName="note" rows="2"></textarea>
+            </div>
         </div>
-        <!-- Note -->
-        <div class="col-12 mt-2 element">
-            <label class="subtitle form-label" for="note">
-                {{"VOUCHER.NOTES" | translate}}
-            </label>
-            <textarea type="text" class="form-control" formControlName="note" rows="2"></textarea>
-        </div>
-        <!-- Create and Save Voucher -->
-        <div class="col-12 text-center mt-3 element">
-            <button *ngIf="voucherId == 0; else saveBlock" class="btn btn-outline-dark" (click)="createVoucher()">
-                {{"VOUCHER.CREATEVOUCHER" | translate}}
-            </button>
-            <ng-template #saveBlock>
-                <button class="btn btn-outline-dark" (click)="saveVoucher()">
-                    {{"VOUCHER.SAVE" | translate}}
+
+        <div class="row align-items-center">
+            <!-- Create and Save Voucher -->
+            <div class="col-12 text-center mt-3 element">
+                <button *ngIf="voucherId == 0; else saveBlock" class="btn btn-outline-dark" (click)="saveVoucher()">
+                    {{"VOUCHER.CREATEVOUCHER" | translate}}
                 </button>
-            </ng-template>
+                <ng-template #saveBlock>
+                    <button class="btn btn-outline-dark" (click)="saveVoucher()">
+                        {{"VOUCHER.SAVE" | translate}}
+                    </button>
+                </ng-template>
+            </div>
         </div>
     </div>
 
@@ -107,8 +127,10 @@
         <div [formGroup]="linesForm">
             <mat-accordion formArrayName="lines" class="example-headers-align">
                 <div *ngFor="let line of linesArray.controls; let i = index" [formGroupName]="i" class="col-12">
-                    <app-voucher-work *ngIf="line.get('type_line')?.value == 1" [line]="getLine(i)" [index]="i" (delete)="deleteLine(i)" (save)="saveLine(i)"></app-voucher-work>
-                    <app-voucher-article *ngIf="line.get('type_line')?.value == 2" [line]="getLine(i)" [index]="i" (delete)="deleteLine(i)" (save)="saveLine(i)"></app-voucher-article>
+                    <app-voucher-work *ngIf="line.get('type_line')?.value == 1" [line]="getLine(i)" [index]="i"
+                        (delete)="deleteLine(i)" (save)="saveLine(i)"></app-voucher-work>
+                    <app-voucher-article *ngIf="line.get('type_line')?.value == 2" [line]="getLine(i)" [index]="i"
+                        (delete)="deleteLine(i)" (save)="saveLine(i)"></app-voucher-article>
                 </div>
             </mat-accordion>
         </div>
@@ -117,14 +139,14 @@
     <div *ngIf="voucherId != 0" class="row addBorder"></div>
 
     <!-- COMPLETE BUTTONS  -->
-    <div class="row justify-content-center align-items-center mb-5 ms-2 me-2">
+    <div *ngIf="voucherId > 0" class="row justify-content-center align-items-center mb-5 ms-2 me-2">
         <div class="col-6 mt-2 text-start">
-            <button class="btn btn-outline-danger" style="width: 100px;">
+            <button class="btn btn-outline-danger" style="width: 100px;" (click)="deleteVoucher()">
                 {{"VOUCHER.DELETE" | translate}}
             </button>
         </div>
         <div class="col-6 mt-2 text-end">
-            <button class="btn btn-outline-success" style="width: 100px;">
+            <button class="btn btn-outline-success" style="width: 100px;" (click)="closeVoucher()">
                 {{"VOUCHER.CLOSE" | translate}}
             </button>
         </div>

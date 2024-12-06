@@ -14,8 +14,8 @@ import { Observable, tap } from 'rxjs';
 export class TicketsInfoService {
 
   clients: Customer[] = [
-    { rifidanacliforprodati: 1, id: 3, denomination: 'Client A' },
-    { rifidanacliforprodati: 2, id: 4, denomination: 'Client B' }
+    { rifidanacliforprodati: 1, id: 3, denominazione: 'Client A' },
+    { rifidanacliforprodati: 2, id: 4, denominazione: 'Client B' }
   ];
 
   locations: Location[] = [

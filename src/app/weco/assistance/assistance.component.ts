@@ -84,7 +84,7 @@ export class AssistanceComponent {
   }
 
   displayCustomerName(customer?: Customer): string {
-    return customer ? customer.denomination : '';
+    return customer ? customer.denominazione! : '';
   }
 
   save() {

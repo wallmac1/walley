@@ -2,7 +2,7 @@
     <mat-expansion-panel-header>
         <mat-panel-title style="font-size: large; min-width: 150px;">
             {{"VOUCHER.WORK" | translate}} {{index+1}}
-            <i class="bi bi-trash ms-2" style="color: red;" (click)="deleteWork(index)"></i>
+            <i class="bi bi-trash ms-2" style="color: red;" (click)="deleteWork(index)" (click)="$event.stopPropagation()"></i>
         </mat-panel-title>
         <mat-panel-description class="align-items-right">
 
@@ -19,11 +19,11 @@
             [class.is-invalid]="line.get('quantity')?.invalid && (line.get('quantity')?.touched || line.get('quantity')?.dirty)">
         </div>
         <div class="col-6 col-md-3 col-lg-2 mt-2">
-            <label class="form-label" for="refidunit">
+            <label class="form-label" for="refidum">
                 {{"VOUCHER.MEASUREMENTUNIT" | translate}}
             </label>
-            <select type="text" class="form-select" formControlName="refidunit" id="refidunit"
-            [class.is-invalid]="line.get('refidunit')?.invalid && submitted">
+            <select type="text" class="form-select" formControlName="refidum" id="refidum"
+            [class.is-invalid]="line.get('refidum')?.invalid && submitted">
                 <option [ngValue]="null" disabled></option>
                 <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">
                     {{unit.acronym}}
@@ -50,7 +50,7 @@
                 {{"VOUCHER.QUANTITYERROR2" | translate}}
             </span>
         </div>
-        <div *ngIf="line.get('refidunit')?.invalid && submitted" class="col-12 text-center">
+        <div *ngIf="line.get('refidum')?.invalid && submitted" class="col-12 text-center">
             <span class="error">
                 {{"VOUCHER.UNITERROR" | translate}}
             </span>

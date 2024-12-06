@@ -26,17 +26,17 @@
 }
 
 .element {
-    padding-top: 0.2rem;
+    padding-top: 0.1rem;
 
     @media screen and (min-width: 768px) {
-        padding-top: 0.4rem;
+        padding-top: 0.2rem;
     }
 
     @media screen and (min-width: 992px) {
-        padding-top: 0.6rem;
+        padding-top: 0.3rem;
     }
 }
 
 .form-label {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.1rem;
 }

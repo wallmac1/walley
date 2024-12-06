@@ -48,7 +48,7 @@
                     <p class="card-text">
                         <span *ngIf="internal; else externalBlock" class="mt-2">Internal</span>
                         <ng-template #externalBlock>
-                            <span>{{ticketInfo?.customer?.denomination}}</span><br>
+                            <span>{{ticketInfo?.customer?.denominazione}}</span><br>
                         </ng-template>
                         <span *ngIf="ticketInfo?.location">{{ticketInfo?.location}}</span>
                         <span *ngIf="!ticketInfo?.location">-</span>

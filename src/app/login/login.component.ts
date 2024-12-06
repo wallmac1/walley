@@ -24,14 +24,12 @@ export class LoginComponent {
   loginForm = new FormGroup({
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
-    rememberMe: new FormControl<number>(0, Validators.required)
   })
 
   constructor(private router: Router, private authService: AuthService) { }
 
   onSwitchChange(): void {
     const isChecked = this.loginForm.get('rememberMe')?.value;
-    this.loginForm.get('rememberMe')?.setValue(isChecked ? 1 : 0);
   }
 
   async login() {
@@ -45,7 +43,7 @@ export class LoginComponent {
     if(this.loginForm.valid) {
       this.authService.loginServer(this.loginForm.get('email')?.value!,
       this.loginForm.get('password')?.value!, true);
-      this.invalidCredentials = true;
+      this.invalidCredentials = this.authService.invalidCredentials;
     }
   }
 
