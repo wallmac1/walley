@@ -421,7 +421,7 @@
     "MEASUREMENTUNIT": "Unità di Misura",
     "DESCRIPTION": "Descrizione",
     "QUANTITYERROR": "Quantità è un campo numerico con al massimo due decimali dopo la virgola",
-    "QUANTITYERROR2": "Quantità è richiesta",
+    "MANDATORY": "Compila i campi obbligatori",
     "UNITERROR": "Unità di misura è richiesta"
   }
 }

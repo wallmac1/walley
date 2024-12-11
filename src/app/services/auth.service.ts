@@ -6,12 +6,14 @@ import { Router } from '@angular/router';
 
 import { User } from '../interfaces/user';
 import { CookieService } from 'ngx-cookie-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  serverError: string = '';
   invalidCredentials = false
   private userSubject = new Subject<User | null>();
   getInfoUserLogged(): Observable<User | null> {
@@ -37,26 +39,23 @@ export class AuthService {
     return await lastValueFrom<any>(request$);
   }
 
-  loginServer(email_send: string, password_send: string, rememberme: boolean) {
-    this.getCsrf().then(
-      (response) => {
-        // console.log('prima risposta:', response);
-        // this.http.post(`${this.urlServerWall}/register`, {
-        this.connectServerService.postRequest(Connect.urlServerLara, 'login', {
-          email: email_send,
-          password: password_send,
-        }).subscribe((esito: any) => {
-          // console.log('login!', esito);
-          if (esito) {
-            localStorage.setItem('authOk', 'YES');
-            this.router.navigate(['/newTicket']);
-          }
-          else {
-            this.invalidCredentials = true;
-          }
-        });
+  async loginServer(email: string, password: string, rememberMe: boolean): Promise<void> {
+    try {
+      const response = await this.connectServerService.postRequest(Connect.urlServerLara, 'login', {
+        email,
+        password,
+      }).toPromise();
+  
+      if (response) {
+        localStorage.setItem('authOk', 'YES');
+        this.invalidCredentials = false;
+      } else {
+        this.invalidCredentials = true; // Credenziali non valide
       }
-    );
+    } catch (error) {
+      console.error('Errore nella chiamata al server:', error);
+      this.invalidCredentials = true; // Gestione errore server
+    }
   }
 
   // async loginUser(email_value: string, password_value: string) {

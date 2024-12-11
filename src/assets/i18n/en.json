@@ -444,7 +444,7 @@
     "MEASUREMENTUNIT": "Measurement Unit",
     "DESCRIPTION": "Description",
     "QUANTITYERROR": "Quantity is a numerical field with at max two decimals",
-    "QUANTITYERROR2": "Quantity is required",
+    "MANDATORY": "Complete mandatory fields",
     "UNITERROR": "Measurment unit is required"
   }
 }

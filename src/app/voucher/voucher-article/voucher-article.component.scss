@@ -16,3 +16,56 @@
     color: red;
     font-size: small;
 }
+
+/* Contenitore esterno */
+.image-container {
+    height: 90px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+/* Contenitore interno per allineamento */
+.scroll-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+/* Stile delle immagini */
+.custom-image {
+    height: 90%;
+    width: 60px;
+    display: inline-block;
+    object-fit: cover;
+    border: 1px solid black;
+}
+
+/* Selettore per la scrollbar */
+.image-container::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+}
+
+/* Selettore per il "track" (sfondo della scrollbar) */
+.image-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+/* Selettore per il "thumb" (maniglia della scrollbar) */
+.image-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+/* Colore quando la maniglia è in hover */
+.image-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Assottiglia la scrollbar su Firefox */
+.image-container {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f0f0f0;
+}

@@ -14,6 +14,7 @@ import { Connect } from '../../classes/connect';
 import { VoucherTable } from '../interfaces/voucher-table';
 import { Filters } from '../interfaces/filters';
 import { ApiResponse } from '../../weco/interfaces/api-response';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-voucher-list',
@@ -42,7 +43,7 @@ export class VoucherListComponent {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(FiltersComponent) filtersChild!: FiltersComponent;
 
-  constructor(private connectServerService: ConnectServerService) { }
+  constructor(private connectServerService: ConnectServerService, private router: Router) { }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
@@ -65,6 +66,14 @@ export class VoucherListComponent {
         this.dataSource.data = this.voucherList;
       }
     })
+  }
+
+  newVoucher() {
+    this.router.navigate(['voucher', 0]);
+  }
+
+  goToVoucher(row: VoucherTable) {
+    this.router.navigate(['voucher', row.progressive]);
   }
 }
 

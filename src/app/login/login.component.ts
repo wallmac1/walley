@@ -33,17 +33,27 @@ export class LoginComponent {
   }
 
   async login() {
-    // await this.authService.loginUser(
-    //   this.loginForm.get('email')?.value!,
-    //   this.loginForm.get('password')?.value!);
-    // if (this.authService.getToken() != null) {
-    //   this.router.navigate(['/newTicket']);
-    // }
     this.submitted = true;
-    if(this.loginForm.valid) {
-      this.authService.loginServer(this.loginForm.get('email')?.value!,
-      this.loginForm.get('password')?.value!, true);
-      this.invalidCredentials = this.authService.invalidCredentials;
+  
+    if (this.loginForm.valid) {
+      try {
+        // Chiama loginServer e attendi la risposta
+        await this.authService.loginServer(
+          this.loginForm.get('email')?.value!,
+          this.loginForm.get('password')?.value!,
+          true
+        );
+  
+        // Verifica se il login è riuscito
+        if (!this.authService.invalidCredentials) {
+          this.router.navigate(['/newTicket']);
+        } else {
+          this.invalidCredentials = true; // Mostra messaggio di errore
+        }
+      } catch (error) {
+        console.error('Errore durante il login:', error);
+        this.invalidCredentials = true; // Gestione errore server
+      }
     }
   }
 

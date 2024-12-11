@@ -10,13 +10,13 @@
     </mat-expansion-panel-header>
 
     <!-- FORM -->
-    <div [formGroup]="line" class="row justify-content-center align-items-top">
+    <div [formGroup]="line" class="row justify-content-center align-items-top mb-2">
         <div class="col-6 col-md-3 col-lg-2 mt-2">
             <label class="form-label" for="quantity">
                 {{"VOUCHER.QUANTITY" | translate}}
             </label>
             <input type="text" class="form-control" formControlName="quantity" id="quantity"
-            [class.is-invalid]="line.get('quantity')?.invalid && (line.get('quantity')?.touched || line.get('quantity')?.dirty)">
+            [class.is-invalid]="line.get('quantity')?.invalid && (line.get('quantity')?.dirty || submitted)">
         </div>
         <div class="col-6 col-md-3 col-lg-2 mt-2">
             <label class="form-label" for="refidum">
@@ -34,30 +34,48 @@
             <label class="form-label" for="description">
                 {{"VOUCHER.DESCRIPTION" | translate}}
             </label>
-            <textarea type="text" class="form-control" formControlName="description" id="description" rows="1">
+            <textarea type="text" class="form-control" formControlName="description" id="description" rows="1"
+            [class.is-invalid]="line.get('description')?.invalid && (line.get('description')?.dirty || submitted)">
             </textarea>
         </div>
     </div>
 
-    <div *ngIf="line.invalid" class="row justify-content-center mt-1">
+    <div *ngIf="line.invalid" class="row justify-content-center mb-1">
         <div *ngIf="line.get('quantity')?.invalid && line.get('quantity')?.value != null && line.get('quantity')?.value != ''" class="col-12 text-center">
             <span class="error">
                 {{"VOUCHER.QUANTITYERROR" | translate}}
             </span>
         </div>
-        <div *ngIf="line.get('quantity')?.invalid && (line.get('quantity')?.value == null || line.get('quantity')?.value == '') && line.get('quantity')?.touched" class="col-12 text-center">
+        <div *ngIf="(line.get('quantity')?.invalid && (line.get('quantity')?.value == null || line.get('quantity')?.value == '') && (line.get('quantity')?.dirty || submitted)) || 
+            (line.get('refidum')?.invalid && (line.get('refidum')?.dirty || submitted)) ||
+            (line.get('description')?.invalid && (line.get('description')?.dirty || submitted))"
+            class="col-12 text-center">
             <span class="error">
-                {{"VOUCHER.QUANTITYERROR2" | translate}}
-            </span>
-        </div>
-        <div *ngIf="line.get('refidum')?.invalid && submitted" class="col-12 text-center">
-            <span class="error">
-                {{"VOUCHER.UNITERROR" | translate}}
+                {{"VOUCHER.MANDATORY" | translate}}
             </span>
         </div>
     </div>
 
-    <div *ngIf="line.dirty" class="row justify-content-center mt-2">
+    <!-- Import Attached Files -->
+    <div *ngIf="line.get('idvoucherline')?.value != 0" class="row justify-content-center align-items-center mt-2">
+        <!-- <div class="col-12">
+            <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
+        </div> -->
+        <div class="col-2 col-lg-1">
+            <label for="fileUpload" class="btn btn-outline-dark" matTooltip="Allega File">
+                <i class="bi bi-paperclip"></i>
+                <input type="file" id="fileUpload" style="display: none;" (change)="onFileSelected($event)" accept="*"
+                    multiple>
+            </label>
+        </div>
+        <div class="col-10 col-lg-11 image-container">
+            <div class="scroll-container">
+                <img *ngFor="let file of files" class="custom-image me-2" [src]="file.src" [matTooltip]="file.title" />
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="line.dirty" class="row justify-content-center pt-2" style="border-top: 1px solid lightgray;">
         <div class="col-12 text-end">
             <button class="btn btn-outline-dark" (click)="saveArticle(index)">
                 {{"VOUCHER.SAVE" | translate}}

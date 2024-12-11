@@ -13,6 +13,9 @@ export interface Lines {
         id: number;
         nickname: string;
         datetime: string;      
+    };
+    file: {
+        src: string;
     }
 }
 

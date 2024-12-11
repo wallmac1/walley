@@ -44,7 +44,7 @@ export class VoucherInfoComponent {
 
   voucher: Voucher | null = null;
   voucherId: number = 0;
-  lines: Lines[] = [];
+  //lines: Lines[] = [];
   linesForm!: FormGroup;
 
   voucherForm = new FormGroup({
@@ -53,7 +53,7 @@ export class VoucherInfoComponent {
     customer: new FormControl<Customer | null>(null, Validators.required),
     location: new FormControl<string | null>(null, Validators.required),
     note: new FormControl<string | null>(null),
-    reference: new FormControl<string | null>(null)
+    reference: new FormControl<string | null>(null),
   })
 
   constructor(private route: ActivatedRoute, private connectServerService: ConnectServerService,
@@ -146,7 +146,7 @@ export class VoucherInfoComponent {
     return this.fb.group({
       idvoucherline: [line.idvoucherline],
       type_line: [line.type_line],
-      description: [line.description],
+      description: [line.description, Validators.required],
       quantity: [line.quantity, [this.numberWithCommaValidator(), Validators.required]],
       refidum: [line.refidum, Validators.required]
     })
@@ -156,7 +156,7 @@ export class VoucherInfoComponent {
     return this.fb.group({
       idvoucherline: [0],
       type_line: [type],
-      description: [null],
+      description: [null, Validators.required],
       quantity: [null, [this.numberWithCommaValidator(), Validators.required]],
       refidum: [null, Validators.required]
     })
@@ -178,18 +178,18 @@ export class VoucherInfoComponent {
     }
   }
 
-  saveLine(i: number) {
+  saveLine(index: number) {
     // Chiama il server e salva la linea specifica
-    const line = this.linesArray.at(i).getRawValue();
+    const line = this.linesArray.at(index).getRawValue();
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine', 
       { idvoucher: this.voucherId, idvoucherline: line.idvoucherline, quantity: parseFloat(line.quantity), 
         type_line: line.type_line, description: line.description, refidum: line.refidum})
         .subscribe((val: ApiResponse<any>) => {
           if(val) {
-            if(val.data.idvoucherline) {
-              line.idvoucherline = val.data.idvoucherline
+            if(val.data && val.data.idvoucherline) {
+              this.linesArray.at(index).get('idvoucherline')?.setValue(val.data.idvoucherline);
             }
-            this.getLineServer(line.idvoucherline, i);
+            this.getLineServer(this.linesArray.at(index).get('idvoucherline')!.value, index);
           }
         })
   }
