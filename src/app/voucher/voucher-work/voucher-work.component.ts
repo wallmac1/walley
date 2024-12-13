@@ -9,6 +9,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 
 @Component({
   selector: 'app-voucher-work',
@@ -18,7 +20,8 @@ import { Connect } from '../../classes/connect';
     ReactiveFormsModule,
     MatExpansionModule,
     TranslateModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   templateUrl: './voucher-work.component.html',
   styleUrl: './voucher-work.component.scss'
@@ -26,7 +29,7 @@ import { Connect } from '../../classes/connect';
 export class VoucherWorkComponent {
 
   files: LineFile[] = [];
-
+  urlServerLaraFile = Connect.urlServerLaraFile;
   @Input() line!: FormGroup;
   @Input() index: number = -1;
   @Input() voucherId: number = 0;
@@ -36,20 +39,28 @@ export class VoucherWorkComponent {
   submitted = false;
   measurmentUnit: MeasurementUnit[] = [];
 
-  constructor(private fb: FormBuilder, private connectServerService: ConnectServerService) { }
+  constructor(private fb: FormBuilder, private connectServerService: ConnectServerService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getFiles();
     this.getMeasurmentUnits();
   }
 
+  openImageModal(file: LineFile): void {
+    this.dialog.open(ImageViewerComponent, {
+      data: { file: file},
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+    });
+  }
+
   onFileSelected(event: any): void {
     const input = event.target as HTMLInputElement
     const formData: FormData = new FormData();
-
     if (input.files) {
       formData.append('idvoucher', String(this.voucherId))
-      formData.append('idvoucherline', String(this.line.get('idvoucherline')?.value))
+      formData.append('idvoucherline', String(this.line.get('idvoucherline')?.value));
       const selectedFiles = Array.from(input.files);
       selectedFiles.forEach(element => {
         formData.append('files[]', element);
@@ -66,8 +77,17 @@ export class VoucherWorkComponent {
     }
   }
 
+  deleteFile(filename: string) {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/voucherDeleteFile',
+      { idvoucher: this.voucherId, idvoucherline: this.line.get('idvoucherline')?.value, filename: filename })
+      .subscribe((val: any) => {
+        this.resetFileInput();
+        this.getFiles();
+      })
+  }
+
   private resetFileInput() {
-    const fileInput = document.getElementById('fileUpload') as HTMLInputElement;
+    const fileInput = document.getElementById('fileUpload-'+this.line.get('idvoucherline')?.value) as HTMLInputElement;
     fileInput.value = '';
   }
 

@@ -1,0 +1,26 @@
+<div class="overlay" (click)="closeModal()">
+    <div class="modal-content">
+        <div class="image-container" #imageContainer (click)="$event.stopPropagation()" style="position: relative;">
+            <img #image [src]="urlServerLaraFile+data.file.src" alt="{{data.file.src}}" />
+            <div>
+                <button class="btn btn-danger" style="position: absolute; top: 5px; right: 5px;" (click)="closeModal()">
+                    <i class="bi bi-x" style="color: white;"></i>
+                </button>
+            </div>
+        </div>
+        <!-- <div class="controls" (click)="$event.stopPropagation()">
+            <button id="prevBtn" class="btn btn-primary button me-5 zoomButtons" (click)="previousPage()">
+                <i class="bi bi-chevron-compact-left"></i>
+            </button>
+            <button class="btn btn-primary ms-4 me-2 zoomButtons" (click)="zoomIn()">
+                <i class="bi bi-zoom-in"></i>
+            </button>
+            <button class="btn btn-primary ms-2 me-4 zoomButtons" (click)="zoomOut()">
+                <i class="bi bi-zoom-out"></i>
+            </button>
+            <button id="nextBtn" class="btn btn-primary button ms-5 zoomButtons" (click)="nextPage()">
+                <i class="bi bi-chevron-compact-right"></i>
+            </button>
+        </div> -->
+    </div>
+</div>

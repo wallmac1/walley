@@ -9,8 +9,8 @@
                         style="position: absolute; left: 20%; top: 0; left: 20%;">
                     </i>
                     Status
-                    <sup class="modifySup ms-2" (click)="modifyPopup(1)" style="position: absolute; top: 70%;">
-                        <i class="bi bi-pencil modifyIcon" style="color: white;"></i>
+                    <sup class="modifySup ms-2" (click)="modifyPopup(1)">
+                        <i class="bi bi-pencil modifyIconStatus" style="color: white;"></i>
                     </sup>
                 </div>
                 <div class="card-body p-1">
@@ -26,7 +26,7 @@
 
         <!-- Title and Description -->
         <div class="col-12 col-lg-6 text-center order-1 order-lg-2">
-            <div class="col-12 text-center">
+            <div class="col-12 text-center" style="position: relative;">
                 <span class="ticketTitle">{{ticketGeneralForm.get("title")?.value}}</span>
                 <sup class="modifySup ms-2" (click)="modifyPopup(0)">
                     <i class="bi bi-pencil modifyIcon"></i>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" [matMenuTriggerFor]="menu" style="position: absolute; right: 20px; top: 200px; width: 50px; z-index: 100;">
+        <button class="btn btn-primary" [matMenuTriggerFor]="menu" style="position: absolute; right: 20px; top: 250px; width: 50px; z-index: 100;">
             +
         </button>
         <mat-menu #menu="matMenu">

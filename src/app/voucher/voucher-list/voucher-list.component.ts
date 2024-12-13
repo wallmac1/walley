@@ -73,7 +73,7 @@ export class VoucherListComponent {
   }
 
   goToVoucher(row: VoucherTable) {
-    this.router.navigate(['voucher', row.progressive]);
+    this.router.navigate(['voucher', row.id]);
   }
 }
 

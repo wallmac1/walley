@@ -1,6 +1,5 @@
 // Ticket Title & Desctiption
 .ticketTitle {
-    margin-left: 1.7rem;
     font-size: xx-large;
     font-weight: bold;
 }
@@ -55,4 +54,14 @@
     color: white;
 }
 
+.btn-primary {
+    border-color: #002D5D;
+    background-color: #002D5D;
+    color: white;
+}
 
+.btn-primary:hover {
+    border-color: #005ec3;
+    background-color: #005ec3;
+    color: white;
+}

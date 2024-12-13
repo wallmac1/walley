@@ -1,8 +1,9 @@
 <mat-expansion-panel class="mt-2" [expanded]="index == 0">
-    <mat-expansion-panel-header>
+    <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(255, 242, 218);">
         <mat-panel-title style="font-size: large; min-width: 150px;">
             {{"VOUCHER.ARTICLE" | translate}} {{index+1}}
-            <i class="bi bi-trash ms-2" style="color: red;" (click)="deleteArticle(index)" (click)="$event.stopPropagation()"></i>
+            <i class="bi bi-trash ms-2" style="color: red;" (click)="deleteArticle(index)"
+                (click)="$event.stopPropagation()"></i>
         </mat-panel-title>
         <mat-panel-description class="align-items-right">
 
@@ -10,38 +11,85 @@
     </mat-expansion-panel-header>
 
     <!-- FORM -->
-    <div [formGroup]="line" class="row justify-content-center align-items-top mb-2">
-        <div class="col-6 col-md-3 col-lg-2 mt-2">
-            <label class="form-label" for="quantity">
-                {{"VOUCHER.QUANTITY" | translate}}
+    <div [formGroup]="line" class="row justify-content-center align-items-end mb-2 mt-1">
+        <div class="col-7 col-sm-8 col-md-9 col-lg-10">
+            <label class="subtitle form-label" for="article">
+                {{"VOUCHER.ARTICLE" | translate}}<sup>*</sup>
             </label>
-            <input type="text" class="form-control" formControlName="quantity" id="quantity"
-            [class.is-invalid]="line.get('quantity')?.invalid && (line.get('quantity')?.dirty || submitted)">
+            <input type="text" matInput [matAutocomplete]="article" class="form-control" id="article"
+                formControlName="article" [class.is-invalid]="line.get('article')?.invalid && submitted">
+            <mat-autocomplete #article="matAutocomplete" [displayWith]="displayArticleName">
+                <mat-option *ngFor="let option of filteredArticles$ | async" [value]="option">
+                    <div>
+                        {{option.title}}
+                    </div>
+                </mat-option>
+            </mat-autocomplete>
         </div>
-        <div class="col-6 col-md-3 col-lg-2 mt-2">
+        <div class="col-5 col-sm-4 col-md-3 col-lg-2">
+            <label class="form-label" for="code">
+                {{"VOUCHER.CODE" | translate}}
+            </label>
+            <input type="text" class="form-control" formControlName="code" id="code">
+        </div>
+
+        <div class="col-6 col-md-3 mt-2">
             <label class="form-label" for="refidum">
                 {{"VOUCHER.MEASUREMENTUNIT" | translate}}
             </label>
             <select type="text" class="form-select" formControlName="refidum" id="refidum"
-            [class.is-invalid]="line.get('refidum')?.invalid && submitted">
+                [class.is-invalid]="line.get('refidum')?.invalid && submitted">
                 <option [ngValue]="null"></option>
                 <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">
                     {{unit.acronym}}
                 </option>
             </select>
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-8 mt-2">
+        <div class="col-6 col-md-3 mt-2">
+            <label class="form-label" for="quantity">
+                {{"VOUCHER.QUANTITY" | translate}}
+            </label>
+            <input type="text" class="form-control" formControlName="quantity" id="quantity"
+                [class.is-invalid]="line.get('quantity')?.invalid && (line.get('quantity')?.dirty || submitted)">
+        </div>
+        <div class="col-6 col-md-3 mt-2">
+            <label class="form-label" for="taxable_purchase">
+                {{"VOUCHER.PURCHASE" | translate}}
+            </label>
+            <input type="text" class="form-control" formControlName="taxable_purchase" id="taxable_purchase"
+                [class.is-invalid]="line.get('taxable_purchase')?.invalid && (line.get('taxable_purchase')?.dirty || submitted)">
+        </div>
+        <div class="col-6 col-md-3 mt-2">
+            <label class="form-label" for="taxable_sale">
+                {{"VOUCHER.SALE" | translate}}
+            </label>
+            <input type="text" class="form-control" formControlName="taxable_sale" id="taxable_sale"
+                [class.is-invalid]="line.get('taxable_sale')?.invalid && (line.get('taxable_sale')?.dirty || submitted)">
+        </div>
+
+        <div class="col-10 col-sm-11 mt-2">
             <label class="form-label" for="description">
                 {{"VOUCHER.DESCRIPTION" | translate}}
             </label>
             <textarea type="text" class="form-control" formControlName="description" id="description" rows="1"
-            [class.is-invalid]="line.get('description')?.invalid && (line.get('description')?.dirty || submitted)">
+                [class.is-invalid]="line.get('description')?.invalid && (line.get('description')?.dirty || submitted)">
             </textarea>
         </div>
+        <ng-container *ngIf="line.get('idvoucherline')?.value != 0">
+            <div class="col-2 col-sm-1 ps-0 ps-sm-1 ps-md-2 ps-lg-3 mt-2 text-end">
+                <label for="fileUpload-{{line.get('idvoucherline')?.value}}" class="btn btn-outline-dark"
+                    matTooltip="Allega File">
+                    <i class="bi bi-paperclip"></i>
+                    <input type="file" id="fileUpload-{{line.get('idvoucherline')?.value}}" style="display: none;"
+                        (change)="onFileSelected($event)" accept="*" multiple>
+                </label>
+            </div>
+        </ng-container>
     </div>
 
     <div *ngIf="line.invalid" class="row justify-content-center mb-1">
-        <div *ngIf="line.get('quantity')?.invalid && line.get('quantity')?.value != null && line.get('quantity')?.value != ''" class="col-12 text-center">
+        <div *ngIf="line.get('quantity')?.invalid && line.get('quantity')?.value != null && line.get('quantity')?.value != ''"
+            class="col-12 text-center">
             <span class="error">
                 {{"VOUCHER.QUANTITYERROR" | translate}}
             </span>
@@ -61,17 +109,19 @@
         <!-- <div class="col-12">
             <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
         </div> -->
-        <div class="col-2 col-lg-1">
-            <label for="fileUpload" class="btn btn-outline-dark" matTooltip="Allega File">
-                <i class="bi bi-paperclip"></i>
-                <input type="file" id="fileUpload" style="display: none;" (change)="onFileSelected($event)" accept="*"
-                    multiple>
-            </label>
-        </div>
-        <div class="col-10 col-lg-11 image-container">
-            <div class="scroll-container">
-                <img *ngFor="let file of files" class="custom-image me-2" [src]="file.src" [matTooltip]="file.title" />
+        <div class="col-12 image-container text-center">
+            <div class="image-wrapper" *ngFor="let file of files">
+                <img class="custom-image me-2" [src]="urlServerLaraFile+file.src" [matTooltip]="file.title"
+                    (click)="openImageModal(file)" />
+                <i class="bi bi-trash delete-icon" (click)="deleteFile(file.title)"></i>
             </div>
+        </div>
+    </div>
+
+    <div class="row align-items-center mt-2">
+        <div class="col-12 col-md-6">
+            <span style="color: gray;">Informazioni aggiuntive</span>
+            <i class="bi bi-plus" style="color: gray;"></i>
         </div>
     </div>
 

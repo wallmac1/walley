@@ -73,7 +73,7 @@ export class StepTwoReadonlyComponent {
         if (val.data.listFiles) {
           this.imagesStep = val.data.listFiles.map(image => {
             // Chiama ImageLoaderService solo una volta per immagine
-            this.imageLoaderService.getImageWithToken(Connect.urlServerLaraFile + image.src).subscribe(
+            this.imageLoaderService.getImageWithToken(Connect.urlServerLaraFileWecare + image.src).subscribe(
               (safeUrl) => {
                 image.src = safeUrl; // Assegna l'URL sicuro all'immagine
               }

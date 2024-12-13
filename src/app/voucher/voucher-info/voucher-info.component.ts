@@ -11,10 +11,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { Connect } from '../../classes/connect';
 import { ConnectServerService } from '../../services/connect-server.service';
-import { Work } from '../../tickets/interfaces/work';
 import { Lines } from '../interfaces/lines';
 import { TranslateModule } from '@ngx-translate/core';
-import { Line } from 'ngx-extended-pdf-viewer';
+import { Status } from '../interfaces/status';
 
 @Component({
   selector: 'app-voucher-info',
@@ -41,7 +40,7 @@ export class VoucherInfoComponent {
 
   filteredCustomer$!: Observable<Customer[]>;
   submitted: boolean = false;
-
+  status: Status | null = null;
   voucher: Voucher | null = null;
   voucherId: number = 0;
   //lines: Lines[] = [];
@@ -148,7 +147,12 @@ export class VoucherInfoComponent {
       type_line: [line.type_line],
       description: [line.description, Validators.required],
       quantity: [line.quantity, [this.numberWithCommaValidator(), Validators.required]],
-      refidum: [line.refidum, Validators.required]
+      refidum: [line.refidum || null, Validators.required],
+      code: [line.code || null],
+      serialnumber: [line.serialnumber || null],
+      taxable_purchase: [line.taxable_purchase || null],
+      taxable_sale: [line.taxable_sale || null],
+      article: [line.article || null]
     })
   }
 
@@ -158,7 +162,12 @@ export class VoucherInfoComponent {
       type_line: [type],
       description: [null, Validators.required],
       quantity: [null, [this.numberWithCommaValidator(), Validators.required]],
-      refidum: [null, Validators.required]
+      refidum: [null, Validators.required],
+      code: [null],
+      serialnumber: [null],
+      taxable_purchase: [null],
+      taxable_sale: [null],
+      article: [null]
     })
   }
 
@@ -183,7 +192,7 @@ export class VoucherInfoComponent {
     const line = this.linesArray.at(index).getRawValue();
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine', 
       { idvoucher: this.voucherId, idvoucherline: line.idvoucherline, quantity: parseFloat(line.quantity), 
-        type_line: line.type_line, description: line.description, refidum: line.refidum})
+        type_line: line.type_line, description: line.description, refidum: line.refidum })
         .subscribe((val: ApiResponse<any>) => {
           if(val) {
             if(val.data && val.data.idvoucherline) {
@@ -251,6 +260,14 @@ export class VoucherInfoComponent {
   }
 
   closeVoucher() {
+    //Cambia Stato
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/closeVoucher', 
+      {idvoucher: this.voucherId})
+      .subscribe((val: any) => {
+        if(val) {
+          this.status = val.data.status;
+        }
+      })
     this.router.navigate(['voucherList']);
   }
 
@@ -263,7 +280,6 @@ export class VoucherInfoComponent {
   //     this.works = lines.filter(line => line.type_line === 1); // Lavori
   //     this.articles = lines.filter(line => line.type_line === 2); // Articoli
   //   }
-
   // }
 
   private searchCustomer() {

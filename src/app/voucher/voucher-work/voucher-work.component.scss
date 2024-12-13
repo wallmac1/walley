@@ -32,13 +32,41 @@
     height: 100%;
 }
 
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 80%;
+}
+
+/* Icona di eliminazione */
+.delete-icon {
+    position: absolute;
+    top: 3px;     /* Distanza dalla parte superiore dell'immagine */
+    right: 10px;   /* Distanza dal lato destro */
+    color: red;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.5);;
+}
+
+/* Hover dell'icona */
+.delete-icon:hover {
+    transform: scale(1.2);
+}
+
 /* Stile delle immagini */
 .custom-image {
-    height: 90%;
-    width: 60px;
+    height: 98%;
+    width: 50px;
     display: inline-block;
     object-fit: cover;
     border: 1px solid black;
+}
+
+.custom-image:hover {
+    cursor: pointer;
 }
 
 /* Selettore per la scrollbar */

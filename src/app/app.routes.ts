@@ -25,5 +25,6 @@ export const routes: Routes = [
     { path: "assistance", component: AssistanceComponent },
     { path: "systemReview/:id", component: SystemReviewComponent },
     { path: "voucher/:id", component: VoucherInfoComponent },
-    { path: "voucherList", component: VoucherListComponent }
+    { path: "voucherList", component: VoucherListComponent },
+    { path: '**', redirectTo: '/login' },
 ];

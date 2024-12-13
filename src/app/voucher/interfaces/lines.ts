@@ -1,9 +1,16 @@
+import { Article } from "./article";
+
 export interface Lines {
     idvoucherline: number;
     type_line: number;
     description: string;
+    code?: string;
     quantity: string;
-    refidum: number;
+    refidum?: number;
+    article: Article;
+    serialnumber?: number;
+    taxable_purchase?: number | null;
+    taxable_sale?: number | null;
     user_created: {
         id: number;
         nickname: string;

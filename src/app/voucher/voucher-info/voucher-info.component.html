@@ -1,5 +1,5 @@
 <div class="container-fluid p-2 mb-5" style="position: relative; max-width: 1000px; min-width: 375px;">
-    <div class="row justify-content-center align-items-center mt-2 mb-2" style="position: relative;">
+    <div class="row justify-content-center align-items-center mt-1 mb-1" style="position: relative;">
         <div class="col-12 text-center">
             <span class="title">
                 {{"VOUCHER.VOUCHER" | translate}}
@@ -20,7 +20,7 @@
     <div [formGroup]="voucherForm" class="p-1" style="position: relative;">
         <div class="row align-items-center">
             <!-- Number -->
-            <div class="col-6 mt-2 element">
+            <div class="col-6 element">
                 <label class="subtitle form-label" for="progressive">
                     {{"VOUCHER.NUMBER" | translate}}<sup>*</sup>
                 </label>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <!-- Date -->
-            <div class="col-6 mt-2 element">
+            <div class="col-6 element">
                 <label class="subtitle form-label" for="voucher_date">
                     {{"VOUCHER.DATE" | translate}}<sup>*</sup>
                 </label>
@@ -40,7 +40,7 @@
 
         <div class="row align-items-center">
             <!-- Customer -->
-            <div class="col-12 col-md-6 mt-2 element">
+            <div class="col-12 col-md-6 element">
                 <label class="subtitle form-label" for="customer">
                     {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
                 </label>
@@ -58,14 +58,14 @@
 
         <div class="row align-items-center">
             <!-- Location -->
-            <div class="col-12 col-sm-6 mt-2 element">
+            <div class="col-12 col-sm-6 element">
                 <label class="subtitle form-label" for="location">
                     {{voucher_label.voucher_labellocation}}
                 </label>
                 <input type="text" class="form-control" formControlName="location">
             </div>
             <!-- Invoice Reference -->
-            <div class="col-12 col-sm-6 mt-2 element">
+            <div class="col-12 col-sm-6 element">
                 <label class="subtitle form-label" for="reference">
                     {{voucher_label.voucher_labelreference}}
                 </label>
@@ -75,7 +75,7 @@
 
         <div class="row align-items-center">
             <!-- Note -->
-            <div class="col-12 mt-2 element">
+            <div class="col-12 element">
                 <label class="subtitle form-label" for="note">
                     {{"VOUCHER.NOTES" | translate}}
                 </label>
@@ -102,7 +102,7 @@
 
     <!-- ADD WORKS AND ARTICLES -->
     <div *ngIf="voucherId != 0" class="row justify-content-center align-items-center p-1" style="position: relative;">
-        <div class="col-6 text-center">
+        <div class="col-6 text-center mt-2">
             <button class="btn btn-outline-dark" style="width: 150px;" (click)="addWork()">
                 <i class="bi bi-plus-circle"></i>
                 <span class="ms-2">
@@ -111,7 +111,7 @@
             </button>
         </div>
 
-        <div class="col-6 text-center mt-2 mb-1">
+        <div class="col-6 text-center mt-2">
             <button class="btn btn-outline-dark" style="width: 150px;" (click)="addArticle()">
                 <i class="bi bi-plus-circle"></i>
                 <span class="ms-2">
@@ -122,7 +122,7 @@
     </div>
 
     <!-- CARD WORKS AND ARTICLES -->
-    <div *ngIf="voucherId != 0" class="row justify-content-center align-items-center p-1 p-md-2 p-lg-3"
+    <div *ngIf="voucherId != 0" class="row justify-content-center align-items-center p-1 p-md-2 p-lg-3 pt-1"
         style="position: relative;">
         <div [formGroup]="linesForm">
             <mat-accordion formArrayName="lines" class="example-headers-align">
