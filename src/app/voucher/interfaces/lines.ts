@@ -7,7 +7,7 @@ export interface Lines {
     code?: string;
     quantity: string;
     refidum?: number;
-    article: Article;
+    article?: Article;
     serialnumber?: number;
     taxable_purchase?: number | null;
     taxable_sale?: number | null;
