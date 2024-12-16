@@ -145,14 +145,14 @@ export class VoucherInfoComponent {
     return this.fb.group({
       idvoucherline: [line.idvoucherline],
       type_line: [line.type_line],
-      description: [line.description, Validators.required],
+      description: [line.description],
       quantity: [line.quantity, [this.numberWithCommaValidator(), Validators.required]],
       refidum: [line.refidum || null, Validators.required],
       code: [line.code || null],
       serialnumber: [line.serialnumber || null],
-      taxable_purchase: [line.taxable_purchase || null],
-      taxable_sale: [line.taxable_sale || null],
-      article: [line.article || null]
+      taxable_purchase: [line.taxable_purchase || 0, this.numberWithCommaValidator()],
+      taxable_sale: [line.taxable_sale || 0, this.numberWithCommaValidator()],
+      title: [line.article?.title || null, Validators.required],
     })
   }
 
@@ -160,14 +160,14 @@ export class VoucherInfoComponent {
     return this.fb.group({
       idvoucherline: [0],
       type_line: [type],
-      description: [null, Validators.required],
+      description: [null],
       quantity: [null, [this.numberWithCommaValidator(), Validators.required]],
       refidum: [null, Validators.required],
       code: [null],
       serialnumber: [null],
-      taxable_purchase: [null],
-      taxable_sale: [null],
-      article: [null]
+      taxable_purchase: [0, this.numberWithCommaValidator()],
+      taxable_sale: [0, this.numberWithCommaValidator()],
+      title: [null, Validators.required]
     })
   }
 

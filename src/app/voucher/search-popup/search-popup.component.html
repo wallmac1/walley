@@ -1,0 +1,26 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 p-0" style="background-color: #002D5D;">
+            <h2 mat-dialog-title style="color: white;">{{"VOUCHER.POPUP.TITLE" | translate}}</h2>
+        </div>
+
+        <div class="col-12">
+            <mat-dialog-content [formGroup]="articleForm">
+                <label for="article">{{"VOUCHER.POPUP.NAME" | translate}}</label>
+                <input type="text" matInput [matAutocomplete]="article" class="form-control" id="article"
+                    formControlName="article" [class.is-invalid]="article && submitted" (input)="print()">
+                <mat-autocomplete #article="matAutocomplete" [displayWith]="displayArticleName">
+                    <mat-option *ngFor="let option of filteredArticles$ | async" [value]="option" (onSelectionChange)="save(option)">
+                        <div>
+                            {{option.title}}
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-dialog-content>
+        </div>
+
+        <div class="col-12 text-end mb-2">
+            <button class="btn btn-outline-danger" (click)="close()">{{"VOUCHER.POPUP.CLOSE" | translate}}</button>
+        </div>
+    </div>
+</div>

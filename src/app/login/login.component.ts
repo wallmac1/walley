@@ -3,13 +3,15 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { InViewportDirective } from '../directives/in-viewport.directive';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InViewportDirective
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'

@@ -445,6 +445,16 @@
     "DESCRIPTION": "Description",
     "QUANTITYERROR": "Quantity is a numerical field with at max two decimals",
     "MANDATORY": "Complete mandatory fields",
-    "UNITERROR": "Measurment unit is required"
+    "UNITERROR": "Measurment unit is required",
+    "CODE": "Code",
+    "PURCHASE": "Taxable Purchase",
+    "SALE": "Taxable Sale",
+    "ADDITIONALINFO": "Additional Info",
+    "SN": "Serial Number",
+    "POPUP": {
+      "TITLE": "Find Article",
+      "NAME": "Name",
+      "CLOSE": "Close"
+    }
   }
 }

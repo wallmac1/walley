@@ -422,6 +422,16 @@
     "DESCRIPTION": "Descrizione",
     "QUANTITYERROR": "Quantità è un campo numerico con al massimo due decimali dopo la virgola",
     "MANDATORY": "Compila i campi obbligatori",
-    "UNITERROR": "Unità di misura è richiesta"
+    "UNITERROR": "Unità di misura è richiesta",
+    "CODE": "Codice",
+    "PURCHASE": "Imponibile Acquisto",
+    "SALE": "Imponibile Vendita",
+    "ADDITIONALINFO": "Informazioni Aggiuntive",
+    "SN": "Serial Number",
+    "POPUP": {
+      "TITLE": "Ricerca Articolo",
+      "NAME": "Nome",
+      "CLOSE": "Chiudi"
+    }
   }
 }

@@ -15,6 +15,8 @@ import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { Article } from '../interfaces/article';
+import { SearchPopupComponent } from '../search-popup/search-popup.component';
+import { InViewportDirective } from '../../directives/in-viewport.directive';
 
 @Component({
   selector: 'app-voucher-article',
@@ -26,13 +28,15 @@ import { Article } from '../interfaces/article';
     TranslateModule,
     MatTooltipModule,
     MatAutocompleteModule,
+    InViewportDirective
   ],
   templateUrl: './voucher-article.component.html',
-  styleUrl: './voucher-article.component.scss'
+  styleUrl: './voucher-article.component.scss',
 })
 export class VoucherArticleComponent {
 
   filteredArticles$!: Observable<Article[]>
+  isOpenInformations = false;
 
   files: LineFile[] = [];
   urlServerLaraFile = Connect.urlServerLaraFile;
@@ -50,7 +54,6 @@ export class VoucherArticleComponent {
   ngOnInit(): void {
     this.getFiles();
     this.getMeasurmentUnits();
-    this.searchArticle();
     this.formLogic();
   }
 
@@ -58,8 +61,35 @@ export class VoucherArticleComponent {
     this.line.get('code')?.disable();
   }
 
+  openInformation() {
+    this.isOpenInformations = !this.isOpenInformations;
+  }
+
+  openPopup() {
+    const dialogRef = this.dialog.open(SearchPopupComponent, {
+      data: { text: this.line.get('title')?.value },
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log(result)
+      if (result) {
+        this.line.get('title')?.setValue(result.title);
+        this.line.get('title')?.disable();
+        this.line.get('refidum')?.setValue(result.refidum);
+        this.line.get('code')?.setValue(result.code);
+        this.line.get('description')?.setValue(result.description);
+        this.line.get('id')?.setValue(result.id);
+        this.line.get('taxable_purchase')?.setValue(result.taxable_purchase);
+        this.line.get('taxable_sale')?.setValue(result.taxable_sale);
+        this.line.get('quantity')?.setValue(1);
+        this.line.markAsDirty();
+      }
+    });
+  }
+
   openImageModal(file: LineFile): void {
-    console.log('Qui', file)
     this.dialog.open(ImageViewerComponent, {
       data: { file: file },
       maxWidth: '90vw',
@@ -67,85 +97,25 @@ export class VoucherArticleComponent {
     });
   }
 
-  displayArticleName(article?: Article): string {
-    return article ? article.title! : '';
-  }
-
-  private searchArticle() {
-    const customer_field = this.line.get('article');
-    if (customer_field) {
-      this.filteredArticles$ = customer_field.valueChanges
-        .pipe(
-          startWith(''),
-          map(value => typeof value === 'string' ? value : value?.title || ''),
-          filter(value => value.length > 0),
-          debounceTime(600),
-          switchMap((value: string) =>
-            value ? this.getArticles(value) : [])
-        );
-    }
-  }
-
-  private getArticles(val: string): Observable<Article[]> {
-    // CHIAMATA AL SERVER
-    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
-    //   {
-    //     query: val
-    //   }).pipe(
-    //     map(response => response.data.cities)
-    //   );
-    // Esempio di una lista di tre clienti
-    const articles: Article[] = [
-      {
-        id: 1,
-        title: "Prodotto A",
-        description: "Descrizione del prodotto A.",
-        code: "A123",
-        refidum: 10,
-        taxable_purchase: 100.50,
-        taxable_sale: 150.75
-    },
-    {
-        id: 2,
-        title: "Prodotto B",
-        description: "Descrizione del prodotto B.",
-        code: "B456",
-        refidum: 20,
-        taxable_purchase: 200.00,
-        taxable_sale: 250.50
-    },
-    {
-        id: 3,
-        title: "Prodotto C",
-        description: "Descrizione del prodotto C.",
-        code: "C789",
-        refidum: 30,
-        taxable_purchase: 300.75,
-        taxable_sale: 350.00
-    },
-    {
-        id: 4,
-        title: "Prodotto D",
-        description: "Descrizione del prodotto D.",
-        code: "D012",
-        refidum: 40,
-        taxable_purchase: 400.25,
-        taxable_sale: 450.75
-    }
-    ];
-
-    // Restituisce la lista come Observable
-    return of(articles);
-  }
-
   onFileSelected(event: any): void {
     const input = event.target as HTMLInputElement
     const formData: FormData = new FormData();
 
     if (input.files) {
+      // Calcola il totale dei file caricati
+      const selectedFiles = Array.from(input.files);
+      
+      const totalFilesCount = this.files.length + selectedFiles.length;
+
+      // Verifica il limite massimo
+      if (totalFilesCount > 5) {
+        alert(`Puoi caricare un massimo di 5 file.`);
+        this.resetFileInput();  // Ripristina l'input file
+        return;
+      }
+
       formData.append('idvoucher', String(this.voucherId))
       formData.append('idvoucherline', String(this.line.get('idvoucherline')?.value));
-      const selectedFiles = Array.from(input.files);
       selectedFiles.forEach(element => {
         formData.append('files[]', element);
       });
@@ -172,7 +142,6 @@ export class VoucherArticleComponent {
       .subscribe((val: ApiResponse<{ attachments: LineFile[] }>) => {
         if (val.data) {
           this.files = val.data.attachments;
-          console.log(this.files)
         }
       })
   }
@@ -197,6 +166,19 @@ export class VoucherArticleComponent {
       this.submitted = false;
       this.save.emit(this.index);
     }
+  }
+
+  resetForm() {
+    this.line.get('title')?.setValue(null);
+    this.line.get('title')?.enable();
+    this.line.get('description')?.setValue(null);
+    this.line.get('id')?.setValue(0);
+    this.line.get('refidum')?.setValue(0);
+    this.line.get('taxable_purchase')?.setValue(0);
+    this.line.get('taxable_sale')?.setValue(0);
+    this.line.get('quantity')?.setValue(0);
+    this.line.get('code')?.setValue(null);
+    this.line.markAsPristine();
   }
 
   private getMeasurmentUnits() {

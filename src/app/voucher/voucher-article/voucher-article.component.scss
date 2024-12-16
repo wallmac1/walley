@@ -19,7 +19,7 @@
 
 /* Contenitore esterno */
 .image-container {
-    height: 90px;
+    height: 80px;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -36,19 +36,22 @@
     position: relative;
     display: inline-block;
     width: 60px;
-    height: 80%;
+    height: 90%;
 }
 
 /* Icona di eliminazione */
 .delete-icon {
     position: absolute;
-    top: 3px;     /* Distanza dalla parte superiore dell'immagine */
-    right: 10px;   /* Distanza dal lato destro */
+    top: 3px;
+    /* Distanza dalla parte superiore dell'immagine */
+    right: 10px;
+    /* Distanza dal lato destro */
     color: red;
     font-size: 1rem;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
-    background-color: rgba(255, 255, 255, 0.5);;
+    background-color: rgba(255, 255, 255, 0.5);
+    ;
 }
 
 /* Hover dell'icona */
@@ -58,7 +61,7 @@
 
 /* Stile delle immagini */
 .custom-image {
-    height: 98%;
+    height: 100%;
     width: 50px;
     display: inline-block;
     object-fit: cover;
@@ -98,3 +101,26 @@
     scrollbar-color: #888 #f0f0f0;
 }
 
+.additionalInfo {
+    cursor: pointer;
+}
+
+.serialnumberRow {
+    opacity: 0;
+    max-height: 0;
+    transition: max-height 1s ease-out, opacity 1.5s ease, pointer-events 0.1s ease;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.serialnumberRow.visible {
+    opacity: 1;
+    max-height: 100px;
+    pointer-events: auto;
+}
+
+.serialnumberRow.hidden {
+    opacity: 0;
+    max-height: 0;
+    pointer-events: none;
+}
