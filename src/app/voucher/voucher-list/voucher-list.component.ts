@@ -31,6 +31,7 @@ import { Router } from '@angular/router';
   styleUrl: './voucher-list.component.scss'
 })
 export class VoucherListComponent {
+
   voucherList: VoucherTable[] = [];
   orderby: string = 'asc';
   currentPage: number = 1;
@@ -57,7 +58,7 @@ export class VoucherListComponent {
   private getVoucherList() {
     this.filters = this.filtersChild.getFilters()
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'voucher/vouchersList', {
-      date_from: this.filters.date_from?.toISOString().split('T')[0], date_to: this.filters.date_to?.toISOString().split('T')[0],
+      date_from: this.filters.date_from, date_to: this.filters.date_to,
       idcustomer: this.filters.customer?.id || null, orderby: this.orderby, currentPageIndex: this.currentPage,
       idstatusvoucher: this.filters.status?.id || null, itemsPerPage: this.itemsPerPage
     }).subscribe((val: ApiResponse<any>) => {

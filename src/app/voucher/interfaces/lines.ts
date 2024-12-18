@@ -1,16 +1,19 @@
-import { Article } from "./article";
-
 export interface Lines {
     idvoucherline: number;
     type_line: number;
     description: string;
     code?: string;
+    hours?: number;
+    title?: string,
+    minutes?: number;
     quantity: string;
     refidum?: number;
-    article?: Article;
+    refidarticle?: number | null;
+    refidarticledata?: number | null;
+    refidarticleprice?: number | null;
     serialnumber?: number;
-    taxable_purchase?: number | null;
-    taxable_sale?: number | null;
+    taxablepurchase?: string | null;
+    taxablesale?: string | null;
     user_created: {
         id: number;
         nickname: string;
@@ -29,4 +32,5 @@ export interface Lines {
 export interface MeasurementUnit {
     id: number;
     acronym: string;
+    description: string;
 }

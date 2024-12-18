@@ -1,9 +1,16 @@
 export interface Article {
     id: number;
-    title: string;
-    description: string;
     code: string;
-    refidum: number;
-    taxable_purchase: number;
-    taxable_sale: number;
+    article_data: {
+        id: number;
+        title: string;
+        description: string | null;
+        refidum: number | null;
+    },
+    article_price: {
+        id: number;
+        taxablepurchase: number | null;
+        taxablesale: number | null;
+        serialnumber?: string | null;
+    }
 }

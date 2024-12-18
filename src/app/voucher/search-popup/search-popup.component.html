@@ -12,7 +12,7 @@
                 <mat-autocomplete #article="matAutocomplete" [displayWith]="displayArticleName">
                     <mat-option *ngFor="let option of filteredArticles$ | async" [value]="option" (onSelectionChange)="save(option)">
                         <div>
-                            {{option.title}}
+                            {{option.article_data.title}}
                         </div>
                     </mat-option>
                 </mat-autocomplete>

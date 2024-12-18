@@ -124,3 +124,38 @@
     max-height: 0;
     pointer-events: none;
 }
+
+.articleTitle {
+    display: inline-block;
+    width: 24ch;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subtitle {
+    margin-bottom: 0;
+}
+
+.panel-title {
+    font-size: large;
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    font-size: large;
+    min-width: 150px;
+}
+
+.delete-icon {
+    color: red;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.userInfo {
+    font-size: small;
+    color: gray;
+    font-style: italic;
+}

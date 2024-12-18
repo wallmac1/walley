@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])) ,
     provideStore({ user: userReducer, countries: countryReducer }), 
     importProvidersFrom(TranslateModule.forRoot({
-      defaultLanguage: 'en',
+      defaultLanguage: 'it',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,

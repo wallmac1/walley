@@ -6,6 +6,6 @@ export interface VoucherTable {
   progressive: number;
   customer: string;
   status: Status;
-  notes: string;
+  note: string;
   location: string;
 }

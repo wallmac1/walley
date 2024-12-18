@@ -1,41 +1,67 @@
 <mat-expansion-panel class="mt-2" [expanded]="index == 0">
-    <mat-expansion-panel-header>
-        <mat-panel-title style="font-size: large; min-width: 150px;">
-            {{"VOUCHER.WORK" | translate}} {{index+1}}
+    <mat-expansion-panel-header style="max-height: 50px; background-color: #e1fff6;">
+        <mat-panel-title class="panel-title">
+            <span *ngIf="line.get('description')?.value == null || line.get('description')?.value.length == 0">
+                {{"VOUCHER.WORK" | translate}} 
+            </span>
+            
+            <span *ngIf="line.get('description')?.value != null && line.get('description')?.value.length > 0" class="workTitle">
+                {{line.get('description')?.value}}
+            </span>
             <i class="bi bi-trash ms-2" style="color: red;" (click)="deleteWork(index)"
                 (click)="$event.stopPropagation()"></i>
         </mat-panel-title>
-        <mat-panel-description class="align-items-right">
-
-        </mat-panel-description>
     </mat-expansion-panel-header>
 
     <!-- FORM -->
-    <div [formGroup]="line" class="row justify-content-start align-items-center mb-2">
-        <div class="col-6 col-md-3 col-lg-2 mt-2">
-            <label class="form-label" for="quantity">
-                {{"VOUCHER.QUANTITY" | translate}}
+    <div [formGroup]="line" class="row justify-content-start align-items-end mb-2">
+        <div class="col-5 col-sm-3 col-md-2 pe-1 mt-2">
+            <label class="subtitle form-label" for="hours">
+                {{"VOUCHER.HOURS" | translate}}
             </label>
-            <input type="text" class="form-control" formControlName="quantity" id="quantity"
-                [class.is-invalid]="line.get('quantity')?.invalid && (line.get('quantity')?.dirty || submitted)">
+            <div class="input-group">
+                <span class="input-group-text" id="hLabel">h</span>
+                <select type="text" class="form-select" formControlName="hours" id="hours"
+                    [class.is-invalid]="line.get('hours')?.invalid && submitted" aria-describedby="hLabel">
+                    <option [value]="null" disabled>-</option>
+                    <option *ngFor="let hour of hours" [ngValue]="hour.id">
+                        {{hour.value}}
+                    </option>
+                </select>
+            </div>
         </div>
-        <div class="col-6 col-md-3 col-lg-2 mt-2">
-            <label class="form-label" for="refidum">
-                {{"VOUCHER.MEASUREMENTUNIT" | translate}}
+        <div class="col-5 col-sm-3 col-md-2 mt-2 ps-1">
+            <label class="subtitle form-label" for="minutes">
+                {{"VOUCHER.MINUTES" | translate}}
             </label>
-            <select type="text" class="form-select" formControlName="refidum" id="refidum"
-                [class.is-invalid]="line.get('refidum')?.invalid && submitted">
-                <option [ngValue]="null" disabled></option>
-                <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">
-                    {{unit.acronym}}
-                </option>
-            </select>
+            <div class="input-group">
+                <span class="input-group-text" id="mLabel">m</span>
+                <select type="text" class="form-select" formControlName="minutes" id="minutes"
+                    [class.is-invalid]="line.get('minutes')?.invalid && submitted" aria-describedby="mLabel">
+                    <option [value]="null" disabled>-</option>
+                    <option *ngFor="let minute of minutes" [ngValue]="minute.id">
+                        {{minute.value}}
+                    </option>
+                </select>
+            </div>
         </div>
+
+        <ng-container *ngIf="line.get('idvoucherline')?.value != 0">
+            <div class="col-2 col-sm-1 ps-0 mt-2 text-end">
+                <label for="fileUpload-{{line.get('idvoucherline')?.value}}" class="btn btn-outline-dark"
+                    matTooltip="Allega Files">
+                    <i class="bi bi-paperclip"></i>
+                    <input type="file" id="fileUpload-{{line.get('idvoucherline')?.value}}" style="display: none;"
+                        (change)="onFileSelected($event)" accept="*" multiple>
+                </label>
+            </div>
+        </ng-container>
+
         <div class="col-12 mt-2">
-            <label class="form-label" for="description">
+            <label class="subtitle form-label" for="description">
                 {{"VOUCHER.DESCRIPTION" | translate}}
             </label>
-            <textarea type="text" class="form-control" formControlName="description" id="description"
+            <textarea type="text" class="form-control" formControlName="description" id="description" rows="2"
                 [class.is-invalid]="line.get('description')?.invalid && (line.get('description')?.dirty || submitted)">
             </textarea>
         </div>
@@ -63,21 +89,11 @@
         <!-- <div class="col-12">
             <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
         </div> -->
-        <div class="col-2 col-lg-1">
-            <label for="fileUpload-{{line.get('idvoucherline')?.value}}" class="btn btn-outline-dark"
-                matTooltip="Allega Files">
-                <i class="bi bi-paperclip"></i>
-                <input type="file" id="fileUpload-{{line.get('idvoucherline')?.value}}" style="display: none;"
-                    (change)="onFileSelected($event)" accept="*" multiple>
-            </label>
-        </div>
-        <div class="col-10 col-lg-11 image-container">
-            <div class="scroll-container">
-                <div class="image-wrapper" *ngFor="let file of files">
-                    <img class="custom-image me-2" [src]="urlServerLaraFile+file.src" [matTooltip]="file.title"
-                        (click)="openImageModal(file)" />
-                    <i class="bi bi-trash delete-icon" (click)="deleteFile(file.title)"></i>
-                </div>
+        <div *ngIf="files.length > 0" class="col-12 image-container text-center">
+            <div class="image-wrapper" *ngFor="let file of files">
+                <img class="custom-image me-2" [src]="urlServerLaraFile+file.src" [matTooltip]="file.title"
+                    (click)="openImageModal(file)" />
+                <i class="bi bi-trash delete-icon" (click)="deleteFile(file.title)"></i>
             </div>
         </div>
     </div>
@@ -89,4 +105,26 @@
             </button>
         </div>
     </div>
+
+    <div *ngIf="screenWidth >= 768; else iconBlock" class="row justify-content-center align-items-center mt-1">
+        <div class="col-12 col-sm-6 text-start">
+            <span *ngIf="line.get('user_created')?.value != null" class="userInfo">
+                {{"VOUCHER.CREATED" | translate}}: 
+                {{line.get('user_created')?.value.nickname}} - {{line.get('user_created')?.value.datetime}}
+            </span>
+        </div>
+        <div class="col-12 col-sm-6 text-end">
+            <span *ngIf="line.get('user_updated')?.value != null" class="userInfo">
+                {{"VOUCHER.UPDATED" | translate}}: 
+                {{line.get('user_updated')?.value.nickname}} - {{line.get('user_updated')?.value.datetime}}
+            </span>
+        </div>
+    </div>
+    <ng-template #iconBlock>
+        <div class="row justify-content-center mt-1">
+            <div class="col-12 text-end">
+                <i class="bi bi-info-circle" [matTooltip]="tooltipLineCreation"></i>
+            </div>
+        </div>
+    </ng-template>
 </mat-expansion-panel>

@@ -1,26 +1,30 @@
 <mat-expansion-panel class="mt-2" [expanded]="index == 0">
     <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(255, 242, 218);">
-        <mat-panel-title style="font-size: large; min-width: 150px;">
-            {{"VOUCHER.ARTICLE" | translate}} {{index+1}}
-            <i class="bi bi-trash ms-2" style="color: red;" (click)="deleteArticle(index)"
+        <mat-panel-title class="panel-title">
+            <span *ngIf="line.get('title')?.value == null || line.get('title')?.value.length == 0">
+                {{"VOUCHER.ARTICLE" | translate}} 
+            </span>
+            
+            <span *ngIf="line.get('title')?.value != null && line.get('title')?.value.length > 0" class="articleTitle">
+                {{line.get('title')?.value}}
+            </span>
+
+            <i class="bi bi-trash ms-2 justify-self-end" style="color: red;" (click)="deleteArticle(index)"
                 (click)="$event.stopPropagation()"></i>
         </mat-panel-title>
-        <mat-panel-description class="align-items-right">
-
-        </mat-panel-description>
     </mat-expansion-panel-header>
 
     <!-- FORM -->
     <ng-container [formGroup]="line">
         <div class="row justify-content-start align-items-end mb-2 mt-1">
-            <div class="col-7 col-sm-8 col-md-9 col-lg-10">
+            <div class="col-12 col-md-7 col-sm-8 col-lg-9">
                 <label class="subtitle form-label" for="title">
-                    {{"VOUCHER.ARTICLE" | translate}}<sup>*</sup>
+                    {{"VOUCHER.TITLE" | translate}}<sup>*</sup>
                 </label>
                 <div class="input-group">
                     <input type="text" matInput class="form-control" id="title" formControlName="title"
                         [class.is-invalid]="line.get('title')?.invalid && submitted">
-                    <button *ngIf="!line.get('title')?.disabled; else deleteBlock" class="btn btn-outline-dark"
+                    <button *ngIf="!isProductSelected; else deleteBlock" class="btn btn-outline-dark"
                         (click)="openPopup()">
                         <i class="bi bi-search"></i>
                     </button>
@@ -32,49 +36,49 @@
                 </div>
 
             </div>
-            <div class="col-5 col-sm-4 col-md-3 col-lg-2">
-                <label class="form-label" for="code">
+            <div class="col-12 col-md-5 col-sm-4 col-md-3 col-lg-3">
+                <label class="subtitle form-label" for="code">
                     {{"VOUCHER.CODE" | translate}}
                 </label>
                 <input type="text" class="form-control" formControlName="code" id="code">
             </div>
 
             <div class="col-6 col-md-3 mt-2">
-                <label class="form-label" for="refidum">
+                <label class="subtitle form-label" for="refidum">
                     {{"VOUCHER.MEASUREMENTUNIT" | translate}}
                 </label>
                 <select type="text" class="form-select" formControlName="refidum" id="refidum"
                     [class.is-invalid]="line.get('refidum')?.invalid && submitted">
-                    <option [ngValue]="null"></option>
+                    <option [ngValue]="null" disabled>-</option>
                     <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">
                         {{unit.acronym}}
                     </option>
                 </select>
             </div>
             <div class="col-6 col-md-3 mt-2">
-                <label class="form-label" for="quantity">
+                <label class="subtitle form-label" for="quantity">
                     {{"VOUCHER.QUANTITY" | translate}}
                 </label>
                 <input type="text" class="form-control" formControlName="quantity" id="quantity"
                     [class.is-invalid]="line.get('quantity')?.invalid && (line.get('quantity')?.dirty || submitted)">
             </div>
             <div class="col-6 col-md-3 mt-2">
-                <label class="form-label" for="taxable_purchase">
+                <label class="subtitle form-label" for="taxablepurchase">
                     {{"VOUCHER.PURCHASE" | translate}}
                 </label>
-                <input type="text" class="form-control" formControlName="taxable_purchase" id="taxable_purchase"
-                    [class.is-invalid]="line.get('taxable_purchase')?.invalid && (line.get('taxable_purchase')?.dirty || submitted)">
+                <input type="text" class="form-control" formControlName="taxablepurchase" id="taxablepurchase"
+                    [class.is-invalid]="line.get('taxablepurchase')?.invalid && (line.get('taxablepurchase')?.dirty || submitted)">
             </div>
             <div class="col-6 col-md-3 mt-2">
-                <label class="form-label" for="taxable_sale">
+                <label class="subtitle form-label" for="taxablesale">
                     {{"VOUCHER.SALE" | translate}}
                 </label>
-                <input type="text" class="form-control" formControlName="taxable_sale" id="taxable_sale"
-                    [class.is-invalid]="line.get('taxable_sale')?.invalid && (line.get('taxable_sale')?.dirty || submitted)">
+                <input type="text" class="form-control" formControlName="taxablesale" id="taxablesale"
+                    [class.is-invalid]="line.get('taxablesale')?.invalid && (line.get('taxablesale')?.dirty || submitted)">
             </div>
 
             <div class="col-10 col-sm-11 mt-2">
-                <label class="form-label" for="description">
+                <label class="subtitle form-label" for="description">
                     {{"VOUCHER.DESCRIPTION" | translate}}
                 </label>
                 <textarea type="text" class="form-control" formControlName="description" id="description" rows="1"
@@ -94,10 +98,12 @@
         </div>
 
         <div *ngIf="line.invalid" class="row justify-content-center mb-1">
-            <div *ngIf="line.get('quantity')?.invalid && (line.get('quantity')?.dirty || submitted)"
+            <div *ngIf="(line.get('quantity')?.invalid && (line.get('quantity')?.dirty || submitted)) ||
+                        (line.get('taxablepurchase')?.invalid && (line.get('taxablepurchase')?.dirty || submitted)) ||
+                        (line.get('taxablesale')?.invalid && (line.get('taxablesale')?.dirty || submitted))"
                 class="col-12 text-center">
                 <span class="error">
-                    {{"VOUCHER.QUANTITYERROR" | translate}}
+                    {{"VOUCHER.NUMBERSERROR" | translate}}
                 </span>
             </div>
             <div *ngIf="(line.get('quantity')?.invalid && 
@@ -151,4 +157,27 @@
             </button>
         </div>
     </div>
+
+    <div *ngIf="screenWidth >= 768; else iconBlock" class="row justify-content-center align-items-center mt-1">
+        <div class="col-12 col-sm-6 text-start">
+            <span *ngIf="line.get('user_created')?.value != null" class="userInfo">
+                {{"VOUCHER.CREATED" | translate}}: 
+                {{line.get('user_created')?.value.nickname}} - {{line.get('user_created')?.value.datetime}}
+            </span>
+        </div>
+        <div class="col-12 col-sm-6 text-end">
+            <span *ngIf="line.get('user_updated')?.value != null" class="userInfo">
+                {{"VOUCHER.UPDATED" | translate}}: 
+                {{line.get('user_updated')?.value.nickname}} - {{line.get('user_updated')?.value.datetime}}
+            </span>
+        </div>
+    </div>
+    <ng-template #iconBlock>
+        <div class="row justify-content-center mt-1">
+            <div class="col-12 text-end">
+                <i class="bi bi-info-circle" [matTooltip]="tooltipLineCreation"></i>
+            </div>
+        </div>
+    </ng-template>
+    
 </mat-expansion-panel>

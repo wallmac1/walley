@@ -14,6 +14,7 @@ import { ConnectServerService } from '../../services/connect-server.service';
 import { Lines } from '../interfaces/lines';
 import { TranslateModule } from '@ngx-translate/core';
 import { Status } from '../interfaces/status';
+import { Line } from 'ngx-extended-pdf-viewer';
 
 @Component({
   selector: 'app-voucher-info',
@@ -133,6 +134,8 @@ export class VoucherInfoComponent {
     this.linesArray.clear();
     lines.forEach((line: Lines) => {
       line.quantity = line.quantity.replace('.', ',');
+      line.taxablepurchase = line.taxablepurchase?.replace('.', ',');
+      line.taxablesale = line.taxablesale?.replace('.', ',');
       this.linesArray.push(this.createLine(line))
     })
   }
@@ -145,14 +148,21 @@ export class VoucherInfoComponent {
     return this.fb.group({
       idvoucherline: [line.idvoucherline],
       type_line: [line.type_line],
-      description: [line.description],
+      description: [line.description, Validators.required],
       quantity: [line.quantity, [this.numberWithCommaValidator(), Validators.required]],
       refidum: [line.refidum || null, Validators.required],
       code: [line.code || null],
       serialnumber: [line.serialnumber || null],
-      taxable_purchase: [line.taxable_purchase || 0, this.numberWithCommaValidator()],
-      taxable_sale: [line.taxable_sale || 0, this.numberWithCommaValidator()],
-      title: [line.article?.title || null, Validators.required],
+      taxablepurchase: [line.taxablepurchase || 0, this.numberWithCommaValidator()],
+      taxablesale: [line.taxablesale || 0, this.numberWithCommaValidator()],
+      title: [line.title || null, Validators.required],
+      refidarticle: [line.refidarticle || null],
+      refidarticledata: [line.refidarticledata || null],
+      refidarticleprice: [line.refidarticleprice || null],
+      hours: [line.hours || { id: 1, value: 0 }, Validators.required],
+      minutes: [line.minutes || { id: 1, value: 0}, Validators.required],
+      user_created: [line.user_created],
+      user_updated: [line.user_updated],
     })
   }
 
@@ -160,14 +170,21 @@ export class VoucherInfoComponent {
     return this.fb.group({
       idvoucherline: [0],
       type_line: [type],
-      description: [null],
-      quantity: [null, [this.numberWithCommaValidator(), Validators.required]],
+      description: [null, Validators.required],
+      quantity: ['0,00', [this.numberWithCommaValidator(), Validators.required]],
       refidum: [null, Validators.required],
       code: [null],
       serialnumber: [null],
-      taxable_purchase: [0, this.numberWithCommaValidator()],
-      taxable_sale: [0, this.numberWithCommaValidator()],
-      title: [null, Validators.required]
+      taxablepurchase: ['0,00', this.numberWithCommaValidator()],
+      taxablesale: ['0,00', this.numberWithCommaValidator()],
+      title: [null, Validators.required],
+      hours: [null, Validators.required],
+      minutes: [null, Validators.required],
+      refidarticle: [null],
+      refidarticledata: [null],
+      refidarticleprice: [null],
+      user_created: [null],
+      user_updated: [null]
     })
   }
 
@@ -190,9 +207,26 @@ export class VoucherInfoComponent {
   saveLine(index: number) {
     // Chiama il server e salva la linea specifica
     const line = this.linesArray.at(index).getRawValue();
+    const line_copy = JSON.parse(JSON.stringify(line));
+    line_copy.idvoucher = this.voucherId;
+    if (line_copy.type_line == 1) {
+      line_copy.quantity = null;
+      line_copy.title = null;
+      line_copy.refidum = null;
+      line_copy.taxablepurchase = null;
+      line_copy.taxablesale = null;
+      line_copy.refidarticle = null;
+      line_copy.refidarticledata = null;
+      line_copy.refidarticleprice = null;
+    } else {
+      line_copy.quantity = parseFloat(line_copy.quantity.replace(',', '.'));
+      line_copy.taxablepurchase = line_copy.taxablepurchase != null ? parseFloat(line_copy.taxablepurchase.replace(',', '.')) : null;
+      line_copy.taxablesale = line_copy.taxablesale != null ? parseFloat(line_copy.taxablesale.replace(',', '.')) : null;
+      line_copy.minutes = null;
+      line_copy.hours = null;
+    }
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine', 
-      { idvoucher: this.voucherId, idvoucherline: line.idvoucherline, quantity: parseFloat(line.quantity), 
-        type_line: line.type_line, description: line.description, refidum: line.refidum })
+      { obj_line: line_copy })
         .subscribe((val: ApiResponse<any>) => {
           if(val) {
             if(val.data && val.data.idvoucherline) {

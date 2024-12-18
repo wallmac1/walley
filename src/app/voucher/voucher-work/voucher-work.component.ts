@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, viewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, viewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { Lines, MeasurementUnit } from '../interfaces/lines';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LineFile } from '../interfaces/line-file';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiResponse } from '../../weco/interfaces/api-response';
@@ -28,6 +28,8 @@ import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 })
 export class VoucherWorkComponent {
 
+  tooltipLineCreation: any;
+  screenWidth: number = window.innerWidth;
   files: LineFile[] = [];
   urlServerLaraFile = Connect.urlServerLaraFile;
   @Input() line!: FormGroup;
@@ -37,19 +39,55 @@ export class VoucherWorkComponent {
   @Output() save = new EventEmitter<number>();
 
   submitted = false;
-  measurmentUnit: MeasurementUnit[] = [];
+  minutes: { id: number, value: number }[] = [];
+  hours: { id: number, value: number }[] = [];
 
   constructor(private fb: FormBuilder, private connectServerService: ConnectServerService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog, private translate: TranslateService) { }
 
   ngOnInit(): void {
+    this.initLine();
     this.getFiles();
-    this.getMeasurmentUnits();
+    this.getMinutesHours();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.screenWidth = event.target.innerWidth;
+  }
+
+  private initLine() {
+    this.line.get('refidum')?.clearValidators();
+    this.line.get('title')?.clearValidators();
+    this.line.get('quantity')?.clearValidators();
+
+    let created_at: string = '';
+    let updated_at: string = '';
+    if(this.line.get('user_created')?.value != null) {
+      created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.line.get('user_created')?.value.nickname + ' - ' + 
+      this.line.get('user_created')?.value.datetime + ', '
+    }
+    if(this.line.get('user_updated')?.value != null) {
+      updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.line.get('user_updated')?.value.nickname +
+      ' - ' + this.line.get('user_updated')?.value.datetime;
+    }
+    this.tooltipLineCreation = created_at + updated_at
+       
+  }
+
+  private getMinutesHours() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/listHoursMinutesWork', {})
+      .subscribe((val: ApiResponse<{hours: {id: number, value: number}[], minutes: {id: number, value: number}[]}>) => {
+        if(val) {
+          this.hours = val.data.hours;
+          this.minutes = val.data.minutes;
+        }
+      })
   }
 
   openImageModal(file: LineFile): void {
     this.dialog.open(ImageViewerComponent, {
-      data: { file: file},
+      data: { file: file },
       maxWidth: '90vw',
       maxHeight: '90vh',
     });
@@ -58,10 +96,22 @@ export class VoucherWorkComponent {
   onFileSelected(event: any): void {
     const input = event.target as HTMLInputElement
     const formData: FormData = new FormData();
+
     if (input.files) {
+      // Calcola il totale dei file caricati
+      const selectedFiles = Array.from(input.files);
+
+      const totalFilesCount = this.files.length + selectedFiles.length;
+
+      // Verifica il limite massimo
+      if (totalFilesCount > 5) {
+        alert(`Puoi caricare un massimo di 5 file.`);
+        this.resetFileInput();  // Ripristina l'input file
+        return;
+      }
+
       formData.append('idvoucher', String(this.voucherId))
       formData.append('idvoucherline', String(this.line.get('idvoucherline')?.value));
-      const selectedFiles = Array.from(input.files);
       selectedFiles.forEach(element => {
         formData.append('files[]', element);
       });
@@ -87,19 +137,21 @@ export class VoucherWorkComponent {
   }
 
   private resetFileInput() {
-    const fileInput = document.getElementById('fileUpload-'+this.line.get('idvoucherline')?.value) as HTMLInputElement;
+    const fileInput = document.getElementById('fileUpload-' + this.line.get('idvoucherline')?.value) as HTMLInputElement;
     fileInput.value = '';
   }
 
   getFiles() {
-    this.connectServerService.postRequest<ApiResponse<{files: LineFile[]}>>(Connect.urlServerLaraApi, 'voucher/voucherListFiles', 
-      {idvoucher: this.voucherId, idvoucherline: this.line.get('idvoucherline')?.value})
-      .subscribe((val: ApiResponse<{attachments: LineFile[]}>) => {
-        if(val.data) {
-          this.files = val.data.attachments;
-          console.log(this.files)
-        }
-    })
+    if (this.line.get('idvoucherline')?.value > 0) {
+      this.connectServerService.postRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'voucher/voucherListFiles',
+        { idvoucher: this.voucherId, idvoucherline: this.line.get('idvoucherline')?.value })
+        .subscribe((val: ApiResponse<{ attachments: LineFile[] }>) => {
+          if (val.data) {
+            this.files = val.data.attachments;
+            console.log(this.files)
+          }
+        })
+    }
   }
 
   deleteWork(i: number) {
@@ -113,28 +165,6 @@ export class VoucherWorkComponent {
       this.submitted = false;
       this.save.emit(i);
     }
-  }
-
-  private getMeasurmentUnits() {
-    // CHIAMATA AL SERVER PER PRENDERE LE UNITA' DI MISURA
-    this.measurmentUnit = [
-      {
-        id: 1,
-        acronym: "kg"
-      },
-      {
-        id: 2,
-        acronym: "pcs"
-      },
-      {
-        id: 3,
-        acronym: "m"
-      },
-      {
-        id: 4,
-        acronym: "l"
-      }
-    ]
   }
 
 }

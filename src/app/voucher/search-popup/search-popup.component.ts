@@ -54,7 +54,7 @@ export class SearchPopupComponent {
   }
 
   print() {
-    console.log("PRINT",this.articleForm.get('article')?.value)
+    console.log("PRINT", this.articleForm.get('article')?.value)
   }
 
   private searchArticle() {
@@ -77,47 +77,27 @@ export class SearchPopupComponent {
     // Esempio di una lista di tre clienti
     const articles: Article[] = [
       {
-        id: 1,
-        title: "Prodotto A",
-        description: "Descrizione del prodotto A.",
-        code: "A123",
-        refidum: 1,
-        taxable_purchase: 100.50,
-        taxable_sale: 150.75
-      },
-      {
-        id: 2,
-        title: "Prodotto B",
-        description: "Descrizione del prodotto B.",
-        code: "B456",
-        refidum: 2,
-        taxable_purchase: 200.00,
-        taxable_sale: 250.50
-      },
-      {
-        id: 3,
-        title: "Prodotto C",
-        description: "Descrizione del prodotto C.",
-        code: "C789",
-        refidum: 3,
-        taxable_purchase: 300.75,
-        taxable_sale: 350.00
-      },
-      {
-        id: 4,
-        title: "Prodotto D",
-        description: "Descrizione del prodotto D.",
-        code: "D012",
-        refidum: 4,
-        taxable_purchase: 400.25,
-        taxable_sale: 450.75
+        id: 6,
+        code: "8745",
+        article_data: {
+          id: 48,
+          title: "Prodotto D",
+          description: "Descrizione del prodotto D.",
+          refidum: 4,
+        },
+        article_price: {
+          id: 5,
+          taxablepurchase: 400.25,
+          taxablesale: 450.75,
+          serialnumber: "35467", 
+        }
       }
     ];
 
     // Restituisce la lista come Observable
     return of(articles).pipe(
-      map(items => items.filter(article => 
-        article.title.toLowerCase().includes(val.toLowerCase())
+      map(items => items.filter(article =>
+        article.article_data.title.toLowerCase().includes(val.toLowerCase())
       ))
     );
   }
