@@ -9,8 +9,10 @@
                 {{line.get('title')?.value}}
             </span>
 
-            <i class="bi bi-trash ms-2 justify-self-end" style="color: red;" (click)="deleteArticle(index)"
-                (click)="$event.stopPropagation()"></i>
+            <button class="btn btn-link" (click)="deleteArticle(index)" (click)="$event.stopPropagation()">
+                <i class="bi bi-trash ms-2 justify-self-end" style="color: red;"></i>
+            </button>
+            
         </mat-panel-title>
     </mat-expansion-panel-header>
 

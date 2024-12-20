@@ -2,14 +2,17 @@
     <mat-expansion-panel-header style="max-height: 50px; background-color: #e1fff6;">
         <mat-panel-title class="panel-title">
             <span *ngIf="line.get('description')?.value == null || line.get('description')?.value.length == 0">
-                {{"VOUCHER.WORK" | translate}} 
+                {{"VOUCHER.WORK" | translate}}
             </span>
-            
-            <span *ngIf="line.get('description')?.value != null && line.get('description')?.value.length > 0" class="workTitle">
+
+            <span *ngIf="line.get('description')?.value != null && line.get('description')?.value.length > 0"
+                class="workTitle">
                 {{line.get('description')?.value}}
             </span>
-            <i class="bi bi-trash ms-2" style="color: red;" (click)="deleteWork(index)"
-                (click)="$event.stopPropagation()"></i>
+
+            <button class="btn btn-link" (click)="deleteWork(index)" (click)="$event.stopPropagation()">
+                <i class="bi bi-trash ms-2" style="color: red;"></i>
+            </button>
         </mat-panel-title>
     </mat-expansion-panel-header>
 
@@ -109,13 +112,13 @@
     <div *ngIf="screenWidth >= 768; else iconBlock" class="row justify-content-center align-items-center mt-1">
         <div class="col-12 col-sm-6 text-start">
             <span *ngIf="line.get('user_created')?.value != null" class="userInfo">
-                {{"VOUCHER.CREATED" | translate}}: 
+                {{"VOUCHER.CREATED" | translate}}:
                 {{line.get('user_created')?.value.nickname}} - {{line.get('user_created')?.value.datetime}}
             </span>
         </div>
         <div class="col-12 col-sm-6 text-end">
             <span *ngIf="line.get('user_updated')?.value != null" class="userInfo">
-                {{"VOUCHER.UPDATED" | translate}}: 
+                {{"VOUCHER.UPDATED" | translate}}:
                 {{line.get('user_updated')?.value.nickname}} - {{line.get('user_updated')?.value.datetime}}
             </span>
         </div>

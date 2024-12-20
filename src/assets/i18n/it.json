@@ -434,6 +434,11 @@
     "CREATED": "Creazione",
     "UPDATED": "Ultima Modifica",
     "FILTER": "Filtra",
+    "OPEN": "Riapri",
+    "TOBEINVOICED": "Da Fatturare",
+    "INVOICED": "Fatturato",
+    "CUSTOMERERROR": "Deve essere selezionato un cliente",
+    "ALLSTATUS": "Tutti gli Stati",
     "POPUP": {
       "TITLE": "Ricerca Articolo",
       "NAME": "Nome",

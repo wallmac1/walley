@@ -1,46 +1,91 @@
 <div class="container-fluid p-1 p-sm-2 p-md-3 p-lg-4" style="min-width: 375px; min-height: 90vh;">
     <div class="row justify-content-center align-items-center mt-2 mb-2">
         <div class="col-12 text-center title">
-            <label>Buoni Di Lavoro</label>
+            <label class="me-3">Buoni Di Lavoro</label>
+            <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer" (click)="newVoucher()">
+                <i class="bi bi-plus-lg"></i>
+            </button>
         </div>
     </div>
 
     <div class="row justify-content-center align-items-center p-3">
-        <app-filters></app-filters>
+        <app-filters [statusList]="voucherListStatus" (filterEmit)="getVoucherList()"></app-filters>
     </div>
 
     <div class="row justify-content-center align-items-center p-3 mt-4">
         <div class="col-12 p-0" style="max-width: 1100px;">
-            <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" class="mat-table" matSort>
+            <div class="mat-elevation-z8" style="position: relative;">
+
+                <!-- <div class="d-none d-md-inline" style="position: absolute; top: 15px; left: 20px;">
+                    <span style="font-size: small;">
+                        Ordina Data per:
+                    </span>
+                    
+                    <button class="btn btn-sm btn-outline-dark" (click)="changeOrder()"> 
+                        <span *ngIf="orderby == 'asc' || orderby == 'null'">
+                            Discendente
+                            <i class="bi bi-caret-down"></i>
+                        </span>
+                        <span *ngIf="orderby == 'desc'">
+                            Ascendente
+                            <i class="bi bi-caret-up"></i>
+                        </span>
+                    </button>
+                </div> -->
+
+                <div class="row justify-content-center p-3">
+                    <div class="col-4 text-start">
+                        <span style="font-size: small;">Risultati Totali: {{totalResults}}</span>
+                    </div>
+
+                    <div class="col-4 text-center">
+                        <span style="font-size: small;">Oggetti per pagina: {{itemsPerPage}}</span>
+                    </div>
+
+                    <div class="col-4 text-end">
+                        <span>
+                            <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
+                                <i class="bi bi-caret-left"></i>
+                            </button>
+                            <span style="font-size: small;">Pagina {{currentPage}} di {{totalPages}}</span>
+                            <button [disabled]="currentPage == totalPages" class="btn btn-link ms-2 p-0" (click)="nextPage()">
+                                <i class="bi bi-caret-right"></i>
+                            </button>
+                        </span>
+                    </div>
+                    
+                </div>
+
+                <table mat-table [dataSource]="voucherList" class="mat-table" matSort #sort="matSort"
+                    matSortActive="date" matSortDirection="desc" matSortDisableClear>
 
                     <!-- Numero Column -->
                     <ng-container matColumnDef="progressive">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Numero </th>
+                        <th mat-header-cell *matHeaderCellDef style="width: 100px;"> Numero </th>
                         <td mat-cell *matCellDef="let element"> {{ element.progressive }} </td>
                     </ng-container>
 
                     <!-- Data Column -->
                     <ng-container matColumnDef="date">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 150px;" disableClear> Data </th>
                         <td mat-cell *matCellDef="let element"> {{ element.voucher_date }} </td>
                     </ng-container>
 
                     <!-- Cliente Column -->
                     <ng-container matColumnDef="customer">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+                        <th mat-header-cell *matHeaderCellDef> Cliente </th>
                         <td mat-cell *matCellDef="let element"> {{ element.customer.nome }} </td>
                     </ng-container>
 
                     <!-- Stato Column -->
                     <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Stato </th>
+                        <th mat-header-cell *matHeaderCellDef> Stato </th>
                         <td mat-cell *matCellDef="let element"> {{ element.status.name }} </td>
                     </ng-container>
 
                     <!-- Note Column -->
                     <ng-container matColumnDef="info">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Info </th>
+                        <th mat-header-cell *matHeaderCellDef style="width: 100px;"> Info </th>
                         <td mat-cell *matCellDef="let element">
                             <i class="bi bi-info-circle me-2" [matTooltip]="element.note"></i>
                             <i class="bi bi-building" [matTooltip]="element.location"></i>
@@ -52,14 +97,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover"
                         (click)="goToVoucher(row)"></tr>
                 </table>
-
-                <!-- Paginator -->
-                <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
             </div>
         </div>
     </div>
-
-    <button class="btn btn-lg btn-outline-dark stickyButton btn-circle sticky-footer" (click)="newVoucher()">
-        <i class="bi bi-plus-lg"></i>
-    </button>
 </div>

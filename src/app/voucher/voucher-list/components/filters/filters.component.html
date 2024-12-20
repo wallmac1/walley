@@ -7,7 +7,7 @@
                 </div>
             </div>
 
-            <div class="row align-items-center p-1">
+            <div class="row justify-content-center align-items-center p-1">
                 <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-1 mb-1 pe-0">
                     <label class="form-label" for="date_from">Da</label>
                     <input type="date" class="form-control ps-1" id="date_from" formControlName="date_from"
@@ -39,15 +39,16 @@
                     <label class="form-label" for="status">Stato</label>
                     <select type="string" class="form-select" id="status" formControlName="status"
                         [class.is-invalid]="voucherFilterForm.get('status')?.invalid && voucherFilterForm.get('status')?.touched">
+                        <option [value]="null">{{"VOUCHER.ALLSTATUS" | translate}}</option>
                         <option *ngFor="let status of statusList" [ngValue]="status.id">
-                            {{status.title}}
+                            {{status.name}}
                         </option>
                     </select>
                 </div>
             </div>
 
             <div class="col-12 text-center mb-1">
-                <button class="btn btn-outline-dark">
+                <button class="btn btn-outline-dark" (click)="filter()">
                     {{"VOUCHER.FILTER" | translate}}
                 </button>
             </div>

@@ -457,6 +457,11 @@
     "CREATED": "Created",
     "UPDATED": "Latest Update",
     "FILTER": "Filter",
+    "OPEN": "Reopen",
+    "TOBEINVOICED": "To Be Invoiced",
+    "INVOICED": "Invoiced",
+    "CUSTOMERERROR": "A Customer must be selected",
+    "ALLSTATUS": "All Status",
     "POPUP": {
       "TITLE": "Find Article",
       "NAME": "Name",

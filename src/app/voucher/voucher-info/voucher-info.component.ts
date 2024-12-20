@@ -15,6 +15,7 @@ import { Lines } from '../interfaces/lines';
 import { TranslateModule } from '@ngx-translate/core';
 import { Status } from '../interfaces/status';
 import { Line } from 'ngx-extended-pdf-viewer';
+import { STRING_TYPE } from '@angular/compiler';
 
 @Component({
   selector: 'app-voucher-info',
@@ -32,6 +33,8 @@ import { Line } from 'ngx-extended-pdf-viewer';
 })
 export class VoucherInfoComponent {
 
+  isDisabled = true;
+  voucherStatus: Status | null = null;
   currentDate = new Date();
 
   voucher_label: { voucher_labelreference: string, voucher_labellocation: string } = {
@@ -41,7 +44,6 @@ export class VoucherInfoComponent {
 
   filteredCustomer$!: Observable<Customer[]>;
   submitted: boolean = false;
-  status: Status | null = null;
   voucher: Voucher | null = null;
   voucherId: number = 0;
   //lines: Lines[] = [];
@@ -50,7 +52,7 @@ export class VoucherInfoComponent {
   voucherForm = new FormGroup({
     progressive: new FormControl<string | null>({ value: null, disabled: true }, Validators.required),
     voucher_date: new FormControl<string | null>({ value: null, disabled: true }, Validators.required),
-    customer: new FormControl<Customer | null>(null, Validators.required),
+    customer: new FormControl<Customer | null>(null, [this.customerValidator()]),
     location: new FormControl<string | null>(null, Validators.required),
     note: new FormControl<string | null>(null),
     reference: new FormControl<string | null>(null),
@@ -78,6 +80,7 @@ export class VoucherInfoComponent {
   }
 
   emptyVoucherInit() {
+    this.isDisabled = false;
     const day = String(this.currentDate.getDate()).padStart(2, '0'); // Giorno con due cifre
     const month = String(this.currentDate.getMonth() + 1).padStart(2, '0'); // Mese con due cifre (i mesi partono da 0)
     const year = String(this.currentDate.getFullYear()).slice(-2); // Ultime due cifre dell'anno
@@ -86,11 +89,6 @@ export class VoucherInfoComponent {
     this.voucher = {
       id: 0,
       progressive: '',
-      status: {
-        id: 0,
-        name: '',
-        color: ''
-      },
       voucher_year: this.currentDate.getFullYear().toString(),
       voucher_date: formattedDate,
       reference: '',
@@ -104,6 +102,19 @@ export class VoucherInfoComponent {
     }
 
     this.voucherForm.patchValue(this.voucher!);
+  }
+
+  customerValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const customer = control.value;
+  
+      // Condizione unica combinata
+      if (!customer || typeof customer === 'string' || !(customer.id > 0)) {
+        return { invalidCustomer: true }; // Errore generico
+      }
+  
+      return null; // Valido
+    };
   }
 
   numberWithCommaValidator(): ValidatorFn {
@@ -160,7 +171,7 @@ export class VoucherInfoComponent {
       refidarticledata: [line.refidarticledata || null],
       refidarticleprice: [line.refidarticleprice || null],
       hours: [line.hours || { id: 1, value: 0 }, Validators.required],
-      minutes: [line.minutes || { id: 1, value: 0}, Validators.required],
+      minutes: [line.minutes || { id: 1, value: 0 }, Validators.required],
       user_created: [line.user_created],
       user_updated: [line.user_updated],
     })
@@ -190,11 +201,11 @@ export class VoucherInfoComponent {
 
   deleteLine(i: number) {
     const line = this.linesArray.at(i).getRawValue();
-    if(line.idvoucherline != 0) {
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/deleteVoucherLine', 
-      { idvoucher: this.voucherId, idvoucherline: line.idvoucherline })
+    if (line.idvoucherline != 0) {
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/deleteVoucherLine',
+        { idvoucher: this.voucherId, idvoucherline: line.idvoucherline })
         .subscribe((val: ApiResponse<any>) => {
-          if(val) {
+          if (val) {
             this.linesArray.removeAt(i)
           }
         })
@@ -225,51 +236,56 @@ export class VoucherInfoComponent {
       line_copy.minutes = null;
       line_copy.hours = null;
     }
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine', 
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine',
       { obj_line: line_copy })
-        .subscribe((val: ApiResponse<any>) => {
-          if(val) {
-            if(val.data && val.data.idvoucherline) {
-              this.linesArray.at(index).get('idvoucherline')?.setValue(val.data.idvoucherline);
-            }
-            this.getLineServer(this.linesArray.at(index).get('idvoucherline')!.value, index);
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          if (val.data && val.data.idvoucherline) {
+            this.linesArray.at(index).get('idvoucherline')?.setValue(val.data.idvoucherline);
           }
-        })
+          this.getLineServer(this.linesArray.at(index).get('idvoucherline')!.value, index);
+        }
+      })
   }
 
   getLineServer(idvoucherline: number, index: number) {
     //voucherLineInfo
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'voucher/voucherLineInfo', {
-      idvoucher: this.voucherId, idvoucherline: idvoucherline})
-        .subscribe((val: ApiResponse<any>) => {
-          if(val) {
-            let line = val.data.voucherInfoLine;
-            line.quantity = line.quantity.replace('.', ',');
-            this.linesArray.at(index).patchValue(line);
-          }
-        })
+      idvoucher: this.voucherId, idvoucherline: idvoucherline
+    })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          let line = val.data.voucherInfoLine;
+          line.quantity = line.quantity.replace('.', ',');
+          this.linesArray.at(index).patchValue(line);
+        }
+      })
   }
 
   saveVoucher() {
-    const formValues = this.voucherForm.getRawValue();
-    let refidregcussuppro = 0;
-    let refidregcussupprodata = 0;
-    refidregcussuppro = formValues.customer!.id!;
-    refidregcussupprodata = formValues.customer!.rifidanacliforprodati!;
+    console.log(this.voucherForm.get('customer')?.value);
+    this.submitted = true;
+    if (this.voucherForm.get('customer')?.valid) {
+      const formValues = this.voucherForm.getRawValue();
+      let refidregcussuppro = 0;
+      let refidregcussupprodata = 0;
+      refidregcussuppro = formValues.customer!.id!;
+      refidregcussupprodata = formValues.customer!.rifidanacliforprodati!;
 
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucher',
-      {
-        refidregcussuppro: refidregcussuppro, refidregcussupprodata: refidregcussupprodata, location: formValues.location,
-        note: formValues.note, reference: formValues.reference, id: this.voucherId
-      })
-      .subscribe((val: ApiResponse<any>) => {
-        if (val) {
-          if(this.voucherId == 0) {
-            this.voucherId = val.data.idvoucher;
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucher',
+        {
+          refidregcussuppro: refidregcussuppro, refidregcussupprodata: refidregcussupprodata, location: formValues.location,
+          note: formValues.note, reference: formValues.reference, id: this.voucherId
+        })
+        .subscribe((val: ApiResponse<any>) => {
+          if (val) {
+            if (this.voucherId == 0) {
+              this.voucherId = val.data.idvoucher;
+              this.router.navigate(['voucher', this.voucherId])
+            }
           }
-          this.getVoucher();
-        }
-      })
+        })
+    }
   }
 
   private getVoucher() {
@@ -279,30 +295,53 @@ export class VoucherInfoComponent {
         if (val) {
           this.voucher = val.data.voucherInfo;
           this.voucherForm.patchValue(this.voucher!);
+          this.voucherStatus = val.data.voucherStatus;
+          if (this.voucherStatus?.id == 40) {
+            this.isDisabled = true;
+          }
+          else {
+            this.isDisabled = false;
+          }
           this.addLines(val.data.voucherInfoLine);
         }
       })
   }
 
   deleteVoucher() {
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/deleteVoucher', {id: this.voucherId})
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/deleteVoucher', { id: this.voucherId })
       .subscribe((val: ApiResponse<any>) => {
-        if(val) {
+        if (val) {
           this.router.navigate(['voucherList']);
         }
       })
   }
 
-  closeVoucher() {
+  goBack() {
+    this.router.navigate(['voucherList']);
+  }
+
+  changeStatus(action: number) {
+    let idstatusvoucher = 0;
+    if (this.voucherStatus?.id == 10 && action == 1) {
+      idstatusvoucher = 20;
+    }
+    else if (this.voucherStatus?.id == 20 && action == 2) {
+      idstatusvoucher = 10;
+    }
+    else if (this.voucherStatus?.id == 20 && action == 3) {
+      idstatusvoucher = 30;
+    }
+    else if (this.voucherStatus?.id == 30) {
+      idstatusvoucher = 40;
+    }
     //Cambia Stato
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/closeVoucher', 
-      {idvoucher: this.voucherId})
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/changeStatusVoucher',
+      { idvoucher: this.voucherId, idstatusvoucher: idstatusvoucher })
       .subscribe((val: any) => {
-        if(val) {
-          this.status = val.data.status;
+        if (val) {
+          this.getVoucher();
         }
       })
-    this.router.navigate(['voucherList']);
   }
 
   displayCustomerName(customer?: Customer): string {

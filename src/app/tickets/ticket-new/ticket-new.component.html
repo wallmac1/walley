@@ -67,16 +67,16 @@
             </div>
 
             <!-- In charge field -->
-            <div class="col-12 col-md-6 mb-3">
+            <!-- <div class="col-12 col-md-6 mb-3">
                 <label for="incharge" class="form-label">In Charge</label>
                 <select id="incharge" class="form-select" formControlName="incharge">
                     <option [ngValue]="null" disabled>Select a person</option>
                     <option *ngFor="let profile of ticketInfoService.users" [ngValue]="profile.id">{{profile.nickname}}</option>
                 </select>
-            </div>
+            </div> -->
 
             <!-- Keep Informed field -->    
-            <div class="col-12 mb-3">
+            <div class="col-12 col-md-6 mb-3">
                 <label for="keepinformed" class="form-label">Keep Informed</label><br>
                 <div class="selection">
                     <mat-select #select2 formControlName="keepinformed" multiple>

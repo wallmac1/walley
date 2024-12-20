@@ -1,7 +1,7 @@
 <div class="container-fluid p-1 p-md-2 p-lg-3" style="position: relative;">
     <div class="row justify-content-center align-items-center mt-2 mb-2" style="position: relative;">
         <!-- Status Card -->
-        <div class="col-12 col-sm-6 col-lg-3 text-center order-2 order-lg-1 mt-4">
+        <div class="col-12 col-sm-6 col-xl-3 text-center order-2 order-xl-1 mt-4" style="max-width: 400px;">
             <div class="card text-center" style="border-color: #002D5D;">
                 <div class="card-header"
                     style="background-color: #002D5D; color: white; position: relative; font-weight: bold;">
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Title and Description -->
-        <div class="col-12 col-lg-6 text-center order-1 order-lg-2">
+        <div class="col-12 col-xl-6 text-center order-1 order-xl-2">
             <div class="col-12 text-center" style="position: relative;">
                 <span class="ticketTitle">{{ticketGeneralForm.get("title")?.value}}</span>
                 <sup class="modifySup ms-2" (click)="modifyPopup(0)">
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Client Card -->
-        <div class="col-12 col-sm-6 col-lg-3 text-center order-3 mt-4">
+        <div class="col-12 col-sm-6 col-xl-3 text-center order-3 mt-4" style="max-width: 400px;">
             <div class="card text-center" style="border-color: #002D5D;">
                 <div class="card-header" style="background-color: #002D5D; color: white; font-weight: bold;">
                     Customer
@@ -57,9 +57,12 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" [matMenuTriggerFor]="menu" style="position: absolute; right: 20px; top: 250px; width: 50px; z-index: 100;">
-            +
-        </button>
+        <!-- <div class="col-12 mt-2 order-4 text-center">
+            <button class="btn btn-outline-primary" [matMenuTriggerFor]="menu">
+                Aggiungi Nuovo +
+            </button>
+        </div> -->
+
         <mat-menu #menu="matMenu">
             <button mat-menu-item>
                 <mat-icon>dialpad</mat-icon>

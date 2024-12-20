@@ -11,143 +11,180 @@
                 {{"VOUCHER.STATUS" | translate}}:
             </span>
             <span class="ms-2">
-                {{voucher?.status}}
+                <i class="bi bi-circle-fill" [style]="{'color': voucherStatus?.color}"></i>
+            </span>
+            <span class="ms-1">
+                {{voucherStatus?.name}}
             </span>
         </div>
+
+        <button class="btn btn-outline-dark goBack" (click)="goBack()">
+            <i class="bi bi-arrow-left"></i>
+        </button>
     </div>
 
     <!-- GENERIC FORM -->
-    <div [formGroup]="voucherForm" class="p-1" style="position: relative;">
-        <div class="row align-items-center">
-            <!-- Number -->
-            <div class="col-6 element">
-                <label class="subtitle form-label" for="progressive">
-                    {{"VOUCHER.NUMBER" | translate}}<sup>*</sup>
-                </label>
-                <div class="form-group d-flex align-items-center gap-2">
-                    <input type="text" class="form-control" formControlName="progressive" style="max-width: 100px;">
-                    / {{voucher?.voucher_year}}
+    <fieldset [disabled]="isDisabled">
+        <div [formGroup]="voucherForm" class="p-1" style="position: relative;">
+            <div class="row align-items-center">
+                <!-- Number -->
+                <div class="col-6 element">
+                    <label class="subtitle form-label" for="progressive">
+                        {{"VOUCHER.NUMBER" | translate}}<sup>*</sup>
+                    </label>
+                    <div class="form-group d-flex align-items-center gap-2">
+                        <input type="text" class="form-control" formControlName="progressive" style="max-width: 100px;">
+                        / {{voucher?.voucher_year}}
+                    </div>
+                </div>
+                <!-- Date -->
+                <div class="col-6 element">
+                    <label class="subtitle form-label" for="voucher_date">
+                        {{"VOUCHER.DATE" | translate}}<sup>*</sup>
+                    </label>
+                    <input type="text" class="form-control" formControlName="voucher_date" style="max-width: 120px;">
                 </div>
             </div>
-            <!-- Date -->
-            <div class="col-6 element">
-                <label class="subtitle form-label" for="voucher_date">
-                    {{"VOUCHER.DATE" | translate}}<sup>*</sup>
-                </label>
-                <input type="text" class="form-control" formControlName="voucher_date" style="max-width: 120px;">
-            </div>
-        </div>
 
-        <div class="row align-items-center">
-            <!-- Customer -->
-            <div class="col-12 col-md-6 element">
-                <label class="subtitle form-label" for="customer">
-                    {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
-                </label>
-                <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
-                    formControlName="customer" [class.is-invalid]="voucherForm.get('customer')?.invalid && submitted">
-                <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
-                    <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
-                        <div>
-                            {{option.denominazione}}
-                        </div>
-                    </mat-option>
-                </mat-autocomplete>
+            <div class="row align-items-center">
+                <!-- Customer -->
+                <div class="col-12 col-md-6 element">
+                    <label class="subtitle form-label" for="customer">
+                        {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
+                    </label>
+                    <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
+                        formControlName="customer"
+                        [class.is-invalid]="voucherForm.get('customer')?.invalid && submitted">
+                    <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                        <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
+                            <div>
+                                {{option.denominazione}}
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
             </div>
-        </div>
 
-        <div class="row align-items-center">
-            <!-- Location -->
-            <div class="col-12 col-sm-6 element">
-                <label class="subtitle form-label" for="location">
-                    {{voucher_label.voucher_labellocation}}
-                </label>
-                <input type="text" class="form-control" formControlName="location">
+            <div class="row align-items-center">
+                <!-- Location -->
+                <div class="col-12 col-sm-6 element">
+                    <label class="subtitle form-label" for="location">
+                        {{voucher_label.voucher_labellocation}}
+                    </label>
+                    <input type="text" class="form-control" formControlName="location">
+                </div>
+                <!-- Invoice Reference -->
+                <div class="col-12 col-sm-6 element">
+                    <label class="subtitle form-label" for="reference">
+                        {{voucher_label.voucher_labelreference}}
+                    </label>
+                    <input type="text" class="form-control" formControlName="reference">
+                </div>
             </div>
-            <!-- Invoice Reference -->
-            <div class="col-12 col-sm-6 element">
-                <label class="subtitle form-label" for="reference">
-                    {{voucher_label.voucher_labelreference}}
-                </label>
-                <input type="text" class="form-control" formControlName="reference">
-            </div>
-        </div>
 
-        <div class="row align-items-center">
-            <!-- Note -->
-            <div class="col-12 element">
-                <label class="subtitle form-label" for="note">
-                    {{"VOUCHER.NOTES" | translate}}
-                </label>
-                <textarea type="text" class="form-control" formControlName="note" rows="2"></textarea>
+            <div class="row align-items-center">
+                <!-- Note -->
+                <div class="col-12 element">
+                    <label class="subtitle form-label" for="note">
+                        {{"VOUCHER.NOTES" | translate}}
+                    </label>
+                    <textarea type="text" class="form-control" formControlName="note" rows="2"></textarea>
+                </div>
             </div>
-        </div>
 
-        <div *ngIf="voucherForm.dirty" class="row align-items-center">
-            <!-- Create and Save Voucher -->
-            <div class="col-12 text-center mt-3 element">
-                <button *ngIf="voucherId == 0; else saveBlock" class="btn btn-outline-dark" (click)="saveVoucher()">
-                    {{"VOUCHER.CREATEVOUCHER" | translate}}
-                </button>
-                <ng-template #saveBlock>
-                    <button class="btn btn-outline-dark" (click)="saveVoucher()">
-                        {{"VOUCHER.SAVE" | translate}}
+            <div *ngIf="voucherForm.get('customer')?.invalid && submitted" class="row justify-content-center align-items-center mt-1">
+                <div class="col-12 text-center">
+                    <span style="font-size: small; color: red;">
+                        {{"VOUCHER.CUSTOMERERROR" | translate}}
+                    </span>
+                </div>
+            </div>
+
+            <div *ngIf="voucherForm.dirty" class="row align-items-center">
+                <!-- Create and Save Voucher -->
+                <div class="col-12 text-center mt-3 element">
+                    <button *ngIf="voucherId == 0; else saveBlock" class="btn btn-outline-dark" (click)="saveVoucher()">
+                        {{"VOUCHER.CREATEVOUCHER" | translate}}
                     </button>
-                </ng-template>
+                    <ng-template #saveBlock>
+                        <button class="btn btn-outline-dark" (click)="saveVoucher()">
+                            {{"VOUCHER.SAVE" | translate}}
+                        </button>
+                    </ng-template>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div *ngIf="voucherId != 0" class="row addBorder"></div>
+        <div *ngIf="voucherId != 0" class="row addBorder"></div>
 
-    <!-- ADD WORKS AND ARTICLES -->
-    <div *ngIf="voucherId != 0" class="row justify-content-center align-items-center p-1" style="position: relative;">
-        <div class="col-6 text-center mt-2">
-            <button class="btn btn-outline-dark" style="width: 150px;" (click)="addWork()">
-                <i class="bi bi-plus-circle"></i>
-                <span class="ms-2">
-                    {{"VOUCHER.WORK" | translate}}
-                </span>
-            </button>
+        <!-- ADD WORKS AND ARTICLES -->
+        <div *ngIf="voucherId != 0 && voucherStatus?.id != 40" class="row justify-content-center align-items-center p-1"
+            style="position: relative;">
+            <div class="col-6 text-center mt-2">
+                <button class="btn btn-outline-dark" style="width: 150px;" (click)="addWork()">
+                    <i class="bi bi-plus-circle"></i>
+                    <span class="ms-2">
+                        {{"VOUCHER.WORK" | translate}}
+                    </span>
+                </button>
+            </div>
+
+            <div class="col-6 text-center mt-2">
+                <button class="btn btn-outline-dark" style="width: 150px;" (click)="addArticle()">
+                    <i class="bi bi-plus-circle"></i>
+                    <span class="ms-2">
+                        {{"VOUCHER.ARTICLE" | translate}}
+                    </span>
+                </button>
+            </div>
         </div>
 
-        <div class="col-6 text-center mt-2">
-            <button class="btn btn-outline-dark" style="width: 150px;" (click)="addArticle()">
-                <i class="bi bi-plus-circle"></i>
-                <span class="ms-2">
-                    {{"VOUCHER.ARTICLE" | translate}}
-                </span>
-            </button>
+        <!-- CARD WORKS AND ARTICLES -->
+        <div *ngIf="voucherId != 0" class="row justify-content-center align-items-center p-1 p-md-2 p-lg-3 pt-1"
+            style="position: relative;">
+            <div [formGroup]="linesForm">
+                <mat-accordion formArrayName="lines" class="example-headers-align">
+                    <div *ngFor="let line of linesArray.controls; let i = index" [formGroupName]="i" class="col-12">
+                        <app-voucher-work *ngIf="line.get('type_line')?.value == 1" [line]="getLine(i)"
+                            [voucherId]="voucherId" [index]="i" (delete)="deleteLine(i)"
+                            (save)="saveLine(i)"></app-voucher-work>
+                        <app-voucher-article *ngIf="line.get('type_line')?.value == 2" [line]="getLine(i)"
+                            [voucherId]="voucherId" [index]="i" (delete)="deleteLine(i)"
+                            (save)="saveLine(i)"></app-voucher-article>
+                    </div>
+                </mat-accordion>
+            </div>
         </div>
-    </div>
 
-    <!-- CARD WORKS AND ARTICLES -->
-    <div *ngIf="voucherId != 0" class="row justify-content-center align-items-center p-1 p-md-2 p-lg-3 pt-1"
-        style="position: relative;">
-        <div [formGroup]="linesForm">
-            <mat-accordion formArrayName="lines" class="example-headers-align">
-                <div *ngFor="let line of linesArray.controls; let i = index" [formGroupName]="i" class="col-12">
-                    <app-voucher-work *ngIf="line.get('type_line')?.value == 1" [line]="getLine(i)" [voucherId]="voucherId" [index]="i" 
-                        (delete)="deleteLine(i)" (save)="saveLine(i)"></app-voucher-work>
-                    <app-voucher-article *ngIf="line.get('type_line')?.value == 2" [line]="getLine(i)" [voucherId]="voucherId" [index]="i"
-                        (delete)="deleteLine(i)" (save)="saveLine(i)"></app-voucher-article>
-                </div>
-            </mat-accordion>
-        </div>
-    </div>
-
-    <div *ngIf="voucherId != 0" class="row addBorder"></div>
-
+        <div *ngIf="voucherId != 0" class="row addBorder"></div>
+    </fieldset>
+    
     <!-- COMPLETE BUTTONS  -->
-    <div *ngIf="voucherId > 0" class="row justify-content-center align-items-center mb-5 ms-2 me-2">
-        <div class="col-6 mt-2 text-start">
-            <button class="btn btn-outline-danger" style="width: 100px;" (click)="deleteVoucher()">
+    <div *ngIf="voucherId > 0" class="row justify-content-evenly align-items-center mb-5 ms-2 me-2">
+        <div class="mt-2"
+            [ngClass]="{'col-4 text-start': voucherStatus?.id != 40, 'col-12 text-center': voucherStatus?.id == 40}">
+            <button class="btn btn-outline-danger" style="width: 150px;" (click)="deleteVoucher()">
                 {{"VOUCHER.DELETE" | translate}}
             </button>
         </div>
-        <div class="col-6 mt-2 text-end">
-            <button class="btn btn-outline-success" style="width: 100px;" (click)="closeVoucher()">
+        <div *ngIf="voucherStatus?.id == 10" class="col-4 mt-2 text-end">
+            <button class="btn btn-outline-warning" style="width: 150px;" (click)="changeStatus(1)">
                 {{"VOUCHER.CLOSE" | translate}}
+            </button>
+        </div>
+        <div *ngIf="voucherStatus?.id == 20" class="col-4 mt-2 text-center">
+            <button class="btn btn-outline-primary" style="width: 150px;" (click)="changeStatus(2)">
+                {{"VOUCHER.OPEN" | translate}}
+            </button>
+        </div>
+        <div *ngIf="voucherStatus?.id == 20" class="col-4 mt-2 text-end">
+            <button class="btn btn-outline-info" style="width: 150px;" (click)="changeStatus(3)">
+                {{"VOUCHER.TOBEINVOICED" | translate}}
+            </button>
+        </div>
+        <div *ngIf="voucherStatus?.id == 30" class="col-4 mt-2 text-end">
+            <button class="btn btn-outline-success" style="width: 150px;" (click)="changeStatus(4)">
+                {{"VOUCHER.INVOICED" | translate}}
             </button>
         </div>
     </div>
