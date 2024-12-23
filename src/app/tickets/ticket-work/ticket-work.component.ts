@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
-import { Work } from '../interfaces/work';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TicketWorksService } from '../services/ticket-works.service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { ImageModalComponent } from '../image-modal/image-modal.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { LineFile } from '../../voucher/interfaces/line-file';
+import { Connect } from '../../classes/connect';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ConnectServerService } from '../../services/connect-server.service';
+import { ApiResponse } from '../../weco/interfaces/api-response';
+import { ImageViewerComponent } from '../../voucher/image-viewer/image-viewer.component';
+import { Work } from '../interfaces/work';
 
 @Component({
   selector: 'app-ticket-work',
@@ -14,111 +21,158 @@ import { ImageModalComponent } from '../image-modal/image-modal.component';
     CommonModule,
     ReactiveFormsModule,
     MatTooltipModule,
+    MatExpansionModule,
+    TranslateModule
   ],
   templateUrl: './ticket-work.component.html',
   styleUrl: './ticket-work.component.scss'
 })
 export class TicketWorkComponent {
 
-  ticketStatus = {
-    actualstatusid: null,
-    actualstatus: null,
+  tooltipLineCreation: any;
+  screenWidth: number = window.innerWidth;
+  files: LineFile[] = [];
+  urlServerLaraFile = Connect.urlServerLaraFile;
+  workForm!: FormGroup;
+
+  @Input() work!: Work;
+  @Input() ticketId: number = 0;
+  @Input() index: number = 0;
+
+  submitted = false;
+  minutes: { id: number, value: number }[] = [];
+  hours: { id: number, value: number }[] = [];
+
+  constructor(private connectServerService: ConnectServerService, public dialog: MatDialog,
+    private translate: TranslateService, private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    this.initForm();
+    this.initLine();
+    this.getFiles();
+    this.getMinutesHours();
   }
 
-  ticketWorks: Work[] = [];
-  hours: string[] = [
-    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
-  ];
-  minutes: string[] = [
-    "00", "15", "30", "45"
-  ];
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.screenWidth = event.target.innerWidth;
+  }
 
-  statusForm = new FormGroup({
-    nextstatus: new FormControl<number | null>(null, Validators.required),
-    actualsubstatus: new FormControl<number | null>(null, Validators.required),
-    user: new FormControl<string | null>(null, Validators.required),
-    dateTime: new FormControl<Date | null>(null, Validators.required)
-  })
+  initForm() {
+    this.workForm = this.fb.group({
+      description: [this.work.description],
+      hours: [this.work.hours, Validators.required],
+      minutes: [this.work.minutes, Validators.required],
+      taxablepurchase: [this.work.taxablepurchase || null],
+      taxablesale: [this.work.taxablesale || null],
+    })
+  }
 
-  workFormArray: FormArray;
-  fb = new FormBuilder()
+  private initLine() {
+    let created_at: string = '';
+    let updated_at: string = '';
+    if (this.workForm.get('user_created')?.value != null) {
+      created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.workForm.get('user_created')?.value.nickname + ' - ' +
+        this.workForm.get('user_created')?.value.datetime + ', '
+    }
+    if (this.workForm.get('user_updated')?.value != null) {
+      updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.workForm.get('user_updated')?.value.nickname +
+        ' - ' + this.workForm.get('user_updated')?.value.datetime;
+    }
+    this.tooltipLineCreation = created_at + updated_at
 
-  constructor(private ticketWorksService: TicketWorksService, public dialog: MatDialog) {
-    this.ticketWorks = ticketWorksService.getTicketWorks();
-    this.workFormArray = this.fb.array([]);
-    this.ticketWorks.forEach(work => {
-      const workGroup = this.fb.group({
-        user: [work.user.nickname, Validators.required],
-        date: [this.dateToISO(work.date!), Validators.required],
-        hours: [work.hours, Validators.required],
-        minutes: [work.minutes, Validators.required],
-        description: [work.description, Validators.required],
-        price: [work.price, Validators.required],
-        price_total: [work.price_total, Validators.required],
-        attached: [work.attached, Validators.required],
-        public: [work.public, Validators.required],
-      });
-      this.workFormArray.push(workGroup);
+  }
+
+  private getMinutesHours() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/listHoursMinutesWork', {})
+      .subscribe((val: ApiResponse<{ hours: { id: number, value: number }[], minutes: { id: number, value: number }[] }>) => {
+        if (val) {
+          this.hours = val.data.hours;
+          this.minutes = val.data.minutes;
+        }
+      })
+  }
+
+  openImageModal(file: LineFile): void {
+    this.dialog.open(ImageViewerComponent, {
+      data: { file: file },
+      maxWidth: '90vw',
+      maxHeight: '90vh',
     });
-
   }
 
-  getWorkFormGroup(index: number): FormGroup {
-    return this.workFormArray.at(index) as FormGroup;
+  onFileSelected(event: any): void {
+    const input = event.target as HTMLInputElement
+    const formData: FormData = new FormData();
+
+    if (input.files) {
+      // Calcola il totale dei file caricati
+      const selectedFiles = Array.from(input.files);
+
+      const totalFilesCount = this.files.length + selectedFiles.length;
+
+      // Verifica il limite massimo
+      if (totalFilesCount > 5) {
+        alert(`Puoi caricare un massimo di 5 file.`);
+        this.resetFileInput();  // Ripristina l'input file
+        return;
+      }
+
+      formData.append('idticket', String(this.ticketId))
+      formData.append('idticketline', String(this.work.idticketline));
+      selectedFiles.forEach(element => {
+        formData.append('files[]', element);
+      });
+
+      // Invia i file al server
+      this.connectServerService.postRequest<File[]>(Connect.urlServerLaraApi, 'ticket/ticketUploadFiles', formData)
+        .subscribe((val: any) => {
+          if (val) {
+            this.resetFileInput();
+            this.getFiles();
+          }
+        });
+    }
   }
 
-  // Converte la data in formato Date
-  dateToISO(dateStr: string): String {
-    const [day, month, year] = dateStr.split('-').map(Number);
-    return new Date(year, month - 1, day + 1).toISOString().split('T')[0];
+  deleteFile(filename: string) {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/ticketDeleteFile',
+      { idvoucher: this.ticketId, idvoucherline: this.work.idticketline, filename: filename })
+      .subscribe((val: any) => {
+        this.resetFileInput();
+        this.getFiles();
+      })
   }
 
-  isImage(fileName: string): boolean {
-    return /\.(jpg|jpeg|png|gif)$/i.test(fileName);
+  private resetFileInput() {
+    const fileInput = document.getElementById('fileUpload-' + this.work.idticketline) as HTMLInputElement;
+    fileInput.value = '';
   }
 
-  save(index: number) {
-
+  getFiles() {
+    if (this.work.idticketline > 0) {
+      this.connectServerService.postRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'ticket/ticketListFiles',
+        { idvoucher: this.ticketId, idvoucherline: this.work.idticketline })
+        .subscribe((val: ApiResponse<{ attachments: LineFile[] }>) => {
+          if (val.data) {
+            this.files = val.data.attachments;
+            console.log(this.files)
+          }
+        })
+    }
   }
 
-  reset(index: number) {
+  deleteWork() {
     
   }
 
-  openFullscreenModal(attachment: string): void {
-    this.dialog.open(ImageModalComponent, {
-      data: `assets/img/${attachment}`,
-      panelClass: 'fullscreen-modal',
-    });
-  }
-
-  // isImage(fileName: string): boolean {
-  //   const ext = fileName.split('.').pop()?.toLowerCase();
-  //   return ext === 'jpg' || ext === 'jpeg' || ext === 'png' || ext === 'gif';
-  // }
-
-  getCardBackgroundColor(index: number): string {
-    const isPublic = this.getWorkFormGroup(index).get('public')?.value;
-    return isPublic ? '#9BDBE7' : '#CCEFF1';
-  }
-
-  getCardBackgroundColorStatus(index: number): string {
-    const actualStatus = this.ticketWorks[index].status?.actualid;
-    let selectedColor = "white"
-    if(actualStatus == 0) {           // Nuovo
-      selectedColor = "#99CFE7";
+  saveWork() {
+    this.submitted = true;
+    if (this.workForm.valid) {
+      this.workForm.markAsPristine();
+      this.submitted = false;
+      
     }
-    else if(actualStatus == 1) {      // Lavorazione
-      selectedColor = "#DAED93"
-    }
-    else if(actualStatus == 2) {      // Attesa
-      selectedColor = "#FFFFE0"
-    }
-    else if(actualStatus == 3) {      //Chiuso
-      selectedColor = "#ECD0DF"
-    }
-
-    return selectedColor;
   }
 
 

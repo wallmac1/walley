@@ -1,5 +1,5 @@
-<div style="max-width: 1100px; margin: 0 auto;">
-    <form [formGroup]="ticketInfoForm" class="p-1 p-md-2 p-lg-3 text-center">
+<div style="max-width: 1000px; min-width: 350px; margin: 0 auto;">
+    <form [formGroup]="ticketInfoForm" class="p-1 p-md-2 p-lg-3 text-center mt-4">
         <div class="row justify-content-center align-items-center mt-1">
             <div class="col-12 col-md-6 btn-group diagonal-divider" role="group"
                 aria-label="Basic radio toggle button group" (change)="internalExternalLogic()">
@@ -13,18 +13,36 @@
             </div>
         </div>
 
-        <div class="row justify-content-center align-items-center mt-3">
+        <div class="row justify-content-start align-items-center mt-4">
+            <!-- Number field (read-only) -->
+            <div class="col-4 col-sm-2 mb-3 text-start" style="margin-bottom: 0.5rem !important; max-width: 100px;">
+                <label for="number" class="form-label" style="margin-bottom: 0.1rem !important;">Number</label>
+                <input type="text" id="number" class="form-control" formControlName="number" readonly>
+            </div>
+
             <!-- Date field (read-only) -->
-            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
+            <div class="col-6 col-sm-3 mb-md-4 text-start" style="margin-bottom: 0.5rem !important; max-width: 200px;">
                 <label for="date_ticket" class="form-label" style="margin-bottom: 0.1rem !important;">Date</label>
                 <input type="text" id="date_ticket" class="form-control" formControlName="date_ticket" readonly>
             </div>
+        </div>
 
+        <div class="row justify-content-start align-items-center">
             <!-- Customer field (visible only if "External" is selected) -->
-            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
-                <label for="customer" class="form-label" style="margin-bottom: 0.1rem !important;">Customer</label>
-                <sup>*</sup>
-                <input class="form-control" id="customer" formControlName="customer" [value]="clientDenomination">
+            <div class="col-12 col-sm-7 col-lg-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
+                <label class="subtitle form-label" for="customer">
+                    {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
+                </label>
+                <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
+                    formControlName="customer"
+                    [class.is-invalid]="ticketInfoForm.get('customer')?.invalid && submitted">
+                <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                    <mat-option *ngFor="let option of filteredCustomer$ | async; trackBy: trackById" [value]="option">
+                        <div>
+                            {{option.denominazione}}
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
             </div>
 
             <!-- Location field (visible only if "External" is selected) -->
@@ -32,9 +50,10 @@
                 <label for="location" class="form-label" style="margin-bottom: 0.1rem !important;">Location</label>
                 <select id="location" class="form-select" formControlName="location">
                     <option [ngValue]="null">No headquarter</option>
-                    <option *ngFor="let location of ticketInfoService.locations" [ngValue]="location.id">
+                    <option *ngFor="let location of locations" [ngValue]="location.id">
                         {{location.city}},
-                        {{location.address}}</option>
+                        {{location.address}}
+                    </option>
                 </select>
             </div>
 
@@ -49,15 +68,6 @@
                     </mat-select>
                     <i class="bi bi-chevron-down" (click)="openSelect(1)"></i>
                 </div>
-            </div>
-
-            <!-- In charge field -->
-            <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
-                <label for="incharge" class="form-label" style="margin-bottom: 0.1rem !important;">In Charge</label>
-                <select id="incharge" class="form-select" formControlName="incharge">
-                    <option [ngValue]="null" disabled>Select a person</option>
-                    <option *ngFor="let user of ticketInfoService.users" [ngValue]="user.id">{{user.nickname}}</option>
-                </select>
             </div>
 
             <!-- Keep Informed field -->
@@ -88,14 +98,17 @@
             </div>
         </div>
 
-        <div class="row justify-content-center align-items-center mt-1">
+        <div class="row justify-content-center align-items-center mt-4">
             <!-- Submit & Refresh button -->
-            <div class="col-6 text-end">
-                <button type="submit" class="btn btn-outline-primary me-2" (click)="save()"
-                    [disabled]="!ticketInfoForm.valid">Submit</button>
+            <div class="col-4 text-start">
+                <button type="submit" class="btn btn-outline-danger ms-2" >Delete</button>
             </div>
-            <div class="col-6 text-start">
+            <div class="col-4 text-center">
                 <button type="submit" class="btn btn-outline-primary ms-2" (click)="refresh()">Refresh</button>
+            </div>
+            <div class="col-4 text-end">
+                <button type="submit" class="btn btn-outline-success me-2" (click)="save()"
+                    [disabled]="!ticketInfoForm.valid">Submit</button>
             </div>
         </div>
     </form>

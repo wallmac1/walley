@@ -1,5 +1,11 @@
-<div class="container-fluid p-1 p-md-3 p-lg-4 p-xl-5"
-    style="min-height: 85vh; max-width: 1400px; min-width: 330px;">
+<div class="container-fluid p-1 p-md-3 p-lg-4 p-xl-5" style="min-height: 85vh; max-width: 1200px; min-width: 330px;">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 text-center">
+            <span style="font-size: xx-large; font-weight: bold;">
+                Crea Ticket
+            </span>
+        </div>
+    </div>
     <form [formGroup]="ticketForm" class="p-1">
         <div class="row justify-content-center align-items-center mt-4">
             <div class="col-12 col-md-10 col-lg-6 btn-group diagonal-divider" role="group"
@@ -14,18 +20,36 @@
             </div>
         </div>
 
-        <div class="row justify-content-center align-items-center mt-4">
+        <div class="row justify-content-start align-items-center mt-4">
+            <!-- Number field (read-only) -->
+            <div class="col-6 col-sm-2 col-lg-1 mb-3">
+                <label for="number" class="form-label">Number</label>
+                <input type="text" id="number" class="form-control" formControlName="number" readonly>
+            </div>
+
             <!-- Date field (read-only) -->
-            <div class="col-12 col-md-6 mb-3">
+            <div class="col-6 col-sm-4 col-lg-2 mb-3">
                 <label for="date_ticket" class="form-label">Date</label>
                 <input type="text" id="date_ticket" class="form-control" formControlName="date_ticket" readonly>
             </div>
+        </div>
 
+        <div class="row justify-content-start align-items-center">
             <!-- Customer field (visible only if "External" is selected) -->
-            <div class="col-12 col-md-6 mb-3" *ngIf="ticketForm.get('internal')!.value === 0">
-                <label for="customer" class="form-label">Customer</label>
-                <sup>*</sup>
-                <input class="form-control" id="customer" formControlName="customer">
+            <div class="col-12 col-md-6 element">
+                <label class="subtitle form-label" for="customer">
+                    {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
+                </label>
+                <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
+                    formControlName="customer"
+                    [class.is-invalid]="ticketForm.get('customer')?.invalid && submitted">
+                <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                    <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
+                        <div>
+                            {{option.denominazione}}
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
             </div>
 
             <!-- Location field (visible only if "External" is selected) -->
@@ -33,7 +57,8 @@
                 <label for="location" class="form-label">Location</label>
                 <select id="location" class="form-select" formControlName="location">
                     <option [ngValue]="null">No headquarter</option>
-                    <option *ngFor="let location of ticketInfoService.locations" [ngValue]="location.id">{{location.city}},
+                    <option *ngFor="let location of ticketInfoService.locations" [ngValue]="location.id">
+                        {{location.city}},
                         {{location.address}}</option>
                 </select>
             </div>
@@ -49,8 +74,8 @@
             <div class="col-12 mb-3">
                 <label for="description" class="form-label">Description</label>
                 <sup>*</sup>
-                <textarea id="description" class="form-control" formControlName="description" 
-                rows="3" placeholder="Write a short description about the ticket"></textarea>
+                <textarea id="description" class="form-control" formControlName="description" rows="3"
+                    placeholder="Write a short description about the ticket"></textarea>
             </div>
 
             <!-- Department field -->
@@ -75,7 +100,7 @@
                 </select>
             </div> -->
 
-            <!-- Keep Informed field -->    
+            <!-- Keep Informed field -->
             <div class="col-12 col-md-6 mb-3">
                 <label for="keepinformed" class="form-label">Keep Informed</label><br>
                 <div class="selection">
@@ -91,14 +116,16 @@
 
         <div *ngIf="!ticketForm.valid" class="row justify-content-center align-items-center mt-4">
             <div class="col-12 text-center">
-                <span style="font-style: italic; opacity: 0.7; font-size: small;">* Compile all the mandatory fields to enable ticket submission</span>
+                <span style="font-style: italic; opacity: 0.7; font-size: small;">* Compile all the mandatory fields to
+                    enable ticket submission</span>
             </div>
         </div>
 
         <div class="row justify-content-center align-items-center mt-2">
             <!-- Submit button -->
             <div class="col-12 text-center">
-                <button type="submit" class="btn btn-outline-primary" (click)="save()" [disabled]="ticketForm.invalid">Submit</button>
+                <button type="submit" class="btn btn-outline-primary" (click)="save()"
+                    [disabled]="ticketForm.invalid">Submit</button>
             </div>
         </div>
     </form>

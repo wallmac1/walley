@@ -1,0 +1,210 @@
+<div class="single-timeline-area">
+    <div class="timeline-date wow fadeInLeft d-none d-md-flex" data-wow-delay="0.1s"
+        style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+        <p class="text-center" style="font-weight: bold;">{{article.timeline}}</p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="single-timeline-content d-flex wow fadeInLeft p-0" data-wow-delay="0.3s"
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
+
+                <mat-expansion-panel [expanded]="index == 0">
+                    <mat-expansion-panel-header style="max-height: 50px; background-color: #dcd3ec; ">
+                        <mat-panel-title class="panel-title">
+                            <span
+                                *ngIf="articleForm.get('title')?.value == null || articleForm.get('title')?.value.length == 0">
+                                {{"VOUCHER.ARTICLE" | translate}}
+                            </span>
+
+                            <span
+                                *ngIf="articleForm.get('title')?.value != null && articleForm.get('title')?.value.length > 0"
+                                class="articleTitle">
+                                {{articleForm.get('title')?.value}}
+                            </span>
+
+                            <button class="btn btn-link" (click)="deleteArticle()" (click)="$event.stopPropagation()">
+                                <i class="bi bi-trash ms-2 justify-self-end" style="color: red;"></i>
+                            </button>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <!-- FORM -->
+                    <ng-container [formGroup]="articleForm">
+                        <div class="row justify-content-start align-items-end mb-2 mt-1">
+                            <div class="col-12 col-md-7 col-sm-8 col-lg-9">
+                                <label class="subtitle form-label" for="title">
+                                    {{"VOUCHER.TITLE" | translate}}<sup>*</sup>
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" matInput class="form-control" id="title" formControlName="title"
+                                        [class.is-invalid]="articleForm.get('title')?.invalid && submitted">
+                                    <button *ngIf="!isProductSelected; else deleteBlock" class="btn btn-outline-dark"
+                                        (click)="openPopup()">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                    <ng-template #deleteBlock>
+                                        <button class="btn btn-danger" (click)="resetForm()">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </ng-template>
+                                </div>
+
+                            </div>
+                            <div class="col-12 col-md-5 col-sm-4 col-md-3 col-lg-3">
+                                <label class="subtitle form-label" for="code">
+                                    {{"VOUCHER.CODE" | translate}}
+                                </label>
+                                <input type="text" class="form-control" formControlName="code" id="code">
+                            </div>
+
+                            <div class="col-6 col-md-3 mt-2">
+                                <label class="subtitle form-label" for="refidum">
+                                    {{"VOUCHER.MEASUREMENTUNIT" | translate}}
+                                </label>
+                                <select type="text" class="form-select" formControlName="refidum" id="refidum"
+                                    [class.is-invalid]="articleForm.get('refidum')?.invalid && submitted">
+                                    <option [ngValue]="null" disabled>-</option>
+                                    <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">
+                                        {{unit.acronym}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-3 mt-2">
+                                <label class="subtitle form-label" for="quantity">
+                                    {{"VOUCHER.QUANTITY" | translate}}
+                                </label>
+                                <input type="text" class="form-control" formControlName="quantity" id="quantity"
+                                    [class.is-invalid]="articleForm.get('quantity')?.invalid && (articleForm.get('quantity')?.dirty || submitted)">
+                            </div>
+                            <div class="col-6 col-md-3 mt-2">
+                                <label class="subtitle form-label" for="taxablepurchase">
+                                    {{"VOUCHER.PURCHASE" | translate}}
+                                </label>
+                                <input type="text" class="form-control" formControlName="taxablepurchase"
+                                    id="taxablepurchase"
+                                    [class.is-invalid]="articleForm.get('taxablepurchase')?.invalid && (articleForm.get('taxablepurchase')?.dirty || submitted)">
+                            </div>
+                            <div class="col-6 col-md-3 mt-2">
+                                <label class="subtitle form-label" for="taxablesale">
+                                    {{"VOUCHER.SALE" | translate}}
+                                </label>
+                                <input type="text" class="form-control" formControlName="taxablesale" id="taxablesale"
+                                    [class.is-invalid]="articleForm.get('taxablesale')?.invalid && (articleForm.get('taxablesale')?.dirty || submitted)">
+                            </div>
+
+                            <div class="col-10 col-sm-11 mt-2">
+                                <label class="subtitle form-label" for="description">
+                                    {{"VOUCHER.DESCRIPTION" | translate}}
+                                </label>
+                                <textarea type="text" class="form-control" formControlName="description"
+                                    id="description" rows="1"
+                                    [class.is-invalid]="articleForm.get('description')?.invalid && (articleForm.get('description')?.dirty || submitted)">
+                                </textarea>
+                            </div>
+                            <ng-container *ngIf="article.idticketline != 0">
+                                <div class="col-2 col-sm-1 ps-0 ps-sm-1 ps-md-2 ps-lg-3 mt-2 text-end">
+                                    <label for="fileUpload-{{article.idticketline}}" class="btn btn-outline-dark"
+                                        matTooltip="Allega File">
+                                        <i class="bi bi-paperclip"></i>
+                                        <input type="file" id="fileUpload-{{article.idticketline}}"
+                                            style="display: none;" (change)="onFileSelected($event)" accept="*"
+                                            multiple>
+                                    </label>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <div *ngIf="articleForm.invalid" class="row justify-content-center mb-1">
+                            <div *ngIf="(articleForm.get('quantity')?.invalid && (articleForm.get('quantity')?.dirty || submitted)) ||
+                        (articleForm.get('taxablepurchase')?.invalid && (articleForm.get('taxablepurchase')?.dirty || submitted)) ||
+                        (articleForm.get('taxablesale')?.invalid && (articleForm.get('taxablesale')?.dirty || submitted))"
+                                class="col-12 text-center">
+                                <span class="error">
+                                    {{"VOUCHER.NUMBERSERROR" | translate}}
+                                </span>
+                            </div>
+                            <div *ngIf="(articleForm.get('quantity')?.invalid && 
+                (articleForm.get('quantity')?.dirty || submitted)) || 
+                (articleForm.get('refidum')?.invalid && (articleForm.get('refidum')?.dirty || submitted)) ||
+                (articleForm.get('title')?.invalid && (articleForm.get('title')?.dirty || submitted))"
+                                class="col-12 text-center">
+                                <span class="error">
+                                    {{"VOUCHER.MANDATORY" | translate}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Import Attached Files -->
+                        <div *ngIf="article.idticketline != 0"
+                            class="row justify-content-center align-items-center mt-2">
+                            <!-- <div class="col-12">
+                                    <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
+                                </div> -->
+                            <div *ngIf="files.length > 0" class="col-12 image-container text-center">
+                                <div class="image-wrapper" *ngFor="let file of files">
+                                    <img class="custom-image me-2" [src]="urlServerLaraFile+file.src"
+                                        [matTooltip]="file.title" (click)="openImageModal(file)" />
+                                    <i class="bi bi-trash delete-icon" (click)="deleteFile(file.title)"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center mt-1">
+                            <div class="col-12 col-md-6 additionalInfo" (click)="openInformation()">
+                                <span style="color: gray;">Informazioni aggiuntive</span>
+                                <i *ngIf="!isOpenInformations; else minusBlock" class="bi bi-plus"
+                                    style="color: gray;"></i>
+                                <ng-template #minusBlock>
+                                    <i class="bi bi-dash" style="color: gray;"></i>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="row serialnumberRow mt-1"
+                            [ngClass]="{ 'visible': isOpenInformations, 'hidden': !isOpenInformations }">
+                            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mb-1">
+                                <label for="serialnumber">
+                                    {{"VOUCHER.SN" | translate}}
+                                </label>
+                                <input type="text" formControlName="serialnumber" class="form-control">
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <div *ngIf="articleForm.dirty" class="row justify-content-center mt-1 pt-2"
+                        style="border-top: 1px solid lightgray;">
+                        <div class="col-12 text-end">
+                            <button class="btn btn-outline-dark" (click)="saveArticle()">
+                                {{"VOUCHER.SAVE" | translate}}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="screenWidth >= 768; else iconBlock"
+                        class="row justify-content-center align-items-center mt-1">
+                        <div class="col-12 col-sm-6 text-start">
+                            <span *ngIf="article.user_created != null" class="userInfo">
+                                {{"VOUCHER.CREATED" | translate}}:
+                                {{article.user_created.nickname}} - {{article.user_created.datetime}}
+                            </span>
+                        </div>
+                        <div class="col-12 col-sm-6 text-end">
+                            <span *ngIf="article.user_updated != null" class="userInfo">
+                                {{"VOUCHER.UPDATED" | translate}}:
+                                {{article.user_updated.nickname}} - {{article.user_updated.datetime}}
+                            </span>
+                        </div>
+                    </div>
+                    <ng-template #iconBlock>
+                        <div class="row justify-content-center mt-1">
+                            <div class="col-12 text-end">
+                                <i class="bi bi-info-circle" [matTooltip]="tooltipLineCreation"></i>
+                            </div>
+                        </div>
+                    </ng-template>
+
+                </mat-expansion-panel>
+            </div>
+        </div>
+    </div>
+</div>

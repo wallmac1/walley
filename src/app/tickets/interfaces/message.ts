@@ -1,12 +1,9 @@
-export interface Work {
+export interface Message {
     idticketline: number;
     type_line: number;
-    description: string;
-    hours: number;
-    minutes: number;
-    taxablepurchase?: string | null;
-    taxablesale?: string | null;
     timeline: string;
+    description: string;
+    public: number;
     user_created: {
         id: number;
         nickname: string;

@@ -1,0 +1,95 @@
+<div class="single-timeline-area">
+    <div class="timeline-date wow fadeInLeft d-none d-md-flex" data-wow-delay="0.1s"
+        style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+        <p class="text-center" style="font-weight: bold;">{{message.timeline}}</p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="single-timeline-content d-flex wow fadeInLeft p-0" data-wow-delay="0.3s"
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
+
+                <mat-expansion-panel [expanded]="index == 0" style="width: 100%;">
+                    <mat-expansion-panel-header style="max-height: 50px; background-color: #cae0e4;">
+                        <mat-panel-title class="panel-title">
+                            <span
+                                *ngIf="messageForm.get('description')?.value == null || messageForm.get('description')?.value.length == 0">
+                                <i *ngIf="messageForm.get('public')?.value == 1" class="bi bi-globe2" style="color: red;"></i>
+                                {{"VOUCHER.ARTICLE" | translate}}
+                            </span>
+
+                            <span
+                                *ngIf="messageForm.get('description')?.value != null && messageForm.get('description')?.value.length > 0"
+                                class="articleTitle">
+                                <i *ngIf="messageForm.get('public')?.value == 1" class="bi bi-globe2" style="color: red;"></i>
+                                {{messageForm.get('description')?.value}}
+                            </span>
+
+                            <button class="btn btn-link" (click)="deleteMessage()" (click)="$event.stopPropagation()">
+                                <i class="bi bi-trash ms-2 justify-self-end" style="color: red;"></i>
+                            </button>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <!-- FORM -->
+                    <ng-container [formGroup]="messageForm">
+
+                        <div class="row justify-content-evenly align-items-center mb-2 mt-1">
+                            <div class="col-10 col-xl-11 text-start">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" formControlName="description"
+                                    rows="3"></textarea>
+                            </div>
+
+                            <div class="col-2 col-xl-1 text-start">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-12">
+                                        <label class="form-label" for="public">Public</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="public"
+                                                formControlName="public" style="width: 40px; height: 18px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <label for="fileUpload-{{message.idticketline}}" class="btn btn-outline-dark"
+                                        matTooltip="Allega File">
+                                        <i class="bi bi-paperclip"></i>
+                                        <input type="file" id="fileUpload-{{message.idticketline}}"
+                                            style="display: none;" (change)="onFileSelected($event)" accept="*"
+                                            multiple>
+                                    </label>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <!-- Import Attached Files -->
+                        <div *ngIf="message.idticketline != 0"
+                            class="row justify-content-center align-items-center mt-2">
+                            <!-- <div class="col-12">
+                        <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
+                    </div> -->
+                            <div *ngIf="files.length > 0" class="col-12 image-container text-center">
+                                <div class="image-wrapper" *ngFor="let file of files">
+                                    <img class="custom-image me-2" [src]="urlServerLaraFile+file.src"
+                                        [matTooltip]="file.title" (click)="openImageModal(file)" />
+                                    <i class="bi bi-trash delete-icon" (click)="deleteFile(file.title)"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="messageForm.dirty" class="row justify-content-center mt-1 pt-2"
+                        style="border-top: 1px solid lightgray;">
+                        <div class="col-12 text-end">
+                            <button class="btn btn-outline-dark" (click)="saveMessage()">
+                                {{"VOUCHER.SAVE" | translate}}
+                            </button>
+                        </div>
+                    </div>
+                    </ng-container>
+                </mat-expansion-panel>
+            </div>
+        </div>
+    </div>
+</div>

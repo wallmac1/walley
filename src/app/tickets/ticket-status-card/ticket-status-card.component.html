@@ -1,0 +1,51 @@
+<div class="single-timeline-area">
+    <div class="timeline-date wow fadeInLeft d-none d-md-flex" data-wow-delay="0.1s"
+        style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+        <p class="text-center" style="font-weight: bold;">{{statusInfo.timeline}}</p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="single-timeline-content d-flex wow fadeInLeft pt-0 pb-0" data-wow-delay="0.3s"
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft; background-color: #f7edd0;">
+
+                <div class="row justify-content-evenly align-items-center mb-2" style="width: 100%;">
+                    <div class="col-6 text-start">
+                        <span style="font-style: italic; font-size: small; color: gray;">
+                            <span class="d-none d-md-inline">
+                                Created By:
+                            </span>
+                            {{statusInfo.user_updated.nickname}}
+                        </span>
+                    </div>
+
+                    <div class="col-6 text-end">
+                        <span style="font-style: italic; font-size: small; color: gray;">
+                            <span class="d-none d-md-inline">
+                                Date and Time Creation:
+                            </span>
+                            {{statusInfo.user_updated.datetime}}
+                        </span>
+                    </div>
+
+                    <div class="col-12 col-sm-6 text-center text-sm-start mt-2">
+                        <span>
+                            Actual Status:
+                            <span style="font-weight: bold;">
+                                {{statusInfo.actual_status}}
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="col-12 col-sm-6 text-center text-sm-end mt-2">
+                        <span>
+                            Previous Status:
+                            <span style="font-weight: bold;">
+                                {{statusInfo.previous_status}}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

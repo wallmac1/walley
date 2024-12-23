@@ -9,13 +9,14 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
-import {MatSelect, MatSelectModule} from '@angular/material/select'; 
-import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
-import { map, Observable, startWith } from 'rxjs';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { TicketsInfoService } from '../services/tickets-info.service';
 import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ticket-new',
@@ -27,13 +28,16 @@ import { Connect } from '../../classes/connect';
     MatButtonModule,
     MatRadioModule,
     MatSelectModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    TranslateModule
   ],
   templateUrl: './ticket-new.component.html',
   styleUrl: './ticket-new.component.scss'
 })
 export class TicketNewComponent {
 
+  filteredCustomer$!: Observable<Customer[]>;
+  submitted: boolean = false;
   today: Date = new Date();
   formattedDate: string = this.today.toISOString().split('T')[0];
 
@@ -43,13 +47,13 @@ export class TicketNewComponent {
   ticketForm = new FormGroup({
     internal: new FormControl<number>(0, Validators.required),
     date_ticket: new FormControl<string>(this.formattedDate), //Non modificabile
-    customer: new FormControl<Customer | string>('', Validators.required),
+    customer: new FormControl<Customer | null>(null, Validators.required),
     location: new FormControl<Location | null>(null),
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null, Validators.required),
     department: new FormControl<number[] | null>(null),
-    incharge: new FormControl<number | null>(null),
-    keepinformed: new FormControl<User[] | null>(null)
+    keepinformed: new FormControl<User[] | null>(null),
+    number: new FormControl<number | null>(null),
   })
 
   //inputClient = new FormControl<string>('');
@@ -57,6 +61,8 @@ export class TicketNewComponent {
   constructor(private router: Router, public ticketInfoService: TicketsInfoService,
     private connectServerService: ConnectServerService) {
     this.ticketForm.get("date_ticket")?.disable();
+    this.ticketForm.get("number")?.disable();
+    this.searchCustomer();
     ticketInfoService.getUsersFromServer();
     ticketInfoService.getDepartmentFromServer();
   }
@@ -66,17 +72,17 @@ export class TicketNewComponent {
   }
 
   openSelect(id: number) {
-    if(id == 1) {
+    if (id == 1) {
       this.select1.open();
     }
-    else if( id == 2) {
+    else if (id == 2) {
       this.select2.open();
     }
   }
 
   internalExternalLogic() {
     const internal = this.ticketForm.get("internal")?.value;
-    if(internal == 1) {
+    if (internal == 1) {
       this.ticketForm.get("customer")?.setValue(null);
       this.ticketForm.get("customer")?.disable();
       this.ticketForm.get("location")?.setValue(null);
@@ -86,22 +92,83 @@ export class TicketNewComponent {
     }
   }
 
-  setNewTicketOnServer() {
-    const obj_infoticket = this.ticketForm.getRawValue();
-    obj_infoticket.customer = {id: 57, rifidanacliforprodati: 5, denominazione: "Wallnet Snc"}
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/insertTicket', {obj_infoticket: obj_infoticket}).
-      subscribe((val: any) => {
-        //console.log(val);
-        if (val) {
-          this.router.navigate(["modifyTicket", val.valore.id]);
-          //console.log("Tickets", val.data.listTickets)
-        }
-      })
+  displayCustomerName(customer?: Customer): string {
+    return customer ? customer.denominazione! : '';
+  }
+
+  // private filterLines(lines: Lines[]) {
+  //   if(lines.length > 0) {
+  //     this.works = lines.filter(line => line.type_line === 1); // Lavori
+  //     this.articles = lines.filter(line => line.type_line === 2); // Articoli
+  //   }
+  // }
+
+  private searchCustomer() {
+    const customer_field = this.ticketForm.get('customer');
+    if (customer_field) {
+      this.filteredCustomer$ = customer_field.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value?.denominazione || ''),
+          filter(value => value.length > 0),
+          debounceTime(400),
+          switchMap((value: string) =>
+            value ? this.getCustomers(value) : [])
+        );
+    }
+  }
+
+  private getCustomers(val: string): Observable<Customer[]> {
+    // CHIAMATA AL SERVER
+    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
+    //   {
+    //     query: val
+    //   }).pipe(
+    //     map(response => response.data.cities)
+    //   );
+    // Esempio di una lista di tre clienti
+    const customers: Customer[] = [
+      {
+        rifidanacliforprodati: 39,
+        id: 88,
+        denominazione: 'Pippo Poppo',
+        codicefiscale: "23323NLDSKNSDNKL",
+        cognome: "poppo",
+        data_nascita: null,
+        email: null,
+        nome: "Pippo",
+        piva: null,
+        telefono: null
+      },
+    ];
+
+    // Restituisce la lista come Observable
+    return of(customers);
   }
 
   save() {
-    // SAVE THE TICKET, GET THE ID BACK AND NAVIGATE TO MODIFICATION PAGE
-    this.setNewTicketOnServer();
+    this.submitted = true;
+    if (this.ticketForm.valid) {
+      const formValues = this.ticketForm.getRawValue();
+      let obj_infoticket;
+      obj_infoticket = {
+        internal: formValues.internal,
+        location: formValues.location,
+        title: formValues.title,
+        description: formValues.description,
+        department: formValues.department,
+        keepinformed: formValues.keepinformed,
+        number: formValues.number,
+        refidregcussuppro: formValues.customer!.id!,
+        refidregcussupprodata: formValues.customer!.rifidanacliforprodati!
+      };
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicket', { obj_infoticket: obj_infoticket, idticket: 0 }).
+        subscribe((val: any) => {
+          if (val) {
+            this.router.navigate(["modifyTicket", val.data.idticket]);
+          }
+        })
+    }
   }
 
 }

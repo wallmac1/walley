@@ -13,7 +13,6 @@ import { ConnectServerService } from '../../services/connect-server.service';
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatLabel,
     CommonModule
   ],
   templateUrl: './ticket-modal.component.html',
@@ -48,12 +47,12 @@ export class TicketModalComponent {
       this.editTitleForm.patchValue(data.form);
     }
     else if (this.id == 1) {
-      this.getStatusFromServer();
+      this.getStatusList();
       this.editStatusForm.patchValue(data.form);
       //console.log(this.editStatusForm.value);
       //console.log(data.form);
       if(data.form.statusid && data.form.statusid != 1) {
-        this.getSubStatusFromServer(data.form.statusid);
+        this.getSubStatusList(data.form.statusid);
       }
       this.disableSubStatus();
     }
@@ -61,21 +60,21 @@ export class TicketModalComponent {
 
   onStatusSelected() {
     this.enableSubStatus();
-    this.getSubStatusFromServer(this.editStatusForm.get("statusid")?.value!);
+    this.getSubStatusList(this.editStatusForm.get("statusid")?.value!);
   }
 
-  getStatusFromServer() {
+  getStatusList() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/listStatusTicket', {}).
       subscribe((val: any) => {
         console.log(val);
         if (val) {
-          this.statusList = val;
+          this.statusList = val.data;
           //this.enableSubStatus();
         }
       })
   }
 
-  getSubStatusFromServer(id: number) {
+  getSubStatusList(id: number) {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/listSubStatusTicket', { refidticketstatus: id }).
       subscribe((val: any) => {
         console.log(val);

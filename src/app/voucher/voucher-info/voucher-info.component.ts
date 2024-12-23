@@ -164,8 +164,8 @@ export class VoucherInfoComponent {
       refidum: [line.refidum || null, Validators.required],
       code: [line.code || null],
       serialnumber: [line.serialnumber || null],
-      taxablepurchase: [line.taxablepurchase || 0, this.numberWithCommaValidator()],
-      taxablesale: [line.taxablesale || 0, this.numberWithCommaValidator()],
+      taxablepurchase: [line.taxablepurchase || '0,00', this.numberWithCommaValidator()],
+      taxablesale: [line.taxablesale || '0,00', this.numberWithCommaValidator()],
       title: [line.title || null, Validators.required],
       refidarticle: [line.refidarticle || null],
       refidarticledata: [line.refidarticledata || null],
@@ -363,7 +363,7 @@ export class VoucherInfoComponent {
           startWith(''),
           map(value => typeof value === 'string' ? value : value?.denominazione || ''),
           filter(value => value.length > 0),
-          debounceTime(600),
+          debounceTime(400),
           switchMap((value: string) =>
             value ? this.getCustomers(value) : [])
         );

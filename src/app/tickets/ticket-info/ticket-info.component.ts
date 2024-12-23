@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Customer } from '../interfaces/customer';
 import { Department } from '../interfaces/department';
@@ -14,6 +14,9 @@ import { CommonModule } from '@angular/common';
 import { Ticket } from '../interfaces/ticket';
 import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
+import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-ticket-info',
@@ -24,12 +27,19 @@ import { Connect } from '../../classes/connect';
     MatOption,
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    TranslateModule,
+    MatAutocompleteModule
   ],
   templateUrl: './ticket-info.component.html',
   styleUrl: './ticket-info.component.scss'
 })
 export class TicketInfoComponent {
+
+  locations: Location[] = [];
+  filteredCustomer$!: Observable<Customer[]>;
+  submitted: boolean = false;
+
   @Input() data!: Ticket;
   @ViewChild('select1') select1!: MatSelect;
   @ViewChild('select2') select2!: MatSelect;
@@ -39,14 +49,15 @@ export class TicketInfoComponent {
     status: new FormControl<Status | number | null>(null, Validators.required),
     internal: new FormControl<number>(0, Validators.required),
     date_ticket: new FormControl<string>(''), //Non modificabile
-    customer: new FormControl<Customer | null>(null, Validators.required),
+    customer: new FormControl<Customer | null>(null, this.customerValidator()),
     location: new FormControl<Location | null>(null),
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null, Validators.required),
     department: new FormControl<Department[] | number[] | null>(null),
     incharge: new FormControl<User | number | null>(null),
     keepinformed: new FormControl<User[] | number[] | null>(null),
-    note: new FormControl<string | null>(null)
+    note: new FormControl<string | null>(null),
+    number: new FormControl<number | null>(null)
   });
 
   ticketId: number | null = null;
@@ -66,14 +77,89 @@ export class TicketInfoComponent {
   }
 
   ngOnInit(): void {
+    this.searchCustomer();
     if (this.ticketId) {
+      this.ticketInfoForm.get('date_ticket')?.disable();
+      this.ticketInfoForm.get('number')?.disable();
       this.getUser();
       this.getDepartment();
+      this.getLocations();
       this.ticketInfoService.getDepartmentFromServer();
       this.ticketInfoForm.patchValue(this.data);
       this.internalExternalLogic();
       this.print();
     }
+  }
+
+  customerValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const customer = control.value;
+
+      // Condizione unica combinata
+      if (!customer || typeof customer === 'string' || !(customer.id > 0)) {
+        return { invalidCustomer: true }; // Errore generico
+      }
+
+      return null; // Valido
+    };
+  }
+
+  displayCustomerName(customer?: Customer): string {
+    return customer ? customer.denominazione! : '';
+  }
+
+  // private filterLines(lines: Lines[]) {
+  //   if(lines.length > 0) {
+  //     this.works = lines.filter(line => line.type_line === 1); // Lavori
+  //     this.articles = lines.filter(line => line.type_line === 2); // Articoli
+  //   }
+  // }
+
+  private searchCustomer() {
+    const customer_field = this.ticketInfoForm.get('customer');
+    if (customer_field) {
+      this.filteredCustomer$ = customer_field.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value?.denominazione || ''),
+          filter(value => value.length > 0),
+          debounceTime(400),
+          switchMap((value: string) =>
+            value ? this.getCustomers(value) : [])
+        );
+    }
+  }
+
+  private getCustomers(val: string): Observable<Customer[]> {
+    // CHIAMATA AL SERVER
+    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
+    //   {
+    //     query: val
+    //   }).pipe(
+    //     map(response => response.data.cities)
+    //   );
+    // Esempio di una lista di tre clienti
+    const customers: Customer[] = [
+      {
+        rifidanacliforprodati: 39,
+        id: 88,
+        denominazione: 'Pippo Poppo',
+        codicefiscale: "23323NLDSKNSDNKL",
+        cognome: "poppo",
+        data_nascita: null,
+        email: null,
+        nome: "Pippo",
+        piva: null,
+        telefono: null
+      },
+    ];
+
+    // Restituisce la lista come Observable
+    return of(customers);
+  }
+
+  trackById(index: number, item: any): number {
+    return item.id;
   }
 
   get clientDenomination(): string | null {
@@ -113,6 +199,16 @@ export class TicketInfoComponent {
       })
   }
 
+  getLocations() {
+    const locations: Location[] = [
+      { id: 1, number: 'Location 1', address: '123 Main St', city: 'City A' },
+      { id: 2, number: 'Location 2', address: '456 Elm St', city: 'City B' },
+      { id: 3, number: 'Location 3', address: '789 Oak St', city: 'City C' }
+    ];
+
+    this.locations = locations;
+  }
+
   getDepartment() {
     if (this.ticketInfoService.departments) {
       this.department = this.ticketInfoService.departments!;
@@ -123,18 +219,14 @@ export class TicketInfoComponent {
       })
   }
 
-  setTicketInfoOnServer() {
-    this.connectServerService.postRequest(Connect.urlServerLara, "ticket/saveTicketInfo", {ticketinfo: this.ticketInfoForm})
+  save() {
+    this.connectServerService.postRequest(Connect.urlServerLara, "ticket/saveTicketInfo", { ticketinfo: this.ticketInfoForm })
       .subscribe((val: any) => {
-        if(val) {
+        if (val) {
           this.ticketInfoService.ticketInfo = val;
           this.ticketInfoForm.patchValue(val);
         }
       })
-  }
-
-  save() {
-    this.setTicketInfoOnServer();
   }
 
   openSelect(id: number) {

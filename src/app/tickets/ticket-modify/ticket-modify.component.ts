@@ -15,6 +15,7 @@ import { Status } from '../interfaces/status';
 import { MatIcon } from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu'; 
 import { MatButton } from '@angular/material/button';
+import { Connect } from '../../classes/connect';
 
 @Component({
   selector: 'app-ticket-modify',
@@ -36,7 +37,7 @@ export class TicketModifyComponent {
   isStatusOpen = false;
   internal: boolean = false;
 
-  status: Status | null = null;
+  status: Status | null = {id: 0, name: "Aperto", substatus: {id: 0, name: "In attesa"}};
 
   ticketGeneralForm = new FormGroup({
     title: new FormControl<string | null>(null, Validators.required),
@@ -57,7 +58,7 @@ export class TicketModifyComponent {
     });
 
     if (this.ticketId) {
-      this.getInfoTicketFromServer();
+      this.getTicketInfo();
     }
 
   }
@@ -65,24 +66,6 @@ export class TicketModifyComponent {
   statusMenu() {
     this.isStatusOpen = !this.isStatusOpen;
   }
-
-  // getBackgroundColor(): string {
-  //   let color = "white";
-  //   const id = this.statusForm.get("status")?.value!.id;
-  //   if (id == 0) {
-  //     color = "#99CFE7";
-  //   }
-  //   else if (id == 1) {
-  //     color = "#DAED93";
-  //   }
-  //   else if (id == 2) {
-  //     color = "#FFFFE0";
-  //   }
-  //   else if (id == 3) {
-  //     color = "#ECD0DF";
-  //   }
-  //   return color;
-  // }
 
   modifyPopup(i: number): void {
     if (i == 0) {
@@ -124,24 +107,19 @@ export class TicketModifyComponent {
 
   }
 
-  private getInfoTicketFromServer() {
-    if (this.ticketInfoService.ticketInfo && this.ticketInfoService.ticketInfo.id == this.ticketId) {
-      this.ticketInfo = this.ticketInfoService.ticketInfo;
-      this.ticketGeneralForm.get("title")?.setValue(this.ticketInfoService.ticketInfo.title);
-      this.ticketGeneralForm.get("description")?.setValue(this.ticketInfoService.ticketInfo.description!);
-      this.status = this.ticketInfoService.ticketInfo.status;
-    }
-    else {
-      this.ticketInfoService.getInfoTicketFromServer(this.ticketId!)
-        .subscribe((val: any) => {
-          if (val) {
-            this.ticketInfo = val;
-            this.ticketGeneralForm.get("title")?.setValue(val.title);
-            this.ticketGeneralForm.get("description")?.setValue(val.description);
-            this.status = val.status;
-          }
-        })
-    }
+  private getTicketInfo() {}
+
+  private getStatusList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/statusListTicket', {})
+  }
+
+  private getSubstatusList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/substatusListTicket', {idstatus: this.status?.id})
+    .subscribe((val: any) => {
+      if (val) {
+        //this.substatus = val;
+      }
+    })
   }
 
 }
