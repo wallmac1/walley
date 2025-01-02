@@ -38,6 +38,7 @@ export class FiltersComponent {
     date_to: new FormControl<string>(this.todayDate.toISOString().split('T')[0]),
     customer: new FormControl<Customer | null>(null),
     status: new FormControl<Status | null>(null),
+    date_all: new FormControl<boolean>(true),
   })
 
   constructor() {
@@ -46,6 +47,19 @@ export class FiltersComponent {
   }
 
   ngOnInit(): void {
+    this.voucherFilterForm.get('date_to')?.disable();
+    this.voucherFilterForm.get('date_from')?.disable();
+    this.voucherFilterForm.get('date_all')?.valueChanges.subscribe((value) => {
+      if (value === true) {
+        console.log('disabling', this.voucherFilterForm.getRawValue());
+        this.voucherFilterForm.get('date_to')?.disable();
+        this.voucherFilterForm.get('date_from')?.disable();
+      } else {
+        console.log('enabling', this.voucherFilterForm.getRawValue());
+        this.voucherFilterForm.get('date_to')?.enable();
+        this.voucherFilterForm.get('date_from')?.enable();
+      }
+    });
     this.searchCustomer();
   }
 
@@ -103,8 +117,19 @@ export class FiltersComponent {
     return of(customers);
   }
 
+  toggleAllDates() {
+    const date_all = this.voucherFilterForm.get('date_all')?.value;
+    this.voucherFilterForm.get('date_all')?.setValue(!date_all);
+  }
+
   getFilters(): Filters {
-    return this.voucherFilterForm.getRawValue();
+    return {
+      date_from: this.voucherFilterForm.get('date_from')?.value!,
+      date_to: this.voucherFilterForm.get('date_to')?.value!,
+      customer: this.voucherFilterForm.value.customer!,
+      status: this.voucherFilterForm.value.status!,
+      date_all: this.voucherFilterForm.value.date_all ? 1 : 0
+    };
   }
 
   filter() {

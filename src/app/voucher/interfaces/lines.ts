@@ -1,19 +1,22 @@
+import { LineFile } from "./line-file";
+
 export interface Lines {
     idvoucherline: number;
     type_line: number;
     description: string;
     code?: string;
-    hours?: number;
+    hours?: number | null;
     title?: string,
-    minutes?: number;
+    minutes?: number | null;
     quantity: string;
-    refidum?: number;
+    refidum?: number | null;
     refidarticle?: number | null;
     refidarticledata?: number | null;
     refidarticleprice?: number | null;
     serialnumber?: number;
     taxablepurchase?: string | null;
     taxablesale?: string | null;
+    attachments: LineFile[];
     user_created: {
         id: number;
         nickname: string;
@@ -24,9 +27,9 @@ export interface Lines {
         nickname: string;
         datetime: string;      
     };
-    file: {
-        src: string;
-    }
+    // file: {
+    //     src: string;
+    // }
 }
 
 export interface MeasurementUnit {

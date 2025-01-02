@@ -405,28 +405,6 @@
       "BATTERY": "Battery"
     }
   },
-  "TICKET": {
-    "TICKETLIST": {
-      "TITLE": "TICKETS LIST",
-      "DESCRIPTION": "Press the button below to open a new ticket",
-      "NEWTICKET": "Open New Ticket",
-      "BUTTONSEARCH": "Search",
-      "SEARCHPLACEHOLDER": "Name of the ticket",
-      "EMPTY": "No tickets available. To add a ticket create or enter a system."
-    },
-    "NEWTICKET": {
-      "NEWTICKET": "NEW TICKET",
-      "TITLE": "Title",
-      "DATE": "Date",
-      "RELATEDSYS": "Related system",
-      "NONE": "None",
-      "DESCRIPTION": "Description",
-      "IMPORTIMG": "You're trying to import too many images",
-      "ATTACHMENT": "Import attachments (max 6)",
-      "IMPORT": "Import",
-      "SUBMIT": "Submit"
-    }
-  },
   "VOUCHER": {
     "VOUCHER": "Voucher",
     "STATUS": "Status",
@@ -466,6 +444,36 @@
       "TITLE": "Find Article",
       "NAME": "Name",
       "CLOSE": "Close"
+    }
+  },
+  "TICKET": {
+    "TICKETLIST": {
+      "TITLE": "TICKETS LIST",
+      "DESCRIPTION": "Press the button below to open a new ticket",
+      "NEWTICKET": "Open New Ticket",
+      "BUTTONSEARCH": "Search",
+      "SEARCHPLACEHOLDER": "Name of the ticket",
+      "EMPTY": "No tickets available. To add a ticket create or enter a system."
+    },
+    "NEWTICKET": {
+      "NEWTICKET": "NEW TICKET",
+      "TITLE": "Title",
+      "DATE": "Date",
+      "RELATEDSYS": "Related system",
+      "NONE": "None",
+      "DESCRIPTION": "Description",
+      "IMPORTIMG": "You're trying to import too many images",
+      "ATTACHMENT": "Import attachments (max 6)",
+      "IMPORT": "Import",
+      "SUBMIT": "Submit"
+    },
+    "TICKET": "Ticket",
+    "STATUS": "Status",
+    "FILTERS": {
+      "INCHARGE": "All Users",
+      "DEPARTMENTS": "All Departments",
+      "ALLSTATUS": "All Status",
+      "FILTER": "Filter"
     }
   }
 }

@@ -11,13 +11,15 @@ import { AssistanceComponent } from './weco/assistance/assistance.component';
 import { SystemReviewComponent } from './weco/system/system-review/system-review.component';
 import { VoucherInfoComponent } from './voucher/voucher-info/voucher-info.component';
 import { VoucherListComponent } from './voucher/voucher-list/voucher-list.component';
+import { TicketListComponent } from './tickets/ticket-list/ticket-list.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
     { path: "login", component: LoginComponent },
     { path: "newTicket", component: TicketNewComponent },
     { path: "recoverPassword", component: RecoverPasswordComponent },
-    { path: "modifyTicket/:id", component: TicketModifyComponent },
+    { path: "ticket/:id", component: TicketModifyComponent },
+    { path: "ticketsList", component: TicketListComponent },
     { path: "newPassword", component: NewPasswordComponent },
     { path: "menu/delete", component: DeleteComponent },
     { path: "authorizations", component: AuthorizationsComponent },

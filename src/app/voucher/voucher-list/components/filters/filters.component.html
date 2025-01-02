@@ -7,21 +7,29 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center align-items-center p-1">
-                <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-1 mb-1 pe-0">
+            <div class="row justify-content-center p-1 align-items-end">
+                <div class="col-5 col-sm-4 col-md-3 col-lg-2 mt-1 mb-1 pe-0">
                     <label class="form-label" for="date_from">Da</label>
                     <input type="date" class="form-control ps-1" id="date_from" formControlName="date_from"
                         style="border-radius: 5px 0 0 5px;"
                         [class.is-invalid]="voucherFilterForm.get('date_from')?.invalid && voucherFilterForm.get('date_from')?.touched">
                 </div>
-                <div class="col-6 col-sm-4 col-md-3 col-lg-2 mt-1 mb-1 ps-0">
+                <div class="col-5 col-sm-4 col-md-3 col-lg-2 mt-1 mb-1 ps-0 pe-0">
                     <label class="form-label" for="date_to">A</label>
                     <input type="date" class="form-control ps-1" id="date_to" formControlName="date_to"
-                        style="border-radius: 0 5px 5px 0;"
+                        style="border-radius: 0 0 0 0;"
                         [class.is-invalid]="voucherFilterForm.get('date_to')?.invalid && voucherFilterForm.get('date_to')?.touched">
                 </div>
+                <div class="col-2 col-sm-2 col-md-1 col-lg-1 mt-1 mb-1 ps-0">
+                    <!-- <label class="form-label" for="dates_all">Tutti</label> -->
+                    <input type="checkbox" class="btn-check" id="btn-check" checked autocomplete="off" (click)="toggleAllDates()">
+                    <label class="btn btn-outline-primary ps-1 pe-1" for="btn-check" style="border-radius: 0 5px 5px 0; width: 100%;">
+                        Tutti
+                    </label>
+                    <!-- <input class="form-control form-check-input ps-1 mt-0" type="checkbox" id="dates_all" formControlName="dates_all"> -->
+                </div>
 
-                <div class="col-12 col-sm-6 col-lg-4 mt-1 mb-1">
+                <div class="col-12 col-sm-6 col-md-5 col-lg-4 mt-1 mb-1">
                     <label class="form-label" for="customer">Cliente</label>
                     <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
                         formControlName="customer"
@@ -35,7 +43,7 @@
                     </mat-autocomplete>
                 </div>
 
-                <div class="col-12 col-sm-6 col-lg-4 mt-1 mb-1">
+                <div class="col-12 col-sm-6 col-lg-3 mt-1 mb-1">
                     <label class="form-label" for="status">Stato</label>
                     <select type="string" class="form-select" id="status" formControlName="status"
                         [class.is-invalid]="voucherFilterForm.get('status')?.invalid && voucherFilterForm.get('status')?.touched">

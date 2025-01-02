@@ -142,18 +142,16 @@
         <!-- CARD WORKS AND ARTICLES -->
         <div *ngIf="voucherId != 0" class="row justify-content-center align-items-center p-1 p-md-2 p-lg-3 pt-1"
             style="position: relative;">
-            <div [formGroup]="linesForm">
-                <mat-accordion formArrayName="lines" class="example-headers-align">
-                    <div *ngFor="let line of linesArray.controls; let i = index" [formGroupName]="i" class="col-12">
-                        <app-voucher-work *ngIf="line.get('type_line')?.value == 1" [line]="getLine(i)"
-                            [voucherId]="voucherId" [index]="i" (delete)="deleteLine(i)"
-                            (save)="saveLine(i)"></app-voucher-work>
-                        <app-voucher-article *ngIf="line.get('type_line')?.value == 2" [line]="getLine(i)"
-                            [voucherId]="voucherId" [index]="i" (delete)="deleteLine(i)"
-                            (save)="saveLine(i)"></app-voucher-article>
+                <mat-accordion class="example-headers-align">
+                    <div *ngFor="let line of lines; let i = index" class="col-12">
+                        <app-voucher-work *ngIf="line.type_line == 1" [line]="line"
+                            [voucherId]="voucherId" [index]="i" (delete)="deleteLine($event)"
+                            (save)="saveLine($event)"></app-voucher-work>
+                        <app-voucher-article *ngIf="line.type_line == 2" [line]="line"
+                            [voucherId]="voucherId" [index]="i" (delete)="deleteLine($event)"
+                            (save)="saveLine($event)"></app-voucher-article>
                     </div>
                 </mat-accordion>
-            </div>
         </div>
 
         <div *ngIf="voucherId != 0" class="row addBorder"></div>
@@ -161,29 +159,29 @@
     
     <!-- COMPLETE BUTTONS  -->
     <div *ngIf="voucherId > 0" class="row justify-content-evenly align-items-center mb-5 ms-2 me-2">
-        <div class="mt-2"
+        <div class="mt-2 p-0"
             [ngClass]="{'col-4 text-start': voucherStatus?.id != 40, 'col-12 text-center': voucherStatus?.id == 40}">
-            <button class="btn btn-outline-danger" style="width: 150px;" (click)="deleteVoucher()">
+            <button class="btn btn-outline-danger" (click)="deleteVoucher()">
                 {{"VOUCHER.DELETE" | translate}}
             </button>
         </div>
-        <div *ngIf="voucherStatus?.id == 10" class="col-4 mt-2 text-end">
-            <button class="btn btn-outline-warning" style="width: 150px;" (click)="changeStatus(1)">
+        <div *ngIf="voucherStatus?.id == 10" class="col-4 mt-2 text-end p-0">
+            <button class="btn btn-outline-warning" (click)="changeStatus(1)">
                 {{"VOUCHER.CLOSE" | translate}}
             </button>
         </div>
-        <div *ngIf="voucherStatus?.id == 20" class="col-4 mt-2 text-center">
-            <button class="btn btn-outline-primary" style="width: 150px;" (click)="changeStatus(2)">
+        <div *ngIf="voucherStatus?.id == 20" class="col-4 mt-2 text-center p-0">
+            <button class="btn btn-outline-primary" (click)="changeStatus(2)">
                 {{"VOUCHER.OPEN" | translate}}
             </button>
         </div>
-        <div *ngIf="voucherStatus?.id == 20" class="col-4 mt-2 text-end">
-            <button class="btn btn-outline-info" style="width: 150px;" (click)="changeStatus(3)">
+        <div *ngIf="voucherStatus?.id == 20" class="col-4 mt-2 text-end p-0">
+            <button class="btn btn-outline-info ps-1 pe-1" (click)="changeStatus(3)">
                 {{"VOUCHER.TOBEINVOICED" | translate}}
             </button>
         </div>
-        <div *ngIf="voucherStatus?.id == 30" class="col-4 mt-2 text-end">
-            <button class="btn btn-outline-success" style="width: 150px;" (click)="changeStatus(4)">
+        <div *ngIf="voucherStatus?.id == 30" class="col-4 mt-2 text-end p-0">
+            <button class="btn btn-outline-success" (click)="changeStatus(4)">
                 {{"VOUCHER.INVOICED" | translate}}
             </button>
         </div>

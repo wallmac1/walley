@@ -421,7 +421,7 @@
     "QUANTITY": "Quantità",
     "MEASUREMENTUNIT": "Unità di Misura",
     "DESCRIPTION": "Descrizione",
-    "NUMBERSERROR": "Quantità, Imponibile Acquisto e Imponibile Vendita sono campi numerici con al massimo due decimali dopo la virgola",
+    "NUMBERSERROR": "Quantità, Imponibile Acquisto e Imponibile Vendita sono campi numerici con al massimo due decimali dopo la virgola e devono essere maggiori di 0,00",
     "MANDATORY": "Compila i campi obbligatori",
     "UNITERROR": "Unità di misura è richiesta",
     "CODE": "Codice",
@@ -443,6 +443,36 @@
       "TITLE": "Ricerca Articolo",
       "NAME": "Nome",
       "CLOSE": "Chiudi"
+    }
+  },
+  "TICKET": {
+    "TICKETLIST": {
+      "TITLE": "TICKETS LIST",
+      "DESCRIPTION": "Press the button below to open a new ticket",
+      "NEWTICKET": "Open New Ticket",
+      "BUTTONSEARCH": "Search",
+      "SEARCHPLACEHOLDER": "Name of the ticket",
+      "EMPTY": "No tickets available. To add a ticket create or enter a system."
+    },
+    "NEWTICKET": {
+      "NEWTICKET": "NEW TICKET",
+      "TITLE": "Title",
+      "DATE": "Date",
+      "RELATEDSYS": "Related system",
+      "NONE": "None",
+      "DESCRIPTION": "Description",
+      "IMPORTIMG": "You're trying to import too many images",
+      "ATTACHMENT": "Import attachments (max 6)",
+      "IMPORT": "Import",
+      "SUBMIT": "Submit"
+    },
+    "TICKET": "Ticket",
+    "STATUS": "Stato",
+    "FILTERS": {
+      "INCHARGE": "Tutti gli Utenti",
+      "DEPARTMENTS": "Tutti i Dipartimenti",
+      "ALLSTATUS": "Tutti gli Stati",
+      "FILTER": "Filtra"
     }
   }
 }

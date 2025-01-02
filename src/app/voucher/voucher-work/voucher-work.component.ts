@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output, viewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { Lines, MeasurementUnit } from '../interfaces/lines';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -30,13 +30,31 @@ export class VoucherWorkComponent {
 
   tooltipLineCreation: any;
   screenWidth: number = window.innerWidth;
-  files: LineFile[] = [];
   urlServerLaraFile = Connect.urlServerLaraFile;
-  @Input() line!: FormGroup;
+  @Input() line: Lines = {
+    idvoucherline: 0,
+    type_line: 1,
+    description: '',
+    hours: 0,
+    quantity: '',
+    minutes: 0,
+    attachments: [],
+    user_created: {
+      id: 0,
+      nickname: '',
+      datetime: ''
+    },
+    user_updated: {
+      id: 0,
+      nickname: '',
+      datetime: ''
+    }
+  };
   @Input() index: number = -1;
   @Input() voucherId: number = 0;
-  @Output() delete = new EventEmitter<number>();
-  @Output() save = new EventEmitter<number>();
+  @Output() delete = new EventEmitter<{index: number, id: number}>();
+  @Output() save = new EventEmitter<{index: number, line: Lines}>();
+  lineForm!: FormGroup;
 
   submitted = false;
   minutes: { id: number, value: number }[] = [];
@@ -47,7 +65,6 @@ export class VoucherWorkComponent {
 
   ngOnInit(): void {
     this.initLine();
-    this.getFiles();
     this.getMinutesHours();
   }
 
@@ -57,19 +74,25 @@ export class VoucherWorkComponent {
   }
 
   private initLine() {
-    this.line.get('refidum')?.clearValidators();
-    this.line.get('title')?.clearValidators();
-    this.line.get('quantity')?.clearValidators();
+    this.lineForm = this.fb.group({
+      idvoucherline: [this.line.idvoucherline],
+      type_line: [this.line.type_line],
+      description: [this.line.description, Validators.required],
+      hours: [this.line.hours || null, Validators.required],
+      minutes: [this.line.minutes || null, Validators.required],
+      user_created: [this.line.user_created || null],
+      user_updated: [this.line.user_updated || null],
+    })
 
     let created_at: string = '';
     let updated_at: string = '';
-    if(this.line.get('user_created')?.value != null) {
-      created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.line.get('user_created')?.value.nickname + ' - ' + 
-      this.line.get('user_created')?.value.datetime + ', '
+    if(this.line.user_created != null) {
+      created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.line.user_created.nickname + ' - ' + 
+      this.line.user_created.datetime + ', '
     }
-    if(this.line.get('user_updated')?.value != null) {
-      updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.line.get('user_updated')?.value.nickname +
-      ' - ' + this.line.get('user_updated')?.value.datetime;
+    if(this.line.user_updated != null) {
+      updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.line.user_updated.nickname +
+      ' - ' + this.line.user_updated.datetime;
     }
     this.tooltipLineCreation = created_at + updated_at
        
@@ -101,7 +124,7 @@ export class VoucherWorkComponent {
       // Calcola il totale dei file caricati
       const selectedFiles = Array.from(input.files);
 
-      const totalFilesCount = this.files.length + selectedFiles.length;
+      const totalFilesCount = this.line.attachments.length + selectedFiles.length;
 
       // Verifica il limite massimo
       if (totalFilesCount > 5) {
@@ -111,7 +134,7 @@ export class VoucherWorkComponent {
       }
 
       formData.append('idvoucher', String(this.voucherId))
-      formData.append('idvoucherline', String(this.line.get('idvoucherline')?.value));
+      formData.append('idvoucherline', String(this.line.idvoucherline));
       selectedFiles.forEach(element => {
         formData.append('files[]', element);
       });
@@ -127,9 +150,39 @@ export class VoucherWorkComponent {
     }
   }
 
+  notZeroValidator(): ValidatorFn {
+      return (control: AbstractControl): ValidationErrors | null => {
+        const value = control.value;
+  
+        if (!value) {
+          return { zero: true }; // Se il campo è vuoto, consideralo non valido
+        }
+  
+        const isValid = parseFloat(value.replace(',', '.')) > 0;
+  
+        return isValid ? null : { zero: true }; // Restituisci l'errore se non valido
+      };
+    }
+  
+    numberWithCommaValidator(): ValidatorFn {
+      return (control: AbstractControl): ValidationErrors | null => {
+        const value = control.value;
+  
+        if (!value) {
+          return null; // Se il campo è vuoto, consideralo valido
+        }
+  
+        // Controlla se il valore soddisfa i criteri
+        const regex = /^\d*(,\d{0,2})?$/; // Regex: numeri con al massimo una virgola e due cifre dopo di essa
+        const isValid = regex.test(value);
+  
+        return isValid ? null : { invalidNumber: true }; // Restituisci l'errore se non valido
+      };
+    }
+
   deleteFile(filename: string) {
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/voucherDeleteFile',
-      { idvoucher: this.voucherId, idvoucherline: this.line.get('idvoucherline')?.value, filename: filename })
+      { idvoucher: this.voucherId, idvoucherline: this.line.idvoucherline, filename: filename })
       .subscribe((val: any) => {
         this.resetFileInput();
         this.getFiles();
@@ -137,34 +190,130 @@ export class VoucherWorkComponent {
   }
 
   private resetFileInput() {
-    const fileInput = document.getElementById('fileUpload-' + this.line.get('idvoucherline')?.value) as HTMLInputElement;
+    const fileInput = document.getElementById('fileUpload-' + this.line.idvoucherline) as HTMLInputElement;
     fileInput.value = '';
   }
 
   getFiles() {
-    if (this.line.get('idvoucherline')?.value > 0) {
+    if (this.line.idvoucherline > 0) {
       this.connectServerService.postRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'voucher/voucherListFiles',
-        { idvoucher: this.voucherId, idvoucherline: this.line.get('idvoucherline')?.value })
+        { idvoucher: this.voucherId, idvoucherline: this.line.idvoucherline })
         .subscribe((val: ApiResponse<{ attachments: LineFile[] }>) => {
           if (val.data) {
-            this.files = val.data.attachments;
-            console.log(this.files)
+            this.line.attachments = val.data.attachments;
           }
         })
     }
   }
 
-  deleteWork(i: number) {
-    this.delete.emit(this.index);
+  deleteWork() {
+    this.delete.emit({index: this.index, id: this.line.idvoucherline});
   }
 
   saveWork(i: number) {
     this.submitted = true;
-    if (this.line.valid) {
-      this.line.markAsPristine();
+    if (this.lineForm.valid) {
+      this.lineForm.markAsPristine();
       this.submitted = false;
-      this.save.emit(i);
+      this.save.emit({index: i, line: this.lineForm.getRawValue()});
     }
   }
+
+  
+    // private createLine(line: Lines): FormGroup {
+    //   return this.fb.group({
+    //     idvoucherline: [line.idvoucherline],
+    //     type_line: [line.type_line],
+    //     description: [line.description, Validators.required],
+    //     quantity: [line.quantity, [this.numberWithCommaValidator(), Validators.required]],
+    //     refidum: [line.refidum || null, Validators.required],
+    //     code: [line.code || null],
+    //     serialnumber: [line.serialnumber || null],
+    //     taxablepurchase: [line.taxablepurchase || '0,00', this.numberWithCommaValidator()],
+    //     taxablesale: [line.taxablesale || '0,00', this.numberWithCommaValidator()],
+    //     title: [line.title || null, Validators.required],
+    //     refidarticle: [line.refidarticle || null],
+    //     refidarticledata: [line.refidarticledata || null],
+    //     refidarticleprice: [line.refidarticleprice || null],
+    //     hours: [line.hours || { id: 1, value: 0 }, Validators.required],
+    //     minutes: [line.minutes || { id: 1, value: 0 }, Validators.required],
+    //     user_created: [line.user_created],
+    //     user_updated: [line.user_updated],
+    //   })
+    // }
+  
+    // private createLineEmpty(type: number): FormGroup {
+    //   this.attachments.push({ files: [] });
+    //   return this.fb.group({
+    //     idvoucherline: [0],
+    //     type_line: [type],
+    //     description: [null, Validators.required],
+    //     quantity: ['1,00', [this.numberWithCommaValidator(), this.notZeroValidator(), Validators.required]],
+    //     refidum: [null, Validators.required],
+    //     code: [null],
+    //     serialnumber: [null],
+    //     taxablepurchase: ['0,00', this.numberWithCommaValidator()],
+    //     taxablesale: ['0,00', this.numberWithCommaValidator()],
+    //     title: [null, Validators.required],
+    //     hours: [null, Validators.required],
+    //     minutes: [null, Validators.required],
+    //     refidarticle: [null],
+    //     refidarticledata: [null],
+    //     refidarticleprice: [null],
+    //     user_created: [null],
+    //     user_updated: [null],
+    //   })
+    // }
+  
+    // deleteLine(i: number) {
+    //   const line = this.linesArray.at(i).getRawValue();
+    //   if (line.idvoucherline != 0) {
+    //     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/deleteVoucherLine',
+    //       { idvoucher: this.voucherId, idvoucherline: line.idvoucherline })
+    //       .subscribe((val: ApiResponse<any>) => {
+    //         if (val) {
+    //           this.linesArray.removeAt(i)
+    //           this.attachments.splice(i, 1);
+    //         }
+    //       })
+    //   }
+    //   else {
+    //     this.linesArray.removeAt(i);
+    //     this.attachments.splice(i, 1);
+    //   }
+    // }
+  
+    // saveLine(index: number) {
+    //   // Chiama il server e salva la linea specifica
+    //   const line = this.linesArray.at(index).getRawValue();
+    //   const line_copy = JSON.parse(JSON.stringify(line));
+    //   line_copy.idvoucher = this.voucherId;
+    //   if (line_copy.type_line == 1) {
+    //     line_copy.quantity = null;
+    //     line_copy.title = null;
+    //     line_copy.refidum = null;
+    //     line_copy.taxablepurchase = null;
+    //     line_copy.taxablesale = null;
+    //     line_copy.refidarticle = null;
+    //     line_copy.refidarticledata = null;
+    //     line_copy.refidarticleprice = null;
+    //   } else {
+    //     line_copy.quantity = parseFloat(line_copy.quantity.replace(',', '.'));
+    //     line_copy.taxablepurchase = line_copy.taxablepurchase != null ? parseFloat(line_copy.taxablepurchase.replace(',', '.')) : null;
+    //     line_copy.taxablesale = line_copy.taxablesale != null ? parseFloat(line_copy.taxablesale.replace(',', '.')) : null;
+    //     line_copy.minutes = null;
+    //     line_copy.hours = null;
+    //   }
+    //   this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine',
+    //     { obj_line: line_copy })
+    //     .subscribe((val: ApiResponse<any>) => {
+    //       if (val) {
+    //         if (val.data && val.data.idvoucherline) {
+    //           this.linesArray.at(index).get('idvoucherline')?.setValue(val.data.idvoucherline);
+    //         }
+    //         this.getLineServer(this.linesArray.at(index).get('idvoucherline')!.value, index);
+    //       }
+    //     })
+    // }
 
 }

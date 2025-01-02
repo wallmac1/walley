@@ -6,4 +6,5 @@ export interface Filters {
     date_to: string | null;
     customer: Customer | null;
     status: Status | null;
+    date_all: number | null;
 }

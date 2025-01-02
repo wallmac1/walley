@@ -1,0 +1,66 @@
+.title {
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.rowHover {
+    scale: 1;
+    background-color: white;
+    transition: scale 0.3s ease-in, background-color 0.3s ease-in;
+}
+
+.rowHover:hover {
+    scale: 1.03;
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+/* Il contenitore principale */
+.container-fluid {
+    min-width: 375px;
+    min-height: 90vh;
+    /* Assicura che occupi l'altezza della viewport */
+    position: relative;
+}
+
+/* Riga sticky */
+.stickyButton {
+    color: white;
+    border-color: #002D5D;
+    background-color: #002D5D;
+    position: sticky;
+    bottom: 0;
+    left: 50%;
+    z-index: 10;
+    padding: 1rem;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    scale: 1;
+    transition: scale 0.5s ease, transform 1s ease, background-color 1s ease, border-color 1s ease;
+    transform-origin: center;
+}
+
+.stickyButton:hover {
+    scale: 1.15;
+    transform: rotate(360deg);
+    background-color: green;
+    border-color: green;
+}
+
+.btn-circle {
+    width: 40px;
+    height: 40px;
+    padding: 4px 10px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 25px;
+}
+
+.btn-outline-dark {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    color: white;
+    background-color: #002D5D;
+}

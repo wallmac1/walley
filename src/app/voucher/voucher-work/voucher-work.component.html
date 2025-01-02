@@ -1,23 +1,23 @@
 <mat-expansion-panel class="mt-2" [expanded]="index == 0">
     <mat-expansion-panel-header style="max-height: 50px; background-color: #e1fff6;">
         <mat-panel-title class="panel-title">
-            <span *ngIf="line.get('description')?.value == null || line.get('description')?.value.length == 0">
+            <span *ngIf="lineForm.get('description')?.value == null || lineForm.get('description')?.value.length == 0">
                 {{"VOUCHER.WORK" | translate}}
             </span>
 
-            <span *ngIf="line.get('description')?.value != null && line.get('description')?.value.length > 0"
+            <span *ngIf="lineForm.get('description')?.value != null && lineForm.get('description')?.value.length > 0"
                 class="workTitle">
-                {{line.get('description')?.value}}
+                {{lineForm.get('description')?.value}}
             </span>
 
-            <button class="btn btn-link" (click)="deleteWork(index)" (click)="$event.stopPropagation()">
+            <button class="btn btn-link" (click)="deleteWork()" (click)="$event.stopPropagation()">
                 <i class="bi bi-trash ms-2" style="color: red;"></i>
             </button>
         </mat-panel-title>
     </mat-expansion-panel-header>
 
     <!-- FORM -->
-    <div [formGroup]="line" class="row justify-content-start align-items-end mb-2">
+    <div [formGroup]="lineForm" class="row justify-content-start align-items-end mb-2">
         <div class="col-5 col-sm-3 col-md-2 pe-1 mt-2">
             <label class="subtitle form-label" for="hours">
                 {{"VOUCHER.HOURS" | translate}}
@@ -25,7 +25,7 @@
             <div class="input-group">
                 <span class="input-group-text" id="hLabel">h</span>
                 <select type="text" class="form-select" formControlName="hours" id="hours"
-                    [class.is-invalid]="line.get('hours')?.invalid && submitted" aria-describedby="hLabel">
+                    [class.is-invalid]="lineForm.get('hours')?.invalid && submitted" aria-describedby="hLabel">
                     <option [value]="null" disabled>-</option>
                     <option *ngFor="let hour of hours" [ngValue]="hour.id">
                         {{hour.value}}
@@ -40,7 +40,7 @@
             <div class="input-group">
                 <span class="input-group-text" id="mLabel">m</span>
                 <select type="text" class="form-select" formControlName="minutes" id="minutes"
-                    [class.is-invalid]="line.get('minutes')?.invalid && submitted" aria-describedby="mLabel">
+                    [class.is-invalid]="lineForm.get('minutes')?.invalid && submitted" aria-describedby="mLabel">
                     <option [value]="null" disabled>-</option>
                     <option *ngFor="let minute of minutes" [ngValue]="minute.id">
                         {{minute.value}}
@@ -49,12 +49,12 @@
             </div>
         </div>
 
-        <ng-container *ngIf="line.get('idvoucherline')?.value != 0">
+        <ng-container *ngIf="lineForm.get('idvoucherline')?.value != 0">
             <div class="col-2 col-sm-1 ps-0 mt-2 text-end">
-                <label for="fileUpload-{{line.get('idvoucherline')?.value}}" class="btn btn-outline-dark"
+                <label for="fileUpload-{{lineForm.get('idvoucherline')?.value}}" class="btn btn-outline-dark"
                     matTooltip="Allega Files">
                     <i class="bi bi-paperclip"></i>
-                    <input type="file" id="fileUpload-{{line.get('idvoucherline')?.value}}" style="display: none;"
+                    <input type="file" id="fileUpload-{{lineForm.get('idvoucherline')?.value}}" style="display: none;"
                         (change)="onFileSelected($event)" accept="*" multiple>
                 </label>
             </div>
@@ -65,21 +65,21 @@
                 {{"VOUCHER.DESCRIPTION" | translate}}
             </label>
             <textarea type="text" class="form-control" formControlName="description" id="description" rows="2"
-                [class.is-invalid]="line.get('description')?.invalid && (line.get('description')?.dirty || submitted)">
+                [class.is-invalid]="lineForm.get('description')?.invalid && (lineForm.get('description')?.dirty || submitted)">
             </textarea>
         </div>
     </div>
 
-    <div *ngIf="line.invalid" class="row justify-content-center mb-1">
-        <div *ngIf="line.get('quantity')?.invalid && line.get('quantity')?.value != null && line.get('quantity')?.value != ''"
+    <div *ngIf="lineForm.invalid" class="row justify-content-center mb-1">
+        <div *ngIf="lineForm.get('quantity')?.invalid && lineForm.get('quantity')?.value != null && lineForm.get('quantity')?.value != ''"
             class="col-12 text-center">
             <span class="error">
                 {{"VOUCHER.QUANTITYERROR" | translate}}
             </span>
         </div>
-        <div *ngIf="(line.get('quantity')?.invalid && (line.get('quantity')?.value == null || line.get('quantity')?.value == '') && (line.get('quantity')?.dirty || submitted)) || 
-            (line.get('refidum')?.invalid && (line.get('refidum')?.dirty || submitted)) ||
-            (line.get('description')?.invalid && (line.get('description')?.dirty || submitted))"
+        <div *ngIf="(lineForm.get('quantity')?.invalid && (lineForm.get('quantity')?.value == null || lineForm.get('quantity')?.value == '') && (lineForm.get('quantity')?.dirty || submitted)) || 
+            (lineForm.get('refidum')?.invalid && (lineForm.get('refidum')?.dirty || submitted)) ||
+            (lineForm.get('description')?.invalid && (lineForm.get('description')?.dirty || submitted))"
             class="col-12 text-center">
             <span class="error">
                 {{"VOUCHER.MANDATORY" | translate}}
@@ -88,12 +88,12 @@
     </div>
 
     <!-- Import Attached Files -->
-    <div *ngIf="line.get('idvoucherline')?.value != 0" class="row justify-content-center align-items-center mt-2">
+    <div *ngIf="lineForm.get('idvoucherline')?.value != 0" class="row justify-content-center align-items-center mt-2">
         <!-- <div class="col-12">
             <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
         </div> -->
-        <div *ngIf="files.length > 0" class="col-12 image-container text-center">
-            <div class="image-wrapper" *ngFor="let file of files">
+        <div *ngIf="line.attachments.length > 0" class="col-12 image-container text-center">
+            <div class="image-wrapper" *ngFor="let file of line.attachments">
                 <img class="custom-image me-2" [src]="urlServerLaraFile+file.src" [matTooltip]="file.title"
                     (click)="openImageModal(file)" />
                 <i class="bi bi-trash delete-icon" (click)="deleteFile(file.title)"></i>
@@ -101,7 +101,7 @@
         </div>
     </div>
 
-    <div *ngIf="line.dirty" class="row justify-content-center pt-2" style="border-top: 1px solid lightgray;">
+    <div *ngIf="lineForm.dirty" class="row justify-content-center pt-2" style="border-top: 1px solid lightgray;">
         <div class="col-12 text-end">
             <button class="btn btn-outline-dark" (click)="saveWork(index)">
                 {{"VOUCHER.SAVE" | translate}}
@@ -111,15 +111,15 @@
 
     <div *ngIf="screenWidth >= 768; else iconBlock" class="row justify-content-center align-items-center mt-1">
         <div class="col-12 col-sm-6 text-start">
-            <span *ngIf="line.get('user_created')?.value != null" class="userInfo">
+            <span *ngIf="lineForm.get('user_created')?.value != null" class="userInfo">
                 {{"VOUCHER.CREATED" | translate}}:
-                {{line.get('user_created')?.value.nickname}} - {{line.get('user_created')?.value.datetime}}
+                {{lineForm.get('user_created')?.value.nickname}} - {{lineForm.get('user_created')?.value.datetime}}
             </span>
         </div>
         <div class="col-12 col-sm-6 text-end">
-            <span *ngIf="line.get('user_updated')?.value != null" class="userInfo">
+            <span *ngIf="lineForm.get('user_updated')?.value != null" class="userInfo">
                 {{"VOUCHER.UPDATED" | translate}}:
-                {{line.get('user_updated')?.value.nickname}} - {{line.get('user_updated')?.value.datetime}}
+                {{lineForm.get('user_updated')?.value.nickname}} - {{lineForm.get('user_updated')?.value.datetime}}
             </span>
         </div>
     </div>

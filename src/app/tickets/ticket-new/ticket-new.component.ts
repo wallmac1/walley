@@ -165,7 +165,7 @@ export class TicketNewComponent {
       this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicket', { obj_infoticket: obj_infoticket, idticket: 0 }).
         subscribe((val: any) => {
           if (val) {
-            this.router.navigate(["modifyTicket", val.data.idticket]);
+            this.router.navigate(["ticket", val.data.idticket]);
           }
         })
     }

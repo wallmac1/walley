@@ -82,9 +82,9 @@ export class VoucherListComponent implements AfterViewInit {
 
   getVoucherList() {
     this.filters = this.filtersChild.getFilters();
-
+    console.log(this.filters)
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'voucher/vouchersList', {
-      date_from: this.filters.date_from, date_to: this.filters.date_to,
+      date_from: this.filters.date_from, date_to: this.filters.date_to, date_all: this.filters.date_all,
       idcustomer: this.filters.customer?.id || null, orderby: this.sort.direction, currentPageIndex: this.currentPage,
       idstatusvoucher: this.filters.status || null, itemsPerPage: this.itemsPerPage
     }).subscribe((val: ApiResponse<any>) => {
@@ -118,9 +118,5 @@ export class VoucherListComponent implements AfterViewInit {
   goToVoucher(row: VoucherTable) {
     this.router.navigate(['voucher', row.id]);
   }
-}
-
-function observableOf(arg0: null): any {
-  throw new Error('Function not implemented.');
 }
 
