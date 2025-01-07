@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { Status } from '../interfaces/status';
 import { StatusLine } from '../interfaces/status-line';
+import { TicketLine } from '../interfaces/ticket-lines';
 
 @Component({
   selector: 'app-ticket-status-card',
@@ -14,7 +15,9 @@ import { StatusLine } from '../interfaces/status-line';
 })
 export class TicketStatusCardComponent {
 
-  @Input() statusInfo!: StatusLine; 
+  @Input() status!: TicketLine;
   @Input() ticketId: number = 0;
+
+  constructor() {}
 
 }

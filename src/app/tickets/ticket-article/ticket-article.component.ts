@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Article, MeasurementUnit } from '../interfaces/article';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Connect } from '../../classes/connect';
@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TicketLine } from '../interfaces/ticket-lines';
 
 @Component({
   selector: 'app-ticket-article',
@@ -36,22 +37,23 @@ export class TicketArticleComponent {
   screenWidth: number = window.innerWidth;
   files: LineFile[] = [];
   urlServerLaraFile = Connect.urlServerLaraFile;
-  @Input() articleForm!: FormGroup;
-  @Input() article!: Article;
+  articleForm!: FormGroup;
+
+  @Input() article!: TicketLine;
   @Input() index: number = -1;
   @Input() ticketId: number = 0;
+  @Input() measurmentUnit: MeasurementUnit[] = [];
+  @Output() delete = new EventEmitter<{ index: number, idticketline: number }>()
 
   submitted = false;
-  measurmentUnit: MeasurementUnit[] = [];
 
   constructor(private fb: FormBuilder, private connectServerService: ConnectServerService, public dialog: MatDialog,
     private translate: TranslateService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.files = this.article.attachments;
     this.initForm();
     this.initLine();
-    this.getFiles();
-    this.getMeasurmentUnits();
     this.formLogic();
   }
 
@@ -110,8 +112,8 @@ export class TicketArticleComponent {
     let created_at: string = '';
     let updated_at: string = '';
     if (this.articleForm.get('user_created')?.value != null) {
-      created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.article.user_created.nickname + ' - ' +
-        this.article.user_created.datetime + ', '
+      created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.article.user_created?.nickname + ' - ' +
+        this.article.user_created?.datetime + ', '
     }
     if (this.article.user_updated != null) {
       updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.article.user_updated.nickname +
@@ -181,14 +183,14 @@ export class TicketArticleComponent {
         return;
       }
 
-      formData.append('idvoucher', String(this.ticketId))
-      formData.append('idvoucherline', String(this.article.idticketline));
+      formData.append('idticket', String(this.ticketId))
+      formData.append('idticketline', String(this.article.idticketline));
       selectedFiles.forEach(element => {
         formData.append('files[]', element);
       });
 
       // Invia i file al server
-      this.connectServerService.postRequest<File[]>(Connect.urlServerLaraApi, 'voucher/voucherUploadFiles', formData)
+      this.connectServerService.postRequest<File[]>(Connect.urlServerLaraApi, 'ticket/ticketLineUploadFiles', formData)
         .subscribe((val: any) => {
           if (val) {
             this.resetFileInput();
@@ -205,7 +207,7 @@ export class TicketArticleComponent {
 
   getFiles() {
     if (this.article.idticketline > 0) {
-      this.connectServerService.postRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'voucher/voucherListFiles',
+      this.connectServerService.postRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'ticket/ticketLineFilesList',
         { idvoucher: this.ticketId, idvoucherline: this.article.idticketline })
         .subscribe((val: ApiResponse<{ attachments: LineFile[] }>) => {
           if (val.data) {
@@ -216,25 +218,12 @@ export class TicketArticleComponent {
   }
 
   deleteFile(filename: string) {
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/voucherDeleteFile',
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/ticketLineDeleteFile',
       { idvoucher: this.ticketId, idvoucherline: this.article.idticketline, filename: filename })
       .subscribe((val: any) => {
         this.resetFileInput();
         this.getFiles();
       })
-  }
-
-  deleteArticle() {
-
-  }
-
-  saveArticle() {
-    this.submitted = true;
-    console.log(this.articleForm.get('refidum')?.value)
-    if (this.articleForm.valid) {
-      this.articleForm.markAsPristine();
-      this.submitted = false;
-    }
   }
 
   resetForm() {
@@ -254,12 +243,33 @@ export class TicketArticleComponent {
     this.articleForm.markAsPristine();
   }
 
-  private getMeasurmentUnits() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/unitOfMeasurements', {})
-      .subscribe((val: ApiResponse<{ unitOfMeasurements: MeasurementUnit[] }>) => {
-        if (val) {
-          this.measurmentUnit = val.data.unitOfMeasurements;
-        }
-      })
+  getArticle() {}
+
+  deleteArticle() {
+    this.delete.emit({ index: this.index, idticketline: this.article.idticketline });
+  }
+
+  saveArticle() {
+    this.submitted = true;
+    if (this.articleForm.valid) {
+      const line_copy = JSON.parse(JSON.stringify(this.articleForm.getRawValue()));
+      line_copy.idticketline = this.article.idticketline;
+      line_copy.idticket = this.ticketId;
+      line_copy.type_line = 2;
+      line_copy.public = null;
+
+      line_copy.quantity = parseFloat(line_copy.quantity.replace(',', '.'));
+      line_copy.taxablepurchase = parseFloat(line_copy.taxablepurchase.replace(',', '.'));
+      line_copy.taxablesale = parseFloat(line_copy.taxablesale.replace(',', '.'));
+
+      this.submitted = false;
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicketLine', { obj_line: line_copy})
+        .subscribe((val: ApiResponse<any>) => {
+          if(val) {
+            this.articleForm.markAsPristine();
+            this.getArticle();
+          }
+        })
+    }
   }
 }

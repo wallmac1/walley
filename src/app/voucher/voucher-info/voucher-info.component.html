@@ -144,10 +144,10 @@
             style="position: relative;">
                 <mat-accordion class="example-headers-align">
                     <div *ngFor="let line of lines; let i = index" class="col-12">
-                        <app-voucher-work *ngIf="line.type_line == 1" [line]="line"
+                        <app-voucher-work *ngIf="line.type_line == 1" [line]="line" [hours]="hours" [minutes]="minutes"
                             [voucherId]="voucherId" [index]="i" (delete)="deleteLine($event)"
                             (save)="saveLine($event)"></app-voucher-work>
-                        <app-voucher-article *ngIf="line.type_line == 2" [line]="line"
+                        <app-voucher-article *ngIf="line.type_line == 2" [line]="line" [measurmentUnit]="measurmentUnit"
                             [voucherId]="voucherId" [index]="i" (delete)="deleteLine($event)"
                             (save)="saveLine($event)"></app-voucher-article>
                     </div>

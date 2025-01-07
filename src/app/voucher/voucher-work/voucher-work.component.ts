@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output, viewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-import { Lines, MeasurementUnit } from '../interfaces/lines';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LineFile } from '../interfaces/line-file';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -11,6 +10,7 @@ import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { VoucherLine } from '../interfaces/lines';
 
 @Component({
   selector: 'app-voucher-work',
@@ -31,7 +31,7 @@ export class VoucherWorkComponent {
   tooltipLineCreation: any;
   screenWidth: number = window.innerWidth;
   urlServerLaraFile = Connect.urlServerLaraFile;
-  @Input() line: Lines = {
+  @Input() line: VoucherLine = {
     idvoucherline: 0,
     type_line: 1,
     description: '',
@@ -52,20 +52,19 @@ export class VoucherWorkComponent {
   };
   @Input() index: number = -1;
   @Input() voucherId: number = 0;
+  @Input() hours: {id: number, value: number}[] = [];
+  @Input() minutes: {id: number, value: number}[] = [];
   @Output() delete = new EventEmitter<{index: number, id: number}>();
-  @Output() save = new EventEmitter<{index: number, line: Lines}>();
+  @Output() save = new EventEmitter<{index: number, line: VoucherLine}>();
   lineForm!: FormGroup;
 
   submitted = false;
-  minutes: { id: number, value: number }[] = [];
-  hours: { id: number, value: number }[] = [];
 
   constructor(private fb: FormBuilder, private connectServerService: ConnectServerService,
     private dialog: MatDialog, private translate: TranslateService) { }
 
   ngOnInit(): void {
     this.initLine();
-    this.getMinutesHours();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -96,16 +95,6 @@ export class VoucherWorkComponent {
     }
     this.tooltipLineCreation = created_at + updated_at
        
-  }
-
-  private getMinutesHours() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/listHoursMinutesWork', {})
-      .subscribe((val: ApiResponse<{hours: {id: number, value: number}[], minutes: {id: number, value: number}[]}>) => {
-        if(val) {
-          this.hours = val.data.hours;
-          this.minutes = val.data.minutes;
-        }
-      })
   }
 
   openImageModal(file: LineFile): void {

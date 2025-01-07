@@ -11,13 +11,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { Connect } from '../../classes/connect';
 import { ConnectServerService } from '../../services/connect-server.service';
-import { Lines } from '../interfaces/lines';
 import { TranslateModule } from '@ngx-translate/core';
 import { Status } from '../interfaces/status';
-import { Line } from 'ngx-extended-pdf-viewer';
-import { STRING_TYPE } from '@angular/compiler';
 import { LineFile } from '../interfaces/line-file';
 import { MatAccordion } from '@angular/material/expansion';
+import { MeasurementUnit, VoucherLine } from '../interfaces/lines';
 
 @Component({
   selector: 'app-voucher-info',
@@ -40,6 +38,9 @@ export class VoucherInfoComponent {
   voucherStatus: Status | null = null;
   currentDate = new Date();
   attachments: { files: LineFile[] }[] = [];
+  hours: { id: number, value: number }[] = [];
+  minutes: { id: number, value: number }[] = [];
+  measurmentUnit: MeasurementUnit[] = [];
 
   voucher_label: { voucher_labelreference: string, voucher_labellocation: string } = {
     voucher_labelreference: 'Riferimento Documento',
@@ -50,7 +51,7 @@ export class VoucherInfoComponent {
   submitted: boolean = false;
   voucher: Voucher | null = null;
   voucherId: number = 0;
-  lines: Lines[] = [];
+  lines: VoucherLine[] = [];
   //linesForm!: FormGroup;
 
   voucherForm = new FormGroup({
@@ -76,6 +77,7 @@ export class VoucherInfoComponent {
         this.emptyVoucherInit();
       }
     });
+    this.getMinutesHours();
     this.searchCustomer();
   }
 
@@ -131,7 +133,7 @@ export class VoucherInfoComponent {
   }
 
   saveVoucher() {
-    console.log(this.voucherForm.get('customer')?.value);
+    //console.log(this.voucherForm.get('customer')?.value);
     this.submitted = true;
     if (this.voucherForm.get('customer')?.valid) {
       const formValues = this.voucherForm.getRawValue();
@@ -149,11 +151,25 @@ export class VoucherInfoComponent {
           if (val) {
             if (this.voucherId == 0) {
               this.voucherId = val.data.idvoucher;
-              this.router.navigate(['voucher', this.voucherId])
+              this.router.navigate(['voucher', this.voucherId]);
             }
+            this.getVoucherHeader();
           }
         })
     }
+  }
+
+  getVoucherHeader() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'voucher/voucherHeaderInfo', { id: this.voucherId })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          this.voucher = val.data.voucherInfo;
+          this.voucherStatus = val.data.voucherStatus;
+          this.voucherForm.patchValue(this.voucher!);
+          this.voucherForm.markAsPristine();
+          this.submitted = false;
+        }
+      })
   }
 
   private getVoucher() {
@@ -321,7 +337,7 @@ export class VoucherInfoComponent {
     this.lines.unshift(line);
   }
 
-  deleteLine(event: {index: number, id: number}) {
+  deleteLine(event: { index: number, id: number }) {
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/deleteVoucherLine', { idvoucherline: event.id, idvoucher: this.voucherId })
       .subscribe((val: ApiResponse<any>) => {
         if (val) {
@@ -330,37 +346,56 @@ export class VoucherInfoComponent {
       });
   }
 
-  saveLine(event: {index: number, line: Lines}) {
-      // Chiama il server e salva la linea specifica
-      // this.lines[index] = line;
-      const line_copy = JSON.parse(JSON.stringify(event.line));
-      line_copy.idvoucher = this.voucherId;
-      if (line_copy.type_line == 1) {
-        line_copy.quantity = null;
-        line_copy.title = null;
-        line_copy.refidum = null;
-        line_copy.taxablepurchase = null;
-        line_copy.taxablesale = null;
-        line_copy.refidarticle = null;
-        line_copy.refidarticledata = null;
-        line_copy.refidarticleprice = null;
-      } else {
-        line_copy.quantity = parseFloat(line_copy.quantity.replace(',', '.'));
-        line_copy.taxablepurchase = line_copy.taxablepurchase != null ? parseFloat(line_copy.taxablepurchase.replace(',', '.')) : null;
-        line_copy.taxablesale = line_copy.taxablesale != null ? parseFloat(line_copy.taxablesale.replace(',', '.')) : null;
-        line_copy.minutes = null;
-        line_copy.hours = null;
-      }
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine',
-        { obj_line: line_copy })
-        .subscribe((val: ApiResponse<any>) => {
-          if (val) {
-            if (val.data && val.data.idvoucherline) {
-              this.lines[event.index].idvoucherline = val.data.idvoucherline;
-            }
-            this.getLineServer(this.lines[event.index].idvoucherline, event.index);
-          }
-        })
+  saveLine(event: { index: number, line: VoucherLine }) {
+    // Chiama il server e salva la linea specifica
+    // this.lines[index] = line;
+    const line_copy = JSON.parse(JSON.stringify(event.line));
+    line_copy.idvoucher = this.voucherId;
+    if (line_copy.type_line == 1) {
+      line_copy.quantity = null;
+      line_copy.title = null;
+      line_copy.refidum = null;
+      line_copy.taxablepurchase = null;
+      line_copy.taxablesale = null;
+      line_copy.refidarticle = null;
+      line_copy.refidarticledata = null;
+      line_copy.refidarticleprice = null;
+    } else {
+      line_copy.quantity = parseFloat(line_copy.quantity.replace(',', '.'));
+      line_copy.taxablepurchase = line_copy.taxablepurchase != null ? parseFloat(line_copy.taxablepurchase.replace(',', '.')) : null;
+      line_copy.taxablesale = line_copy.taxablesale != null ? parseFloat(line_copy.taxablesale.replace(',', '.')) : null;
+      line_copy.minutes = null;
+      line_copy.hours = null;
     }
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/saveVoucherLine',
+      { obj_line: line_copy })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          if (val.data && val.data.idvoucherline) {
+            this.lines[event.index].idvoucherline = val.data.idvoucherline;
+          }
+          this.getLineServer(this.lines[event.index].idvoucherline, event.index);
+        }
+      })
+  }
+
+  private getMinutesHours() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/listHoursMinutesWorkVoucher', {})
+      .subscribe((val: ApiResponse<{ hours: { id: number, value: number }[], minutes: { id: number, value: number }[] }>) => {
+        if (val) {
+          this.hours = val.data.hours;
+          this.minutes = val.data.minutes;
+        }
+      })
+  }
+
+  private getMeasurmentUnits() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/unitOfMeasurements', {})
+      .subscribe((val: ApiResponse<{ unitOfMeasurements: MeasurementUnit[] }>) => {
+        if (val) {
+          this.measurmentUnit = val.data.unitOfMeasurements;
+        }
+      })
+  }
 
 }

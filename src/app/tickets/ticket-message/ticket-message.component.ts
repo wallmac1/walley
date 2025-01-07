@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Message } from '../interfaces/message';
 import { ConnectServerService } from '../../services/connect-server.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import { ApiResponse } from '../../weco/interfaces/api-response';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
+import { TicketLine } from '../interfaces/ticket-lines';
 
 @Component({
   selector: 'app-ticket-message',
@@ -30,14 +31,17 @@ export class TicketMessageComponent {
   files: LineFile[] = [];
   messageForm!: FormGroup;
   urlServerLaraFile = Connect.urlServerLaraFile;
+  submitted = false;
 
-  @Input() message!: Message;
+  @Input() message!: TicketLine;
   @Input() ticketId: number = 0;
   @Input() index: number = 0;
+  @Output() delete = new EventEmitter<{index: number, idticketline: number}>()
 
   constructor(private connectServerService: ConnectServerService, private fb: FormBuilder, public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.files = this.message.attachments;
     this.initForm();
   }
 
@@ -73,14 +77,14 @@ export class TicketMessageComponent {
           return;
         }
   
-        formData.append('idvoucher', String(this.ticketId))
-        formData.append('idvoucherline', String(this.message.idticketline));
+        formData.append('idticket', String(this.ticketId))
+        formData.append('idticketline', String(this.message.idticketline));
         selectedFiles.forEach(element => {
           formData.append('files[]', element);
         });
   
         // Invia i file al server
-        this.connectServerService.postRequest<File[]>(Connect.urlServerLaraApi, 'voucher/voucherUploadFiles', formData)
+        this.connectServerService.postRequest<File[]>(Connect.urlServerLaraApi, 'ticket/ticketLineUploadFiles', formData)
           .subscribe((val: any) => {
             if (val) {
               this.resetFileInput();
@@ -97,8 +101,8 @@ export class TicketMessageComponent {
   
     getFiles() {
       if (this.message.idticketline > 0) {
-        this.connectServerService.postRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'voucher/voucherListFiles',
-          { idvoucher: this.ticketId, idvoucherline: this.message.idticketline })
+        this.connectServerService.getRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'ticket/ticketLineFilesList',
+          { idticket: this.ticketId, idticketline: this.message.idticketline })
           .subscribe((val: ApiResponse<{ attachments: LineFile[] }>) => {
             if (val.data) {
               this.files = val.data.attachments;
@@ -108,22 +112,55 @@ export class TicketMessageComponent {
     }
   
     deleteFile(filename: string) {
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'voucher/voucherDeleteFile',
-        { idvoucher: this.ticketId, idvoucherline: this.message.idticketline, filename: filename })
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/ticketLineDeleteFile',
+        { idticket: this.ticketId, idticketline: this.message.idticketline, filename: filename })
         .subscribe((val: any) => {
           this.resetFileInput();
           this.getFiles();
         })
     }
 
+    getMessage() {
+      if(this.message.idticketline > 0) {
+        this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketLine', 
+          {idticket: this.ticketId, idticketline: this.message.idticketline})
+            .subscribe((val: ApiResponse<any>) => {
+              if(val) {
+                this.message = val.data.line;
+                this.messageForm.patchValue(this.message);
+              }
+            })
+      }
+    }
+  
     deleteMessage() {
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/ticketDeleteMessage',
-        { idticket: this.ticketId, idticketline: this.message.idticketline })
-        .subscribe((val: any) => {
-          this.resetFileInput();
-          this.getFiles();
-        })
+      this.delete.emit({ index: this.index, idticketline: this.message.idticketline });
     }
-
-    saveMessage() { }
+  
+    saveMessage() {
+      this.submitted = true;
+      if (this.messageForm.valid) {
+        const line_copy = JSON.parse(JSON.stringify(this.messageForm.getRawValue()));
+        line_copy.idticketline = this.message.idticketline;
+        line_copy.idticket = this.ticketId;
+        line_copy.type_line = 3;
+        line_copy.quantity = null;
+        line_copy.title = null;
+        line_copy.refidum = null;
+        line_copy.taxablepurchase = null;
+        line_copy.taxablesale = null;
+        line_copy.refidarticle = null;
+        line_copy.refidarticledata = null;
+        line_copy.refidarticleprice = null;
+        
+        this.submitted = false;
+        this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicketLine', { obj_line: line_copy})
+          .subscribe((val: ApiResponse<any>) => {
+            if(val) {
+              this.messageForm.markAsPristine();
+              this.getMessage();
+            }
+          })
+      }
+    }
 }

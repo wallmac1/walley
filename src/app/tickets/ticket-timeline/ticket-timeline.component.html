@@ -15,15 +15,15 @@
             <div class="col-12" style="max-width: 1500px; min-width: 350px; margin: 0 auto;">
                 <!-- Timeline Area-->
                 <div class="apland-timeline-area">
-                    <div *ngFor="let line of lines; let i = index">
-                        <app-ticket-work *ngIf="line.type_line == 1" [ticketId]="ticketId" [work]="line"
-                            [index]="i"></app-ticket-work>
-                        <app-ticket-article *ngIf="line.type_line == 2" [ticketId]="ticketId" [article]="line"
-                            [index]="i"></app-ticket-article>
+                    <div *ngFor="let line of lines; let i = index; trackBy: trackById">
+                        <app-ticket-work *ngIf="line.type_line == 1" [ticketId]="ticketId" [work]="line" [hours]="hours" [minutes]="minutes"
+                            [index]="i" (delete)="deleteLine($event)"></app-ticket-work>
+                        <app-ticket-article *ngIf="line.type_line == 2" [ticketId]="ticketId" [article]="line" [measurmentUnit]="measurmentUnit"
+                            [index]="i" (delete)="deleteLine($event)"></app-ticket-article>
                         <app-ticket-message *ngIf="line.type_line == 3" [ticketId]="ticketId" [message]="line"
-                            [index]="i"></app-ticket-message>
+                            [index]="i" (delete)="deleteLine($event)"></app-ticket-message>
                         <app-ticket-status-card *ngIf="line.type_line == 4" [ticketId]="ticketId"
-                            [statusInfo]="line"></app-ticket-status-card>
+                            [status]="line"></app-ticket-status-card>
                     </div>
                 </div>
             </div>

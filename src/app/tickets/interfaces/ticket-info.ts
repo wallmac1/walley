@@ -3,19 +3,18 @@ import { Department } from "./department";
 import { Location } from "./location";
 import { User } from "./user";
 import { Status } from "./status";
-import { SubStatus } from "./substatus";
 
-export interface Ticket {
+export interface TicketInfo {
     id: number;
     status: Status;
     internal: number;
     title: string;
     description: string;
-    date_ticket: string;
+    ticket_date: string;
     customer: Customer | null;
     location: Location | null;
-    department: Department[] | number[] | null;
+    departments: Department[] | number[] | null;
     incharge: User | number | null;
     keepinformed: User[] | number[] | null;
-    note: string | null;
+    notes: string | null;
 }

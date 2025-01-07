@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Ticket } from '../interfaces/ticket';
+import { TicketInfo } from '../interfaces/ticket-info';
 import { Customer } from '../interfaces/customer';
 import { Department } from '../interfaces/department';
 import { User } from '../interfaces/user';
 import { Location } from '../interfaces/location';
 import { Connect } from '../../classes/connect';
 import { ConnectServerService } from '../../services/connect-server.service';
-import { Observable, tap } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +23,17 @@ export class TicketsInfoService {
     { id: 2, address: '456 Elm St', number: '2B', city: 'City B' }
   ];
 
-  departments: Department[] = [];
+  departments: Department[] = [
+    { id: 1, name: 'Department A' },
+    { id: 2, name: 'Department B' }
+  ];
 
-  users: User[] = [];
+  users: User[] = [
+    { id: 1, nickname: 'Department A' },
+    { id: 2, nickname: 'Department B' }
+  ];
 
-  ticketInfo: Ticket | null = null;
+  ticketInfo: TicketInfo | null = null;
 
   constructor(private connectServerService: ConnectServerService) { }
 
@@ -55,6 +61,7 @@ export class TicketsInfoService {
         }
       })
     );
+    //return of(this.departments);
   }
 
   getInfoTicketFromServer(ticketId: number): Observable<any> {

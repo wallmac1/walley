@@ -39,7 +39,7 @@ export class VoucherListComponent implements AfterViewInit {
   isRateLimitReached: boolean = false;
   voucherListStatus: Status[] = [];
   voucherList: VoucherTable[] = [];
-  orderby: string = 'asc';
+  //orderby: string = 'asc';
   currentPage: number = 1;
   totalPages: number = 1;
   totalResults: number = 0;
@@ -62,15 +62,15 @@ export class VoucherListComponent implements AfterViewInit {
     this.getStatusList();
   }
 
-  changeOrder() {
-    if (this.orderby == 'asc' || this.orderby == 'null') {
-      this.orderby = 'desc';
-    }
-    else {
-      this.orderby = 'asc';
-    }
-    this.getVoucherList()
-  }
+  // changeOrder() {
+  //   if (this.orderby == 'asc' || this.orderby == 'null') {
+  //     this.orderby = 'desc';
+  //   }
+  //   else {
+  //     this.orderby = 'asc';
+  //   }
+  //   this.getVoucherList();
+  // }
 
   private getStatusList() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'voucher/voucherListStatus', {}).subscribe((val: ApiResponse<any>) => {

@@ -1,8 +1,10 @@
-import { LineFile } from "./line-file";
+import { LineFile } from "../../voucher/interfaces/line-file";
 
-export interface VoucherLine {
-    idvoucherline: number;
-    type_line: number;
+export interface TicketLine {
+    idticketline: number;
+    idticket: number;
+    public?: number;
+    type_line: number; //1: job, 2: article, 3: message, 4: status
     description: string;
     code?: string;
     hours?: number | null;
@@ -13,16 +15,19 @@ export interface VoucherLine {
     refidarticle?: number | null;
     refidarticledata?: number | null;
     refidarticleprice?: number | null;
-    serialnumber?: number;
+    serialnumber?: string;
     taxablepurchase?: string | null;
     taxablesale?: string | null;
     attachments: LineFile[];
-    user_created: {
+    timeline: string;
+    status?: string;
+    substatus?: string;
+    user_created?: {
         id: number;
         nickname: string;
         datetime: string;
     };
-    user_updated: {
+    user_updated?: {
         id: number;
         nickname: string;
         datetime: string;      
@@ -30,10 +35,4 @@ export interface VoucherLine {
     // file: {
     //     src: string;
     // }
-}
-
-export interface MeasurementUnit {
-    id: number;
-    acronym: string;
-    description: string;
 }

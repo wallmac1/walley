@@ -23,14 +23,14 @@
         <div class="row justify-content-start align-items-center mt-4">
             <!-- Number field (read-only) -->
             <div class="col-6 col-sm-2 col-lg-1 mb-3">
-                <label for="number" class="form-label">Number</label>
-                <input type="text" id="number" class="form-control" formControlName="number" readonly>
+                <label for="progressive" class="form-label">Number</label>
+                <input type="text" id="progressive" class="form-control" formControlName="progressive" readonly>
             </div>
 
             <!-- Date field (read-only) -->
             <div class="col-6 col-sm-4 col-lg-2 mb-3">
-                <label for="date_ticket" class="form-label">Date</label>
-                <input type="text" id="date_ticket" class="form-control" formControlName="date_ticket" readonly>
+                <label for="ticket_date" class="form-label">Date</label>
+                <input type="text" id="ticket_date" class="form-control" formControlName="ticket_date" readonly>
             </div>
         </div>
 
@@ -57,7 +57,7 @@
                 <label for="location" class="form-label">Location</label>
                 <select id="location" class="form-select" formControlName="location">
                     <option [ngValue]="null">No headquarter</option>
-                    <option *ngFor="let location of ticketInfoService.locations" [ngValue]="location.id">
+                    <option *ngFor="let location of locations" [ngValue]="location.id">
                         {{location.city}},
                         {{location.address}}</option>
                 </select>
@@ -80,10 +80,10 @@
 
             <!-- Department field -->
             <div class="col-12 col-md-6 mb-3">
-                <label for="department" class="form-label">Department</label>
+                <label for="departments" class="form-label">Department</label>
                 <div class="selection">
-                    <mat-select #select1 formControlName="department" multiple>
-                        @for (department of ticketInfoService.departments; track ticketInfoService.departments) {
+                    <mat-select #select1 formControlName="departments" multiple>
+                        @for (department of departments; track department.id) {
                         <mat-option class="selectOptions" [value]="department.id">{{department.name}}</mat-option>
                         }
                     </mat-select>
@@ -105,8 +105,8 @@
                 <label for="keepinformed" class="form-label">Keep Informed</label><br>
                 <div class="selection">
                     <mat-select #select2 formControlName="keepinformed" multiple>
-                        @for (profile of ticketInfoService.users; track ticketInfoService.users) {
-                        <mat-option class="selectOptions" [value]="profile.id">{{profile.nickname}}</mat-option>
+                        @for (user of users; track user.id) {
+                        <mat-option class="selectOptions" [value]="user.id">{{user.nickname}}</mat-option>
                         }
                     </mat-select>
                     <i class="bi bi-chevron-down" (click)="openSelect(2)"></i>

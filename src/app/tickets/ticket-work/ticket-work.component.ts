@@ -13,6 +13,7 @@ import { ConnectServerService } from '../../services/connect-server.service';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { ImageViewerComponent } from '../../voucher/image-viewer/image-viewer.component';
 import { Work } from '../interfaces/work';
+import { TicketLine } from '../interfaces/ticket-lines';
 
 @Component({
   selector: 'app-ticket-work',
@@ -35,22 +36,22 @@ export class TicketWorkComponent {
   urlServerLaraFile = Connect.urlServerLaraFile;
   workForm!: FormGroup;
 
-  @Input() work!: Work;
+  @Input() work!: TicketLine;
   @Input() ticketId: number = 0;
   @Input() index: number = 0;
+  @Input() hours: { id: number, value: number }[] = [];
+  @Input() minutes: { id: number, value: number }[] = [];
+  @Output() delete = new EventEmitter<{ index: number, idticketline: number }>()
 
   submitted = false;
-  minutes: { id: number, value: number }[] = [];
-  hours: { id: number, value: number }[] = [];
 
   constructor(private connectServerService: ConnectServerService, public dialog: MatDialog,
     private translate: TranslateService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.files = this.work.attachments;
     this.initForm();
     this.initLine();
-    this.getFiles();
-    this.getMinutesHours();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -81,16 +82,6 @@ export class TicketWorkComponent {
     }
     this.tooltipLineCreation = created_at + updated_at
 
-  }
-
-  private getMinutesHours() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/listHoursMinutesWork', {})
-      .subscribe((val: ApiResponse<{ hours: { id: number, value: number }[], minutes: { id: number, value: number }[] }>) => {
-        if (val) {
-          this.hours = val.data.hours;
-          this.minutes = val.data.minutes;
-        }
-      })
   }
 
   openImageModal(file: LineFile): void {
@@ -125,7 +116,7 @@ export class TicketWorkComponent {
       });
 
       // Invia i file al server
-      this.connectServerService.postRequest<File[]>(Connect.urlServerLaraApi, 'ticket/ticketUploadFiles', formData)
+      this.connectServerService.postRequest<File[]>(Connect.urlServerLaraApi, 'ticket/ticketLineUploadFiles', formData)
         .subscribe((val: any) => {
           if (val) {
             this.resetFileInput();
@@ -136,7 +127,7 @@ export class TicketWorkComponent {
   }
 
   deleteFile(filename: string) {
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/ticketDeleteFile',
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/ticketLineDeleteFile',
       { idvoucher: this.ticketId, idvoucherline: this.work.idticketline, filename: filename })
       .subscribe((val: any) => {
         this.resetFileInput();
@@ -151,8 +142,8 @@ export class TicketWorkComponent {
 
   getFiles() {
     if (this.work.idticketline > 0) {
-      this.connectServerService.postRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'ticket/ticketListFiles',
-        { idvoucher: this.ticketId, idvoucherline: this.work.idticketline })
+      this.connectServerService.getRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'ticket/ticketLineFilesList',
+        { idticket: this.ticketId, idticketline: this.work.idticketline })
         .subscribe((val: ApiResponse<{ attachments: LineFile[] }>) => {
           if (val.data) {
             this.files = val.data.attachments;
@@ -162,18 +153,48 @@ export class TicketWorkComponent {
     }
   }
 
+  getWork() {
+    if(this.work.idticketline > 0) {
+      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketLine', 
+        {idticket: this.ticketId, idticketline: this.work.idticketline})
+          .subscribe((val: ApiResponse<any>) => {
+            if(val) {
+              this.work = val.data.line;
+              this.workForm.patchValue(this.work);
+            }
+          })
+    }
+  }
+
   deleteWork() {
-    
+    this.delete.emit({ index: this.index, idticketline: this.work.idticketline });
   }
 
   saveWork() {
     this.submitted = true;
     if (this.workForm.valid) {
-      this.workForm.markAsPristine();
-      this.submitted = false;
+      const line_copy = JSON.parse(JSON.stringify(this.workForm.getRawValue()));
+      line_copy.idticketline = this.work.idticketline;
+      line_copy.idticket = this.ticketId;
+      line_copy.type_line = 1;
+      line_copy.quantity = null;
+      line_copy.title = null;
+      line_copy.refidum = null;
+      line_copy.taxablepurchase = null;
+      line_copy.taxablesale = null;
+      line_copy.refidarticle = null;
+      line_copy.refidarticledata = null;
+      line_copy.refidarticleprice = null;
       
+      this.submitted = false;
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicketLine', { obj_line: line_copy})
+        .subscribe((val: ApiResponse<any>) => {
+          if(val) {
+            this.workForm.markAsPristine();
+            this.getWork();
+          }
+        })
     }
   }
-
 
 }

@@ -33,7 +33,7 @@ export class TicketModalComponent {
     substatusid: new FormControl<number | null>(null)
   });
 
-  ticketid: number | null = null;
+  ticketid: number = 0;
 
   id: number | null = null;
 
@@ -42,18 +42,13 @@ export class TicketModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) {
     // Inizializza il form con i dati passati al dialog
     this.id = data.index;
+    this.ticketid = data.ticketid;
 
     if (this.id == 0) {
       this.editTitleForm.patchValue(data.form);
     }
     else if (this.id == 1) {
       this.getStatusList();
-      this.editStatusForm.patchValue(data.form);
-      //console.log(this.editStatusForm.value);
-      //console.log(data.form);
-      if(data.form.statusid && data.form.statusid != 1) {
-        this.getSubStatusList(data.form.statusid);
-      }
       this.disableSubStatus();
     }
   }
@@ -64,41 +59,46 @@ export class TicketModalComponent {
   }
 
   getStatusList() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/listStatusTicket', {}).
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/statusListTicket' , {}).
       subscribe((val: any) => {
         console.log(val);
         if (val) {
-          this.statusList = val.data;
-          //this.enableSubStatus();
+          this.statusList = val.data.statusList;
         }
       })
   }
 
   getSubStatusList(id: number) {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/listSubStatusTicket', { refidticketstatus: id }).
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/subStatusListTicket', { idstatus: id }).
       subscribe((val: any) => {
         console.log(val);
         if (val) {
-          this.substatusList = val;
+          this.substatusList = val.data.subStatusList;
         }
       })
   }
 
-  setStatusOnServer() {
+  saveStatus() {
     const status = this.editStatusForm.getRawValue()
-    this.connectServerService.postRequest(Connect.urlServerLara, "status/setStatus",
-      { statusid: status.statusid, substatusid: status.substatusid, ticketid: this.ticketid })
+    this.connectServerService.postRequest(Connect.urlServerLara, "ticket/changeStatusTicket",
+      { statusid: status.statusid, substatusid: status.substatusid, idticket: this.ticketid })
       .subscribe((val: any) => {
         this.dialogRef.close(val);
       })
   }
 
-  setTitleDescriptionOnServer() {
+  saveTitleDescription() {
+    console.log("qui")
     const titleDescription = this.editTitleForm.getRawValue();
-    this.connectServerService.postRequest(Connect.urlServerLara, "status/setStatus",
-      { title: titleDescription.title, description: titleDescription.description, ticketid: this.ticketid })
+    this.connectServerService.postRequest(Connect.urlServerLara, "ticket/saveHeaderTicket",
+      { idticket: this.ticketid, title: titleDescription.title, description: titleDescription.description })
       .subscribe((val: any) => {
-        this.dialogRef.close(val);
+        if(val) {
+          this.dialogRef.close(titleDescription);
+        }
+        else {
+          this.dialogRef.close(null);
+        }
       })
   }
 
@@ -108,24 +108,23 @@ export class TicketModalComponent {
 
   disableSubStatus() {
     //console.log("Status", this.editStatusForm.get("statusid")?.value)
-    if (this.editStatusForm.get("statusid")?.value || this.editStatusForm.get("statusid")?.value == 4 || this.editStatusForm.get("statusid")?.value == 1) {
+    if (!this.editStatusForm.get("statusid")?.value || this.editStatusForm.get("statusid")?.value == 4 || this.editStatusForm.get("statusid")?.value == 1) {
       this.editStatusForm.get("substatusid")?.disable();
     }
   }
 
   async save(): Promise<void> {
     if (this.id == 0) {
-      this.setTitleDescriptionOnServer();
-      this.dialogRef.close(this.editTitleForm.value);
+      this.saveTitleDescription();
     }
     else if (this.id == 1) {
-      this.setStatusOnServer();
+      this.saveStatus();
     }
 
   }
 
   cancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(null);
   }
 
 }

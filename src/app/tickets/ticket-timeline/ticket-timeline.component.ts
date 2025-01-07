@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TicketWorkComponent } from "../ticket-work/ticket-work.component";
 import { CommonModule } from '@angular/common';
 import { TicketStatusCardComponent } from "../ticket-status-card/ticket-status-card.component";
@@ -7,7 +7,10 @@ import { TicketMessageComponent } from "../ticket-message/ticket-message.compone
 import { ConnectServerService } from '../../services/connect-server.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Lines } from '../../voucher/interfaces/lines';
+import { TicketLine } from '../interfaces/ticket-lines';
+import { ApiResponse } from '../../weco/interfaces/api-response';
+import { Connect } from '../../classes/connect';
+import { MeasurementUnit } from '../interfaces/article';
 
 @Component({
   selector: 'app-ticket-timeline',
@@ -24,16 +27,17 @@ import { Lines } from '../../voucher/interfaces/lines';
 })
 export class TicketTimelineComponent {
 
-  lines: any[] = [];
   ticketId: number = 0;
-  linesForm!: FormGroup;
+  hours: { id: number, value: number }[] = [];
+  minutes: { id: number, value: number }[] = [];
+  measurmentUnit: MeasurementUnit[] = [];
+  //linesForm!: FormGroup;
 
+  @Input() lines: TicketLine[] = [];
 
   constructor(private connectServerService: ConnectServerService, private route: ActivatedRoute,
     private fb: FormBuilder) {
-    this.linesForm = this.fb.group({
-      lines: this.fb.array([])
-    })
+    console.log(this.lines);
   }
 
   ngOnInit(): void {
@@ -41,81 +45,15 @@ export class TicketTimelineComponent {
       const id = params.get('id');
       if (id && parseInt(id) != 0) {
         this.ticketId = +id;
-        this.getTicket();
+        //this.getTicket();
       }
     });
+    this.getMinutesHours();
+    this.getMeasurmentUnits();
   }
 
-  getTicket() {
-    this.lines = [
-      {
-        idticketline: 1,
-        type_line: 3,
-        timeline: "15/12/24",
-        description: "Messaggio di esempio",
-        public: 1,
-        user_created: {
-          id: 3,
-          nickname: "Mario",
-          datetime: "15/12/24"
-        },
-        user_updated: {
-          id: 4,
-          nickname: "Luigi",
-          datetime: "16/12/24"
-        }
-      },
-      {
-        idticketline: 1, type_line: 1, description: "sdfgjkhsdfg", hours: 1, minutes: 15, timeline: "15/12/24",
-        user_created: {
-          id: 5, nickname: "Pippo", datetime: "20/12/24"
-        },
-        user_updated: {
-          id: 7, nickname: "Franco", datetime: "24/12/24"
-        }
-      },
-      {
-        idticketline: 1,
-        type_line: 2,
-        description: "Descrizione dell'articolo",
-        code: "COD123",
-        title: "Titolo dell'articolo",
-        quantity: "10",
-        refidum: 100,
-        refidarticle: null,
-        refidarticledata: null,
-        refidarticleprice: null,
-        serialnumber: 123456,
-        taxablepurchase: "100.00",
-        taxablesale: "120.00",
-        timeline: "20/12/24",
-        user_created: {
-          id: 1,
-          nickname: "creatore",
-          datetime: "20/12/24"
-        },
-        user_updated: {
-          id: 2,
-          nickname: "modificatore",
-          datetime: "20/12/24"
-        }
-      },
-      {
-        idticketline: 1, type_line: 1, description: "sdfgjkhsdfg", hours: 1, minutes: 15, timeline: "15/12/24",
-        user_created: {
-          id: 5, nickname: "Pippo", datetime: "20/12/24"
-        },
-        user_updated: {
-          id: 7, nickname: "Franco", datetime: "24/12/24"
-        }
-      },
-      {
-        idticketline: 2, type_line: 4, actual_status: "Nuovo", previous_status: "Nessuno", timeline: "20/12/24",
-        user_updated: {
-          id: 5, nickname: "Pippo", datetime: "20/12/24"
-        }
-      }
-    ]
+  trackById(index: number, item: any): number {
+    return item.idticketline;
   }
 
   numberWithCommaValidator(): ValidatorFn {
@@ -132,6 +70,49 @@ export class TicketTimelineComponent {
 
       return isValid ? null : { invalidNumber: true }; // Restituisci l'errore se non valido
     };
+  }
+
+  private getLines() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketLineInfo', { idticket: this.ticketId })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          this.lines = val.data;
+        }
+      })
+  }
+
+  deleteLine(event: { index: number, idticketline: number }) {
+    if (event.idticketline == 0) {
+      this.lines.splice(event.index, 1);
+    }
+    else {
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/deleteTicketLine', { idticketline: event.idticketline, idticket: this.ticketId })
+        .subscribe((val: ApiResponse<any>) => {
+          if (val) {
+            this.lines.splice(event.index, 1);
+            this.getLines();
+          }
+        });
+    }
+  }
+
+  private getMinutesHours() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/listHoursMinutesWorkTicket', {})
+      .subscribe((val: ApiResponse<{ hours: { id: number, value: number }[], minutes: { id: number, value: number }[] }>) => {
+        if (val) {
+          this.hours = val.data.hours;
+          this.minutes = val.data.minutes;
+        }
+      })
+  }
+
+  private getMeasurmentUnits() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/unitOfMeasurements', {})
+      .subscribe((val: ApiResponse<{ unitOfMeasurements: MeasurementUnit[] }>) => {
+        if (val) {
+          this.measurmentUnit = val.data.unitOfMeasurements;
+        }
+      })
   }
 
 }

@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Lines, MeasurementUnit } from '../interfaces/lines';
-import { Line } from 'ngx-extended-pdf-viewer';
+import { MeasurementUnit, VoucherLine } from '../interfaces/lines';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LineFile } from '../interfaces/line-file';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -13,11 +12,9 @@ import { ApiResponse } from '../../weco/interfaces/api-response';
 import { MatDialog } from '@angular/material/dialog';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Article } from '../interfaces/article';
 import { SearchPopupComponent } from '../search-popup/search-popup.component';
-import { InViewportDirective } from '../../directives/in-viewport.directive';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-voucher-article',
@@ -41,7 +38,7 @@ export class VoucherArticleComponent {
   isOpenInformations = false;
   screenWidth: number = window.innerWidth;
   urlServerLaraFile = Connect.urlServerLaraFile;
-  @Input() line: Lines = {
+  @Input() line: VoucherLine = {
     idvoucherline: 0,
     type_line: 2,
     description: '',
@@ -70,19 +67,18 @@ export class VoucherArticleComponent {
 
   @Input() index: number = -1;
   @Input() voucherId: number = 0;
+  @Input() measurmentUnit: MeasurementUnit[] = [];
   @Output() delete = new EventEmitter<{index: number, id: number}>();
-  @Output() save = new EventEmitter<{index: number, line: Lines}>();
+  @Output() save = new EventEmitter<{index: number, line: VoucherLine}>();
   lineForm!: FormGroup;
 
   submitted = false;
-  measurmentUnit: MeasurementUnit[] = [];
 
   constructor(private fb: FormBuilder, private connectServerService: ConnectServerService, public dialog: MatDialog,
     private translate: TranslateService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initLine();
-    this.getMeasurmentUnits();
     this.formLogic();
   }
 
@@ -301,15 +297,6 @@ export class VoucherArticleComponent {
     this.lineForm.get('code')?.setValue(null);
     this.isProductSelected = false;
     this.lineForm.markAsPristine();
-  }
-
-  private getMeasurmentUnits() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/unitOfMeasurements', {})
-      .subscribe((val: ApiResponse<{ unitOfMeasurements: MeasurementUnit[] }>) => {
-        if (val) {
-          this.measurmentUnit = val.data.unitOfMeasurements;
-        }
-      })
   }
 
   // addLines(lines: Lines[]) {

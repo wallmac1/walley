@@ -40,20 +40,23 @@ export class TicketNewComponent {
   submitted: boolean = false;
   today: Date = new Date();
   formattedDate: string = this.today.toISOString().split('T')[0];
+  departments: Department[] = [];
+  users: User[] = [];
+  locations: Location[] = [];
 
   @ViewChild('select1') select1!: MatSelect;
   @ViewChild('select2') select2!: MatSelect;
 
   ticketForm = new FormGroup({
     internal: new FormControl<number>(0, Validators.required),
-    date_ticket: new FormControl<string>(this.formattedDate), //Non modificabile
+    ticket_date: new FormControl<string>(this.formattedDate), //Non modificabile
     customer: new FormControl<Customer | null>(null, Validators.required),
     location: new FormControl<Location | null>(null),
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null, Validators.required),
-    department: new FormControl<number[] | null>(null),
+    departments: new FormControl<number[] | null>(null),
     keepinformed: new FormControl<User[] | null>(null),
-    number: new FormControl<number | null>(null),
+    progressive: new FormControl<number | null>(null),
   })
 
   //inputClient = new FormControl<string>('');
@@ -63,8 +66,11 @@ export class TicketNewComponent {
     this.ticketForm.get("date_ticket")?.disable();
     this.ticketForm.get("number")?.disable();
     this.searchCustomer();
-    ticketInfoService.getUsersFromServer();
-    ticketInfoService.getDepartmentFromServer();
+    // ticketInfoService.getUsersFromServer();
+    // ticketInfoService.getDepartmentFromServer();
+    this.getUsers();
+    this.getDepartments();
+    this.getLocations();
   }
 
   print() {
@@ -143,7 +149,34 @@ export class TicketNewComponent {
     ];
 
     // Restituisce la lista come Observable
-    return of(customers);
+    return of(customers).pipe(
+      map(items => items.filter(customer =>
+        customer.denominazione!.toLowerCase().includes(val.toLowerCase())
+      )));
+  }
+
+  private getUsers() {
+    this.connectServerService.getRequest(Connect.urlServerLara, "user/usersListNoAdmin", {}).subscribe((val: any) => {
+      if (val) {
+        this.users = val ;
+      }
+    });
+  }
+
+  private getDepartments() {
+    this.connectServerService.getRequest(Connect.urlServerLara, "infogeneral/departmentsList", {}).subscribe((val: any) => {
+      if (val) {
+        this.departments = val.data.departments;
+      }
+    });
+  }
+
+  private getLocations() {
+    //CHIAMATA AL SERVER
+    this.locations = [
+      { id: 1, address: '123 Main St', number: '1A', city: 'City A' },
+      { id: 2, address: '456 Elm St', number: '2B', city: 'City B' }
+    ];
   }
 
   save() {
@@ -156,11 +189,13 @@ export class TicketNewComponent {
         location: formValues.location,
         title: formValues.title,
         description: formValues.description,
-        department: formValues.department,
+        departments: formValues.departments,
+        notes: null,
         keepinformed: formValues.keepinformed,
-        number: formValues.number,
+        progressive: formValues.progressive,
         refidregcussuppro: formValues.customer!.id!,
-        refidregcussupprodata: formValues.customer!.rifidanacliforprodati!
+        refidregcussupprodata: formValues.customer!.rifidanacliforprodati!,
+        refidcussupprolocation: null //TODO: DA CAMBIARE CON VALORE REALE
       };
       this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicket', { obj_infoticket: obj_infoticket, idticket: 0 }).
         subscribe((val: any) => {

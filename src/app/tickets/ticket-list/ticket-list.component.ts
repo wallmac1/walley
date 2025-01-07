@@ -68,16 +68,24 @@ export class TicketListComponent {
 
   getTicketList() {
     this.filters = this.filtersChild.getFilters();
-    console.log('filters')
-    console.log(this.filtersChild.getFilters())
+    // console.log('filters')
+    if (this.sort.active === 'creation') {
+      this.orderby_creation = this.sort.direction;
+      this.orderby_update = null;
+      console.log("CREATION",this.orderby_creation)
+    } else if (this.sort.active === 'lastupdate') {
+      this.orderby_update = this.sort.direction;
+      this.orderby_creation = null;
+      console.log("UPDATE",this.orderby_update)
+    }
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketsList', {
       idcustomer: this.filters.customer || null, idstatusticket: this.filters.status || null, 
       idsubstatustiket: this.filters.substatus || null, incharge: this.filters.incharge || null,
       iddepartment: this.filters.department || null, notclosed: this.filters.notclosed, orderby_creation: this.orderby_creation,
-      orderby_update: this.orderby_update, itemsPerPage: this.itemsPerPage, currentPageIndex: this.currentPage
+      orderby_lastupdate: this.orderby_update, itemsPerPage: this.itemsPerPage, currentPageIndex: this.currentPage
     }).subscribe((val: ApiResponse<any>) => {
       if (val) {
-        console.log(val.data)
+        //console.log(val.data)
         this.ticketList = val.data.tickets;
         this.totalResults = val.data.pagination.total;
         this.totalPages = val.data.pagination.lastPage;
@@ -100,7 +108,7 @@ export class TicketListComponent {
   }
 
   newTicket() {
-    this.router.navigate(['ticket', 0]);
+    this.router.navigate(['newTicket']);
   }
 
   gotoTicket(row: TicketTable) {

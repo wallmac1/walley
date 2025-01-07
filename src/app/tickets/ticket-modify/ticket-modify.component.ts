@@ -10,12 +10,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { TicketModalComponent } from '../ticket-modal/ticket-modal.component';
 import { ConnectServerService } from '../../services/connect-server.service';
-import { Ticket } from '../interfaces/ticket';
+import { TicketInfo } from '../interfaces/ticket-info';
 import { Status } from '../interfaces/status';
 import { MatIcon } from '@angular/material/icon';
-import {MatMenuModule} from '@angular/material/menu'; 
+import { MatMenuModule } from '@angular/material/menu';
 import { MatButton } from '@angular/material/button';
 import { Connect } from '../../classes/connect';
+import { TicketLine } from '../interfaces/ticket-lines';
+import { ApiResponse } from '../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-ticket-modify',
@@ -26,7 +28,6 @@ import { Connect } from '../../classes/connect';
     ReactiveFormsModule,
     TicketInfoComponent,
     TicketTimelineComponent,
-    MatIcon,
     MatMenuModule,
   ],
   templateUrl: './ticket-modify.component.html',
@@ -34,19 +35,18 @@ import { Connect } from '../../classes/connect';
 })
 export class TicketModifyComponent {
 
+  selectedTabIndex = 0;
   isStatusOpen = false;
   internal: boolean = false;
-
-  status: Status | null = {id: 0, name: "Aperto", substatus: {id: 0, name: "In attesa"}};
+  lines: TicketLine[] = [];
+  ticketInfo: TicketInfo | null = null;
+  ticketStatus: { idstatus: number, idsubstatus: number, name_status: string, name_substatus: string, color: string } | null = null;
+  ticketId: number = 0;
 
   ticketGeneralForm = new FormGroup({
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null, Validators.required),
   });
-
-  ticketInfo: Ticket | null = null;
-
-  ticketId: number | null = null;
 
   constructor(private route: ActivatedRoute, public ticketInfoService: TicketsInfoService, public dialog: MatDialog,
     private connectServerService: ConnectServerService) {
@@ -71,7 +71,7 @@ export class TicketModifyComponent {
     if (i == 0) {
       const dialogRef = this.dialog.open(TicketModalComponent, {
         width: '450px',
-        data: { form: this.ticketGeneralForm.value, index: i }
+        data: { form: this.ticketGeneralForm.value, index: i, ticketid: this.ticketId }
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -81,17 +81,10 @@ export class TicketModifyComponent {
       });
     }
     else if (i == 1) {
-      let subid;
-      if (this.status?.substatus) {
-        subid = this.status?.substatus.id;
-      }
-      else {
-        subid = null;
-      }
-      const statusForm = { statusid: this.status?.id, substatusid: subid }
+      const statusForm = { statusid: this.ticketStatus?.idstatus, substatusid: this.ticketStatus?.idsubstatus }
       const dialogRef = this.dialog.open(TicketModalComponent, {
         width: '450px',
-        data: { form: statusForm, index: i }
+        data: { form: statusForm, index: i, ticketid: this.ticketId }
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -103,23 +96,87 @@ export class TicketModifyComponent {
 
   }
 
-  private setInfoTicketOnServer() {
-
+  private getTicketInfo() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketAllInfo', { idticket: this.ticketId }).subscribe((val: any) => {
+      if (val) {
+        this.ticketInfo = val.data.ticketInfo;
+        this.ticketGeneralForm.get('title')?.setValue(val.data.ticketInfo.title);
+        this.ticketGeneralForm.get('description')?.setValue(val.data.ticketInfo.description);
+        this.ticketStatus = val.data.ticketStatus;
+        this.lines = val.data.ticketInfoLines;
+      }
+    });
   }
 
-  private getTicketInfo() {}
+  goToWorksAndMessages() {
+    this.selectedTabIndex = 1;
+  }
+
+  addWork() {
+    this.goToWorksAndMessages();
+    let work: TicketLine = {
+      idticket: this.ticketId,
+      idticketline: 0,
+      type_line: 1,
+      description: '',
+      quantity: '0,00',
+      hours: null,
+      minutes: null,
+      attachments: [],
+      timeline: new Date().toISOString().slice(0, 10)
+    }
+    this.lines.unshift(work);
+  }
+
+  addArticle() {
+    this.goToWorksAndMessages();
+    let article: TicketLine = {
+      idticket: this.ticketId,
+      idticketline: 0,
+      type_line: 2,
+      description: '',
+      quantity: '0,00',
+      taxablepurchase: '0,00',
+      taxablesale: '0,00',
+      serialnumber: '',
+      refidum: null,
+      refidarticle: null,
+      refidarticledata: null,
+      refidarticleprice: null,
+      code: '',
+      title: '',
+      attachments: [],
+      timeline: new Date().toISOString().slice(0, 10)
+    }
+    this.lines.unshift(article);
+  }
+
+  addMessage() {
+    this.goToWorksAndMessages();
+    let message: TicketLine = {
+      idticket: this.ticketId,
+      idticketline: 0,
+      type_line: 3,
+      description: '',
+      public: 0,
+      quantity: '0,00',
+      attachments: [],
+      timeline: new Date().toISOString().slice(0, 10)
+    }
+    this.lines.unshift(message);
+  }
 
   private getStatusList() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/statusListTicket', {})
   }
 
   private getSubstatusList() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/substatusListTicket', {idstatus: this.status?.id})
-    .subscribe((val: any) => {
-      if (val) {
-        //this.substatus = val;
-      }
-    })
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/substatusListTicket', { idstatus: this.ticketStatus?.idstatus })
+      .subscribe((val: any) => {
+        if (val) {
+          //this.substatus = val;
+        }
+      })
   }
 
 }

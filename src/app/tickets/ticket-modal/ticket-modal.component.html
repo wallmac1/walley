@@ -5,7 +5,7 @@
             <span class="title">Edit Title and Description</span>
         </div>
     </div>
-    
+
     <div mat-dialog-content>
         <div class="row justify-content-center align-items-center p-1">
             <form [formGroup]="editTitleForm">
@@ -22,12 +22,12 @@
     </div>
 
     <div class="row justify-content-center align-items-center mt-2 mb-3">
-            <div class="col-4 text-end me-2">
-                <button class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
-            </div>
-            <div class="col-4 text-start ms-2">
-                <button class="btn btn-outline-primary" color="primary" (click)="save()">Save</button>
-            </div>
+        <div class="col-6 text-center">
+            <button class="btn btn-outline-danger" style="width: 80px;" (click)="cancel()">Cancel</button>
+        </div>
+        <div *ngIf="editTitleForm.dirty" class="col-6 text-center">
+            <button class="btn btn-outline-success" style="width: 80px;" (click)="save()">Save</button>
+        </div>
     </div>
 </div>
 
@@ -38,21 +38,22 @@
             <span class="title">Edit Status</span>
         </div>
     </div>
-    
+
     <div mat-dialog-content>
         <div class="row justify-content-center align-items-center p-1">
             <form [formGroup]="editStatusForm">
                 <div class="col-12 mt-2 mb-3">
                     <label for="statusid" class="mb-1" style="font-weight: bold;">Status</label>
                     <select id="statusid" class="form-select" formControlName="statusid" (change)="onStatusSelected()">
-                        <option *ngIf="editStatusForm.get('statusid')!.value == 1" [ngValue]="1" disabled>New</option>
                         <option *ngFor="let status of statusList" [ngValue]="status.id">{{status.name}}</option>
                     </select>
                 </div>
                 <div class="col-12 mt-2 mb-2">
                     <label for="substatusid" class="mb-1" style="font-weight: bold;">Substatus</label>
                     <select id="substatusid" class="form-select" formControlName="substatusid">
-                        <option *ngFor="let substatus of substatusList" [ngValue]="substatus.id">{{substatus.name}}</option>
+                        <option [ngValue]="null" selected>--</option>
+                        <option *ngFor="let substatus of substatusList" [ngValue]="substatus.id">{{substatus.name}}
+                        </option>
                     </select>
                 </div>
             </form>
@@ -60,11 +61,11 @@
     </div>
 
     <div class="row justify-content-center align-items-center mt-2 mb-3">
-            <div class="col-4 text-end me-2">
-                <button class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
-            </div>
-            <div class="col-4 text-start ms-2">
-                <button class="btn btn-outline-primary" color="primary" (click)="save()" [disabled]="editStatusForm.invalid">Save</button>
-            </div>
+        <div class="col-6 text-center">
+            <button class="btn btn-outline-danger" style="width: 80px;" (click)="cancel()">Cancel</button>
+        </div>
+        <div *ngIf="editStatusForm.dirty" class="col-6 text-center">
+            <button class="btn btn-outline-success" style="width: 80px;" (click)="save()">Save</button>
+        </div>
     </div>
 </div>
