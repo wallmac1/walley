@@ -3,7 +3,7 @@
         <div class="card-body p-0">
             <div class="row justify-content-center align-items-center card-title">
                 <div class="col-12 text-center mt-1 mb-2">
-                    <span class="title">Filtri</span>
+                    <span class="title">{{"TICKET.FILTERS.FILTERS" | translate }}</span>
                 </div>
             </div>
 
@@ -25,10 +25,10 @@
 
                 <!-- IN CHARGE -->
                 <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="incharge">In Carico</label>
+                    <label class="form-label" for="incharge">{{"TICKET.FILTERS.INCHARGE" | translate }}</label>
                     <select type="string" class="form-select" id="incharge" formControlName="incharge"
                         [class.is-invalid]="ticketFilterForm.get('incharge')?.invalid && ticketFilterForm.get('incharge')?.touched">
-                        <option [value]="null">{{"TICKET.FILTERS.INCHARGE" | translate}}</option>
+                        <option [value]="null">--</option>
                         <option *ngFor="let user of listUser" [ngValue]="user.id">
                             {{user.nickname}}
                         </option>
@@ -37,10 +37,10 @@
 
                 <!-- DEPARTMENT -->
                 <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="department">Department</label>
+                    <label class="form-label" for="department">{{"TICKET.FILTERS.DEPARTMENT" | translate }}</label>
                     <select type="string" class="form-select" id="department" formControlName="department"
                         [class.is-invalid]="ticketFilterForm.get('department')?.invalid && ticketFilterForm.get('department')?.touched">
-                        <option [value]="null">{{"TICKET.FILTERS.DEPARTMENTS" | translate}}</option>
+                        <option [value]="null">--</option>
                         <option *ngFor="let department of listDepartments" [ngValue]="department.id">
                             {{department.name}}
                         </option>
@@ -49,7 +49,7 @@
 
                 <!-- STATUS -->
                 <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="status">Stato</label>
+                    <label class="form-label" for="status">{{"TICKET.FILTERS.STATUS" | translate }}</label>
                     <select type="string" class="form-select" id="status" formControlName="status"
                         [class.is-invalid]="ticketFilterForm.get('status')?.invalid && ticketFilterForm.get('status')?.touched">
                         <option [ngValue]="null">--</option>
@@ -61,7 +61,7 @@
 
                 <!-- SUBSTATUS -->
                 <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="substatus">Sottostato</label>
+                    <label class="form-label" for="substatus">{{"TICKET.FILTERS.SUBSTATUS" | translate }}</label>
                     <select type="string" class="form-select" id="substatus" formControlName="substatus"
                         [class.is-invalid]="ticketFilterForm.get('substatus')?.invalid && ticketFilterForm.get('substatus')?.touched">
                         <option [ngValue]="null">--</option>
@@ -75,7 +75,7 @@
                 <div class="col-5 col-sm-6 col-md-4 mt-1 mb-1">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="notclosed" formControlName="notclosed">
-                        <label class="form-check-label" for="notclosed">Non Chiuso</label>
+                        <label class="form-check-label" for="notclosed">{{"TICKET.FILTERS.NOTCLOSED" | translate }}</label>
                       </div>
                       
                 </div>

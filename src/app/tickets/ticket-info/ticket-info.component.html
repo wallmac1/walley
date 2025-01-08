@@ -5,24 +5,24 @@
                 aria-label="Basic radio toggle button group" (change)="internalExternalLogic()">
                 <input type="radio" class="btn-check" id="internal" autocomplete="off" formControlName="internal"
                     [value]="1">
-                <label class="btn btn-outline-primary" for="internal">Internal</label>
+                <label class="btn btn-outline-primary" for="internal">{{"TICKET.INFO.INTERNAL" | translate}}</label>
 
                 <input type="radio" class="btn-check" id="external" autocomplete="off" formControlName="internal"
                     [value]="0">
-                <label class="btn btn-outline-primary" for="external">External</label>
+                <label class="btn btn-outline-primary" for="external">{{"TICKET.INFO.EXTERNAL" | translate}}</label>
             </div>
         </div>
 
         <div class="row justify-content-start align-items-center mt-4">
             <!-- Number field (read-only) -->
             <div class="col-4 col-sm-2 mb-3 text-start" style="margin-bottom: 0.5rem !important; max-width: 100px;">
-                <label for="progressive" class="form-label" style="margin-bottom: 0.1rem !important;">Number</label>
+                <label for="progressive" class="form-label" style="margin-bottom: 0.1rem !important;">{{"TICKET.INFO.NUMBER" | translate}}</label>
                 <input type="text" id="progressive" class="form-control" formControlName="progressive" readonly>
             </div>
 
             <!-- Date field (read-only) -->
             <div class="col-6 col-sm-3 mb-md-4 text-start" style="margin-bottom: 0.5rem !important; max-width: 200px;">
-                <label for="ticket_date" class="form-label" style="margin-bottom: 0.1rem !important;">Date</label>
+                <label for="ticket_date" class="form-label" style="margin-bottom: 0.1rem !important;">{{"TICKET.INFO.DATE" | translate}}</label>
                 <input type="text" id="ticket_date" class="form-control" formControlName="ticket_date" readonly>
             </div>
         </div>
@@ -30,8 +30,8 @@
         <div class="row justify-content-start align-items-center">
             <!-- Customer field (visible only if "External" is selected) -->
             <div class="col-12 col-sm-7 col-lg-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
-                <label class="subtitle form-label" for="customer">
-                    {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
+                <label class="subtitle form-label" for="customer" style="margin-bottom: 0.1rem !important;">
+                    {{"TICKET.INFO.CUSTOMER" | translate}}<sup>*</sup>
                 </label>
                 <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
                     formControlName="customer"
@@ -47,9 +47,9 @@
 
             <!-- Location field (visible only if "External" is selected) -->
             <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
-                <label for="location" class="form-label" style="margin-bottom: 0.1rem !important;">Location</label>
+                <label for="location" class="form-label" style="margin-bottom: 0.1rem !important;">{{"TICKET.INFO.LOCATION" | translate}}</label>
                 <select id="location" class="form-select" formControlName="location">
-                    <option [ngValue]="null">No headquarter</option>
+                    <option [ngValue]="null">--</option>
                     <option *ngFor="let location of locations" [ngValue]="location.id">
                         {{location.city}},
                         {{location.address}}
@@ -59,7 +59,7 @@
 
             <!-- Department field -->
             <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
-                <label for="departments" class="form-label" style="margin-bottom: 0.1rem !important;">Department</label>
+                <label for="departments" class="form-label" style="margin-bottom: 0.1rem !important;">{{"TICKET.INFO.DEPARTMENT" | translate}}</label>
                 <div class="selection">
                     <mat-select #select1 formControlName="departments" multiple>
                         @for (department of departments; track department.id) {
@@ -72,7 +72,7 @@
 
             <!-- Keep Informed field -->
             <div class="col-12 col-md-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
-                <label for="keepinformed" class="form-label" style="margin-bottom: 0.1rem !important;">Keep Informed</label><br>
+                <label for="keepinformed" class="form-label" style="margin-bottom: 0.1rem !important;">{{"TICKET.INFO.KEEPINFORMED" | translate}}</label><br>
                 <div class="selection">
                     <mat-select #select2 formControlName="keepinformed" multiple>
                         @for (user of users; track user.id) {
@@ -85,7 +85,7 @@
 
             <!-- Notes -->
             <div class="col-12 mb-md-5 text-start" style="margin-bottom: 0.5rem !important;">
-                <label for="notes" class="form-label" style="margin-bottom: 0.1rem !important;">Note</label><br>
+                <label for="notes" class="form-label" style="margin-bottom: 0.1rem !important;">{{"TICKET.INFO.NOTES" | translate}}</label><br>
                 <textarea id="notes" class="form-control" formControlName="notes" rows="3"
                     placeholder="Write a temporary note"></textarea>
             </div>
@@ -93,22 +93,20 @@
 
         <div *ngIf="!ticketInfoForm.valid && submitted" class="row justify-content-center align-items-center">
             <div class="col-12 text-center">
-                <span style="color: red; opacity: 0.7; font-size: small;">* Compile all the mandatory fields to
-                    enable ticket submission</span>
+                <span style="color: red; opacity: 0.7; font-size: small;">{{"TICKET.INFO.ERROR" | translate}}</span>
             </div>
         </div>
 
         <div class="row justify-content-center align-items-center mt-4">
             <!-- Submit & Refresh button -->
             <div class="col-4 text-start">
-                <button type="submit" class="btn btn-outline-danger" >Delete</button>
+                <button type="submit" class="btn btn-outline-danger" >{{"TICKET.BUTTONS.DELETE" | translate}}</button>
             </div>
             <div class="col-4 text-center">
-                <button type="submit" class="btn btn-outline-primary" (click)="getTicketInfo()">Refresh</button>
+                <button type="submit" class="btn btn-outline-primary" (click)="getTicketInfo()">{{"TICKET.BUTTONS.REFRESH" | translate}}</button>
             </div>
             <div class="col-4 text-end">
-                <button type="submit" class="btn btn-outline-success" (click)="save()"
-                    >Submit</button>
+                <button type="submit" class="btn btn-outline-success" (click)="save()">{{"TICKET.BUTTONS.SAVE" | translate}}</button>
             </div>
         </div>
     </form>

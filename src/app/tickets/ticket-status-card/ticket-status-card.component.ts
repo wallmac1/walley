@@ -3,12 +3,14 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { Status } from '../interfaces/status';
 import { StatusLine } from '../interfaces/status-line';
 import { TicketLine } from '../interfaces/ticket-lines';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ticket-status-card',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    TranslateModule
   ],
   templateUrl: './ticket-status-card.component.html',
   styleUrl: './ticket-status-card.component.scss'

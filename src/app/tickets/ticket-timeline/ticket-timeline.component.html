@@ -12,18 +12,25 @@
         </div> -->
 
         <div class="row p-1 mt-4" >
-            <div class="col-12" style="max-width: 1500px; min-width: 350px; margin: 0 auto;">
+            <div class="col-12" style="max-width: 1500px; min-width: 350px; margin: 0 auto; overflow-y: hidden;">
                 <!-- Timeline Area-->
                 <div class="apland-timeline-area">
                     <div *ngFor="let line of lines; let i = index; trackBy: trackById">
                         <app-ticket-work *ngIf="line.type_line == 1" [ticketId]="ticketId" [work]="line" [hours]="hours" [minutes]="minutes"
-                            [index]="i" (delete)="deleteLine($event)"></app-ticket-work>
+                            [index]="i" (delete)="deleteLine($event)">
+                        </app-ticket-work>
                         <app-ticket-article *ngIf="line.type_line == 2" [ticketId]="ticketId" [article]="line" [measurmentUnit]="measurmentUnit"
-                            [index]="i" (delete)="deleteLine($event)"></app-ticket-article>
+                            [index]="i" (delete)="deleteLine($event)">
+                        </app-ticket-article>
                         <app-ticket-message *ngIf="line.type_line == 3" [ticketId]="ticketId" [message]="line"
-                            [index]="i" (delete)="deleteLine($event)"></app-ticket-message>
+                            [index]="i" (delete)="deleteLine($event)">
+                        </app-ticket-message>
                         <app-ticket-status-card *ngIf="line.type_line == 4" [ticketId]="ticketId"
-                            [status]="line"></app-ticket-status-card>
+                            [status]="line">
+                        </app-ticket-status-card>
+                        <app-ticket-incharge-card *ngIf="line.type_line == 5" [ticketId]="ticketId"
+                            [incharge]="line">
+                        </app-ticket-incharge-card>
                     </div>
                 </div>
             </div>

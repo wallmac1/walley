@@ -13,6 +13,7 @@ import { Filters } from '../interfaces/filters';
 import { Connect } from '../../classes/connect';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { MatTableModule } from '@angular/material/table';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ticket-list',
@@ -23,6 +24,7 @@ import { MatTableModule } from '@angular/material/table';
     FiltersComponent,
     MatTableModule,
     MatSortModule,
+    TranslateModule
   ],
   templateUrl: './ticket-list.component.html',
   styleUrl: './ticket-list.component.scss'
@@ -39,8 +41,16 @@ export class TicketListComponent {
   totalPages: number = 1;
   totalResults: number = 0;
   itemsPerPage: number = 10;
-  displayedColumns: string[] = ['creation', 'customer', 'description', 'status', 'lastupdate', 'info'];
-  filters: Filters | null = null;
+  displayedColumns: string[] = ['creation', 'customer', 'title', 'status', 'lastupdate', 'info'];
+
+  lastSearch: Filters = {
+    customer: null,
+    incharge: null,
+    department: null,
+    status: null,
+    substatus: null,
+    notclosed: 1,
+  }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -51,9 +61,9 @@ export class TicketListComponent {
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => {
       this.currentPage = 1;
-      this.getTicketList();
+      this.getTicketList(2);
     });
-    this.getTicketList();
+    this.getTicketList(2);
   }
 
   changeOrderCreation() {
@@ -63,25 +73,28 @@ export class TicketListComponent {
     else {
       this.orderby_creation = 'asc';
     }
-    this.getTicketList()
+    this.getTicketList(2)
   }
 
-  getTicketList() {
-    this.filters = this.filtersChild.getFilters();
+  getTicketList(type: number) {
+    if (type == 1) {
+      this.lastSearch = this.filtersChild.getFilters();
+    }
+  
     // console.log('filters')
     if (this.sort.active === 'creation') {
       this.orderby_creation = this.sort.direction;
       this.orderby_update = null;
-      console.log("CREATION",this.orderby_creation)
+      console.log("CREATION", this.orderby_creation)
     } else if (this.sort.active === 'lastupdate') {
       this.orderby_update = this.sort.direction;
       this.orderby_creation = null;
-      console.log("UPDATE",this.orderby_update)
+      console.log("UPDATE", this.orderby_update)
     }
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketsList', {
-      idcustomer: this.filters.customer || null, idstatusticket: this.filters.status || null, 
-      idsubstatustiket: this.filters.substatus || null, incharge: this.filters.incharge || null,
-      iddepartment: this.filters.department || null, notclosed: this.filters.notclosed, orderby_creation: this.orderby_creation,
+      idcustomer: this.lastSearch.customer || null, idstatusticket: this.lastSearch.status || null,
+      idsubstatustiket: this.lastSearch.substatus || null, incharge: this.lastSearch.incharge || null,
+      iddepartment: this.lastSearch.department || null, notclosed: this.lastSearch.notclosed, orderby_creation: this.orderby_creation,
       orderby_lastupdate: this.orderby_update, itemsPerPage: this.itemsPerPage, currentPageIndex: this.currentPage
     }).subscribe((val: ApiResponse<any>) => {
       if (val) {
@@ -96,14 +109,14 @@ export class TicketListComponent {
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage -= 1;
-      this.getTicketList();
+      this.getTicketList(2);
     }
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage += 1;
-      this.getTicketList();
+      this.getTicketList(2);
     }
   }
 

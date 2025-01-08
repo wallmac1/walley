@@ -446,33 +446,129 @@
     }
   },
   "TICKET": {
-    "TICKETLIST": {
-      "TITLE": "TICKETS LIST",
-      "DESCRIPTION": "Press the button below to open a new ticket",
-      "NEWTICKET": "Open New Ticket",
-      "BUTTONSEARCH": "Search",
-      "SEARCHPLACEHOLDER": "Name of the ticket",
-      "EMPTY": "No tickets available. To add a ticket create or enter a system."
+    "LIST": {
+      "TICKET": "TICKETS",
+      "TITLE": "Titolo",
+      "DESCRIPTION": "Premi il pulsante qui sotto per aprire un nuovo ticket",
+      "NEWTICKET": "Apri Nuovo Ticket",
+      "BUTTONSEARCH": "Cerca",
+      "SEARCHPLACEHOLDER": "Nome del ticket",
+      "EMPTY": "Nessun ticket disponibile. Per aggiungere un ticket, crea o accedi a un sistema.",
+      "TICKETS": "TICKET",
+      "TOTALRESULTS": "Risultati Totali",
+      "OBJPERPAGE": "Oggetti Per Pagina",
+      "PAGE": "Pagina",
+      "CREATION": "Creazione",
+      "CUSTOMER": "Cliente",
+      "STATUS": "Stato",
+      "LASTUPDATE": "Ultimo Aggiornamento",
+      "INFO": "Informazioni"
     },
-    "NEWTICKET": {
-      "NEWTICKET": "NEW TICKET",
-      "TITLE": "Title",
-      "DATE": "Date",
-      "RELATEDSYS": "Related system",
-      "NONE": "None",
-      "DESCRIPTION": "Description",
-      "IMPORTIMG": "You're trying to import too many images",
-      "ATTACHMENT": "Import attachments (max 6)",
-      "IMPORT": "Import",
-      "SUBMIT": "Submit"
+    "NEW": {
+      "NEWTICKET": "NUOVO TICKET",
+      "CREATETICKET": "Crea Ticket",
+      "TITLE": "Titolo",
+      "DATE": "Data",
+      "RELATEDSYS": "Sistema correlato",
+      "NONE": "Nessuno",
+      "DESCRIPTION": "Descrizione",
+      "IMPORTIMG": "Stai tentando di importare troppe immagini",
+      "ATTACHMENT": "Importa allegati (max 5)",
+      "IMPORT": "Importa",
+      "INTERNAL": "Interno",
+      "EXTERNAL": "Esterno",
+      "NUMBER": "Numero",
+      "CUSTOMER": "Cliente",
+      "DEPARTMENT": "Dipartimento",
+      "KEEPINFORMED": "Tieni aggiornato",
+      "ERROR": "Completa tutti i campi obbligatori per inviare"
+    },
+    "STATUSCARD": {
+      "STATUS": "Stato",
+      "CREATEDBY": "Creato Da"
+    },
+    "WORK": {
+      "WORK": "Lavoro",
+      "HOURS": "Ore",
+      "MINUTES": "Minuti",
+      "DESCRIPTION": "Descrizione",
+      "UPDATED": "Aggiornato",
+      "CREATED": "Creato"
+    },
+    "INFO": {
+      "CUSTOMER": "Cliente",
+      "LOCATION": "Sede",
+      "INTERNAL": "Interno",
+      "EXTERNAL": "Esterno",
+      "NUMBER": "Numero",
+      "DATE": "Data",
+      "DEPARTMENT": "Dipartimento",
+      "KEEPINFORMED": "Tieni aggiornato",
+      "NOTES": "Note",
+      "ERROR": "Completa tutti i campi obbligatori per inviare"
+    },
+    "MODAL": {
+      "EDITTITLE": "Modifica Titolo e Descrizione",
+      "TITLE": "Titolo",
+      "DESCRIPTION": "Descrizione",
+      "EDITSTATUS": "Modifica Stato",
+      "STATUS": "Stato",
+      "SUBSTATUS": "Sottostato"
+    },
+    "BUTTONS": {
+      "DELETE": "Elimina",
+      "SAVE": "Salva",
+      "REFRESH": "Reset",
+      "CANCEL": "Annulla"
+    },
+    "MODIFY": {
+      "CUSTOMER": "Cliente",
+      "INTERNAL": "Interno",
+      "STATUS": "Stato",
+      "TICKETINFO": "Informazioni Ticket",
+      "WORKSMESSAGES": "Lavori & Messaggi",
+      "TAKEONCHARGE": "Prendi in Carico",
+      "ADDWORK": "Aggiungi Lavoro",
+      "ADDARTICLE": "Aggiungi Articolo",
+      "ADDMESSAGE": "Aggiungi Messaggio",
+      "CHANGESTATUS": "Cambia Stato"
+    },
+    "ARTICLE": {
+      "ARTICLE": "Articolo",
+      "TITLE": "Titolo",
+      "CODE": "Codice",
+      "MEASUREMENTUNIT": "Unità di Misura",
+      "QUANTITY": "Quantità",
+      "PURCHASE": "Imponibile Acquisto",
+      "SALE": "Imponibile Vendita",
+      "DESCRIPTION": "Descrizione",
+      "NUMBERSERROR": "Quantità, Imponibile Acquisto e Imponibile Vendita sono campi numerici con al massimo due decimali dopo la virgola e devono essere maggiori di 0,00",
+      "MANDATORY": "Compila i campi obbligatori",
+      "SN": "Serial Number",
+      "CREATED": "Creato da",
+      "UPDATED": "Ultima Modifica"
     },
     "TICKET": "Ticket",
     "STATUS": "Stato",
+    "INCHARGE": "In Carico",
     "FILTERS": {
-      "INCHARGE": "Tutti gli Utenti",
-      "DEPARTMENTS": "Tutti i Dipartimenti",
+      "FILTERS": "Filtri",
+      "INCHARGE": "In Carico",
+      "DEPARTMENT": "Dipartimento",
+      "SUBSTATUS": "Sottostato",
       "ALLSTATUS": "Tutti gli Stati",
-      "FILTER": "Filtra"
+      "STATUS": "Stato",
+      "FILTER": "Filtra",
+      "NOTCLOSED": "Non Chiuso"
+    },
+    "MESSAGE": {
+      "MESSAGE": "Messaggio",
+      "DESCRIPTION": "Descrizione",
+      "ERROR": "Completa i campi obbligatori"
+    },
+    "TOOLTIP": {
+      "NODESCRIPTION": "Nessuna Descrizione",
+      "NOTINCHARGE": "Non in Carica"
     }
-  }
+}
 }

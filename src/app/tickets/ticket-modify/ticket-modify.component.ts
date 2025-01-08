@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -18,6 +18,8 @@ import { MatButton } from '@angular/material/button';
 import { Connect } from '../../classes/connect';
 import { TicketLine } from '../interfaces/ticket-lines';
 import { ApiResponse } from '../../weco/interfaces/api-response';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-ticket-modify',
@@ -29,12 +31,18 @@ import { ApiResponse } from '../../weco/interfaces/api-response';
     TicketInfoComponent,
     TicketTimelineComponent,
     MatMenuModule,
+    TranslateModule,
+    MatTooltipModule
   ],
   templateUrl: './ticket-modify.component.html',
   styleUrl: './ticket-modify.component.scss'
 })
 export class TicketModifyComponent {
 
+  @ViewChild('titleElement') textElement!: ElementRef;
+  isEllipsisActive: boolean = false;
+
+  private resizeTimeout: any;
   selectedTabIndex = 0;
   isStatusOpen = false;
   internal: boolean = false;
@@ -48,8 +56,16 @@ export class TicketModifyComponent {
     description: new FormControl<string | null>(null, Validators.required),
   });
 
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(() => {
+      this.checkEllipsis();
+    }, 300);  // Controllo solo dopo 300ms
+  }
+
   constructor(private route: ActivatedRoute, public ticketInfoService: TicketsInfoService, public dialog: MatDialog,
-    private connectServerService: ConnectServerService) {
+    private connectServerService: ConnectServerService, private cdr: ChangeDetectorRef) {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
@@ -61,6 +77,21 @@ export class TicketModifyComponent {
       this.getTicketInfo();
     }
 
+  }
+
+  ngAfterViewInit(): void {
+    this.checkEllipsis();
+    this.ticketGeneralForm.get('title')?.valueChanges.subscribe(() => {
+      setTimeout(() => {
+        this.checkEllipsis();
+      });
+    })
+  }
+
+  checkEllipsis(): void {
+    const element = this.textElement.nativeElement;
+    this.isEllipsisActive = element.scrollWidth > element.clientWidth;
+    this.cdr.detectChanges();
   }
 
   statusMenu() {
@@ -89,7 +120,9 @@ export class TicketModifyComponent {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          //this.status.patchValue(result);
+          if (result == 1) {
+            this.getTicketInfo();
+          }
         }
       });
     }
@@ -110,6 +143,15 @@ export class TicketModifyComponent {
 
   goToWorksAndMessages() {
     this.selectedTabIndex = 1;
+  }
+
+  takeOnCharge() {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/takeInChargeTicket', { idticket: this.ticketId })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          console.log(val);
+        }
+      })
   }
 
   addWork() {

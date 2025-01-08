@@ -10,7 +10,7 @@ export interface Filters {
     customer: Customer | null;
     status: Status | null;
     substatus: SubStatus | null;
-    orderby_creation: string;
-    orderby_lastupdate: string;
+    orderby_creation?: string | null;
+    orderby_lastupdate?: string | null;
     notclosed: number;
 }

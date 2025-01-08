@@ -4,6 +4,14 @@
     font-weight: bold;
 }
 
+.nowrap-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+}
+
 .ticketDescription {
     font-size: medium;
     font-style: italic;
@@ -12,9 +20,9 @@
 
 .modifyIcon {
     font-size: medium;
-    position: relative;
-    top: -20px;
-    left: 10px;
+    transform: translateY(-24px) translateX(10px);
+    display: inline-block;
+    z-index: 1000;
 }
 
 .modifySup:hover {
@@ -64,4 +72,86 @@
     border-color: #005ec3;
     background-color: #005ec3;
     color: white;
+}
+
+.inChargeIcon {
+    bottom: -98px; 
+    left: 44%;
+
+    @media screen and (min-width: 450px) {
+        left: 45%
+    }
+
+    @media screen and (min-width: 520px) {
+        left: 45.5%
+    }
+
+    @media screen and (min-width: 550px) {
+        left: 46%
+    }
+
+    @media screen and (min-width: 630px) {
+        left: 46.5%
+    }
+
+    @media screen and (min-width: 760px) {
+        left: 46.8%
+    }
+
+    @media screen and (min-width: 800px) {
+        left: 47%
+    }
+
+    @media screen and (min-width: 860px) {
+        left: 47.2%
+    }
+
+    @media screen and (min-width: 950px) {
+        left: 47.4%
+    }
+
+    @media screen and (min-width: 1030px) {
+        left: 47.6%
+    }
+
+    @media screen and (min-width: 1140px) {
+        left: 47.6%
+    }
+
+    @media screen and (min-width: 1160px) {
+        left: 47.8%
+    }
+
+    @media screen and (min-width: 1200px) {
+        bottom: -32px; 
+        left: 48%
+    }
+
+    @media screen and (min-width: 1300px) {
+        left: 48.2%
+    }
+
+    @media screen and (min-width: 1400px) {
+        left: 48.4%
+    }
+
+    @media screen and (min-width: 1600px) {
+        left: 48.6%
+    }
+
+    @media screen and (min-width: 1800px) {
+        left: 48.8%
+    }
+
+    @media screen and (min-width: 2200px) {
+        left: 49%
+    }
+
+    @media screen and (min-width: 2400px) {
+        left: 49.2%
+    }
+}
+
+.colouredIcon {
+    color: red;
 }

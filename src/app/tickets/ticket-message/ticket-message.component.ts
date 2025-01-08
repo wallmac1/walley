@@ -28,6 +28,7 @@ import { TicketLine } from '../interfaces/ticket-lines';
 })
 export class TicketMessageComponent {
 
+  tooltipLineCreation = '';
   files: LineFile[] = [];
   messageForm!: FormGroup;
   urlServerLaraFile = Connect.urlServerLaraFile;
@@ -42,8 +43,23 @@ export class TicketMessageComponent {
 
   ngOnInit(): void {
     this.files = this.message.attachments;
+    //this.initLine();
     this.initForm();
   }
+
+  // private initLine() {
+  //   let created_at: string = '';
+  //   let updated_at: string = '';
+  //   if (this.messageForm.get('user_created')?.value != null) {
+  //     created_at = this.messageForm.instant('VOUCHER.CREATED') + ': ' + this.messageForm.get('user_created')?.value.nickname + ' - ' +
+  //       this.messageForm.get('user_created')?.value.datetime + ', '
+  //   }
+  //   if (this.messageForm.get('user_updated')?.value != null) {
+  //     updated_at = this.messageForm.instant('VOUCHER.UPDATED') + ': ' + this.messageForm.get('user_updated')?.value.nickname +
+  //       ' - ' + this.messageForm.get('user_updated')?.value.datetime;
+  //   }
+  //   this.tooltipLineCreation = created_at + updated_at
+  // }
 
   private initForm() {
     this.messageForm = this.fb.group({
@@ -126,7 +142,7 @@ export class TicketMessageComponent {
           {idticket: this.ticketId, idticketline: this.message.idticketline})
             .subscribe((val: ApiResponse<any>) => {
               if(val) {
-                this.message = val.data.line;
+                this.message = val.data.ticketLineInfo;
                 this.messageForm.patchValue(this.message);
               }
             })

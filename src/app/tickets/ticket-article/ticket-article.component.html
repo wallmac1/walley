@@ -6,19 +6,19 @@
     <div class="row">
         <div class="col-12">
             <div class="single-timeline-content d-flex wow fadeInLeft p-0" data-wow-delay="0.3s"
-                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft; border-color: lightgray; border-radius: 4px;">
 
                 <mat-expansion-panel [expanded]="index == 0">
-                    <mat-expansion-panel-header style="max-height: 50px; background-color: #dcd3ec; ">
+                    <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
                         <mat-panel-title class="panel-title">
-                            <span
-                                *ngIf="articleForm.get('title')?.value == null || articleForm.get('title')?.value.length == 0">
-                                {{"VOUCHER.ARTICLE" | translate}}
+                            <span *ngIf="articleForm.get('title')?.value == null || articleForm.get('title')?.value.length == 0">
+                                <i class="bi bi-box-seam me-2"></i>
+                                {{"TICKET.ARTICLE.ARTICLE" | translate}}
                             </span>
 
-                            <span
-                                *ngIf="articleForm.get('title')?.value != null && articleForm.get('title')?.value.length > 0"
+                            <span *ngIf="articleForm.get('title')?.value != null && articleForm.get('title')?.value.length > 0"
                                 class="articleTitle">
+                                <i class="bi bi-box-seam me-2"></i>
                                 {{articleForm.get('title')?.value}}
                             </span>
 
@@ -34,7 +34,7 @@
                         <div class="row justify-content-start align-items-end mb-2 mt-1">
                             <div class="col-12 col-md-7 col-sm-8 col-lg-9">
                                 <label class="subtitle form-label" for="title">
-                                    {{"VOUCHER.TITLE" | translate}}<sup>*</sup>
+                                    {{"TICKET.ARTICLE.TITLE" | translate}}<sup>*</sup>
                                 </label>
                                 <div class="input-group">
                                     <input type="text" matInput class="form-control" id="title" formControlName="title"
@@ -53,14 +53,14 @@
                             </div>
                             <div class="col-12 col-md-5 col-sm-4 col-md-3 col-lg-3">
                                 <label class="subtitle form-label" for="code">
-                                    {{"VOUCHER.CODE" | translate}}
+                                    {{"TICKET.ARTICLE.CODE" | translate}}
                                 </label>
                                 <input type="text" class="form-control" formControlName="code" id="code">
                             </div>
 
                             <div class="col-6 col-md-3 mt-2">
                                 <label class="subtitle form-label" for="refidum">
-                                    {{"VOUCHER.MEASUREMENTUNIT" | translate}}
+                                    {{"TICKET.ARTICLE.MEASUREMENTUNIT" | translate}}
                                 </label>
                                 <select type="text" class="form-select" formControlName="refidum" id="refidum"
                                     [class.is-invalid]="articleForm.get('refidum')?.invalid && submitted">
@@ -72,14 +72,14 @@
                             </div>
                             <div class="col-6 col-md-3 mt-2">
                                 <label class="subtitle form-label" for="quantity">
-                                    {{"VOUCHER.QUANTITY" | translate}}
+                                    {{"TICKET.ARTICLE.QUANTITY" | translate}}
                                 </label>
                                 <input type="text" class="form-control" formControlName="quantity" id="quantity"
                                     [class.is-invalid]="articleForm.get('quantity')?.invalid && (articleForm.get('quantity')?.dirty || submitted)">
                             </div>
                             <div class="col-6 col-md-3 mt-2">
                                 <label class="subtitle form-label" for="taxablepurchase">
-                                    {{"VOUCHER.PURCHASE" | translate}}
+                                    {{"TICKET.ARTICLE.PURCHASE" | translate}}
                                 </label>
                                 <input type="text" class="form-control" formControlName="taxablepurchase"
                                     id="taxablepurchase"
@@ -87,7 +87,7 @@
                             </div>
                             <div class="col-6 col-md-3 mt-2">
                                 <label class="subtitle form-label" for="taxablesale">
-                                    {{"VOUCHER.SALE" | translate}}
+                                    {{"TICKET.ARTICLE.SALE" | translate}}
                                 </label>
                                 <input type="text" class="form-control" formControlName="taxablesale" id="taxablesale"
                                     [class.is-invalid]="articleForm.get('taxablesale')?.invalid && (articleForm.get('taxablesale')?.dirty || submitted)">
@@ -95,7 +95,7 @@
 
                             <div class="col-10 col-sm-11 mt-2">
                                 <label class="subtitle form-label" for="description">
-                                    {{"VOUCHER.DESCRIPTION" | translate}}
+                                    {{"TICKET.ARTICLE.DESCRIPTION" | translate}}
                                 </label>
                                 <textarea type="text" class="form-control" formControlName="description"
                                     id="description" rows="1"
@@ -121,7 +121,7 @@
                         (articleForm.get('taxablesale')?.invalid && (articleForm.get('taxablesale')?.dirty || submitted))"
                                 class="col-12 text-center">
                                 <span class="error">
-                                    {{"VOUCHER.NUMBERSERROR" | translate}}
+                                    {{"TICKET.ARTICLE.NUMBERSERROR" | translate}}
                                 </span>
                             </div>
                             <div *ngIf="(articleForm.get('quantity')?.invalid && 
@@ -130,7 +130,7 @@
                 (articleForm.get('title')?.invalid && (articleForm.get('title')?.dirty || submitted))"
                                 class="col-12 text-center">
                                 <span class="error">
-                                    {{"VOUCHER.MANDATORY" | translate}}
+                                    {{"TICKET.ARTICLE.MANDATORY" | translate}}
                                 </span>
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                             [ngClass]="{ 'visible': isOpenInformations, 'hidden': !isOpenInformations }">
                             <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mb-1">
                                 <label for="serialnumber">
-                                    {{"VOUCHER.SN" | translate}}
+                                    {{"TICKET.ARTICLE.SN" | translate}}
                                 </label>
                                 <input type="text" formControlName="serialnumber" class="form-control">
                             </div>
@@ -175,7 +175,7 @@
                         style="border-top: 1px solid lightgray;">
                         <div class="col-12 text-end">
                             <button class="btn btn-outline-dark" (click)="saveArticle()">
-                                {{"VOUCHER.SAVE" | translate}}
+                                {{"TICKET.BUTTONS.SAVE" | translate}}
                             </button>
                         </div>
                     </div>
@@ -184,13 +184,13 @@
                         class="row justify-content-center align-items-center mt-1">
                         <div class="col-12 col-sm-6 text-start">
                             <span *ngIf="article.user_created != null" class="userInfo">
-                                {{"VOUCHER.CREATED" | translate}}:
+                                {{"TICKET.ARTICLE.CREATED" | translate}}:
                                 {{article.user_created.nickname}} - {{article.user_created.datetime}}
                             </span>
                         </div>
                         <div class="col-12 col-sm-6 text-end">
                             <span *ngIf="article.user_updated != null" class="userInfo">
-                                {{"VOUCHER.UPDATED" | translate}}:
+                                {{"TICKET.ARTICLE.UPDATED" | translate}}:
                                 {{article.user_updated.nickname}} - {{article.user_updated.datetime}}
                             </span>
                         </div>

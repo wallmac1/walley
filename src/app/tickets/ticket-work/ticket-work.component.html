@@ -6,19 +6,19 @@
     <div class="row">
         <div class="col-12">
             <div class="single-timeline-content d-flex wow fadeInLeft p-0" data-wow-delay="0.3s"
-                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft; border-color: lightgray; border-radius: 4px;">
 
                 <mat-expansion-panel [expanded]="index == 0" style="width: 100%;">
-                    <mat-expansion-panel-header style="max-height: 50px; background-color: #d0dff7;">
+                    <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
                         <mat-panel-title class="panel-title">
-                            <span
-                                *ngIf="workForm.get('description')?.value == null || workForm.get('description')?.value.length == 0">
-                                {{"VOUCHER.WORK" | translate}}
+                            <span *ngIf="workForm.get('description')?.value == null || workForm.get('description')?.value.length == 0">
+                                <i class="bi bi-tools me-2"></i>
+                                {{"TICKET.WORK.WORK" | translate}}
                             </span>
 
-                            <span
-                                *ngIf="workForm.get('description')?.value != null && workForm.get('description')?.value.length > 0"
+                            <span *ngIf="workForm.get('description')?.value != null && workForm.get('description')?.value.length > 0"
                                 class="workTitle">
+                                <i class="bi bi-tools me-2"></i>
                                 {{workForm.get('description')?.value}}
                             </span>
 
@@ -32,7 +32,7 @@
                     <div [formGroup]="workForm" class="row justify-content-start align-items-end mb-2 mt-1">
                         <div class="col-5 col-sm-3 col-md-2 pe-1 mt-2">
                             <label class="subtitle form-label" for="hours">
-                                {{"VOUCHER.HOURS" | translate}}
+                                {{"TICKET.WORK.HOURS" | translate}}
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text" id="hLabel">h</span>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="col-5 col-sm-3 col-md-2 mt-2 ps-1">
                             <label class="subtitle form-label" for="minutes">
-                                {{"VOUCHER.MINUTES" | translate}}
+                                {{"TICKET.WORK.MINUTES" | translate}}
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text" id="mLabel">m</span>
@@ -76,7 +76,7 @@
 
                         <div class="col-12 mt-2">
                             <label class="subtitle form-label" for="description">
-                                {{"VOUCHER.DESCRIPTION" | translate}}
+                                {{"TICKET.WORK.DESCRIPTION" | translate}}
                             </label>
                             <textarea type="text" class="form-control" formControlName="description" id="description"
                                 rows="2"
@@ -120,7 +120,7 @@
                         style="border-top: 1px solid lightgray;">
                         <div class="col-12 text-end">
                             <button class="btn btn-outline-dark" (click)="saveWork()">
-                                {{"VOUCHER.SAVE" | translate}}
+                                {{"TICKET.BUTTONS.SAVE" | translate}}
                             </button>
                         </div>
                     </div>
@@ -129,13 +129,13 @@
                         class="row justify-content-center align-items-center mt-1">
                         <div class="col-12 col-sm-6 text-start">
                             <span *ngIf="work.user_created != null" class="userInfo">
-                                {{"VOUCHER.CREATED" | translate}}:
+                                {{"TICKET.WORK.CREATED" | translate}}:
                                 {{work.user_created.nickname}} - {{work.user_created.datetime}}
                             </span>
                         </div>
                         <div class="col-12 col-sm-6 text-end">
                             <span *ngIf="work.user_updated != null" class="userInfo">
-                                {{"VOUCHER.UPDATED" | translate}}:
+                                {{"TICKET.WORK.UPDATED" | translate}}:
                                 {{work.user_updated.nickname}} - {{work.user_updated.datetime}}
                             </span>
                         </div>

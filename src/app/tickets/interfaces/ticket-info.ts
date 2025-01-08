@@ -14,7 +14,7 @@ export interface TicketInfo {
     customer: Customer | null;
     location: Location | null;
     departments: Department[] | number[] | null;
-    incharge: User | number | null;
+    incharge: User | null;
     keepinformed: User[] | number[] | null;
     notes: string | null;
 }

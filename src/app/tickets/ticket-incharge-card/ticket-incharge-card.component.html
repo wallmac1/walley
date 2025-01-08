@@ -1,0 +1,38 @@
+<div class="single-timeline-area">
+    <div class="timeline-date wow fadeInLeft d-none d-md-flex" data-wow-delay="0.1s"
+        style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+        <p class="text-center" style="font-weight: bold;">{{incharge.timeline}}</p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="single-timeline-content d-flex wow fadeInLeft pt-0 pb-0 ps-1 ps-md-4 pe-3 pe-md-4" data-wow-delay="0.3s"
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft; background-color: rgb(242, 242, 242); height: 48px;
+                    border-color: lightgray;">
+
+                <div class="row justify-content-evenly align-items-center mb-2 mt-2 ms-1" style="width: 100%;">
+                    <div class="col-8 col-md-6 text-start p-0">
+                        <span>
+                            <span class="d-none d-md-inline">
+                                <i class="bi bi-person-raised-hand me-2"></i>
+                            </span>
+                            <span class="d-none d-lg-inline responsive-text" style="font-weight: bold;">
+                                {{"TICKET.INCHARGE" | translate }}:
+                            </span>
+                            <span style="font-style: italic;" class="responsive-text">
+                                {{incharge.user_created?.nickname}}
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="col-4 col-md-6 text-end p-0">
+                        <span>
+                            <span style="color: gray; font-size: x-small;">
+                                {{incharge.user_created?.datetime}}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

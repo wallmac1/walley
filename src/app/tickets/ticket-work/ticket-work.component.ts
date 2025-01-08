@@ -81,7 +81,6 @@ export class TicketWorkComponent {
         ' - ' + this.workForm.get('user_updated')?.value.datetime;
     }
     this.tooltipLineCreation = created_at + updated_at
-
   }
 
   openImageModal(file: LineFile): void {
@@ -159,7 +158,7 @@ export class TicketWorkComponent {
         {idticket: this.ticketId, idticketline: this.work.idticketline})
           .subscribe((val: ApiResponse<any>) => {
             if(val) {
-              this.work = val.data.line;
+              this.work = val.data.ticketLineInfo;
               this.workForm.patchValue(this.work);
             }
           })

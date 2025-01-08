@@ -6,21 +6,21 @@
     <div class="row">
         <div class="col-12">
             <div class="single-timeline-content d-flex wow fadeInLeft p-0" data-wow-delay="0.3s"
-                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft; border-color: lightgray; border-radius: 4px;">
 
                 <mat-expansion-panel [expanded]="index == 0" style="width: 100%;">
-                    <mat-expansion-panel-header style="max-height: 50px; background-color: #cae0e4;">
+                    <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
                         <mat-panel-title class="panel-title">
-                            <span
-                                *ngIf="messageForm.get('description')?.value == null || messageForm.get('description')?.value.length == 0">
-                                <i *ngIf="messageForm.get('public')?.value == 1" class="bi bi-globe2" style="color: red;"></i>
-                                {{"VOUCHER.ARTICLE" | translate}}
+                            <span *ngIf="messageForm.get('description')?.value == null || messageForm.get('description')?.value.length == 0">
+                                <i class="bi bi-chat-right-text me-2"></i>
+                                <i *ngIf="messageForm.get('public')?.value == 1" class="bi bi-globe2 me-1" style="color: red;"></i>
+                                {{"TICKET.MESSAGE.MESSAGE" | translate}}
                             </span>
 
-                            <span
-                                *ngIf="messageForm.get('description')?.value != null && messageForm.get('description')?.value.length > 0"
+                            <span *ngIf="messageForm.get('description')?.value != null && messageForm.get('description')?.value.length > 0"
                                 class="articleTitle">
-                                <i *ngIf="messageForm.get('public')?.value == 1" class="bi bi-globe2" style="color: red;"></i>
+                                <i class="bi bi-chat-right-text me-2"></i>
+                                <i *ngIf="messageForm.get('public')?.value == 1" class="bi bi-globe2 me-1" style="color: red;"></i>
                                 {{messageForm.get('description')?.value}}
                             </span>
 
@@ -36,9 +36,9 @@
 
                         <div class="row justify-content-evenly align-items-center mb-2 mt-1">
                             <div class="col-10 col-xl-11 text-start">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" formControlName="description"
-                                    rows="3"></textarea>
+                                <label for="description" class="form-label">{{"TICKET.MESSAGE.DESCRIPTION" | translate}}</label>
+                                <textarea class="form-control" id="description" formControlName="description"rows="3"
+                                [class.is-invalid]="messageForm.invalid && (messageForm.dirty || submitted)"></textarea>
                             </div>
 
                             <div class="col-2 col-xl-1 text-start">
@@ -50,7 +50,7 @@
                                                 formControlName="public" style="width: 40px; height: 18px;">
                                         </div>
                                     </div>
-                                    <div class="col-12 mt-3">
+                                    <div *ngIf="message.idticketline > 0" class="col-12 mt-3">
                                         <label for="fileUpload-{{message.idticketline}}" class="btn btn-outline-dark"
                                         matTooltip="Allega File">
                                         <i class="bi bi-paperclip"></i>
@@ -60,7 +60,12 @@
                                     </label>
                                     </div>
                                 </div>
-                                
+                            </div>
+
+                            <div *ngIf="messageForm.invalid && (messageForm.dirty || submitted)" class="col-12 text-center mt-1">
+                                <span style="color: red; font-size: small;">
+                                    {{"TICKET.MESSAGE.ERROR" | translate}}
+                                </span>
                             </div>
                         </div>
 
@@ -83,11 +88,34 @@
                         style="border-top: 1px solid lightgray;">
                         <div class="col-12 text-end">
                             <button class="btn btn-outline-dark" (click)="saveMessage()">
-                                {{"VOUCHER.SAVE" | translate}}
+                                {{"TICKET.BUTTONS.SAVE" | translate}}
                             </button>
                         </div>
                     </div>
                     </ng-container>
+
+                    <!-- <div *ngIf="screenWidth >= 768; else iconBlock"
+                        class="row justify-content-center align-items-center mt-1">
+                        <div class="col-12 col-sm-6 text-start">
+                            <span *ngIf="message.user_created != null" class="userInfo">
+                                {{"TICKET.WORK.CREATED" | translate}}:
+                                {{message.user_created.nickname}} - {{message.user_created.datetime}}
+                            </span>
+                        </div>
+                        <div class="col-12 col-sm-6 text-end">
+                            <span *ngIf="message.user_updated != null" class="userInfo">
+                                {{"TICKET.WORK.UPDATED" | translate}}:
+                                {{message.user_updated.nickname}} - {{message.user_updated.datetime}}
+                            </span>
+                        </div>
+                    </div>
+                    <ng-template #iconBlock>
+                        <div class="row justify-content-center mt-1">
+                            <div class="col-12 text-end">
+                                <i class="bi bi-info-circle" [matTooltip]="tooltipLineCreation"></i>
+                            </div>
+                        </div>
+                    </ng-template> -->
                 </mat-expansion-panel>
             </div>
         </div>

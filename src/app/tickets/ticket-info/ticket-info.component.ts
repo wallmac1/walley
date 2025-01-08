@@ -15,7 +15,7 @@ import { TicketInfo } from '../interfaces/ticket-info';
 import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
 import { TranslateModule } from '@ngx-translate/core';
-import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 
 @Component({

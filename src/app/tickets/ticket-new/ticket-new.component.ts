@@ -62,15 +62,15 @@ export class TicketNewComponent {
   //inputClient = new FormControl<string>('');
 
   constructor(private router: Router, public ticketInfoService: TicketsInfoService,
-    private connectServerService: ConnectServerService) {
-    this.ticketForm.get("date_ticket")?.disable();
-    this.ticketForm.get("number")?.disable();
+    private connectServerService: ConnectServerService) {}
+
+  ngOnInit(): void {
     this.searchCustomer();
-    // ticketInfoService.getUsersFromServer();
-    // ticketInfoService.getDepartmentFromServer();
     this.getUsers();
     this.getDepartments();
     this.getLocations();
+    this.ticketForm.get("ticket_date")?.disable();
+    this.ticketForm.get("progressive")?.disable();
   }
 
   print() {

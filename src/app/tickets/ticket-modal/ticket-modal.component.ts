@@ -6,6 +6,7 @@ import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { Status } from '../interfaces/status';
 import { Connect } from '../../classes/connect';
 import { ConnectServerService } from '../../services/connect-server.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ticket-modal',
@@ -13,7 +14,8 @@ import { ConnectServerService } from '../../services/connect-server.service';
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
-    CommonModule
+    CommonModule,
+    TranslateModule
   ],
   templateUrl: './ticket-modal.component.html',
   styleUrl: './ticket-modal.component.scss'
@@ -22,6 +24,7 @@ export class TicketModalComponent {
 
   statusList: Status[] = [];
   substatusList: Status[] = [];
+  error: string = '';
 
   editTitleForm = new FormGroup({
     title: new FormControl(''),
@@ -59,7 +62,7 @@ export class TicketModalComponent {
   }
 
   getStatusList() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/statusListTicket' , {}).
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/statusListTicket', {}).
       subscribe((val: any) => {
         console.log(val);
         if (val) {
@@ -81,19 +84,19 @@ export class TicketModalComponent {
   saveStatus() {
     const status = this.editStatusForm.getRawValue()
     this.connectServerService.postRequest(Connect.urlServerLara, "ticket/changeStatusTicket",
-      { statusid: status.statusid, substatusid: status.substatusid, idticket: this.ticketid })
+      { idstatus: status.statusid, idsubstatus: status.substatusid, idticket: this.ticketid })
       .subscribe((val: any) => {
-        this.dialogRef.close(val);
+        this.dialogRef.close(1);
       })
   }
 
   saveTitleDescription() {
-    console.log("qui")
+    //console.log("qui")
     const titleDescription = this.editTitleForm.getRawValue();
     this.connectServerService.postRequest(Connect.urlServerLara, "ticket/saveHeaderTicket",
       { idticket: this.ticketid, title: titleDescription.title, description: titleDescription.description })
       .subscribe((val: any) => {
-        if(val) {
+        if (val) {
           this.dialogRef.close(titleDescription);
         }
         else {
@@ -108,7 +111,7 @@ export class TicketModalComponent {
 
   disableSubStatus() {
     //console.log("Status", this.editStatusForm.get("statusid")?.value)
-    if (!this.editStatusForm.get("statusid")?.value || this.editStatusForm.get("statusid")?.value == 4 || this.editStatusForm.get("statusid")?.value == 1) {
+    if (!this.editStatusForm.get("statusid")?.value) {
       this.editStatusForm.get("substatusid")?.disable();
     }
   }

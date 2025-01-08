@@ -5,29 +5,44 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="single-timeline-content d-flex wow fadeInLeft pt-0 pb-0 pe-2" data-wow-delay="0.3s"
-                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft; background-color: #f7edd0; height: 48px;">
+            <div class="single-timeline-content d-flex wow fadeInLeft pt-0 pb-0 ps-1 ps-md-4 pe-3 pe-md-4" data-wow-delay="0.3s" 
+                style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft; background-color: rgb(242, 242, 242); height: 48px;
+                border-color: lightgray;">
 
-                <div class="row justify-content-evenly align-items-center mb-2 mt-2" style="width: 100%;">
-                    <div class="col-12 col-md-6 text-center text-md-start p-0">
-                        <span>
-                            Status:
-                            <span style="font-weight: bold;">
+                <div class="row justify-content-evenly align-items-center mb-2 mt-2 ms-1" style="width: 100%;">
+                    <div class="col-8 col-md-6 text-start p-0">
+                        <span class="text-underline" [ngStyle]="{'border-color': status.color}">
+                            <span class="d-none d-md-inline">
+                                <i class="bi bi-arrow-clockwise me-2"></i>
+                            </span>
+                            <span class="d-none d-lg-inline responsive-text" style="font-weight: bold;">
+                                {{"TICKET.STATUSCARD.STATUS" | translate }}:
+                            </span>
+                            <span style="font-style: italic;" class="responsive-text nowrap-text">
                                 {{status.status}} <span *ngIf="status.substatus != '---'">- {{status.substatus}}</span>
                             </span>
+                            <span class="d-none d-sm-inline ms-2" [ngStyle]="{'color': status.color}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="20" fill="currentColor"
+                                    class="bi bi-dash" viewBox="0 0 16 16" style="transform: scale(4);">
+                                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
+                                </svg>
+                            </span>
+                            <!-- <span class="d-sm-none ms-1">
+                                <i class="bi bi-circle-fill" [ngStyle]="{'color': status.color}"></i>
+                            </span> -->
                         </span>
                     </div>
 
-                    <div class="col-12 col-md-6 text-center text-md-end p-0">
+                    <div class="col-4 col-md-6 text-end p-0">
                         <span>
-                            <span>
-                                Created By:
-                            </span>
-                            <span style="font-weight: bold;">
-                                {{status.user_created?.nickname}} 
-                            </span>
-                            <span class="d-none d-lg-inline" style="color: gray;">
-                                &#40;{{status.user_created?.datetime}}&#41;
+                            <!-- <span class="d-none d-lg-inline responsive-text" style="font-weight: bold;">
+                                {{"TICKET.STATUSCARD.CREATEDBY" | translate }}:
+                            </span> -->
+                            <span style="font-style: italic;" class="responsive-text nowrap-text">
+                                {{status.user_created?.nickname}}
+                                <span class="d-none d-lg-inline ms-1" style="color: gray; font-size: x-small;">
+                                    {{status.user_created?.datetime}}
+                                </span>
                             </span>
                         </span>
                     </div>

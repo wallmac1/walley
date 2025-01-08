@@ -11,6 +11,7 @@ import { TicketLine } from '../interfaces/ticket-lines';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { Connect } from '../../classes/connect';
 import { MeasurementUnit } from '../interfaces/article';
+import { TicketInchargeCardComponent } from "../ticket-incharge-card/ticket-incharge-card.component";
 
 @Component({
   selector: 'app-ticket-timeline',
@@ -20,8 +21,9 @@ import { MeasurementUnit } from '../interfaces/article';
     CommonModule,
     TicketStatusCardComponent,
     TicketArticleComponent,
-    TicketMessageComponent
-  ],
+    TicketMessageComponent,
+    TicketInchargeCardComponent
+],
   templateUrl: './ticket-timeline.component.html',
   styleUrl: './ticket-timeline.component.scss'
 })

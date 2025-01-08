@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Article, MeasurementUnit } from '../interfaces/article';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Connect } from '../../classes/connect';
 import { LineFile } from '../../voucher/interfaces/line-file';
 import { Observable } from 'rxjs';
@@ -73,12 +73,12 @@ export class TicketArticleComponent {
       this.article.taxablesale = this.article.taxablesale.replace('.', ',');
     }
     this.articleForm = this.fb.group({
-      title: [this.article.title],
+      title: [this.article.title, Validators.required],
       description: [this.article.description],
       code: [this.article.code],
       serialnumber: [this.article.serialnumber],
-      quantity: [this.article.quantity || '0,00', this.numberWithCommaValidator()],
-      refidum: [this.article.refidum],
+      quantity: [this.article.quantity || '0,00', [this.numberWithCommaValidator(), Validators.required]],
+      refidum: [this.article.refidum, Validators.required],
       refidarticle: [this.article.refidarticle],
       refidarticledata: [this.article.refidarticledata],
       refidarticleprice: [this.article.refidarticleprice],
@@ -243,7 +243,21 @@ export class TicketArticleComponent {
     this.articleForm.markAsPristine();
   }
 
-  getArticle() {}
+  getArticle() {
+    if(this.article.idticketline > 0) {
+      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketLine', 
+        {idticket: this.ticketId, idticketline: this.article.idticketline})
+          .subscribe((val: ApiResponse<any>) => {
+            if(val) {
+              this.article = val.data.ticketLineInfo;
+              this.article.quantity = this.article.quantity.replace(".", ",");
+              this.article.taxablepurchase = this.article.taxablepurchase?.replace(".", ",");
+              this.article.taxablesale = this.article.taxablesale?.replace(".", ",");
+              this.articleForm.patchValue(this.article);
+            }
+          })
+    }
+  }
 
   deleteArticle() {
     this.delete.emit({ index: this.index, idticketline: this.article.idticketline });

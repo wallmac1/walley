@@ -22,6 +22,7 @@ export interface TicketLine {
     timeline: string;
     status?: string;
     substatus?: string;
+    color?: string; 
     user_created?: {
         id: number;
         nickname: string;

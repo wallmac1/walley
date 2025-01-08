@@ -2,7 +2,7 @@
     <div class="row justify-content-center align-items-center">
         <div class="col-12 text-center">
             <span style="font-size: xx-large; font-weight: bold;">
-                Crea Ticket
+                {{"TICKET.NEW.CREATETICKET" | translate }}
             </span>
         </div>
     </div>
@@ -12,24 +12,24 @@
                 aria-label="Basic radio toggle button group" (change)="internalExternalLogic()">
                 <input type="radio" class="btn-check" id="internal" autocomplete="off" formControlName="internal"
                     [value]="1">
-                <label class="btn btn-outline-primary" for="internal">Internal</label>
+                <label class="btn btn-outline-primary" for="internal">{{"TICKET.NEW.INTERNAL" | translate }}</label>
 
                 <input type="radio" class="btn-check" id="external" autocomplete="off" formControlName="internal"
                     [value]="0">
-                <label class="btn btn-outline-primary" for="external">External</label>
+                <label class="btn btn-outline-primary" for="external">{{"TICKET.NEW.EXTERNAL" | translate }}</label>
             </div>
         </div>
 
         <div class="row justify-content-start align-items-center mt-4">
             <!-- Number field (read-only) -->
             <div class="col-6 col-sm-2 col-lg-1 mb-3">
-                <label for="progressive" class="form-label">Number</label>
+                <label for="progressive" class="form-label">{{"TICKET.NEW.NUMBER" | translate }}</label>
                 <input type="text" id="progressive" class="form-control" formControlName="progressive" readonly>
             </div>
 
             <!-- Date field (read-only) -->
             <div class="col-6 col-sm-4 col-lg-2 mb-3">
-                <label for="ticket_date" class="form-label">Date</label>
+                <label for="ticket_date" class="form-label">{{"TICKET.NEW.DATE" | translate }}</label>
                 <input type="text" id="ticket_date" class="form-control" formControlName="ticket_date" readonly>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <!-- Customer field (visible only if "External" is selected) -->
             <div class="col-12 col-md-6 mb-3 element">
                 <label class="subtitle form-label" for="customer">
-                    {{"VOUCHER.CUSTOMER" | translate}}<sup>*</sup>
+                    {{"TICKET.NEW.CUSTOMER" | translate}}<sup>*</sup>
                 </label>
                 <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
                     formControlName="customer"
@@ -56,7 +56,7 @@
             <div class="col-12 col-md-6 mb-3" *ngIf="ticketForm.get('internal')!.value === 0">
                 <label for="location" class="form-label">Location</label>
                 <select id="location" class="form-select" formControlName="location">
-                    <option [ngValue]="null">No headquarter</option>
+                    <option [ngValue]="null">--</option>
                     <option *ngFor="let location of locations" [ngValue]="location.id">
                         {{location.city}},
                         {{location.address}}</option>
@@ -65,14 +65,14 @@
 
             <!-- Title field -->
             <div class="col-12 col-md-6 mb-3">
-                <label for="title" class="form-label">Title</label>
+                <label for="title" class="form-label">{{"TICKET.NEW.TITLE" | translate }}</label>
                 <sup>*</sup>
                 <input type="text" id="title" class="form-control" formControlName="title">
             </div>
 
             <!-- Description field -->
             <div class="col-12 mb-3">
-                <label for="description" class="form-label">Description</label>
+                <label for="description" class="form-label">{{"TICKET.NEW.DESCRIPTION" | translate }}</label>
                 <sup>*</sup>
                 <textarea id="description" class="form-control" formControlName="description" rows="3"
                     placeholder="Write a short description about the ticket"></textarea>
@@ -80,7 +80,7 @@
 
             <!-- Department field -->
             <div class="col-12 col-md-6 mb-3">
-                <label for="departments" class="form-label">Department</label>
+                <label for="departments" class="form-label">{{"TICKET.NEW.DEPARTMENT" | translate }}</label>
                 <div class="selection">
                     <mat-select #select1 formControlName="departments" multiple>
                         @for (department of departments; track department.id) {
@@ -102,7 +102,7 @@
 
             <!-- Keep Informed field -->
             <div class="col-12 col-md-6 mb-3">
-                <label for="keepinformed" class="form-label">Keep Informed</label><br>
+                <label for="keepinformed" class="form-label">{{"TICKET.NEW.KEEPINFORMED" | translate }}</label><br>
                 <div class="selection">
                     <mat-select #select2 formControlName="keepinformed" multiple>
                         @for (user of users; track user.id) {
@@ -116,8 +116,7 @@
 
         <div *ngIf="!ticketForm.valid" class="row justify-content-center align-items-center mt-4">
             <div class="col-12 text-center">
-                <span style="font-style: italic; opacity: 0.7; font-size: small;">* Compile all the mandatory fields to
-                    enable ticket submission</span>
+                <span style="font-style: italic; opacity: 0.7; font-size: small;">{{"TICKET.NEW.ERROR" | translate }}</span>
             </div>
         </div>
 
@@ -125,7 +124,7 @@
             <!-- Submit button -->
             <div class="col-12 text-center">
                 <button type="submit" class="btn btn-outline-primary" (click)="save()"
-                    [disabled]="ticketForm.invalid">Submit</button>
+                    [disabled]="ticketForm.invalid">{{"TICKET.BUTTONS.SAVE" | translate }}</button>
             </div>
         </div>
     </form>

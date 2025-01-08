@@ -447,16 +447,27 @@
     }
   },
   "TICKET": {
-    "TICKETLIST": {
-      "TITLE": "TICKETS LIST",
+    "LIST": {
+      "TITLE": "Titolo",
+      "TICKET": "TICKETS",
       "DESCRIPTION": "Press the button below to open a new ticket",
       "NEWTICKET": "Open New Ticket",
       "BUTTONSEARCH": "Search",
       "SEARCHPLACEHOLDER": "Name of the ticket",
-      "EMPTY": "No tickets available. To add a ticket create or enter a system."
+      "EMPTY": "No tickets available. To add a ticket create or enter a system.",
+      "TICKETS": "TICKETS",
+      "TOTALRESULTS": "Total Results",
+      "OBJPERPAGE": "Objects Per Page",
+      "PAGE": "Page",
+      "CREATION": "Creation",
+      "CUSTOMER": "Customer",
+      "STATUS": "Status",
+      "LASTUPDATE": "Latest Update",
+      "INFO": "Info"
     },
-    "NEWTICKET": {
+    "NEW": {
       "NEWTICKET": "NEW TICKET",
+      "CREATETICKET": "Create Ticket",
       "TITLE": "Title",
       "DATE": "Date",
       "RELATEDSYS": "Related system",
@@ -465,15 +476,100 @@
       "IMPORTIMG": "You're trying to import too many images",
       "ATTACHMENT": "Import attachments (max 6)",
       "IMPORT": "Import",
-      "SUBMIT": "Submit"
+      "INTERNAL": "Internal",
+      "EXTERNAL": "External",
+      "NUMBER": "Number",
+      "CUSTOMER": "Customer",
+      "DEPARTMENT": "Department",
+      "KEEPINFORMED": "Keep Informed",
+      "ERROR":"Complete all the mandatory fields to submit"
+    },
+    "STATUSCARD": {
+      "STATUS": "Status",
+      "CREATEDBY": "Created By"
+    },
+    "WORK": {
+      "WORK": "Work",
+      "HOURS": "Hours",
+      "MINUTES": "Minutes",
+      "DESCRIPTION": "Description",
+      "UPDATED": "Updated",
+      "CREATED": "Created"
+    },
+    "INFO": {
+      "CUSTOMER": "Customer",
+      "LOCATION": "Location",
+      "INTERNAL": "Internal",
+      "EXTERNAL": "External",
+      "NUMBER": "Number",
+      "DATE": "Date",
+      "DEPARTMENT": "Department",
+      "KEEPINFORMED": "Keep Informed",
+      "NOTES": "Notes",
+      "ERROR": "Complete all the mandatory fields to submit"
+    },
+    "MODAL": {
+      "EDITTITLE": "Edit Title and Description",
+      "TITLE": "Title",
+      "DESCRIPTION": "Description",
+      "EDITSTATUS": "Edit Status",
+      "STATUS": "Status",
+      "SUBSTATUS": "Substatus"
+    },
+    "BUTTONS": {
+      "DELETE": "Delete",
+      "SAVE": "Save",
+      "REFRESH": "Reset",
+      "CANCEL": "Cancel"
+    },
+    "MODIFY": {
+      "CUSTOMER": "Customer",
+      "INTERNAL": "Internal",
+      "STATUS": "Status",
+      "TICKETINFO": "Ticket Info",
+      "WORKSMESSAGES": "Works & Messages",
+      "TAKEONCHARGE": "Take On Charge",
+      "ADDWORK": "Add Work",
+      "ADDARTICLE": "Add Article",
+      "ADDMESSAGE": "Add Message",
+      "CHANGESTATUS": "Change Status"
+    },
+    "ARTICLE": {
+      "ARTICLE": "Article",
+      "TITLE": "Title",
+      "CODE": "Code",
+      "MEASUREMENTUNIT": "Measurement Unit",
+      "QUANTITY": "Quantity",
+      "PURCHASE": "Purchase Taxable Amount",
+      "SALE": "Sale Taxable Amount",
+      "DESCRIPTION": "Description",
+      "NUMBERSERROR": "Quantity, Purchase Taxable Amount, and Sale Taxable Amount are numeric fields with a maximum of two decimal places and must be greater than 0.00",
+      "MANDATORY": "Fill in the mandatory fields",
+      "SN": "Serial Number",
+      "CREATED": "Created by",
+      "UPDATED": "Last Modified"
     },
     "TICKET": "Ticket",
     "STATUS": "Status",
+    "INCHARGE": "In Charge",
     "FILTERS": {
-      "INCHARGE": "All Users",
-      "DEPARTMENTS": "All Departments",
+      "FILTERS": "Filters",
+      "INCHARGE": "In Charge",
+      "DEPARTMENT": "Departments",
+      "SUBSTATUS": "Substatus",
       "ALLSTATUS": "All Status",
-      "FILTER": "Filter"
+      "STATUS": "Status",
+      "FILTER": "Filter",
+      "NOTCLOSED": "Not Closed"
+    },
+    "MESSAGE": {
+      "MESSAGE": "Message",
+      "DESCRIPTION": "Description",
+      "ERROR": "Complete all the mandatory fields"
+    },
+    "TOOLTIP": {
+      "NODESCRIPTION": "No Description",
+      "NOTINCHARGE": "Not in Charge"
     }
   }
 }
