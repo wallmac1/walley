@@ -2,7 +2,7 @@
     <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(255, 242, 218);">
         <mat-panel-title class="panel-title">
             <span *ngIf="lineForm.get('title')?.value == null || lineForm.get('title')?.value.length == 0">
-                {{"VOUCHER.ARTICLE" | translate}} 
+                {{"VOUCHER.ARTICLE.ARTICLE" | translate}} 
             </span>
             
             <span *ngIf="lineForm.get('title')?.value != null && lineForm.get('title')?.value.length > 0" class="articleTitle">
@@ -21,7 +21,7 @@
         <div class="row justify-content-start align-items-end mb-2 mt-1">
             <div class="col-12 col-md-7 col-sm-8 col-lg-9">
                 <label class="subtitle form-label" for="title">
-                    {{"VOUCHER.TITLE" | translate}}<sup>*</sup>
+                    {{"VOUCHER.ARTICLE.TITLE" | translate}}<sup>*</sup>
                 </label>
                 <div class="input-group">
                     <input type="text" matInput class="form-control" id="title" formControlName="title"
@@ -40,14 +40,14 @@
              
             <div class="col-12 col-md-5 col-sm-4 col-md-3 col-lg-3">
                 <label class="subtitle form-label" for="code">
-                    {{"VOUCHER.CODE" | translate}}
+                    {{"VOUCHER.ARTICLE.CODE" | translate}}
                 </label>
                 <input type="text" class="form-control" formControlName="code" id="code">
             </div>
 
             <div class="col-6 col-md-3 mt-2">
                 <label class="subtitle form-label" for="refidum">
-                    {{"VOUCHER.MEASUREMENTUNIT" | translate}}
+                    {{"VOUCHER.ARTICLE.MEASUREMENTUNIT" | translate}}
                 </label>
                 <select type="text" class="form-select" formControlName="refidum" id="refidum"
                     [class.is-invalid]="lineForm.get('refidum')?.invalid && submitted">
@@ -59,21 +59,21 @@
             </div>
             <div class="col-6 col-md-3 mt-2">
                 <label class="subtitle form-label" for="quantity">
-                    {{"VOUCHER.QUANTITY" | translate}}
+                    {{"VOUCHER.ARTICLE.QUANTITY" | translate}}
                 </label>
                 <input type="text" class="form-control" formControlName="quantity" id="quantity"
                     [class.is-invalid]="lineForm.get('quantity')?.invalid && (lineForm.get('quantity')?.dirty || submitted)">
             </div>
             <div class="col-6 col-md-3 mt-2">
                 <label class="subtitle form-label" for="taxablepurchase">
-                    {{"VOUCHER.PURCHASE" | translate}}
+                    {{"VOUCHER.ARTICLE.PURCHASE" | translate}}
                 </label>
                 <input type="text" class="form-control" formControlName="taxablepurchase" id="taxablepurchase"
                     [class.is-invalid]="lineForm.get('taxablepurchase')?.invalid && (lineForm.get('taxablepurchase')?.dirty || submitted)">
             </div>
             <div class="col-6 col-md-3 mt-2">
                 <label class="subtitle form-label" for="taxablesale">
-                    {{"VOUCHER.SALE" | translate}}
+                    {{"VOUCHER.ARTICLE.SALE" | translate}}
                 </label>
                 <input type="text" class="form-control" formControlName="taxablesale" id="taxablesale"
                     [class.is-invalid]="lineForm.get('taxablesale')?.invalid && (lineForm.get('taxablesale')?.dirty || submitted)">
@@ -81,7 +81,7 @@
 
             <div class="col-10 col-sm-11 mt-2">
                 <label class="subtitle form-label" for="description">
-                    {{"VOUCHER.DESCRIPTION" | translate}}
+                    {{"VOUCHER.ARTICLE.DESCRIPTION" | translate}}
                 </label>
                 <textarea type="text" class="form-control" formControlName="description" id="description" rows="1"
                     [class.is-invalid]="lineForm.get('description')?.invalid && (lineForm.get('description')?.dirty || submitted)">
@@ -105,7 +105,7 @@
                         (lineForm.get('taxablesale')?.invalid && (lineForm.get('taxablesale')?.dirty || submitted))"
                 class="col-12 text-center">
                 <span class="error">
-                    {{"VOUCHER.NUMBERSERROR" | translate}}
+                    {{"VOUCHER.ARTICLE.NUMBERSERROR" | translate}}
                 </span>
             </div>
             <div *ngIf="(lineForm.get('quantity')?.invalid && 
@@ -114,7 +114,7 @@
                 (lineForm.get('title')?.invalid && (lineForm.get('title')?.dirty || submitted))"
                 class="col-12 text-center">
                 <span class="error">
-                    {{"VOUCHER.MANDATORY" | translate}}
+                    {{"VOUCHER.ARTICLE.MANDATORY" | translate}}
                 </span>
             </div>
         </div>
@@ -135,7 +135,7 @@
 
         <div class="row align-items-center mt-1">
             <div class="col-12 col-md-6 additionalInfo" (click)="openInformation()">
-                <span style="color: gray;">Informazioni aggiuntive</span>
+                <span style="color: gray;">{{"VOUCHER.ARTICLE.ADDITIONALINFO" | translate}}</span>
                 <i *ngIf="!isOpenInformations; else minusBlock" class="bi bi-plus" style="color: gray;"></i>
                 <ng-template #minusBlock>
                     <i class="bi bi-dash" style="color: gray;"></i>
@@ -145,7 +145,7 @@
         <div class="row serialnumberRow mt-1" [ngClass]="{ 'visible': isOpenInformations, 'hidden': !isOpenInformations }">
             <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mb-1">
                 <label for="serialnumber">
-                    {{"VOUCHER.SN" | translate}}
+                    {{"VOUCHER.ARTICLE.SN" | translate}}
                 </label>
                 <input type="text" formControlName="serialnumber" class="form-control">
             </div>
@@ -155,7 +155,7 @@
     <div *ngIf="lineForm.dirty" class="row justify-content-center mt-1 pt-2" style="border-top: 1px solid lightgray;">
         <div class="col-12 text-end">
             <button class="btn btn-outline-dark" (click)="saveArticle(index)">
-                {{"VOUCHER.SAVE" | translate}}
+                {{"VOUCHER.BUTTONS.SAVE" | translate}}
             </button>
         </div>
     </div>
@@ -163,13 +163,13 @@
     <div *ngIf="screenWidth >= 768; else iconBlock" class="row justify-content-center align-items-center mt-1">
         <div class="col-12 col-sm-6 text-start">
             <span *ngIf="lineForm.get('user_created')?.value != null" class="userInfo">
-                {{"VOUCHER.CREATED" | translate}}: 
+                {{"VOUCHER.ARTICLE.CREATED" | translate}}: 
                 {{lineForm.get('user_created')?.value.nickname}} - {{lineForm.get('user_created')?.value.datetime}}
             </span>
         </div>
         <div class="col-12 col-sm-6 text-end">
             <span *ngIf="lineForm.get('user_updated')?.value != null" class="userInfo">
-                {{"VOUCHER.UPDATED" | translate}}: 
+                {{"VOUCHER.ARTICLE.UPDATED" | translate}}: 
                 {{lineForm.get('user_updated')?.value.nickname}} - {{lineForm.get('user_updated')?.value.datetime}}
             </span>
         </div>

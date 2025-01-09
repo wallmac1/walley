@@ -4,7 +4,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { Customer } from '../interfaces/customer';
 import { Department } from '../interfaces/department';
 import { User } from '../interfaces/user';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TicketsInfoService } from '../services/tickets-info.service';
 import { Status } from '../interfaces/status';
 import { SubStatus } from '../interfaces/substatus';
@@ -16,7 +16,9 @@ import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { async, debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ApiResponse } from '../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-ticket-info',
@@ -29,7 +31,8 @@ import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 
     ReactiveFormsModule,
     FormsModule,
     TranslateModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTooltipModule
   ],
   templateUrl: './ticket-info.component.html',
   styleUrl: './ticket-info.component.scss'
@@ -51,7 +54,7 @@ export class TicketInfoComponent {
     customer: new FormControl<Customer | null>(null, this.customerValidator()),
     location: new FormControl<Location | null>(null),
     title: new FormControl<string | null>(null, Validators.required),
-    description: new FormControl<string | null>(null, Validators.required),
+    description: new FormControl<string | null>(null),
     departments: new FormControl<Department[] | number[] | null>(null),
     incharge: new FormControl<User | number | null>(null),
     keepinformed: new FormControl<User[] | number[] | null>(null),
@@ -64,15 +67,7 @@ export class TicketInfoComponent {
   locations: Location[] = [];
 
   constructor(private route: ActivatedRoute, public ticketInfoService: TicketsInfoService,
-    private connectServerService: ConnectServerService) {
-    // CHIAMATA AL SERVER PER OTTENERE I VALORI DEL TICKET
-    // this.route.paramMap.subscribe((params: ParamMap) => {
-    //   const id = params.get('id');
-    //   if (id) {
-    //     this.ticketId = parseInt(id);
-    //   }
-    // });
-  }
+    private connectServerService: ConnectServerService, private router: Router) { }
 
   ngOnInit(): void {
     this.searchCustomer();
@@ -225,11 +220,34 @@ export class TicketInfoComponent {
     }
   }
 
+  reset() {
+    this.ticketInfoForm.get('location')?.reset();
+    this.ticketInfoForm.get('customer')?.reset();
+    this.getTicketInfo();
+  }
+
+  deleteTicket() {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/deleteTicket', {idticket: this.ticketId})
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          this.router.navigate(['ticketsList']);
+        }
+      })
+  }
+
   getTicketInfo() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketInfo', { idticket: this.ticketId }).subscribe((val: any) => {
       if (val) {
         this.ticketInfo = val.data.ticketInfo;
         this.ticketInfoForm.patchValue(this.ticketInfo);
+        if(this.ticketInfoForm.get('internal')?.value == 0) {
+          this.ticketInfoForm.get('customer')?.enable();
+          this.ticketInfoForm.get('location')?.enable();
+        }
+        else {
+          this.ticketInfoForm.get('customer')?.disable();
+          this.ticketInfoForm.get('location')?.disable();
+        }
       }
     });
   }

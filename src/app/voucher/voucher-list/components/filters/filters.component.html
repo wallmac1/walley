@@ -47,7 +47,7 @@
                     <label class="form-label" for="status">Stato</label>
                     <select type="string" class="form-select" id="status" formControlName="status"
                         [class.is-invalid]="voucherFilterForm.get('status')?.invalid && voucherFilterForm.get('status')?.touched">
-                        <option [value]="null">{{"VOUCHER.ALLSTATUS" | translate}}</option>
+                        <option [value]="null">{{"VOUCHER.FILTERS.ALLSTATUS" | translate}}</option>
                         <option *ngFor="let status of statusList" [ngValue]="status.id">
                             {{status.name}}
                         </option>
@@ -57,7 +57,7 @@
 
             <div class="col-12 text-center mb-1">
                 <button class="btn btn-outline-dark" (click)="filter()">
-                    {{"VOUCHER.FILTER" | translate}}
+                    {{"VOUCHER.FILTERS.FILTER" | translate}}
                 </button>
             </div>
         </div>

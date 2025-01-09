@@ -11,24 +11,37 @@
             </div>
         </div> -->
 
-        <div class="row p-1 mt-4" >
+        <div class="row mt-2 mx-auto justify-content-end" style="max-width: 1500px; min-width: 350px;">
+            <div class="col-auto responsiveColumn">
+                <mat-chip-listbox class="mat-chip-container" multiple>
+                    <mat-chip-option *ngFor="let filter of translatedFilters" (selectionChange)="onSelectionChange($event, filter.offset)" selected>
+                        <span class="d-none d-md-inline">
+                            {{filter.label}}
+                        </span>
+                        <i class="bi bi-{{filter.icon}} ms-md-1"></i>
+                    </mat-chip-option>
+                </mat-chip-listbox> 
+            </div>
+        </div>
+
+        <div class="row p-1 mt-2">
             <div class="col-12" style="max-width: 1500px; min-width: 350px; margin: 0 auto; overflow-y: hidden;">
                 <!-- Timeline Area-->
                 <div class="apland-timeline-area">
                     <div *ngFor="let line of lines; let i = index; trackBy: trackById">
-                        <app-ticket-work *ngIf="line.type_line == 1" [ticketId]="ticketId" [work]="line" [hours]="hours" [minutes]="minutes"
-                            [index]="i" (delete)="deleteLine($event)">
+                        <app-ticket-work *ngIf="line.type_line == 1 && translatedFilters[4].value == 1" [ticketId]="ticketId" [work]="line" [hours]="hours" [minutes]="minutes"
+                            [index]="i" (delete)="deleteLine($event)" (getLine)="getLine($event)">
                         </app-ticket-work>
-                        <app-ticket-article *ngIf="line.type_line == 2" [ticketId]="ticketId" [article]="line" [measurmentUnit]="measurmentUnit"
-                            [index]="i" (delete)="deleteLine($event)">
+                        <app-ticket-article *ngIf="line.type_line == 2 && translatedFilters[0].value == 1" [ticketId]="ticketId" [article]="line" [measurmentUnit]="measurmentUnit"
+                            [index]="i" (delete)="deleteLine($event)" (getLine)="getLine($event)">
                         </app-ticket-article>
-                        <app-ticket-message *ngIf="line.type_line == 3" [ticketId]="ticketId" [message]="line"
-                            [index]="i" (delete)="deleteLine($event)">
+                        <app-ticket-message *ngIf="line.type_line == 3 && translatedFilters[2].value == 1" [ticketId]="ticketId" [message]="line"
+                            [index]="i" (delete)="deleteLine($event)" (getLine)="getLine($event)">
                         </app-ticket-message>
-                        <app-ticket-status-card *ngIf="line.type_line == 4" [ticketId]="ticketId"
+                        <app-ticket-status-card *ngIf="line.type_line == 4 && translatedFilters[3].value == 1" [ticketId]="ticketId"
                             [status]="line">
                         </app-ticket-status-card>
-                        <app-ticket-incharge-card *ngIf="line.type_line == 5" [ticketId]="ticketId"
+                        <app-ticket-incharge-card *ngIf="line.type_line == 5 && translatedFilters[1].value == 1" [ticketId]="ticketId"
                             [incharge]="line">
                         </app-ticket-incharge-card>
                     </div>

@@ -15,18 +15,24 @@
                             <span class="d-none d-md-inline">
                                 <i class="bi bi-person-raised-hand me-2"></i>
                             </span>
-                            <span class="d-none d-lg-inline responsive-text" style="font-weight: bold;">
+                            <span *ngIf="incharge.incharge; else releasedBlock" class="d-none d-lg-inline responsive-text" style="font-weight: bold;">
                                 {{"TICKET.INCHARGE" | translate }}:
                             </span>
+                            <ng-template #releasedBlock>
+                                <span class="d-none d-lg-inline responsive-text" style="font-weight: bold;">
+                                    {{"TICKET.RELEASED" | translate }}
+                                </span>
+                            </ng-template>
                             <span style="font-style: italic;" class="responsive-text">
-                                {{incharge.user_created?.nickname}}
+                                {{incharge.incharge?.nickname}}
                             </span>
                         </span>
                     </div>
 
                     <div class="col-4 col-md-6 text-end p-0">
-                        <span>
-                            <span style="color: gray; font-size: x-small;">
+                        <span style="font-style: italic;" class="responsive-text nowrap-text">
+                            {{incharge.user_created?.nickname}}
+                            <span class="d-none d-lg-inline ms-1" style="color: gray; font-size: x-small;">
                                 {{incharge.user_created?.datetime}}
                             </span>
                         </span>

@@ -80,3 +80,77 @@ label {
     background-color: #002D5D;
     color: white;
 }
+
+.inChargeIcon {
+    bottom: -94px;
+    left: 34%;
+
+    @media screen and (min-width: 450px) {
+        left: 30%
+    }
+
+    @media screen and (min-width: 500px) {
+        left: 20%
+    }
+
+    @media screen and (min-width: 576px) {
+        left: 0;
+    }
+
+    @media screen and (min-width: 800px) {
+        left: -10%
+    }
+
+    @media screen and (min-width: 900px) {
+        left: -14%
+    }
+
+    @media screen and (min-width: 1030px) {
+        left: -18%
+    }
+
+    // @media screen and (min-width: 1140px) {
+    //     left: 47.6%
+    // }
+
+    // @media screen and (min-width: 1160px) {
+    //     left: 47.8%
+    // }
+
+    // @media screen and (min-width: 1200px) {
+    //     bottom: -32px;
+    //     left: 48%
+    // }
+
+    // @media screen and (min-width: 1300px) {
+    //     left: 48.2%
+    // }
+
+    // @media screen and (min-width: 1400px) {
+    //     left: 48.4%
+    // }
+
+    // @media screen and (min-width: 1600px) {
+    //     left: 48.6%
+    // }
+
+    // @media screen and (min-width: 1800px) {
+    //     left: 48.8%
+    // }
+
+    // @media screen and (min-width: 2200px) {
+    //     left: 49%
+    // }
+
+    // @media screen and (min-width: 2400px) {
+    //     left: 49.2%
+    // }
+}
+
+.colouredIcon {
+    color: red;
+}
+
+.colouredIcon:hover {
+    cursor: pointer;
+}  

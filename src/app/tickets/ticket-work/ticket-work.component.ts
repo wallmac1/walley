@@ -30,17 +30,19 @@ import { TicketLine } from '../interfaces/ticket-lines';
 })
 export class TicketWorkComponent {
 
-  tooltipLineCreation: any;
+  //tooltipLineCreation: any;
   screenWidth: number = window.innerWidth;
   files: LineFile[] = [];
   urlServerLaraFile = Connect.urlServerLaraFile;
   workForm!: FormGroup;
+  validHoursMinutes: boolean = false;
 
   @Input() work!: TicketLine;
   @Input() ticketId: number = 0;
   @Input() index: number = 0;
   @Input() hours: { id: number, value: number }[] = [];
   @Input() minutes: { id: number, value: number }[] = [];
+  @Output() getLine = new EventEmitter<{ index: number, idticketline: number }>()
   @Output() delete = new EventEmitter<{ index: number, idticketline: number }>()
 
   submitted = false;
@@ -51,7 +53,7 @@ export class TicketWorkComponent {
   ngOnInit(): void {
     this.files = this.work.attachments;
     this.initForm();
-    this.initLine();
+    //this.initLine();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -61,7 +63,7 @@ export class TicketWorkComponent {
 
   initForm() {
     this.workForm = this.fb.group({
-      description: [this.work.description],
+      description: [this.work.description, Validators.required],
       hours: [this.work.hours, Validators.required],
       minutes: [this.work.minutes, Validators.required],
       taxablepurchase: [this.work.taxablepurchase || null],
@@ -69,19 +71,19 @@ export class TicketWorkComponent {
     })
   }
 
-  private initLine() {
-    let created_at: string = '';
-    let updated_at: string = '';
-    if (this.workForm.get('user_created')?.value != null) {
-      created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.workForm.get('user_created')?.value.nickname + ' - ' +
-        this.workForm.get('user_created')?.value.datetime + ', '
-    }
-    if (this.workForm.get('user_updated')?.value != null) {
-      updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.workForm.get('user_updated')?.value.nickname +
-        ' - ' + this.workForm.get('user_updated')?.value.datetime;
-    }
-    this.tooltipLineCreation = created_at + updated_at
-  }
+  // private initLine() {
+  //   let created_at: string = '';
+  //   let updated_at: string = '';
+  //   if (this.workForm.get('user_created')?.value != null) {
+  //     created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.workForm.get('user_created')?.value.nickname + ' - ' +
+  //       this.workForm.get('user_created')?.value.datetime + ', '
+  //   }
+  //   if (this.workForm.get('user_updated')?.value != null) {
+  //     updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.workForm.get('user_updated')?.value.nickname +
+  //       ' - ' + this.workForm.get('user_updated')?.value.datetime;
+  //   }
+  //   this.tooltipLineCreation = created_at + updated_at
+  // }
 
   openImageModal(file: LineFile): void {
     this.dialog.open(ImageViewerComponent, {
@@ -152,26 +154,14 @@ export class TicketWorkComponent {
     }
   }
 
-  getWork() {
-    if(this.work.idticketline > 0) {
-      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketLine', 
-        {idticket: this.ticketId, idticketline: this.work.idticketline})
-          .subscribe((val: ApiResponse<any>) => {
-            if(val) {
-              this.work = val.data.ticketLineInfo;
-              this.workForm.patchValue(this.work);
-            }
-          })
-    }
-  }
-
   deleteWork() {
     this.delete.emit({ index: this.index, idticketline: this.work.idticketline });
   }
 
   saveWork() {
+    this.checkHoursAndMinutes();
     this.submitted = true;
-    if (this.workForm.valid) {
+    if (this.workForm.valid && this.validHoursMinutes) {
       const line_copy = JSON.parse(JSON.stringify(this.workForm.getRawValue()));
       line_copy.idticketline = this.work.idticketline;
       line_copy.idticket = this.ticketId;
@@ -189,10 +179,23 @@ export class TicketWorkComponent {
       this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicketLine', { obj_line: line_copy})
         .subscribe((val: ApiResponse<any>) => {
           if(val) {
-            this.workForm.markAsPristine();
-            this.getWork();
+            if(this.work.idticketline == 0) {
+              this.getLine.emit({index: this.index, idticketline: val.data.idticketline});
+            }
+            else {
+              this.getLine.emit({index: this.index, idticketline: this.work.idticketline});
+            }
           }
         })
+    }
+  }
+
+  checkHoursAndMinutes() {
+    if(this.workForm.get('hours')?.value == 0 && this.workForm.get('minutes')?.value == 0) {
+      this.validHoursMinutes = false;
+    }
+    else {
+      this.validHoursMinutes = true;
     }
   }
 

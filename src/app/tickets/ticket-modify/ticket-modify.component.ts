@@ -149,7 +149,16 @@ export class TicketModifyComponent {
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/takeInChargeTicket', { idticket: this.ticketId })
       .subscribe((val: ApiResponse<any>) => {
         if (val) {
-          console.log(val);
+          this.getTicketInfo();
+        }
+      })
+  }
+
+  release() {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/releaseTicket', { idticket: this.ticketId })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          this.getTicketInfo();
         }
       })
   }

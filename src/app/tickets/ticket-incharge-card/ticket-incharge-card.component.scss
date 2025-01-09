@@ -117,3 +117,33 @@
 .single-timeline-area .single-timeline-content:focus .timeline-text h6 {
     color: #002D5D;
 }
+
+.responsive-text {
+    font-size: 16px;
+}
+
+@media (max-width: 576px) {
+    .responsive-text {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 992px) {
+    .responsive-text {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .responsive-text {
+        font-size: 14px;
+    }
+}
+
+.nowrap-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    //display: inline-block;
+    max-width: 100%;
+}

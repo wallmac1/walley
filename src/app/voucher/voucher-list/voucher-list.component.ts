@@ -17,6 +17,7 @@ import { ApiResponse } from '../../weco/interfaces/api-response';
 import { Router } from '@angular/router';
 import { Status } from '../interfaces/status';
 import { catchError, map, merge, startWith, switchMap } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-voucher-list',
@@ -28,7 +29,8 @@ import { catchError, map, merge, startWith, switchMap } from 'rxjs';
     MatTableModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatSortModule
+    MatSortModule,
+    TranslateModule
   ],
   templateUrl: './voucher-list.component.html',
   styleUrl: './voucher-list.component.scss'

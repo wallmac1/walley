@@ -9,11 +9,12 @@ import { Department } from '../../../interfaces/department';
 import { SubStatus } from '../../../interfaces/substatus';
 import { CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { tick } from '@angular/core/testing';
 import { Connect } from '../../../../classes/connect';
 import { ConnectServerService } from '../../../../services/connect-server.service';
 import { ApiResponse } from '../../../../weco/interfaces/api-response';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-filters',
@@ -22,7 +23,8 @@ import { ApiResponse } from '../../../../weco/interfaces/api-response';
     CommonModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
-    TranslateModule
+    TranslateModule,
+    MatTooltipModule
   ],
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.scss'
@@ -31,6 +33,7 @@ export class FiltersComponent {
 
   @Output() filterEmit = new EventEmitter<null>();
 
+  infoTooltip: string = ''
   submitted: boolean = false;
   todayDate = new Date();
   threeMonthsAgo: Date = new Date(this.todayDate);
@@ -75,6 +78,7 @@ export class FiltersComponent {
       }
     });
     this.ticketFilterForm.get('status')?.valueChanges.subscribe((value) => {
+      this.ticketFilterForm.get('substatus')?.reset();
       if (value != null) {
         this.getSubstatusList();
         this.ticketFilterForm.get('substatus')?.enable();
@@ -87,25 +91,22 @@ export class FiltersComponent {
     this.getStatusList();
     this.getDepartments();
     this.searchCustomer();
-    console.log(this.listStatus, "STATUS");
   }
 
-  getUsers() {
-    //CHIAMATA AL SERVER PER OTTENERE LA LISTA DI USERS
-    this.listUser = [
-      { id: 1, nickname: 'JohnDoe' },
-      { id: 2, nickname: 'JaneSmith' },
-      { id: 3, nickname: 'AliceJohnson' }
-    ];
+  private getUsers() {
+    this.connectServerService.getRequest(Connect.urlServerLara, "user/usersListNoAdmin", {}).subscribe((val: any) => {
+      if (val) {
+        this.listUser = val;
+      }
+    });
   }
 
-  getDepartments() {
-    //CHIAMATA
-    this.listDepartments = [
-      { id: 1, name: 'HR' },
-      { id: 2, name: 'IT' },
-      { id: 3, name: 'Finance' }
-    ];
+  private getDepartments() {
+    this.connectServerService.getRequest(Connect.urlServerLara, "infogeneral/departmentsList", {}).subscribe((val: any) => {
+      if (val) {
+        this.listDepartments = val.data.departments;
+      }
+    });
   }
 
   private getStatusList() {
@@ -132,7 +133,7 @@ export class FiltersComponent {
       incharge: this.ticketFilterForm.get('incharge')?.value || null,
       department: this.ticketFilterForm.get('department')?.value || null,
       status: this.ticketFilterForm.get('status')?.value || null,
-      substatus: this.ticketFilterForm.value.substatus || null,
+      substatus: this.ticketFilterForm.get('substatus')?.value || null,
       orderby_creation: 'asc',
       orderby_lastupdate: 'asc',
       notclosed: this.ticketFilterForm.value.notclosed ? 1 : 0

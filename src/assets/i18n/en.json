@@ -406,46 +406,72 @@
     }
   },
   "VOUCHER": {
-    "VOUCHER": "Voucher",
+  "ARTICLE": {
+    "ARTICLE": "Article",
+    "TITLE": "Title",
+    "CODE": "Code",
+    "MEASUREMENTUNIT": "Unit of Measure",
+    "QUANTITY": "Quantity",
+    "PURCHASE": "Purchase Amount",
+    "SALE": "Sale Amount",
+    "DESCRIPTION": "Description",
+    "NUMBERSERROR": "Quantity, Purchase Amount, and Sale Amount are numeric fields with a maximum of two decimal places and must be greater than 0.00",
+    "MANDATORY": "Fill in the mandatory fields",
+    "ADDITIONALINFO": "Additional Information",
+    "SN": "Serial Number",
+    "CREATED": "Created On",
+    "UPDATED": "Last Modified"
+  },
+  "INFO": {
+    "VOUCHER": "Work Vouchers",
     "STATUS": "Status",
     "NUMBER": "Number",
     "DATE": "Date",
     "CUSTOMER": "Customer",
-    "ARTICLE": "Article",
     "NOTES": "Notes",
-    "CREATEVOUCHER": "Create Voucher",
-    "SAVE": "Save",
+    "CREATEVOUCHER": "Create Work Voucher",
+    "CUSTOMERERROR": "A customer must be selected",
     "WORK": "Work",
-    "TITLE": "Title",
-    "DELETE": "Delete",
-    "CLOSE": "Close",
-    "QUANTITY": "Quantity",
-    "MEASUREMENTUNIT": "Measurement Unit",
-    "DESCRIPTION": "Description",
-    "NUMBERSERROR": "Quantity, Taxable Purchase and Taxable Sale are numerical fields with at max two decimals",
-    "MANDATORY": "Complete mandatory fields",
-    "UNITERROR": "Measurment unit is required",
-    "CODE": "Code",
-    "PURCHASE": "Taxable Purchase",
-    "SALE": "Taxable Sale",
-    "ADDITIONALINFO": "Additional Info",
-    "SN": "Serial Number",
+    "ARTICLE": "Article"
+  },
+  "FILTERS": {
+    "FILTER": "Filter",
+    "ALLSTATUS": "All Statuses"
+  },
+  "LIST": {
+    "VOUCHER": "Work Vouchers",
+    "TOTALRESULTS": "Total Results",
+    "OBJPERPAGE": "Items Per Page",
+    "PAGE": "Page",
+    "OF": "Of",
+    "DATE": "Date",
+    "CUSTOMER": "Customer",
+    "STATUS": "Status",
+    "INFO": "Info"
+  },
+  "WORK": {
+    "WORK": "Work",
     "MINUTES": "Minutes",
     "HOURS": "Hours",
-    "CREATED": "Created",
-    "UPDATED": "Latest Update",
-    "FILTER": "Filter",
+    "DESCRIPTION": "Description",
+    "MANDATORY": "Fill in the mandatory fields",
+    "CREATED": "Created by",
+    "UPDATED": "Last Modified"
+  },
+  "POPUP": {
+    "TITLE": "Search Article",
+    "NAME": "Name",
+    "CLOSE": "Close"
+  },
+  "BUTTONS": {
+    "SAVE": "Save",
+    "DELETE": "Delete",
+    "CLOSE": "Close",
     "OPEN": "Reopen",
     "TOBEINVOICED": "To Be Invoiced",
-    "INVOICED": "Invoiced",
-    "CUSTOMERERROR": "A Customer must be selected",
-    "ALLSTATUS": "All Status",
-    "POPUP": {
-      "TITLE": "Find Article",
-      "NAME": "Name",
-      "CLOSE": "Close"
-    }
-  },
+    "INVOICED": "Invoiced"
+  }
+},
   "TICKET": {
     "LIST": {
       "TITLE": "Titolo",
@@ -484,19 +510,16 @@
       "KEEPINFORMED": "Keep Informed",
       "ERROR":"Complete all the mandatory fields to submit"
     },
-    "STATUSCARD": {
-      "STATUS": "Status",
-      "CREATEDBY": "Created By"
-    },
     "WORK": {
+      "QUANTITYERROR": "Hours and Minutes can't be zero at the same time",
+      "MANDATORY": "Complete all mandatory fields",
       "WORK": "Work",
       "HOURS": "Hours",
       "MINUTES": "Minutes",
-      "DESCRIPTION": "Description",
-      "UPDATED": "Updated",
-      "CREATED": "Created"
+      "DESCRIPTION": "Description"
     },
     "INFO": {
+      "INCHARGE": "In Charge",
       "CUSTOMER": "Customer",
       "LOCATION": "Location",
       "INTERNAL": "Internal",
@@ -532,7 +555,8 @@
       "ADDWORK": "Add Work",
       "ADDARTICLE": "Add Article",
       "ADDMESSAGE": "Add Message",
-      "CHANGESTATUS": "Change Status"
+      "CHANGESTATUS": "Change Status",
+      "RELEASE": "Release Ticket"
     },
     "ARTICLE": {
       "ARTICLE": "Article",
@@ -545,22 +569,29 @@
       "DESCRIPTION": "Description",
       "NUMBERSERROR": "Quantity, Purchase Taxable Amount, and Sale Taxable Amount are numeric fields with a maximum of two decimal places and must be greater than 0.00",
       "MANDATORY": "Fill in the mandatory fields",
-      "SN": "Serial Number",
-      "CREATED": "Created by",
-      "UPDATED": "Last Modified"
+      "SN": "Serial Number"
+    },
+    "TIMELINE": {
+      "WORK": "Work",
+      "ARTICLE": "Article",
+      "INCHARGE": "In Charge",
+      "MESSAGE": "Message",
+      "STATUS": "Status"
     },
     "TICKET": "Ticket",
     "STATUS": "Status",
     "INCHARGE": "In Charge",
+    "RELEASED": "Released",
     "FILTERS": {
+      "TOOLTIP": "If activated, closed, invoiced and to be invoiced tickets won't be visible", 
       "FILTERS": "Filters",
       "INCHARGE": "In Charge",
       "DEPARTMENT": "Departments",
       "SUBSTATUS": "Substatus",
       "ALLSTATUS": "All Status",
       "STATUS": "Status",
-      "FILTER": "Filter",
-      "NOTCLOSED": "Not Closed"
+      "NOTCLOSED": "Aperto",
+      "CUSTOMER": "Cliente"
     },
     "MESSAGE": {
       "MESSAGE": "Message",
@@ -570,6 +601,10 @@
     "TOOLTIP": {
       "NODESCRIPTION": "No Description",
       "NOTINCHARGE": "Not in Charge"
+    },
+    "DATETIMELOG": {
+      "CREATED": "Created by",
+      "UPDATED":"Last Modified"
     }
   }
 }

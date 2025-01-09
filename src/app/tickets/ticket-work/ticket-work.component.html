@@ -11,12 +11,14 @@
                 <mat-expansion-panel [expanded]="index == 0" style="width: 100%;">
                     <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
                         <mat-panel-title class="panel-title">
-                            <span *ngIf="workForm.get('description')?.value == null || workForm.get('description')?.value.length == 0">
+                            <span
+                                *ngIf="workForm.get('description')?.value == null || workForm.get('description')?.value.length == 0">
                                 <i class="bi bi-tools me-2"></i>
                                 {{"TICKET.WORK.WORK" | translate}}
                             </span>
 
-                            <span *ngIf="workForm.get('description')?.value != null && workForm.get('description')?.value.length > 0"
+                            <span
+                                *ngIf="workForm.get('description')?.value != null && workForm.get('description')?.value.length > 0"
                                 class="workTitle">
                                 <i class="bi bi-tools me-2"></i>
                                 {{workForm.get('description')?.value}}
@@ -37,8 +39,8 @@
                             <div class="input-group">
                                 <span class="input-group-text" id="hLabel">h</span>
                                 <select type="text" class="form-select" formControlName="hours" id="hours"
-                                    [class.is-invalid]="workForm.get('hours')?.invalid && submitted"
-                                    aria-describedby="hLabel">
+                                    (change)="checkHoursAndMinutes()" [class.is-invalid]="(workForm.get('hours')?.invalid && (workForm.get('hours')?.dirty || submitted)) ||
+                                    (submitted && !validHoursMinutes)" aria-describedby="hLabel">
                                     <option [value]="null" disabled>-</option>
                                     <option *ngFor="let hour of hours" [ngValue]="hour.value">
                                         {{hour.value}}
@@ -53,8 +55,8 @@
                             <div class="input-group">
                                 <span class="input-group-text" id="mLabel">m</span>
                                 <select type="text" class="form-select" formControlName="minutes" id="minutes"
-                                    [class.is-invalid]="workForm.get('minutes')?.invalid && submitted"
-                                    aria-describedby="mLabel">
+                                    (change)="checkHoursAndMinutes()" [class.is-invalid]="(workForm.get('minutes')?.invalid && (workForm.get('minutes')?.dirty || submitted)) ||
+                                    (submitted && !validHoursMinutes)" aria-describedby="mLabel">
                                     <option [value]="null" disabled>-</option>
                                     <option *ngFor="let minute of minutes" [ngValue]="minute.value">
                                         {{minute.value}}
@@ -81,33 +83,31 @@
                             <textarea type="text" class="form-control" formControlName="description" id="description"
                                 rows="2"
                                 [class.is-invalid]="workForm.get('description')?.invalid && (workForm.get('description')?.dirty || submitted)">
-            </textarea>
+                            </textarea>
                         </div>
                     </div>
 
-                    <!-- <div *ngIf="work.invalid" class="row justify-content-center mb-1">
-            <div *ngIf="work.get('quantity')?.invalid && work.get('quantity')?.value != null && workForm.get('quantity')?.value != ''"
-                class="col-12 text-center">
-                <span class="error">
-                    {{"VOUCHER.QUANTITYERROR" | translate}}
-                </span>
-            </div>
-            <div *ngIf="(work.get('quantity')?.invalid && (work.get('quantity')?.value == null || work.get('quantity')?.value == '') && (work.get('quantity')?.dirty || submitted)) || 
-            (work.get('refidum')?.invalid && (work.get('refidum')?.dirty || submitted)) ||
-            (work.get('description')?.invalid && (work.get('description')?.dirty || submitted))"
-                class="col-12 text-center">
-                <span class="error">
-                    {{"VOUCHER.MANDATORY" | translate}}
-                </span>
-            </div>
-        </div> -->
+                    <div *ngIf="submitted" class="row justify-content-center mb-1">
+                        <div *ngIf="!validHoursMinutes; else mandatoryBlock" class="col-12 text-center">
+                            <span class="error">
+                                {{"TICKET.WORK.QUANTITYERROR" | translate}}
+                            </span>
+                        </div>
+                        <ng-template #mandatoryBlock>
+                            <div *ngIf="workForm.invalid" class="col-12 text-center">
+                                <span class="error">
+                                    {{"TICKET.WORK.MANDATORY" | translate}}
+                                </span>
+                            </div>
+                        </ng-template>
+                    </div>
 
                     <!-- Import Attached Files -->
                     <div *ngIf="work.idticketline != 0" class="row justify-content-center align-items-center mt-2">
                         <!-- <div class="col-12">
-            <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
-        </div> -->
-                        <div *ngIf="files.length > 0" class="col-12 image-container text-center">
+                            <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
+                        </div> -->
+                        <div *ngIf="files && files.length > 0" class="col-12 image-container text-center">
                             <div class="image-wrapper" *ngFor="let file of files">
                                 <img class="custom-image me-2" [src]="urlServerLaraFile+file.src"
                                     [matTooltip]="file.title" (click)="openImageModal(file)" />
@@ -129,21 +129,23 @@
                         class="row justify-content-center align-items-center mt-1">
                         <div class="col-12 col-sm-6 text-start">
                             <span *ngIf="work.user_created != null" class="userInfo">
-                                {{"TICKET.WORK.CREATED" | translate}}:
+                                {{"TICKET.DATETIMELOG.CREATED" | translate}}:
                                 {{work.user_created.nickname}} - {{work.user_created.datetime}}
                             </span>
                         </div>
                         <div class="col-12 col-sm-6 text-end">
                             <span *ngIf="work.user_updated != null" class="userInfo">
-                                {{"TICKET.WORK.UPDATED" | translate}}:
+                                {{"TICKET.DATETIMELOG.UPDATED" | translate}}:
                                 {{work.user_updated.nickname}} - {{work.user_updated.datetime}}
                             </span>
                         </div>
                     </div>
                     <ng-template #iconBlock>
                         <div class="row justify-content-center mt-1">
-                            <div class="col-12 text-end">
-                                <i class="bi bi-info-circle" [matTooltip]="tooltipLineCreation"></i>
+                            <div class="col-12 text-start">
+                                <i class="bi bi-info-circle"
+                                    matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: {{work.user_created?.nickname}} - {{work.user_created?.datetime}}, &#10;
+                                {{'TICKET.DATETIMELOG.UPDATED' | translate}}: {{work.user_updated?.nickname}} - {{work.user_updated?.datetime}}"></i>
                             </div>
                         </div>
                     </ng-template>

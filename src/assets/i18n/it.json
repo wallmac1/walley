@@ -405,44 +405,70 @@
     }
   },
   "VOUCHER": {
-    "VOUCHER": "Buoni Di Lavoro",
-    "STATUS": "Stato",
-    "NUMBER": "Numero",
-    "DATE": "Data",
-    "CUSTOMER": "Cliente",
-    "NOTES": "Note",
-    "CREATEVOUCHER": "Crea Buono di Lavoro",
-    "SAVE": "Salva",
-    "ARTICLE": "Articolo",
-    "WORK": "Lavoro",
-    "TITLE": "Titolo",
-    "DELETE": "Elimina",
-    "CLOSE": "Chiudi",
-    "QUANTITY": "Quantità",
-    "MEASUREMENTUNIT": "Unità di Misura",
-    "DESCRIPTION": "Descrizione",
-    "NUMBERSERROR": "Quantità, Imponibile Acquisto e Imponibile Vendita sono campi numerici con al massimo due decimali dopo la virgola e devono essere maggiori di 0,00",
-    "MANDATORY": "Compila i campi obbligatori",
-    "UNITERROR": "Unità di misura è richiesta",
-    "CODE": "Codice",
-    "PURCHASE": "Imponibile Acquisto",
-    "SALE": "Imponibile Vendita",
-    "ADDITIONALINFO": "Informazioni Aggiuntive",
-    "SN": "Serial Number",
-    "MINUTES": "Minuti",
-    "HOURS": "Ore",
-    "CREATED": "Creazione",
-    "UPDATED": "Ultima Modifica",
-    "FILTER": "Filtra",
-    "OPEN": "Riapri",
-    "TOBEINVOICED": "Da Fatturare",
-    "INVOICED": "Fatturato",
-    "CUSTOMERERROR": "Deve essere selezionato un cliente",
-    "ALLSTATUS": "Tutti gli Stati",
+    "ARTICLE": {
+      "ARTICLE": "Articolo",
+      "TITLE": "Titolo",
+      "CODE": "Codice",
+      "MEASUREMENTUNIT": "Unità di Misura",
+      "QUANTITY": "Quantità",
+      "PURCHASE": "Imponibile Acquisto",
+      "SALE": "Imponibile Vendita",
+      "DESCRIPTION": "Descrizione",
+      "NUMBERSERROR": "Quantità, Imponibile Acquisto e Imponibile Vendita sono campi numerici con al massimo due decimali dopo la virgola e devono essere maggiori di 0,00",
+      "MANDATORY": "Compila i campi obbligatori",
+      "ADDITIONALINFO": "Informazioni aggiuntive",
+      "SN": "Serial Number",
+      "CREATED": "Creazione",
+      "UPDATED": "Ultima Modifica"
+    },
+    "INFO": {
+      "VOUCHER": "Buoni Di Lavoro",
+      "STATUS": "Stato",
+      "NUMBER": "Numero",
+      "DATE": "Data",
+      "CUSTOMER": "Cliente",
+      "NOTES": "Note",
+      "CREATEVOUCHER": "Crea Buono di Lavoro",
+      "CUSTOMERERROR": "Deve essere selezionato un cliente",
+      "WORK": "Lavoro",
+      "ARTICLE": "Articolo"
+    },
+    "FILTERS": {
+      "FILTER": "Filtra",
+      "ALLSTATUS": "Tutti gli Stati"
+    },
+    "LIST": {
+      "VOUCHER": "Buoni Di Lavoro",
+      "TOTALRESULTS": "Risultati Totali",
+      "OBJPERPAGE": "Oggetti Per Pagina",
+      "PAGE": "Pagina",
+      "OF": "Di",
+      "DATE": "Data",
+      "CUSTOMER": "Cliente",
+      "STATUS": "Stato",
+      "INFO": "Info"
+    },
+    "WORK": {
+      "WORK": "Lavoro",
+      "MINUTES": "Minuti",
+      "HOURS": "Ore",
+      "DESCRIPTION": "Descrizione",
+      "MANDATORY": "Compila i campi obbligatori",
+      "CREATED": "Creato da",
+      "UPDATED": "Ultima Modifica"
+    },
     "POPUP": {
       "TITLE": "Ricerca Articolo",
       "NAME": "Nome",
       "CLOSE": "Chiudi"
+    },
+    "BUTTONS": {
+      "SAVE": "Salva",
+      "DELETE": "Elimina",
+      "CLOSE": "Chiudi",
+      "OPEN": "Riapri",
+      "TOBEINVOICED": "Da Fatturare",
+      "INVOICED": "Fatturato"
     }
   },
   "TICKET": {
@@ -483,19 +509,16 @@
       "KEEPINFORMED": "Tieni aggiornato",
       "ERROR": "Completa tutti i campi obbligatori per inviare"
     },
-    "STATUSCARD": {
-      "STATUS": "Stato",
-      "CREATEDBY": "Creato Da"
-    },
     "WORK": {
+      "QUANTITYERROR": "Ore e Minuti non possono essere entrambi nulli",
+      "MANDATORY": "Compilare i campi obbligatori",
       "WORK": "Lavoro",
       "HOURS": "Ore",
       "MINUTES": "Minuti",
-      "DESCRIPTION": "Descrizione",
-      "UPDATED": "Aggiornato",
-      "CREATED": "Creato"
+      "DESCRIPTION": "Descrizione"
     },
     "INFO": {
+      "INCHARGE": "In Carico",
       "CUSTOMER": "Cliente",
       "LOCATION": "Sede",
       "INTERNAL": "Interno",
@@ -531,7 +554,8 @@
       "ADDWORK": "Aggiungi Lavoro",
       "ADDARTICLE": "Aggiungi Articolo",
       "ADDMESSAGE": "Aggiungi Messaggio",
-      "CHANGESTATUS": "Cambia Stato"
+      "CHANGESTATUS": "Cambia Stato",
+      "RELEASE": "Rilascia Ticket"
     },
     "ARTICLE": {
       "ARTICLE": "Articolo",
@@ -544,14 +568,21 @@
       "DESCRIPTION": "Descrizione",
       "NUMBERSERROR": "Quantità, Imponibile Acquisto e Imponibile Vendita sono campi numerici con al massimo due decimali dopo la virgola e devono essere maggiori di 0,00",
       "MANDATORY": "Compila i campi obbligatori",
-      "SN": "Serial Number",
-      "CREATED": "Creato da",
-      "UPDATED": "Ultima Modifica"
+      "SN": "Serial Number"
+    },
+    "TIMELINE": {
+      "WORK": "Lavoro",
+      "ARTICLE": "Articolo",
+      "INCHARGE": "In Carico",
+      "MESSAGE": "Messaggio",
+      "STATUS": "Stato"
     },
     "TICKET": "Ticket",
     "STATUS": "Stato",
     "INCHARGE": "In Carico",
+    "RELEASED": "Rilasciato",
     "FILTERS": {
+      "TOOLTIP": "Se attivato verranno mostrati solo i ticket nuovi, in lavorazione ed in attesa", 
       "FILTERS": "Filtri",
       "INCHARGE": "In Carico",
       "DEPARTMENT": "Dipartimento",
@@ -559,7 +590,8 @@
       "ALLSTATUS": "Tutti gli Stati",
       "STATUS": "Stato",
       "FILTER": "Filtra",
-      "NOTCLOSED": "Non Chiuso"
+      "NOTCLOSED": "Aperto",
+      "CUSTOMER": "Cliente"
     },
     "MESSAGE": {
       "MESSAGE": "Messaggio",
@@ -568,7 +600,11 @@
     },
     "TOOLTIP": {
       "NODESCRIPTION": "Nessuna Descrizione",
-      "NOTINCHARGE": "Non in Carica"
+      "NOTINCHARGE": "Non in Carico"
+    },
+    "DATETIMELOG": {
+      "CREATED": "Creato da",
+      "UPDATED": "Ultima Modifica"
     }
-}
+  }
 }

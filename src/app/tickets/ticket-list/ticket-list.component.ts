@@ -14,6 +14,8 @@ import { Connect } from '../../classes/connect';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
+import { Department } from '../interfaces/department';
+import { User } from '../interfaces/user';
 
 @Component({
   selector: 'app-ticket-list',
@@ -40,7 +42,7 @@ export class TicketListComponent {
   currentPage: number = 1;
   totalPages: number = 1;
   totalResults: number = 0;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 50;
   displayedColumns: string[] = ['creation', 'customer', 'title', 'status', 'lastupdate', 'info'];
 
   lastSearch: Filters = {
@@ -93,7 +95,7 @@ export class TicketListComponent {
     }
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketsList', {
       idcustomer: this.lastSearch.customer || null, idstatusticket: this.lastSearch.status || null,
-      idsubstatustiket: this.lastSearch.substatus || null, incharge: this.lastSearch.incharge || null,
+      idsubstatusticket: this.lastSearch.substatus || null, incharge: this.lastSearch.incharge || null,
       iddepartment: this.lastSearch.department || null, notclosed: this.lastSearch.notclosed, orderby_creation: this.orderby_creation,
       orderby_lastupdate: this.orderby_update, itemsPerPage: this.itemsPerPage, currentPageIndex: this.currentPage
     }).subscribe((val: ApiResponse<any>) => {

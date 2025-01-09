@@ -31,7 +31,7 @@ import { TicketLine } from '../interfaces/ticket-lines';
 export class TicketArticleComponent {
 
   isProductSelected: boolean = false;
-  tooltipLineCreation: any;
+  //tooltipLineCreation: any;
   filteredArticles$!: Observable<Article[]>
   isOpenInformations = false;
   screenWidth: number = window.innerWidth;
@@ -43,17 +43,18 @@ export class TicketArticleComponent {
   @Input() index: number = -1;
   @Input() ticketId: number = 0;
   @Input() measurmentUnit: MeasurementUnit[] = [];
+  @Output() getLine = new EventEmitter<{ index: number, idticketline: number }>()
   @Output() delete = new EventEmitter<{ index: number, idticketline: number }>()
 
   submitted = false;
 
   constructor(private fb: FormBuilder, private connectServerService: ConnectServerService, public dialog: MatDialog,
-    private translate: TranslateService, private cdr: ChangeDetectorRef) { }
+    private translate: TranslateService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.files = this.article.attachments;
     this.initForm();
-    this.initLine();
+    //this.initLine();
     this.formLogic();
   }
 
@@ -103,24 +104,24 @@ export class TicketArticleComponent {
       };
     }
 
-  private initLine() {
-    if (this.articleForm.get('refidarticle')?.value != null) {
-      this.articleForm.get('title')?.disable();
-      this.isProductSelected = true;
-    }
+  // private initLine() {
+  //   if (this.articleForm.get('refidarticle')?.value != null) {
+  //     this.articleForm.get('title')?.disable();
+  //     this.isProductSelected = true;
+  //   }
 
-    let created_at: string = '';
-    let updated_at: string = '';
-    if (this.articleForm.get('user_created')?.value != null) {
-      created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.article.user_created?.nickname + ' - ' +
-        this.article.user_created?.datetime + ', '
-    }
-    if (this.article.user_updated != null) {
-      updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.article.user_updated.nickname +
-        ' - ' + this.article.user_updated.datetime;
-    }
-    this.tooltipLineCreation = created_at + updated_at
-  }
+  //   let created_at: string = '';
+  //   let updated_at: string = '';
+  //   if (this.articleForm.get('user_created')?.value != null) {
+  //     created_at = this.translate.instant('VOUCHER.CREATED') + ': ' + this.article.user_created?.nickname + ' - ' +
+  //       this.article.user_created?.datetime + ', '
+  //   }
+  //   if (this.article.user_updated != null) {
+  //     updated_at = this.translate.instant('VOUCHER.UPDATED') + ': ' + this.article.user_updated.nickname +
+  //       ' - ' + this.article.user_updated.datetime;
+  //   }
+  //   this.tooltipLineCreation = created_at + updated_at
+  // }
 
   formLogic() {
     this.articleForm.get('code')?.disable();
@@ -138,7 +139,6 @@ export class TicketArticleComponent {
     });
 
     dialogRef.afterClosed().subscribe((result: any | null) => {
-      console.log(result)
       if (result) {
         this.articleForm.get('title')?.setValue(result.article_data.title);
         this.articleForm.get('title')?.disable();
@@ -243,22 +243,6 @@ export class TicketArticleComponent {
     this.articleForm.markAsPristine();
   }
 
-  getArticle() {
-    if(this.article.idticketline > 0) {
-      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketLine', 
-        {idticket: this.ticketId, idticketline: this.article.idticketline})
-          .subscribe((val: ApiResponse<any>) => {
-            if(val) {
-              this.article = val.data.ticketLineInfo;
-              this.article.quantity = this.article.quantity.replace(".", ",");
-              this.article.taxablepurchase = this.article.taxablepurchase?.replace(".", ",");
-              this.article.taxablesale = this.article.taxablesale?.replace(".", ",");
-              this.articleForm.patchValue(this.article);
-            }
-          })
-    }
-  }
-
   deleteArticle() {
     this.delete.emit({ index: this.index, idticketline: this.article.idticketline });
   }
@@ -280,8 +264,15 @@ export class TicketArticleComponent {
       this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicketLine', { obj_line: line_copy})
         .subscribe((val: ApiResponse<any>) => {
           if(val) {
-            this.articleForm.markAsPristine();
-            this.getArticle();
+            if(this.article.idticketline == 0) {
+              this.getLine.emit({index: this.index, idticketline: val.data.idticketline});
+            }
+            else {
+              this.getLine.emit({index: this.index, idticketline: this.article.idticketline});
+            }
+            //this.article.idticketline = val.data.idticketline;
+            //this.articleForm.markAsPristine();
+            //this.getArticle();
           }
         })
     }

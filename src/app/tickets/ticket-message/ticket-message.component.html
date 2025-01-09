@@ -75,7 +75,7 @@
                             <!-- <div class="col-12">
                         <span style="font-size: small; color: gray;">File Allegati: {{files.length}}</span>
                     </div> -->
-                            <div *ngIf="files.length > 0" class="col-12 image-container text-center">
+                            <div *ngIf="files && files.length > 0" class="col-12 image-container text-center">
                                 <div class="image-wrapper" *ngFor="let file of files">
                                     <img class="custom-image me-2" [src]="urlServerLaraFile+file.src"
                                         [matTooltip]="file.title" (click)="openImageModal(file)" />
@@ -94,28 +94,30 @@
                     </div>
                     </ng-container>
 
-                    <!-- <div *ngIf="screenWidth >= 768; else iconBlock"
+                    <div *ngIf="screenWidth >= 768; else iconBlock"
                         class="row justify-content-center align-items-center mt-1">
                         <div class="col-12 col-sm-6 text-start">
                             <span *ngIf="message.user_created != null" class="userInfo">
-                                {{"TICKET.WORK.CREATED" | translate}}:
+                                {{"TICKET.DATETIMELOG.CREATED" | translate}}:
                                 {{message.user_created.nickname}} - {{message.user_created.datetime}}
                             </span>
                         </div>
                         <div class="col-12 col-sm-6 text-end">
                             <span *ngIf="message.user_updated != null" class="userInfo">
-                                {{"TICKET.WORK.UPDATED" | translate}}:
+                                {{"TICKET.DATETIMELOG.UPDATED" | translate}}:
                                 {{message.user_updated.nickname}} - {{message.user_updated.datetime}}
                             </span>
                         </div>
                     </div>
                     <ng-template #iconBlock>
                         <div class="row justify-content-center mt-1">
-                            <div class="col-12 text-end">
-                                <i class="bi bi-info-circle" [matTooltip]="tooltipLineCreation"></i>
+                            <div class="col-12 text-start">
+                                <i class="bi bi-info-circle" 
+                                matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: {{message.user_created?.nickname}} - {{message.user_created?.datetime}}, &#10;
+                                {{'TICKET.DATETIMELOG.UPDATED' | translate}}: {{message.user_updated?.nickname}} - {{message.user_updated?.datetime}}"></i>
                             </div>
                         </div>
-                    </ng-template> -->
+                    </ng-template>
                 </mat-expansion-panel>
             </div>
         </div>

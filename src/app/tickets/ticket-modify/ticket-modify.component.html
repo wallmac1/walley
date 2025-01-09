@@ -1,5 +1,5 @@
-<div class="container-fluid p-1 p-md-2 p-lg-3" style="min-height: 100%; min-width: 375px;">
-    <div class="row justify-content-center mt-2 mb-2" style="position: relative;">
+<div class="container-fluid p-1 p-md-2 p-lg-3" style="min-height: 100%; min-width: 375px; overflow: visible !important;">
+    <div class="row justify-content-center mt-2 mb-2" style="position: relative; overflow: visible !important;">
         <!-- Client Card -->
         <div class="col-12 col-sm-6 col-xl-3 col-xxl-2 text-center order-2 order-xl-1 mt-1"
             style="max-width: 400px; height: 100%;">
@@ -58,7 +58,7 @@
                 <div class="card-body p-1" style="position: relative;">
                     <p class="card-text" style="position: relative; color: #002D5D;">
                         <span class="me-2" [ngStyle]="{'color': ticketStatus?.color}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="20" fill="currentColor"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor"
                                 class="bi bi-dash" viewBox="0 0 16 16" style="transform: scale(4);">
                                 <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
                             </svg>
@@ -67,7 +67,7 @@
                             {{ticketStatus?.name_status}}
                         </span>
                         <span class="ms-2" [ngStyle]="{'color': ticketStatus?.color}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="20" fill="currentColor"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor"
                                 class="bi bi-dash" viewBox="0 0 16 16" style="transform: scale(4);">
                                 <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
                             </svg>
@@ -79,11 +79,6 @@
                     </p>
                 </div>
             </div>
-        </div>
-
-        <div class="inChargeIcon" style="position: absolute;" [matTooltip]="ticketInfo?.incharge?.nickname!"
-            [ngClass]="true ? 'colouredIcon' : '' ">
-            <i class="bi bi-person-raised-hand" style="font-size: x-large; z-index: 1000;"></i>
         </div>
 
         <!-- <div class="col-12 mt-2 order-4 text-center">
@@ -151,10 +146,16 @@
         <i class="bi bi-three-dots-vertical"></i>
     </button>
     <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="takeOnCharge()">
+        <button *ngIf="false; else releaseBlock" mat-menu-item (click)="takeOnCharge()">
             <i class="bi bi-person-raised-hand me-2"></i>
             <span>{{"TICKET.MODIFY.TAKEONCHARGE" | translate }}</span>
         </button>
+        <ng-template #releaseBlock>
+            <button mat-menu-item (click)="release()">
+                <i class="bi bi-person-standing me-2"></i>
+                <span>{{"TICKET.MODIFY.RELEASE" | translate }}</span>
+            </button>
+        </ng-template>
         <button mat-menu-item (click)="addWork()">
             <i class="bi bi-tools me-2"></i>
             <span>{{"TICKET.MODIFY.ADDWORK" | translate }}</span>

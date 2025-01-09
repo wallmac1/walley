@@ -1,4 +1,5 @@
 import { LineFile } from "../../voucher/interfaces/line-file";
+import { User } from "./user";
 
 export interface TicketLine {
     idticketline: number;
@@ -22,6 +23,7 @@ export interface TicketLine {
     timeline: string;
     status?: string;
     substatus?: string;
+    incharge?: User | null;
     color?: string; 
     user_created?: {
         id: number;

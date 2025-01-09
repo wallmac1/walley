@@ -2,7 +2,7 @@
     <mat-expansion-panel-header style="max-height: 50px; background-color: #e1fff6;">
         <mat-panel-title class="panel-title">
             <span *ngIf="lineForm.get('description')?.value == null || lineForm.get('description')?.value.length == 0">
-                {{"VOUCHER.WORK" | translate}}
+                {{"VOUCHER.WORK.WORK" | translate}}
             </span>
 
             <span *ngIf="lineForm.get('description')?.value != null && lineForm.get('description')?.value.length > 0"
@@ -20,7 +20,7 @@
     <div [formGroup]="lineForm" class="row justify-content-start align-items-end mb-2">
         <div class="col-5 col-sm-3 col-md-2 pe-1 mt-2">
             <label class="subtitle form-label" for="hours">
-                {{"VOUCHER.HOURS" | translate}}
+                {{"VOUCHER.WORK.HOURS" | translate}}
             </label>
             <div class="input-group">
                 <span class="input-group-text" id="hLabel">h</span>
@@ -35,7 +35,7 @@
         </div>
         <div class="col-5 col-sm-3 col-md-2 mt-2 ps-1">
             <label class="subtitle form-label" for="minutes">
-                {{"VOUCHER.MINUTES" | translate}}
+                {{"VOUCHER.WORK.MINUTES" | translate}}
             </label>
             <div class="input-group">
                 <span class="input-group-text" id="mLabel">m</span>
@@ -62,7 +62,7 @@
 
         <div class="col-12 mt-2">
             <label class="subtitle form-label" for="description">
-                {{"VOUCHER.DESCRIPTION" | translate}}
+                {{"VOUCHER.WORK.DESCRIPTION" | translate}}
             </label>
             <textarea type="text" class="form-control" formControlName="description" id="description" rows="2"
                 [class.is-invalid]="lineForm.get('description')?.invalid && (lineForm.get('description')?.dirty || submitted)">
@@ -74,7 +74,7 @@
         <div *ngIf="lineForm.get('quantity')?.invalid && lineForm.get('quantity')?.value != null && lineForm.get('quantity')?.value != ''"
             class="col-12 text-center">
             <span class="error">
-                {{"VOUCHER.QUANTITYERROR" | translate}}
+                {{"VOUCHER.WORK.QUANTITYERROR" | translate}}
             </span>
         </div>
         <div *ngIf="(lineForm.get('quantity')?.invalid && (lineForm.get('quantity')?.value == null || lineForm.get('quantity')?.value == '') && (lineForm.get('quantity')?.dirty || submitted)) || 
@@ -82,7 +82,7 @@
             (lineForm.get('description')?.invalid && (lineForm.get('description')?.dirty || submitted))"
             class="col-12 text-center">
             <span class="error">
-                {{"VOUCHER.MANDATORY" | translate}}
+                {{"VOUCHER.WORK.MANDATORY" | translate}}
             </span>
         </div>
     </div>
@@ -104,7 +104,7 @@
     <div *ngIf="lineForm.dirty" class="row justify-content-center pt-2" style="border-top: 1px solid lightgray;">
         <div class="col-12 text-end">
             <button class="btn btn-outline-dark" (click)="saveWork(index)">
-                {{"VOUCHER.SAVE" | translate}}
+                {{"VOUCHER.BUTTONS.SAVE" | translate}}
             </button>
         </div>
     </div>
@@ -112,13 +112,13 @@
     <div *ngIf="screenWidth >= 768; else iconBlock" class="row justify-content-center align-items-center mt-1">
         <div class="col-12 col-sm-6 text-start">
             <span *ngIf="lineForm.get('user_created')?.value != null" class="userInfo">
-                {{"VOUCHER.CREATED" | translate}}:
+                {{"VOUCHER.WORK.CREATED" | translate}}:
                 {{lineForm.get('user_created')?.value.nickname}} - {{lineForm.get('user_created')?.value.datetime}}
             </span>
         </div>
         <div class="col-12 col-sm-6 text-end">
             <span *ngIf="lineForm.get('user_updated')?.value != null" class="userInfo">
-                {{"VOUCHER.UPDATED" | translate}}:
+                {{"VOUCHER.WORK.UPDATED" | translate}}:
                 {{lineForm.get('user_updated')?.value.nickname}} - {{lineForm.get('user_updated')?.value.datetime}}
             </span>
         </div>
