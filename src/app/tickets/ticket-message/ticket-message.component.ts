@@ -44,7 +44,10 @@ export class TicketMessageComponent {
   constructor(private connectServerService: ConnectServerService, private fb: FormBuilder, public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.files = this.message.attachments;
+    if (this.message.attachments) {
+      this.files = this.message.attachments;
+    }
+
     //this.initLine();
     this.initForm();
   }
@@ -181,14 +184,13 @@ export class TicketMessageComponent {
       this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicketLine', { obj_line: line_copy })
         .subscribe((val: ApiResponse<any>) => {
           if (val) {
-            if (val) {
-              if (this.message.idticketline == 0) {
-                this.getLine.emit({ index: this.index, idticketline: val.data.idticketline });
-              }
-              else {
-                this.getLine.emit({ index: this.index, idticketline: this.message.idticketline });
-              }
+            if (this.message.idticketline == 0) {
+              this.getLine.emit({ index: this.index, idticketline: val.data.idticketline });
             }
+            else {
+              this.getLine.emit({ index: this.index, idticketline: this.message.idticketline });
+            }
+            this.messageForm.markAsPristine();
           }
         })
     }

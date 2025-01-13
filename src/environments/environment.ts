@@ -2,7 +2,7 @@ export const environment = {
     production: true,
     recaptcha: {
         apiUrl: '',
-        siteKey: '',
+        siteKey: '6Ld2JLYqAAAAAEN17L2CG0RSOXJByc4dOeFtwadz',
     },
     urlserver: {
         laravelApi: '/proxylink/',

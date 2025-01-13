@@ -15,6 +15,7 @@ import { Connect } from '../../../../classes/connect';
 import { ConnectServerService } from '../../../../services/connect-server.service';
 import { ApiResponse } from '../../../../weco/interfaces/api-response';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-filters',
@@ -24,7 +25,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ReactiveFormsModule,
     MatAutocompleteModule,
     TranslateModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatExpansionModule
   ],
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.scss'

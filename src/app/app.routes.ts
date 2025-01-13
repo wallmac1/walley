@@ -12,6 +12,7 @@ import { SystemReviewComponent } from './weco/system/system-review/system-review
 import { VoucherInfoComponent } from './voucher/voucher-info/voucher-info.component';
 import { VoucherListComponent } from './voucher/voucher-list/voucher-list.component';
 import { TicketListComponent } from './tickets/ticket-list/ticket-list.component';
+import { AccessPageComponent } from './tickets/access-page/access-page.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -20,6 +21,7 @@ export const routes: Routes = [
     { path: "recoverPassword", component: RecoverPasswordComponent },
     { path: "ticket/:id", component: TicketModifyComponent },
     { path: "ticketsList", component: TicketListComponent },
+    { path: "access", component: AccessPageComponent },
     { path: "newPassword", component: NewPasswordComponent },
     { path: "menu/delete", component: DeleteComponent },
     { path: "authorizations", component: AuthorizationsComponent },

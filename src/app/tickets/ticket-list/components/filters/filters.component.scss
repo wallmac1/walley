@@ -1,6 +1,7 @@
 .title {
     font-size: large;
     font-weight: bold;
+    color: white;
 }
 
 .form-label {
@@ -9,10 +10,8 @@
 }
 
 .card-title {
-    border-bottom: 1px solid lightgray;
     background-color: #002D5D;
     color: white;
-    border-radius: 5px 5px 0 0;
 }
 
 .btn-outline-dark {
@@ -41,4 +40,12 @@
 
 .btn-outline-primary:hover {
     border-color: #002D5D;
+}
+
+.fontStyle {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+::ng-deep .specific-class>.mat-expansion-indicator:after {
+    color: white;
 }

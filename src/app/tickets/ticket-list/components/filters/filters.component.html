@@ -1,91 +1,92 @@
-<div class="row justify-content-center align-items-center">
-    <div class="card col-12" [formGroup]="ticketFilterForm" style="max-width: 1100px;">
-        <div class="card-body p-0">
-            <div class="row justify-content-center align-items-center card-title">
+<div class="row justify-content-center align-items-center fontStyle">
+    <mat-expansion-panel [expanded]="true" class="p-0" style="max-width: 1100px; width: 100%;">
+        <mat-expansion-panel-header class="specific-class" style="background-color: #002D5D; height: 50px;">
+            <mat-panel-title class="panel-title">
                 <div class="col-12 text-center mt-1 mb-2">
                     <span class="title">{{"TICKET.FILTERS.FILTERS" | translate }}</span>
                 </div>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row justify-content-center mt-2 align-items-end" [formGroup]="ticketFilterForm">
+            <!-- CUSTOMER -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="customer">{{"TICKET.FILTERS.CUSTOMER" | translate }}</label>
+                <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
+                    formControlName="customer"
+                    [class.is-invalid]="ticketFilterForm.get('customer')?.invalid && submitted">
+                <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                    <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
+                        <div>
+                            {{option.denominazione}}
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
             </div>
 
-            <div class="row justify-content-center p-1 align-items-end">
-                <!-- CUSTOMER -->
-                <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="customer">{{"TICKET.FILTERS.CUSTOMER" | translate }}</label>
-                    <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
-                        formControlName="customer"
-                        [class.is-invalid]="ticketFilterForm.get('customer')?.invalid && submitted">
-                    <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
-                        <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
-                            <div>
-                                {{option.denominazione}}
-                            </div>
-                        </mat-option>
-                    </mat-autocomplete>
-                </div>
-
-                <!-- IN CHARGE -->
-                <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="incharge">{{"TICKET.FILTERS.INCHARGE" | translate }}</label>
-                    <select type="string" class="form-select" id="incharge" formControlName="incharge"
-                        [class.is-invalid]="ticketFilterForm.get('incharge')?.invalid && ticketFilterForm.get('incharge')?.touched">
-                        <option [value]="null">--</option>
-                        <option *ngFor="let user of listUser" [ngValue]="user.id">
-                            {{user.nickname}}
-                        </option>
-                    </select>
-                </div>
-
-                <!-- DEPARTMENT -->
-                <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="department">{{"TICKET.FILTERS.DEPARTMENT" | translate }}</label>
-                    <select type="string" class="form-select" id="department" formControlName="department"
-                        [class.is-invalid]="ticketFilterForm.get('department')?.invalid && ticketFilterForm.get('department')?.touched">
-                        <option [value]="null">--</option>
-                        <option *ngFor="let department of listDepartments" [ngValue]="department.id">
-                            {{department.name}}
-                        </option>
-                    </select>
-                </div>
-
-                <!-- STATUS -->
-                <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="status">{{"TICKET.FILTERS.STATUS" | translate }}</label>
-                    <select type="string" class="form-select" id="status" formControlName="status"
-                        [class.is-invalid]="ticketFilterForm.get('status')?.invalid && ticketFilterForm.get('status')?.touched">
-                        <option [ngValue]="null">--</option>
-                        <option *ngFor="let status of listStatus" [ngValue]="status.id">
-                            {{status.name}}
-                        </option>
-                    </select>
-                </div>
-
-                <!-- SUBSTATUS -->
-                <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
-                    <label class="form-label" for="substatus">{{"TICKET.FILTERS.SUBSTATUS" | translate }}</label>
-                    <select type="string" class="form-select" id="substatus" formControlName="substatus"
-                        [class.is-invalid]="ticketFilterForm.get('substatus')?.invalid && ticketFilterForm.get('substatus')?.touched">
-                        <option [ngValue]="null">--</option>
-                        <option *ngFor="let substatus of listSubStatus" [ngValue]="substatus.id">
-                            {{substatus.name}}
-                        </option>
-                    </select>
-                </div>
-                
-                <!-- CLOSED -->
-                <div class="col-5 col-sm-6 col-md-4 mt-1 mb-1">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="notclosed" formControlName="notclosed">
-                        <label class="form-check-label" for="notclosed">{{"TICKET.FILTERS.NOTCLOSED" | translate }}</label>
-                        <i class="bi bi-info-circle ms-2" matTooltip="{{'TICKET.FILTERS.TOOLTIP' | translate}}"></i> 
-                      </div> 
-                </div>
+            <!-- IN CHARGE -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="incharge">{{"TICKET.FILTERS.INCHARGE" | translate }}</label>
+                <select type="string" class="form-select" id="incharge" formControlName="incharge"
+                    [class.is-invalid]="ticketFilterForm.get('incharge')?.invalid && ticketFilterForm.get('incharge')?.touched">
+                    <option [value]="null">--</option>
+                    <option *ngFor="let user of listUser" [ngValue]="user.id">
+                        {{user.nickname}}
+                    </option>
+                </select>
             </div>
 
-            <div class="col-12 text-center mb-1 mt-1">
-                <button class="btn btn-outline-dark" (click)="filter()">
-                    {{"TICKET.FILTERS.FILTER" | translate}}
-                </button>
+            <!-- DEPARTMENT -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="department">{{"TICKET.FILTERS.DEPARTMENT" | translate }}</label>
+                <select type="string" class="form-select" id="department" formControlName="department"
+                    [class.is-invalid]="ticketFilterForm.get('department')?.invalid && ticketFilterForm.get('department')?.touched">
+                    <option [value]="null">--</option>
+                    <option *ngFor="let department of listDepartments" [ngValue]="department.id">
+                        {{department.name}}
+                    </option>
+                </select>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="status">{{"TICKET.FILTERS.STATUS" | translate }}</label>
+                <select type="string" class="form-select" id="status" formControlName="status"
+                    [class.is-invalid]="ticketFilterForm.get('status')?.invalid && ticketFilterForm.get('status')?.touched">
+                    <option [ngValue]="null">--</option>
+                    <option *ngFor="let status of listStatus" [ngValue]="status.id">
+                        {{status.name}}
+                    </option>
+                </select>
+            </div>
+
+            <!-- SUBSTATUS -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="substatus">{{"TICKET.FILTERS.SUBSTATUS" | translate }}</label>
+                <select type="string" class="form-select" id="substatus" formControlName="substatus"
+                    [class.is-invalid]="ticketFilterForm.get('substatus')?.invalid && ticketFilterForm.get('substatus')?.touched">
+                    <option [ngValue]="null">--</option>
+                    <option *ngFor="let substatus of listSubStatus" [ngValue]="substatus.id">
+                        {{substatus.name}}
+                    </option>
+                </select>
+            </div>
+
+            <!-- CLOSED -->
+            <div class="col-4 col-sm-6 col-md-4 mt-1 mb-1">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="notclosed"
+                        formControlName="notclosed">
+                    <label class="form-check-label" for="notclosed">{{"TICKET.FILTERS.NOTCLOSED" | translate
+                        }}</label>
+                    <i class="bi bi-info-circle ms-2" matTooltip="{{'TICKET.FILTERS.TOOLTIP' | translate}}"></i>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div class="col-12 text-center mb-1 mt-1">
+            <button class="btn btn-outline-dark" (click)="filter()">
+                {{"TICKET.FILTERS.FILTER" | translate}}
+            </button>
+        </div>
+    </mat-expansion-panel>
 </div>

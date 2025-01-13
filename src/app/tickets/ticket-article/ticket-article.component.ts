@@ -52,7 +52,10 @@ export class TicketArticleComponent {
     private translate: TranslateService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.files = this.article.attachments;
+    if(this.article.attachments) {
+      this.files = this.article.attachments;
+    }
+
     this.initForm();
     //this.initLine();
     this.formLogic();
@@ -86,6 +89,10 @@ export class TicketArticleComponent {
       taxablepurchase: [this.article.taxablepurchase || '0,00', this.numberWithCommaValidator()],
       taxablesale: [this.article.taxablesale || '0,00', this.numberWithCommaValidator()],
     })
+    if(this.article.refidarticle) {
+      this.isProductSelected = true;
+      this.articleForm.get('title')?.disable();
+    }
   }
 
   numberWithCommaValidator(): ValidatorFn {
@@ -207,8 +214,8 @@ export class TicketArticleComponent {
 
   getFiles() {
     if (this.article.idticketline > 0) {
-      this.connectServerService.postRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'ticket/ticketLineFilesList',
-        { idvoucher: this.ticketId, idvoucherline: this.article.idticketline })
+      this.connectServerService.getRequest<ApiResponse<{ files: LineFile[] }>>(Connect.urlServerLaraApi, 'ticket/ticketLineFilesList',
+        { idticket: this.ticketId, idticketline: this.article.idticketline })
         .subscribe((val: ApiResponse<{ attachments: LineFile[] }>) => {
           if (val.data) {
             this.files = val.data.attachments;
@@ -270,9 +277,7 @@ export class TicketArticleComponent {
             else {
               this.getLine.emit({index: this.index, idticketline: this.article.idticketline});
             }
-            //this.article.idticketline = val.data.idticketline;
-            //this.articleForm.markAsPristine();
-            //this.getArticle();
+            this.articleForm.markAsPristine();
           }
         })
     }

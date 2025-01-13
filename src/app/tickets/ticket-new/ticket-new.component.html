@@ -71,10 +71,14 @@
             </div>
 
             <!-- Description field -->
-            <div class="col-12 mb-3">
+            <div class="col-12 col-md-8 mb-3">
                 <label for="description" class="form-label">{{"TICKET.NEW.DESCRIPTION" | translate }}</label>
-                <sup>*</sup>
                 <textarea id="description" class="form-control" formControlName="description" rows="3"></textarea>
+            </div>
+
+            <div class="col-12 col-md-4 mb-3">
+                <label for="notes" class="form-label">{{"TICKET.NEW.NOTES" | translate }}</label>
+                <textarea id="notes" class="form-control" formControlName="notes" rows="3"></textarea>
             </div>
 
             <!-- Department field -->

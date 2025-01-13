@@ -1,0 +1,95 @@
+.flagIcon {
+    height: 20px;
+    width: auto;
+    margin-top: 2px;
+}
+
+.languageButton:focus {
+    box-shadow: none;
+}
+
+.languagesList:hover {
+    cursor: pointer;
+}
+
+.bi {
+    position: absolute;
+    top: 50%;
+}
+
+.loginRow {
+    width: 300px;
+
+    @media screen and (min-width: 500px) {
+        width: 350px;
+    }
+
+    @media screen and (min-width: 700px) {
+        width: 400px;
+    }
+}
+
+.titleBorder {
+    border: 1px solid #002D5D;
+    background-color: #002D5D;
+    color: white;
+    border-radius: 20px;
+}
+
+.textRow {
+    transform: translateY(-100px);
+    opacity: 0;
+    transition: transform 1.5s ease, opacity 1.5s ease;
+}
+
+.textRow.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.imageRow {
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 1.5s ease, opacity 1.5s ease;
+}
+
+.imageRow.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.emailAnimation, .passwordAnimation {
+    transform: translateX(-100px);
+    opacity: 0;
+    transition: transform 1.5s ease, opacity 1.5s ease;
+}
+
+.emailAnimation.visible, .passwordAnimation.visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.passwordAnimation.visible {
+    transition-delay: 0.5s;
+}
+
+.customButton {
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.customButton.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.walleyAnimation {
+    transform: translateY(30px); /* Parte a sinistra fuori dallo schermo */
+    opacity: 0;
+    transition: opacity 1.5s ease, transform 1.5s ease; /* Transizione per l'opacità */
+}
+
+.walleyAnimation.visible {
+    opacity: 1;
+    transform: translateX(0px);
+}

@@ -51,7 +51,10 @@ export class TicketWorkComponent {
     private translate: TranslateService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.files = this.work.attachments;
+    if(this.work.attachments) {
+      this.files = this.work.attachments;
+    }
+    
     this.initForm();
     //this.initLine();
   }
@@ -185,6 +188,7 @@ export class TicketWorkComponent {
             else {
               this.getLine.emit({index: this.index, idticketline: this.work.idticketline});
             }
+            this.workForm.markAsPristine();
           }
         })
     }

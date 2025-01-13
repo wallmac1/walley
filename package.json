@@ -26,6 +26,7 @@
     "@ngx-translate/http-loader": "^8.0.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "ng-recaptcha": "^13.2.1",
     "ng2-pdf-viewer": "^10.2.2",
     "ngx-cookie-service": "^17.1.0",
     "ngx-extended-pdf-viewer": "^21.3.5",

@@ -488,7 +488,8 @@
       "CUSTOMER": "Cliente",
       "STATUS": "Stato",
       "LASTUPDATE": "Ultimo Aggiornamento",
-      "INFO": "Informazioni"
+      "INFO": "Info",
+      "ORDEREDBYDEFAULT": "Ordinato per ultima modifica"
     },
     "NEW": {
       "NEWTICKET": "NUOVO TICKET",
@@ -507,7 +508,8 @@
       "CUSTOMER": "Cliente",
       "DEPARTMENT": "Dipartimento",
       "KEEPINFORMED": "Tieni aggiornato",
-      "ERROR": "Completa tutti i campi obbligatori per inviare"
+      "ERROR": "Completa tutti i campi obbligatori per inviare",
+      "NOTES": "Note"
     },
     "WORK": {
       "QUANTITYERROR": "Ore e Minuti non possono essere entrambi nulli",
@@ -536,7 +538,8 @@
       "DESCRIPTION": "Descrizione",
       "EDITSTATUS": "Modifica Stato",
       "STATUS": "Stato",
-      "SUBSTATUS": "Sottostato"
+      "SUBSTATUS": "Sottostato",
+      "SIDEEFFECTS": "Attenzione, questa operazione annullerà tutte le modifiche non salvate"
     },
     "BUTTONS": {
       "DELETE": "Elimina",

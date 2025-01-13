@@ -1,0 +1,119 @@
+<div class="container-fluid" style="min-width: 350px; height: 100%;">
+    <div class="row justify-content-center" style="height: 100%;">
+        <div class="col-12 col-lg-7 col-xl-8 p-1 p-md-5" style="background-color: #002D5D;">
+            <div class="row justify-content-center align-items-center mb-4">
+                <div class="col-8 text-start">
+                    <img src="assets/img/logo.png" height="40px">
+                </div>
+
+                <!-- <div class="col-8 ps-0">
+                    <span style="font-size: x-large; font-weight: bold; color: white;">
+                        Walley
+                    </span><br>
+                    <span style="font-size: small; color: white;">
+                        Software su misura per te
+                    </span>
+                </div> -->
+
+                <div class="col-4 text-end">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle languageButton p-1" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleDropdown()">
+                            <img class="flagIcon" *ngIf="selectedLanguage.flag"
+                                [src]="'assets/img/'+selectedLanguage.flag">
+                            <span class="ms-1 me-1">{{ selectedLanguage.sign }}</span>
+                        </button>
+                        <ul class="dropdown-menu" style="min-width: 65px !important;">
+                            <li class="ms-2 languagesList" *ngFor="let language of languagesList">
+                                <img class="flagIcon" [src]="'assets/img/'+language.flag">
+                                <span class="ms-1">{{ language.sign }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row textRow" style="margin-top: 8rem;" appInViewport>
+                <div class="col-12 text-center">
+                    <span style="font-size: xx-large; color: white; font-weight: bold;">
+                        Gestisci i tuoi Ticket di assistenza in un click
+                    </span>
+                </div>
+                <div class="col-12 text-center mt-3">
+                    <span style="color: white;">
+                        Accedi dal portale dedicato per visualizzare, aprire e seguire i tuoi ticket. Supporto rapido e
+                        a portata di mano, ovunque tu sia!
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12 text-center" style="overflow: hidden;">
+                    <img class="imageRow" src="assets/img/office.png" height="500px" appInViewport>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5 col-xl-4 p-1 d-flex align-items-center justify-content-center"
+            style="height: 100%; background-color: whitesmoke;">
+            <div class="row justify-content-center align-items-center loginRow">
+                <form [formGroup]="accessForm">
+                    <!-- <div class="col-12 mb-5 text-center">
+                        <span class="p-2 titleBorder" style="font-size: large;">
+                            ACCEDI AL PORTALE
+                        </span>
+                    </div> -->
+
+                    <div class="col-12 text-center" style="border-bottom: 1px solid lightgray;">
+                        <img src="assets/img/walley.png" alt="logo" class="logo walleyAnimation mb-4" appInViewport>
+                        <!-- <p class="login-card-description " style="font-size: small;">Login</p> -->
+                    </div>
+
+                    <div class="col-12 mt-4 emailAnimation form-group" appInViewport>
+                        <label for="email" style="font-weight: bold;">Email</label>
+                        <input type="email" id="email" formControlName="email" class="form-control" placeholder=""
+                            [class.is-invalid]="(accessForm.get('email')?.invalid && (accessForm.get('email')?.touched || submitted)) || 
+                        (accessForm.valid && accessForm && invalidCredentials)">
+                    </div>
+                    <div class="col-12 mt-3 passwordAnimation form-group" style="position: relative;" appInViewport>
+                        <label for="password" style="font-weight: bold;">Password</label>
+                        <input [type]="type" id="password" formControlName="password" class="form-control "
+                            placeholder="" [class.is-invalid]="(accessForm.get('password')?.invalid && (accessForm.get('password')?.touched || submitted)) ||
+                      (accessForm.valid && submitted && invalidCredentials)">
+                        <i class="bi" [ngClass]="{'bi-eye': !toggled, 'bi-eye-slash': toggled}" id="togglePassword"
+                            (click)="seePassword()" [ngStyle]="{'right': (accessForm.get('password')?.invalid && submitted) ? '10%' : '2%'}"></i>
+                    </div>
+                    <div *ngIf="accessForm.invalid && submitted && invalidCredentials" appInViewport
+                        class="col-12 text-center mb-2 text-center" style="color: #DC3545;">
+                        <small style="font-size: smaller;">wrong email or password</small>
+                    </div>
+                    <div class="col-12 text-start">
+                        <span style="font-size: small;">
+                            <a href="recoverPassword">
+                                Forgot
+                                Password?
+                            </a>
+                        </span>
+                    </div>
+
+                    <div class="col-12 text-center">
+                        <button class="btn btn-outline-primary customButton mb-2" appInViewport>
+                            Login
+                        </button>
+                    </div>
+                </form>
+
+                <div class="col-12 text-center mt-5">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="" style="font-size: small;">
+                                Hai bisogno di un'app di ticketing per la tua azienda?
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

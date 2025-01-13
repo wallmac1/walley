@@ -36,15 +36,23 @@
                 <div class="row justify-content-center p-3">
                     <div class="d-none d-md-inline col-4 text-start">
                         <span style="font-size: small;">{{"TICKET.LIST.TOTALRESULTS" | translate }}:
-                            {{totalResults}}</span>
+                            {{totalResults}}
+                        </span>
                     </div>
 
                     <div class="d-none d-md-inline col-4 text-center">
                         <span style="font-size: small;">{{"TICKET.LIST.OBJPERPAGE" | translate }}:
-                            {{itemsPerPage}}</span>
+                            {{itemsPerPage}}
+                        </span>
                     </div>
 
-                    <div class="col-12 col-md-4 text-end">
+                    <div class="col-6 d-sm-none">
+                        <span style="font-size: small;">
+                            {{"TICKET.LIST.ORDEREDBYDEFAULT" | translate}}
+                        </span>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 text-end">
                         <span>
                             <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
                                 <i class="bi bi-caret-left"></i>
@@ -60,48 +68,58 @@
 
                 </div>
 
-                <table mat-table [dataSource]="ticketList" class="mat-table" matSort #sort="matSort"
-                    matSortActive="creation" matSortDirection="desc" matSortDisableClear>
+                <table *ngIf="!isSmall; else smallTableBlock" mat-table [dataSource]="ticketList" class="mat-table"
+                    matSort #sort="matSort" matSortActive="lastupdate" matSortDirection="desc" matSortDisableClear>
 
-                    <!-- Numero Column -->
+                    <!-- Creation Column -->
                     <ng-container matColumnDef="creation">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> 
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear
+                            class="d-none d-lg-table-cell">
                             {{"TICKET.LIST.CREATION" | translate}} </th>
-                        <td mat-cell *matCellDef="let element"> {{ element.creation }} </td>
+                        <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell"> {{ element.creation }}
+                        </td>
                     </ng-container>
 
-                    <!-- Data Column -->
+                    <!-- Customer Column -->
                     <ng-container matColumnDef="customer">
-                        <th mat-header-cell *matHeaderCellDef> {{"TICKET.LIST.CUSTOMER" | translate}} </th>
-                        <td mat-cell *matCellDef="let element"> {{ element.customer.denominazione }} </td>
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell"> {{"TICKET.LIST.CUSTOMER" |
+                            translate}} </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell"> {{
+                            element.customer.denominazione }} </td>
                     </ng-container>
 
-                    <!-- Cliente Column -->
+                    <!-- Title Column -->
                     <ng-container matColumnDef="title">
-                        <th mat-header-cell *matHeaderCellDef> {{"TICKET.LIST.TITLE" | translate}} </th>
-                        <td mat-cell *matCellDef="let element"> {{ element.title }} </td>
+                        <th mat-header-cell *matHeaderCellDef class="limitedWidth" class="d-none d-lg-table-cell">
+                            {{"TICKET.LIST.TITLE" | translate}} </th>
+                        <td mat-cell *matCellDef="let element" class="limitedWidth" class="d-none d-lg-table-cell"> {{
+                            element.title }} </td>
                     </ng-container>
 
-                    <!-- Stato Column -->
+                    <!-- Satus Column -->
                     <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef> {{"TICKET.LIST.STATUS" | translate }} </th>
-                        <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
-                    </ng-container>
-
-                    <!-- Ultimo Aggiornamento Column -->
-                    <ng-container matColumnDef="lastupdate">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> {{"TICKET.LIST.LASTUPDATE" |
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell"> {{"TICKET.LIST.STATUS" |
                             translate }} </th>
-                        <td mat-cell *matCellDef="let element"> {{ element.lastupdate }} </td>
+                        <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell"> {{ element.status }}
+                        </td>
                     </ng-container>
 
-                    <!-- Note Column -->
+                    <!-- Last Update Column -->
+                    <ng-container matColumnDef="lastupdate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear
+                            class="d-none d-sm-table-cell"> {{"TICKET.LIST.LASTUPDATE" |
+                            translate }} </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell"> {{ element.lastupdate }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Info Column -->
                     <ng-container matColumnDef="info">
-                        <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 100px;">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 80px;">
                             {{"TICKET.LIST.INFO" | translate }} </th>
                         <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell">
                             <i *ngIf="element.incharge; else notInChargeBlock" class="bi bi-person me-2"
-                                [matTooltip]="element.incharge"></i>
+                                [matTooltip]="element.incharge.nickname"></i>
                             <ng-template #notInChargeBlock>
                                 <i class="bi bi-person-x me-2"
                                     [matTooltip]="'TICKET.TOOLTIP.NOTINCHARGE' | translate"></i>
@@ -120,6 +138,26 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover"
                         (click)="gotoTicket(row)"></tr>
                 </table>
+
+                <ng-template #smallTableBlock>
+                    <table mat-table [dataSource]="ticketList" class="mat-table"
+                        matSort #sort="matSort" matSortActive="lastupdate" matSortDirection="desc" matSortDisableClear>
+                        <!-- Small Screen Column -->
+                        <ng-container matColumnDef="smallScreenCol">
+                            <th mat-header-cell *matHeaderCellDef class="d-none">Cliente - Titolo</th>
+                            <td mat-cell *matCellDef="let element" class="d-sm-none"> {{ element.customer.denominazione
+                                }}
+                                <br> {{element.title}}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsSmall" class="d-none"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsSmall;" class="rowHover"
+                            (click)="gotoTicket(row)">
+                        </tr>
+                    </table>
+                </ng-template>
+
             </div>
         </div>
     </div>

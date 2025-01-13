@@ -64,3 +64,11 @@
     color: white;
     background-color: #002D5D;
 }
+
+.limitedWidth {
+    max-width: 200px; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+}
+

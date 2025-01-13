@@ -10,6 +10,8 @@ import { userReducer } from './ngrx/user/user.reducer';
 import { countryReducer } from './ngrx/country/country.reducer';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { environment } from '../environments/environment';
 
 // required for AoT
 export function HttpLoaderFactory(http: HttpClient) {
@@ -29,6 +31,13 @@ export const appConfig: ApplicationConfig = {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    }))
+    })),
+    importProvidersFrom(RecaptchaV3Module),  // Importa il modulo V3
+    {
+      provide: RECAPTCHA_V3_SITE_KEY,
+      useValue: environment.recaptcha.siteKey,  // Fornisci la chiave di reCAPTCHA
+    }
   ]
 };
+
+

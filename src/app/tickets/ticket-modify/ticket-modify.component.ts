@@ -145,6 +145,10 @@ export class TicketModifyComponent {
     this.selectedTabIndex = 1;
   }
 
+  insertionDeniedAlert() {
+    alert("Per aggiungere una nuova linea al ticket è necessario prima salvare o eliminare l'ultima creata");
+  }
+
   takeOnCharge() {
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/takeInChargeTicket', { idticket: this.ticketId })
       .subscribe((val: ApiResponse<any>) => {
@@ -165,56 +169,72 @@ export class TicketModifyComponent {
 
   addWork() {
     this.goToWorksAndMessages();
-    let work: TicketLine = {
-      idticket: this.ticketId,
-      idticketline: 0,
-      type_line: 1,
-      description: '',
-      quantity: '0,00',
-      hours: null,
-      minutes: null,
-      attachments: [],
-      timeline: new Date().toISOString().slice(0, 10)
+    if (this.lines[0].idticketline != 0) {
+      let work: TicketLine = {
+        idticket: this.ticketId,
+        idticketline: 0,
+        type_line: 1,
+        description: '',
+        quantity: '0,00',
+        hours: null,
+        minutes: null,
+        attachments: [],
+        timeline: new Date().toISOString().slice(0, 10)
+      }
+      this.lines.unshift(work);
     }
-    this.lines.unshift(work);
+    else {
+      this.insertionDeniedAlert();
+    }
+
   }
 
   addArticle() {
     this.goToWorksAndMessages();
-    let article: TicketLine = {
-      idticket: this.ticketId,
-      idticketline: 0,
-      type_line: 2,
-      description: '',
-      quantity: '0,00',
-      taxablepurchase: '0,00',
-      taxablesale: '0,00',
-      serialnumber: '',
-      refidum: null,
-      refidarticle: null,
-      refidarticledata: null,
-      refidarticleprice: null,
-      code: '',
-      title: '',
-      attachments: [],
-      timeline: new Date().toISOString().slice(0, 10)
+    if (this.lines[0].idticketline != 0) {
+      let article: TicketLine = {
+        idticket: this.ticketId,
+        idticketline: 0,
+        type_line: 2,
+        description: '',
+        quantity: '0,00',
+        taxablepurchase: '0,00',
+        taxablesale: '0,00',
+        serialnumber: '',
+        refidum: null,
+        refidarticle: null,
+        refidarticledata: null,
+        refidarticleprice: null,
+        code: '',
+        title: '',
+        attachments: [],
+        timeline: new Date().toISOString().slice(0, 10)
+      }
+      this.lines.unshift(article);
     }
-    this.lines.unshift(article);
+    else {
+      this.insertionDeniedAlert();
+    }
   }
 
   addMessage() {
     this.goToWorksAndMessages();
-    let message: TicketLine = {
-      idticket: this.ticketId,
-      idticketline: 0,
-      type_line: 3,
-      description: '',
-      public: 0,
-      quantity: '0,00',
-      attachments: [],
-      timeline: new Date().toISOString().slice(0, 10)
+    if (this.lines[0].idticketline != 0) {
+      let message: TicketLine = {
+        idticket: this.ticketId,
+        idticketline: 0,
+        type_line: 3,
+        description: '',
+        public: 0,
+        quantity: '0,00',
+        attachments: [],
+        timeline: new Date().toISOString().slice(0, 10)
+      }
+      this.lines.unshift(message);
     }
-    this.lines.unshift(message);
+    else {
+      this.insertionDeniedAlert();
+    }
   }
 
   private getStatusList() {

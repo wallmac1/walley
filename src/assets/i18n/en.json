@@ -489,7 +489,8 @@
       "CUSTOMER": "Customer",
       "STATUS": "Status",
       "LASTUPDATE": "Latest Update",
-      "INFO": "Info"
+      "INFO": "Info",
+      "ORDEREDBYDEFAULT": "Ordered by last modified"
     },
     "NEW": {
       "NEWTICKET": "NEW TICKET",
@@ -508,7 +509,8 @@
       "CUSTOMER": "Customer",
       "DEPARTMENT": "Department",
       "KEEPINFORMED": "Keep Informed",
-      "ERROR":"Complete all the mandatory fields to submit"
+      "ERROR":"Complete all the mandatory fields to submit",
+      "NOTES": "Notes"
     },
     "WORK": {
       "QUANTITYERROR": "Hours and Minutes can't be zero at the same time",
@@ -537,7 +539,8 @@
       "DESCRIPTION": "Description",
       "EDITSTATUS": "Edit Status",
       "STATUS": "Status",
-      "SUBSTATUS": "Substatus"
+      "SUBSTATUS": "Substatus",
+      "SIDEEFFECTS": "Pay attention, this operation will reset all the modifications not saved"
     },
     "BUTTONS": {
       "DELETE": "Delete",

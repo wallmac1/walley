@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FiltersComponent } from './components/filters/filters.component';
 import { Status } from '../interfaces/status';
@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { Department } from '../interfaces/department';
 import { User } from '../interfaces/user';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-ticket-list',
@@ -26,17 +27,20 @@ import { User } from '../interfaces/user';
     FiltersComponent,
     MatTableModule,
     MatSortModule,
-    TranslateModule
+    TranslateModule,
+    MatDividerModule
   ],
   templateUrl: './ticket-list.component.html',
   styleUrl: './ticket-list.component.scss'
 })
 export class TicketListComponent {
+  isSmall: boolean = false;
   resultsLength: number = 0;
   isRateLimitReached: boolean = false;
   ticketListStatus: Status[] = [];
   ticketListSubstatus: SubStatus[] = [];
   ticketList: TicketTable[] = [];
+  ticketListReduced: any[] = []
   orderby_creation: string | null = 'asc';
   orderby_update: string | null = null;
   currentPage: number = 1;
@@ -44,6 +48,7 @@ export class TicketListComponent {
   totalResults: number = 0;
   itemsPerPage: number = 50;
   displayedColumns: string[] = ['creation', 'customer', 'title', 'status', 'lastupdate', 'info'];
+  displayedColumnsSmall: string[] = ['smallScreenCol']
 
   lastSearch: Filters = {
     customer: null,
@@ -59,6 +64,20 @@ export class TicketListComponent {
   @ViewChild(FiltersComponent) filtersChild!: FiltersComponent;
 
   constructor(private connectServerService: ConnectServerService, private router: Router) { }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize(): void {
+    const screenWidth = window.innerWidth;
+    this.isSmall = screenWidth < 576;
+  }
+
+  ngOnInit(): void {
+    this.checkScreenSize();
+  }
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => {
