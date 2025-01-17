@@ -1,0 +1,91 @@
+<div class="container-fluid p-2 p-md-3 p-lg-4 d-flex justify-content-center"
+    style="min-width: 375px; min-height: 90vh;">
+    <form [formGroup]="articleForm">
+        <div class="row justify-content-center align-items-center mt-2 mb-2" style="max-width: 1400px;">
+            <div class="col-12 text-center">
+                <span style="font-size: xx-large; font-weight: bold;">
+                    SCHEDA ARTICOLO
+                </span>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 mt-2">
+                <label class="form-label" for="code">
+                    Codice Articolo<sup>*</sup>
+                </label>
+                <div class="input-group">
+                    <button class="btn btn-outline-dark" [matTooltip]="'Storico Articolo'" (click)="historyPopUp()">
+                        <i class="bi bi-clock-history"></i>
+                    </button>
+                    <input id="code" name="code" class="form-control" formControlName="code">
+                </div>
+            </div>
+            <div class="col-12 col-sm-3 col-lg-2 mt-2">
+                <label class="form-label" for="refidum">
+                    Unità di Misura
+                </label>
+                <select name="refidum" id="refidum" class="form-select" formControlName="refidum">
+                    <option [value]="null">--</option>
+                    <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">{{unit.acronym}}</option>
+                </select>
+            </div>
+            <div class="col-12 col-sm-3 col-lg-2 mt-2">
+                <label class="form-label" for="quantity">
+                    Quantità
+                </label>
+                <input name="quantity" id="quantity" class="form-control">
+            </div>
+
+            <div class="col-12 col-md-10 col-lg-8 mt-2">
+                <label class="form-label" for="title">
+                    Titolo<sup>*</sup>
+                </label>
+                <input id="title" name="title" class="form-control" formControlName="title"
+                    [class.is-invalid]="articleForm.get('title')?.invalid && submitted">
+            </div>
+
+            <div class="col-12 col-md-10 col-lg-8 mt-2">
+                <label class="form-label" for="description">
+                    Descrizione
+                </label>
+                <textarea id="description" name="description" class="form-control" formControlName="description" rows="3"></textarea>
+            </div>
+
+
+            <div *ngIf="articleForm.get('title')?.invalid && submitted" class="col-12 mt-1 text-center">
+                <span style="color: red; font-size: small;">
+                    Inserire un titolo valido
+                </span>
+            </div>
+
+            <div class="row d-none d-md-inline justify-content-center align-items-center mt-1">
+                <div class="col-12 col-sm-6 text-start">
+                    <span *ngIf="article?.article_data?.user_created" class="userInfo">
+                        {{"TICKET.DATETIMELOG.CREATED" | translate}}:
+                        {{article?.article_data?.user_created?.nickname}} - {{article?.article_data?.user_created?.datetime}}
+                    </span>
+                </div>
+                <div class="col-12 col-sm-6 text-end">
+                    <span *ngIf="article?.article_data?.user_updated != null" class="userInfo">
+                        {{"TICKET.DATETIMELOG.UPDATED" | translate}}:
+                        {{article?.article_data?.user_updated?.nickname}} - {{article?.article_data?.user_updated?.datetime}}
+                    </span>
+                </div>
+            </div>
+            <ng-template #iconBlock>
+                <div class="row d-md-none justify-content-center mt-1">
+                    <div class="col-12 text-start">
+                        <i class="bi bi-info-circle"
+                            matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: {{article?.article_data?.user_created?.nickname}} - {{article?.article_data?.user_created?.datetime}}, &#10;
+                        {{'TICKET.DATETIMELOG.UPDATED' | translate}}: {{article?.article_data?.user_updated?.nickname}} - {{article?.article_data?.user_updated?.datetime}}"></i>
+                    </div>
+                </div>
+            </ng-template>
+
+            <div class="col-12 mt-2 text-center">
+                <button class="btn btn-outline-dark" (click)="updateArticle()">
+                    Salva
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

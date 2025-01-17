@@ -13,6 +13,8 @@ import { VoucherInfoComponent } from './voucher/voucher-info/voucher-info.compon
 import { VoucherListComponent } from './voucher/voucher-list/voucher-list.component';
 import { TicketListComponent } from './tickets/ticket-list/ticket-list.component';
 import { AccessPageComponent } from './tickets/access-page/access-page.component';
+import { ArticleNewComponent } from './articles/article-new/article-new.component';
+import { ArticleModifyComponent } from './articles/article-modify/article-modify.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -30,5 +32,7 @@ export const routes: Routes = [
     { path: "systemReview/:id", component: SystemReviewComponent },
     { path: "voucher/:id", component: VoucherInfoComponent },
     { path: "voucherList", component: VoucherListComponent },
+    { path: "newArticle", component: ArticleNewComponent },
+    { path: "article/:id", component: ArticleModifyComponent },
     { path: '**', redirectTo: '/login' },
 ];

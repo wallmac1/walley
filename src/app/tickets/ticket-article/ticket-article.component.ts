@@ -49,10 +49,10 @@ export class TicketArticleComponent {
   submitted = false;
 
   constructor(private fb: FormBuilder, private connectServerService: ConnectServerService, public dialog: MatDialog,
-    private translate: TranslateService, private cdr: ChangeDetectorRef) {}
+    private translate: TranslateService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    if(this.article.attachments) {
+    if (this.article.attachments) {
       this.files = this.article.attachments;
     }
 
@@ -67,13 +67,13 @@ export class TicketArticleComponent {
   }
 
   private initForm() {
-    if(this.article.quantity != null) {
-      this.article.quantity = this.article.quantity.replace('.', ','); 
+    if (this.article.quantity != null) {
+      this.article.quantity = this.article.quantity.replace('.', ',');
     }
-    if(this.article.taxablepurchase != null) {
+    if (this.article.taxablepurchase != null) {
       this.article.taxablepurchase = this.article.taxablepurchase.replace('.', ',');
     }
-    if(this.article.taxablesale != null) {
+    if (this.article.taxablesale != null) {
       this.article.taxablesale = this.article.taxablesale.replace('.', ',');
     }
     this.articleForm = this.fb.group({
@@ -89,27 +89,27 @@ export class TicketArticleComponent {
       taxablepurchase: [this.article.taxablepurchase || '0,00', this.numberWithCommaValidator()],
       taxablesale: [this.article.taxablesale || '0,00', this.numberWithCommaValidator()],
     })
-    if(this.article.refidarticle) {
+    if (this.article.refidarticle) {
       this.isProductSelected = true;
       this.articleForm.get('title')?.disable();
     }
   }
 
   numberWithCommaValidator(): ValidatorFn {
-      return (control: AbstractControl): ValidationErrors | null => {
-        const value = control.value;
-  
-        if (!value) {
-          return null; // Se il campo è vuoto, consideralo valido
-        }
-  
-        // Controlla se il valore soddisfa i criteri
-        const regex = /^\d*(,\d{0,2})?$/; // Regex: numeri con al massimo una virgola e due cifre dopo di essa
-        const isValid = regex.test(value);
-  
-        return isValid ? null : { invalidNumber: true }; // Restituisci l'errore se non valido
-      };
-    }
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+
+      if (!value) {
+        return null; // Se il campo è vuoto, consideralo valido
+      }
+
+      // Controlla se il valore soddisfa i criteri
+      const regex = /^\d*(,\d{0,2})?$/; // Regex: numeri con al massimo una virgola e due cifre dopo di essa
+      const isValid = regex.test(value);
+
+      return isValid ? null : { invalidNumber: true }; // Restituisci l'errore se non valido
+    };
+  }
 
   // private initLine() {
   //   if (this.articleForm.get('refidarticle')?.value != null) {
@@ -268,14 +268,14 @@ export class TicketArticleComponent {
       line_copy.taxablesale = parseFloat(line_copy.taxablesale.replace(',', '.'));
 
       this.submitted = false;
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicketLine', { obj_line: line_copy})
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicketLine', { obj_line: line_copy })
         .subscribe((val: ApiResponse<any>) => {
-          if(val) {
-            if(this.article.idticketline == 0) {
-              this.getLine.emit({index: this.index, idticketline: val.data.idticketline});
+          if (val) {
+            if (this.article.idticketline == 0) {
+              this.getLine.emit({ index: this.index, idticketline: val.data.idticketline });
             }
             else {
-              this.getLine.emit({index: this.index, idticketline: this.article.idticketline});
+              this.getLine.emit({ index: this.index, idticketline: this.article.idticketline });
             }
             this.articleForm.markAsPristine();
           }

@@ -9,7 +9,7 @@ export interface Article {
     refidarticle: number | null;
     refidarticledata: number | null;
     refidarticleprice: number | null;
-    serialnumber: number;
+    serialnumber: string;
     taxablepurchase: string | null;
     taxablesale: string | null;
     timeline: string;

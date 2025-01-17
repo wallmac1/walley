@@ -7,7 +7,7 @@ import { TicketNewComponent } from "./tickets/ticket-new/ticket-new.component";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FooterComponent, NavbarComponent, TicketNewComponent],
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
