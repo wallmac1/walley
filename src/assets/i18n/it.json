@@ -446,7 +446,8 @@
       "DATE": "Data",
       "CUSTOMER": "Cliente",
       "STATUS": "Stato",
-      "INFO": "Info"
+      "INFO": "Info",
+      "ORDEREDBYDATE": "Ordinato per Data"
     },
     "WORK": {
       "WORK": "Lavoro",
@@ -487,7 +488,7 @@
       "CREATION": "Creazione",
       "CUSTOMER": "Cliente",
       "STATUS": "Stato",
-      "LASTUPDATE": "Ultimo Aggiornamento",
+      "LASTUPDATE": "Ultima Modifica",
       "INFO": "Info",
       "ORDEREDBYDEFAULT": "Ordinato per ultima modifica"
     },

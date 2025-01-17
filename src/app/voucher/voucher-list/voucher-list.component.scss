@@ -4,7 +4,7 @@
 }
 
 .rowHover {
-    scale: 1;
+    scale: 0.98;
     background-color: white;
     transition: scale 0.3s ease-in, background-color 0.3s ease-in;
 }
@@ -15,11 +15,17 @@
     cursor: pointer;
 }
 
-/* Il contenitore principale */
+.mat-row {
+    background-color: white;
+}
+
+.mat-header-row {
+    background-color: whitesmoke;
+}
+
 .container-fluid {
     min-width: 375px;
     min-height: 90vh;
-    /* Assicura che occupi l'altezza della viewport */
     position: relative;
 }
 

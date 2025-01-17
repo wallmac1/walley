@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TicketsInfoService } from '../services/tickets-info.service';
 import { CommonModule } from '@angular/common';
 import { TicketInfoComponent } from "../ticket-info/ticket-info.component";
@@ -40,7 +40,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class TicketModifyComponent {
 
   @ViewChild('titleElement') textElement!: ElementRef;
+  @ViewChild('customerElement') customerElement!: ElementRef;
   isEllipsisActive: boolean = false;
+  isEllipsisActiveCustomer: boolean = false;
 
   private resizeTimeout: any;
   selectedTabIndex = 0;
@@ -65,7 +67,7 @@ export class TicketModifyComponent {
   }
 
   constructor(private route: ActivatedRoute, public ticketInfoService: TicketsInfoService, public dialog: MatDialog,
-    private connectServerService: ConnectServerService, private cdr: ChangeDetectorRef) {
+    private connectServerService: ConnectServerService, private cdr: ChangeDetectorRef, private router: Router) {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
@@ -89,8 +91,10 @@ export class TicketModifyComponent {
   }
 
   checkEllipsis(): void {
-    const element = this.textElement.nativeElement;
-    this.isEllipsisActive = element.scrollWidth > element.clientWidth;
+    const elementT = this.textElement.nativeElement;
+    this.isEllipsisActive = elementT.scrollWidth > elementT.clientWidth;
+    const elementC = this.customerElement.nativeElement;
+    this.isEllipsisActiveCustomer = elementC.scrollWidth > elementC.clientWidth;
     this.cdr.detectChanges();
   }
 
@@ -139,6 +143,10 @@ export class TicketModifyComponent {
         this.lines = val.data.ticketInfoLines;
       }
     });
+  }
+
+  goBack() {
+    this.router.navigate(['ticketsList']);
   }
 
   goToWorksAndMessages() {

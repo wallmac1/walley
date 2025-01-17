@@ -447,7 +447,8 @@
     "DATE": "Date",
     "CUSTOMER": "Customer",
     "STATUS": "Status",
-    "INFO": "Info"
+    "INFO": "Info",
+    "ORDEREDBYDATE": "Ordered by Date"
   },
   "WORK": {
     "WORK": "Work",

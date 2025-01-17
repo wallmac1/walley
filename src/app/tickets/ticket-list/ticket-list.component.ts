@@ -34,6 +34,7 @@ import { MatDividerModule } from '@angular/material/divider';
   styleUrl: './ticket-list.component.scss'
 })
 export class TicketListComponent {
+  
   isSmall: boolean = false;
   resultsLength: number = 0;
   isRateLimitReached: boolean = false;

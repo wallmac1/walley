@@ -73,3 +73,22 @@
     background-color: #005ec3;
     color: white;
 }
+
+.btn-outline-dark {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    color: white;
+    background-color: #002D5D;
+}
+
+.goBackButton {
+    padding: 0;
+    height: 24px;
+    width: 40px;
+    position: absolute; 
+    top: 4px;
+    left: 20px;
+}

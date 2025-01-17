@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Customer } from '../../tickets/interfaces/customer';
 import { CommonModule } from '@angular/common';
@@ -37,6 +37,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class VoucherListComponent implements AfterViewInit {
 
+  isSmall: boolean = false;
   resultsLength: number = 0;
   isRateLimitReached: boolean = false;
   voucherListStatus: Status[] = [];
@@ -47,6 +48,7 @@ export class VoucherListComponent implements AfterViewInit {
   totalResults: number = 0;
   itemsPerPage: number = 10;
   displayedColumns: string[] = ['progressive', 'date', 'customer', 'status', 'info'];
+  displayedColumnsSmall: string[] = [ 'smallScreenCol' ]
   filters: Filters | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -54,6 +56,20 @@ export class VoucherListComponent implements AfterViewInit {
   @ViewChild(FiltersComponent) filtersChild!: FiltersComponent;
 
   constructor(private connectServerService: ConnectServerService, private router: Router) { }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize(): void {
+    const screenWidth = window.innerWidth;
+    this.isSmall = screenWidth < 576;
+  }
+
+  ngOnInit(): void {
+    this.checkScreenSize();
+  }
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => {
@@ -100,14 +116,14 @@ export class VoucherListComponent implements AfterViewInit {
   }
 
   prevPage() {
-    if(this.currentPage > 1) {
+    if (this.currentPage > 1) {
       this.currentPage -= 1;
       this.getVoucherList();
     }
   }
 
   nextPage() {
-    if(this.currentPage < this.totalPages) {
+    if (this.currentPage < this.totalPages) {
       this.currentPage += 1;
       this.getVoucherList();
     }
