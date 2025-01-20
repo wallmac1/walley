@@ -12,3 +12,29 @@
     background-color: #002D5D;
     color: white;
 }
+
+.userInfo {
+    color: gray;
+    font-size: x-small;
+    font-style: italic;
+}
+
+.mat-mdc-tab-group {
+    --mdc-tab-indicator-active-indicator-color: #002D5D;
+    --mat-tab-header-active-label-text-color: #002D5D;
+    --mat-tab-header-active-ripple-color: #002D5D;
+    --mat-tab-header-inactive-ripple-color: #002D5D;
+    --mat-tab-header-active-focus-label-text-color: #002D5D;
+    --mat-tab-header-active-hover-label-text-color: #002D5D;
+    --mat-tab-header-active-focus-indicator-color: #002D5D;
+    --mat-tab-header-active-hover-indicator-color: #002D5D;
+}
+
+.titleIcon {
+    font-size: 20px;
+    margin-left: 1rem;
+}
+
+.title {
+    font-size: large;
+}

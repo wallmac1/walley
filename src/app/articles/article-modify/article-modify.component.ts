@@ -8,6 +8,13 @@ import { ApiResponse } from '../../weco/interfaces/api-response';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Article } from '../interfaces/article';
+import { MatTabsModule } from '@angular/material/tabs';
+import { ArticleStorageComponent } from "../article-storage/article-storage.component";
+import { ArticleTaxableComponent } from "../article-taxable/article-taxable.component";
+import { ArticleHistoryComponent } from "../article-history/article-history.component";
+import { MatDialog } from '@angular/material/dialog';
+import { HistoricComponent } from '../pop-up/historic/historic.component';
+import { ConfirmComponent } from '../pop-up/confirm/confirm.component';
 
 @Component({
   selector: 'app-article-modify',
@@ -16,7 +23,11 @@ import { Article } from '../interfaces/article';
     CommonModule,
     ReactiveFormsModule,
     MatTooltipModule,
-    TranslateModule
+    TranslateModule,
+    MatTabsModule,
+    ArticleStorageComponent,
+    ArticleTaxableComponent,
+    ArticleHistoryComponent
   ],
   templateUrl: './article-modify.component.html',
   styleUrl: './article-modify.component.scss'
@@ -26,16 +37,17 @@ export class ArticleModifyComponent {
   submitted: boolean = false;
   measurmentUnit: MeasurementUnit[] = [];
   article: Article | null = null;
+  selectedTabIndex = 0;
 
   articleForm = new FormGroup({
     code: new FormControl<string | null>(null, Validators.required),
     title: new FormControl<string | null>(null, Validators.required),
     refidum: new FormControl<number | null>(null),
     description: new FormControl<string | null>(null),
-    quantity: new FormControl<number | null>(null, [Validators.required, this.numberWithCommaValidator()])
+    quantity: new FormControl<string | null>(null, [Validators.required, this.numberWithCommaValidator()])
   });
 
-  constructor(private connectServerService: ConnectServerService) { }
+  constructor(private connectServerService: ConnectServerService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getArticle();
@@ -44,25 +56,61 @@ export class ArticleModifyComponent {
   }
 
   private getArticle() {
-    // const articles: Article =
-    // {
-    //   id: 6,
-    //   code: "8745",
-    //   article_data: {
-    //     id: 48,
-    //     title: "Prodotto D",
-    //     description: "Descrizione del prodotto D.",
-    //     refidum: 4,
-    //   },
-    //   article_price: {
-    //     id: 5,
-    //     taxablepurchase: 400.25,
-    //     taxablesale: 450.75,
-    //     serialnumber: "35467",
-    //   }
-    // };
+    const articleExample: Article =
+    {
+      id: 6,
+      code: "8745",
+      progressive: 1,
+      quantity: "1,00",
+      article_data: {
+        refidarticle: 6,
+        title: "Prodotto D",
+        description: "Descrizione del prodotto D.",
+        um: {
+          id: 4,
+          description: "",
+          acronym: "cm"
+        },
+        date_snapshot: "",
+        user_created: {
+          id: 20,
+          nickname: "And",
+          datetime: "20/12/24"
+        },
+        user_updated: {
+          id: 20,
+          nickname: "And",
+          datetime: "24/12/24"
+        }
+      },
+      article_price: {
+        refidarticle: 5,
+        serialnumber: "S83DLHB",
+        taxablepurchase: "400,25",
+        taxablesale: "450,75",
+        taxablerecommended: "450,00",
+        vatpurchase: "5%",
+        vatsale: "15%",
+        vatrecommended: "15%",
+        user_created: {
+          id: 20,
+          nickname: "And",
+          datetime: "20/12/24"
+        },
+        user_updated: {
+          id: 20,
+          nickname: "And",
+          datetime: "24/12/24"
+        }
+      }
+    };
 
-    // return article;
+    this.article = articleExample;
+    this.articleForm.get('code')?.setValue(this.article.code);
+    this.articleForm.get('title')?.setValue(this.article.article_data.title);
+    this.articleForm.get('refidum')?.setValue(this.article.article_data.um?.id || null);
+    this.articleForm.get('quantity')?.setValue(this.article.quantity);
+    this.articleForm.get('description')?.setValue(this.article.article_data.description);
   }
 
   private initForm() {
@@ -95,8 +143,33 @@ export class ArticleModifyComponent {
       })
   }
 
-  updateArticle() { }
+  updateQuantity() { }
 
-  historyPopUp() { }
+  historyPopUp() {
+    const dialogRef = this.dialog.open(HistoricComponent, {
+      maxWidth: '700px',
+      data: { articleid: this.article?.id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      
+    });
+  }
+
+  updateArticlePopup() {
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      maxWidth: '700px',
+      data: { articleid: this.article?.id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == 1) {
+        // AGGIORNA QUANTITA'
+      }
+      else if(result == 2) {
+        // VARIA QUANTITA'
+      }
+    });
+  }
 
 }

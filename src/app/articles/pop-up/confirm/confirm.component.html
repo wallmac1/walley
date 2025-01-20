@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
+        <div class="col-12 text-center mt-2 mb-2">
+            <span style="color: white; font-weight: bold; font-size: large;">
+                {{"ARTICLE.MODAL.UPDATEORVARY" | translate}}</span>
+        </div>
+    </div>
+
+    <div mat-dialog-content>
+        <div class="row justify-content-center align-items-center p-1">
+            <div class="col-12 mt-2 mt-1">
+                {{"ARTICLE.MODAL.UPDATETEXT" | translate}}
+            </div>
+            <div class="col-12 mt-2 mt-1">
+                {{"ARTICLE.MODAL.VARYTEXT" | translate}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center align-items-center mt-2 mb-3">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-dark" style="width: 90px;" (click)="update()">
+                {{"ARTICLE.MODAL.UPDATE" | translate }}
+            </button>
+        </div>
+
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-dark" style="width: 90px;" (click)="close()">
+                {{"ARTICLE.MODAL.CLOSE" | translate }}
+            </button>
+        </div>
+
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark" style="width: 90px;" (click)="vary()">
+                {{"ARTICLE.MODAL.VARY" | translate }}
+            </button>
+        </div>
+    </div>
+</div>
