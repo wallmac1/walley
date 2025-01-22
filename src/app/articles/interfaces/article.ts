@@ -14,7 +14,7 @@ export interface ArticleData {
     description: string | null;
     refidarticle: number;
     um: MeasurementUnit | null;
-    date_snapshot: string | null; 
+    date_snapshot: string | null; // Data Variazione
     user_created: {
         id: number;
         nickname: string;

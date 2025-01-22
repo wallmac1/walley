@@ -1,0 +1,68 @@
+<div class="container-fluid" style="min-width: 380px;">
+    <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
+        <div class="col-12 text-center mt-2 mb-2">
+            <span style="color: white; font-weight: bold; font-size: large;">{{"ARTICLE.MODAL.MODIFYARTICLE" | translate
+                }}</span>
+        </div>
+    </div>
+
+    <div mat-dialog-content>
+        <form [formGroup]="modifyForm">
+            <div class="row justify-content-center align-items-center p-1">
+
+                <div *ngIf="modifyForm.get('serialnumber')?.value == ''; else snBlock" class="col-3 col-sm-2 p-1">
+                    <label class="form-label" for="quantity">
+                        Quantità
+                    </label>
+                    <input class="form-control" type="text" id="quantity" formControlName="quantity">
+                </div>
+                <ng-template #snBlock>
+                    <div class="col-4 col-md-2 p-1">
+                        <label class="form-label" for="serialnumber">
+                            Serial Number
+                        </label>
+                        <input class="form-control" type="text" id="serialnumber" formControlName="serialnumber">
+                    </div>
+                </ng-template>
+                
+                <div class="col-4 col-sm-4 col-md-3 p-1">
+                    <label class="form-label" for="taxablepurchase">
+                        Imponibile Acquisto
+                    </label>
+                    <input class="form-control" type="text" id="taxablepurchase" formControlName="taxablepurchase">
+                </div>
+                <div class="col-2 col-sm-1 p-1">
+                    <label class="form-label" for="vatpurchase">
+                        IVA
+                    </label>
+                    <input class="form-control ps-sm-0 pe-sm-0 pe-md-1 ps-md-1" type="text" id="vatpurchase" formControlName="vatpurchase">
+                </div>
+                <div class="col-4 col-sm-4 col-md-3 p-1">
+                    <label class="form-label" for="taxablerecommended">
+                        Imponibile Consigliato
+                    </label>
+                    <input class="form-control" type="text" id="taxablerecommended" formControlName="taxablerecommended">
+                </div>
+                <div class="col-2 col-sm-1 p-1">
+                    <label class="form-label" for="vatrecommended">
+                        IVA
+                    </label>
+                    <input class="form-control ps-sm-0 pe-sm-0 pe-md-1 ps-md-1" type="text" id="vatrecommended" formControlName="vatrecommended">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row justify-content-center align-items-center mt-2 mb-3">
+        <div class="col-6 text-center">
+            <button class="btn btn-outline-dark" style="width: 100px;" (click)="close()">
+                {{"ARTICLE.MODAL.CANCEL" | translate }}
+            </button>
+        </div>
+        <div class="col-6 text-center">
+            <button class="btn btn-outline-success" style="width: 100px;" (click)="modifyArticle()">
+                {{"ARTICLE.MODAL.CONFIRM" | translate }}
+            </button>
+        </div>
+    </div>
+</div>

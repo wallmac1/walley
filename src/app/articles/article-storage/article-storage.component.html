@@ -14,15 +14,18 @@
             <!-- CHECKBOX -->
             <div class="checkboxPadding col-2 col-sm-1">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" formArrayName="groupAction" id="groupAction">
+                    <input class="form-check-input group-checkbox" type="checkbox" formControlName="groupAction"
+                        id="groupAction" (change)="formLogicGroup()">
                 </div>
             </div>
 
             <div class="articleColumn col-10 col-sm-11">
-                <span class="me-2 me-md-4" style="font-weight: bold;">
+                <span class="me-2" style="font-weight: bold;">
                     Azione di Gruppo
                 </span>
-                <button class="btn btn-sm btn-outline-danger">
+                <i class="me-2 me-md-4 bi bi-info-circle"
+                    matTooltip="L'azione di gruppo è da considerarsi su tutti gli articoli selezionati singolarmente"></i>
+                <button class="btn btn-sm btn-outline-danger" (click)="deletePopUp([])">
                     Elimina
                 </button>
             </div>
@@ -30,15 +33,17 @@
 
         <!-- ARTICLES -->
         <ng-container formArrayName="articles">
-            <div *ngFor="let item of articles.controls; let i = index" [formGroupName]="i" 
-                class="row justify-content-center align-items-group mt-2 pb-2" style="border-bottom: 1px solid lightgray;">
+            <div *ngFor="let item of articles.controls; let i = index" [formGroupName]="i"
+                class="row justify-content-center align-items-group mt-2 pb-2"
+                style="border-bottom: 1px solid lightgray;">
                 <!-- CHECKBOX -->
                 <div class="checkboxPadding col-2 col-sm-1">
                     <div class="form-check" style="margin-top: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" formcontrolName="action" id="action-{{i}}">
+                        <input class="form-check-input" type="checkbox" formControlName="action" id="action-{{i}}"
+                            (change)="formLogic()">
                     </div>
                 </div>
-    
+
                 <div class="col-10 col-sm-11">
                     <div class="row justify-content-start align-items-center">
                         <div class="articleColumn col-6 col-sm-2">
@@ -48,25 +53,25 @@
                             <input name="quantity-{{i}}" id="quantity-{{i}}" class="form-control"
                                 formControlName="quantity">
                         </div>
-            
+
                         <div class="articleColumn col-3 col-sm-2 col-md-1" style="margin-top: 1.6rem;">
-                            <i class="bi bi-exclamation-circle iconMargin iconSize"></i>
-                            <i class="bi bi-trash iconSize" style="color: red;"></i>
+                            <i class="bi bi-pencil iconMargin iconSize" (click)="modifyPopUp(item.getRawValue())"></i>
+                            <i class="bi bi-trash iconSize" style="color: red;" (click)="deletePopUp(item.getRawValue())"></i>
                         </div>
-            
+
                         <div class="articleColumn col-8 col-sm-5 col-sm-4 col-md-3 col-lg-4">
                             <label class="form-label" for="taxablepurchase-{{i}}">
                                 Imponibile Acquisto
                             </label>
-                            <input class="form-control" type="text" name="taxablepurchase-{{i}}" id="taxablepurchase-{{i}}"
-                                formControlName="taxablepurchase">
+                            <input class="form-control" type="text" name="taxablepurchase-{{i}}"
+                                id="taxablepurchase-{{i}}" formControlName="taxablepurchase">
                         </div>
                         <div class="articleColumn col-3 col-sm-2 col-md-1">
                             <label class="form-label" for="vatpurchase-{{i}}">
                                 IVA
                             </label>
-                            <input class="form-control vatPadding" type="text" name="vatpurchase-{{i}}" id="vatpurchase-{{i}}" 
-                                formControlName="vatpurchase">
+                            <input class="form-control vatPadding" type="text" name="vatpurchase-{{i}}"
+                                id="vatpurchase-{{i}}" formControlName="vatpurchase">
                         </div>
                         <div class="articleColumn col-6 col-md-5 col-lg-4">
                             <label class="form-label" for="pricesale-{{i}}">
@@ -75,7 +80,7 @@
                             <input class="form-control" type="text" name="pricesale-{{i}}" id="pricesale-{{i}}"
                                 formControlName="pricesale">
                         </div>
-            
+
                         <div class="articleColumn col-5 col-md-3">
                             <label class="form-label" for="serialnumber-{{i}}">
                                 SN
@@ -87,27 +92,27 @@
                             <label class="form-label" for="taxablerecommended-{{i}}">
                                 Imponibile Consigliato
                             </label>
-                            <input class="form-control" type="text" name="taxablerecommended-{{i}}" id="taxablerecommended-{{i}}"
-                                formControlName="taxablerecommended">
+                            <input class="form-control" type="text" name="taxablerecommended-{{i}}"
+                                id="taxablerecommended-{{i}}" formControlName="taxablerecommended">
                         </div>
                         <div class="articleColumn col-3 col-sm-2 col-md-1">
                             <label class="form-label" for="vatrecommended-{{i}}">
                                 IVA
                             </label>
-                            <input class="form-control vatPadding" type="text" name="vatrecommended-{{i}}" id="vatrecommended-{{i}}"
-                                formControlName="vatrecommended">
+                            <input class="form-control vatPadding" type="text" name="vatrecommended-{{i}}"
+                                id="vatrecommended-{{i}}" formControlName="vatrecommended">
                         </div>
                         <div class="articleColumn col-8 col-sm-5 col-md-5 col-lg-4">
                             <label class="form-label" for="pricerecommended-{{i}}">
                                 Prezzo Consigliato
                             </label>
-                            <input class="form-control" type="text" name="pricerecommended-{{i}}" id="pricerecommended-{{i}}"
-                                formControlName="pricerecommended">
+                            <input class="form-control" type="text" name="pricerecommended-{{i}}"
+                                id="pricerecommended-{{i}}" formControlName="pricerecommended">
                         </div>
                     </div>
                 </div>
             </div>
         </ng-container>
-         
+
     </form>
 </div>

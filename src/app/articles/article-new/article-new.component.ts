@@ -22,6 +22,7 @@ export class ArticleNewComponent {
   submittedSearch: boolean = false;
   submittedSave: boolean = false;
   stepTwo: boolean = false;
+  idarticle: number = 0;
 
   measurmentUnit: MeasurementUnit[] = [];
 
@@ -32,7 +33,7 @@ export class ArticleNewComponent {
     description: new FormControl<string | null>(null)
   })
 
-  constructor(private connectServerService: ConnectServerService, private router: Router) {}
+  constructor(private connectServerService: ConnectServerService, private router: Router) { }
 
   ngOnInit(): void {
     this.getMeasurmentUnits();
@@ -50,21 +51,35 @@ export class ArticleNewComponent {
   insertArticle() {
     this.submittedSearch = true;
     if (this.articleForm.get('code')?.valid) {
-      this.articleForm.get('code')?.disable();
-      this.stepTwo = true;
-      // CHIAMATA AL SERVER PER INSERIMENTO
-      // OPZIONE 1: INSERIMENTO DI UN NUOVO ARTICOLO NELLA PAGINA STESSA
-      // OPZIONE 2: CARICAMENTO DELLA PAGINA DI MODIFICA DI UN TICKET PREESISTENTE
+      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'articles/checkCodeArticle',
+        { code: this.articleForm.get('code')?.value }).subscribe((val: ApiResponse<any>) => {
+          //console.log(val)
+          if (val.data && val.data.idarticle) {
+            // ALERT ARTICOLO GIA' ESISTENTE
+            alert(`Codice articolo già esistente`);
+          }
+          else {
+            this.stepTwo = true;
+            this.articleForm.get('code')?.disable();
+          }
+        })
     }
   }
 
   saveArticle() {
     this.submittedSave = true;
     if (this.articleForm.valid) {
-      // CHIAMATA AL SERVER PER SALVATAGGIO NUOVO ARTICOLO
-      // CARICAMENTO DELLA PAGINA DI MODIFICA
-      const articleId = 0;
-      this.router.navigate(['article', articleId]);
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'articles/storeOrUpdateArticle',
+        {
+          idarticle: this.idarticle, title: this.articleForm.get('title')?.value,
+          refidum: this.articleForm.get('refidum')?.value, description: this.articleForm.get('description')?.value,
+          code: this.articleForm.get('code')?.value
+        }).subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            this.idarticle = val.data.idarticle;
+            this.router.navigate(['article', this.idarticle]);
+          }
+        })
     }
   }
 

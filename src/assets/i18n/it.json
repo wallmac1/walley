@@ -620,7 +620,13 @@
       "UPDATETEXT": "Se si sceglie 'Aggiorna' i cambiamenti verranno effettuati solo sugli articoli venduti a partire da questo istante.",
       "VARYTEXT": "Se si sceglie 'Varia' i cambiamenti vengono applicati anche a tutte le versioni precedenti dell'articolo",
       "UPDATE": "Aggiorna",
-      "VARY": "Varia"
+      "VARY": "Varia",
+      "DELETEARTICLES": "Elimina Articoli",
+      "CANCEL": "Annulla",
+      "DELETE": "Elimina",
+      "MODIFYARTICLE": "Modifica Articolo",
+      "CONFIRM": "Conferma",
+      "UPDATEQUANTITY": "Aggiorna Quantità"
     }
   }
 }

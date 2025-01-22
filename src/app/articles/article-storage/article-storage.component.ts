@@ -4,6 +4,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } f
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Article } from '../interfaces/article';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteComponent } from '../pop-up/delete/delete.component';
+import { ModifyComponent } from '../pop-up/modify/modify.component';
 
 @Component({
   selector: 'app-article-storage',
@@ -19,11 +22,12 @@ import { Article } from '../interfaces/article';
 })
 export class ArticleStorageComponent {
 
+  checkboxGroup = document.querySelector('#groupAction') as HTMLElement;
   storageForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private dialog: MatDialog) {
     this.storageForm = this.fb.group({
-      groupAction: [0],
+      groupAction: [false],
       articles: this.fb.array([])
     })
   }
@@ -32,10 +36,45 @@ export class ArticleStorageComponent {
     this.getArticles();
   }
 
+  formLogicGroup() {
+    let articleSelected: number[] = [];
+    this.articles.controls.forEach((element, index) => {
+      if (element.get('action')?.value == 1) {
+        articleSelected.push(index);
+      }
+    });
+
+    if (articleSelected.length == 0) {
+      this.articles.controls.forEach((element) => {
+        element.get('action')?.setValue(true);
+      });
+    }
+    else {
+      this.articles.controls.forEach((element) => {
+        element.get('action')?.setValue(false);
+      });
+    }
+  }
+
+  formLogic() {
+    let articleSelected: number[] = [];
+    this.articles.controls.forEach((element, index) => {
+      if (element.get('action')?.value == 1) {
+        articleSelected.push(index);
+      }
+    });
+
+    if (this.storageForm.get('groupAction')?.value == false && articleSelected.length > 0) {
+      this.storageForm.get('groupAction')?.setValue(true);
+    }
+    else if (this.storageForm.get('groupAction')?.value == true && articleSelected.length == 0) {
+      this.storageForm.get('groupAction')?.setValue(false);
+    }
+  }
+
   getArticles() {
     // CHIAMATA AL SERVER PER OTTENERE GLI ARTICOLI E CREARE I FORM ARRAY NEL SUBSCRIBE
     this.createArticlesForm(this.articlesTemporary);
-    this.storageForm.disable();
   }
 
   get articles(): FormArray {
@@ -49,8 +88,8 @@ export class ArticleStorageComponent {
   }
 
   createArticle(article: Article) {
-    return this.fb.group({
-      action: [0],
+    const group = this.fb.group({
+      action: [false],
       id: [article.id],
       quantity: [article.quantity],
       serialnumber: [article.article_price.serialnumber],
@@ -61,6 +100,37 @@ export class ArticleStorageComponent {
       vatpurchase: [article.article_price.vatpurchase],
       vatrecommended: [article.article_price.vatrecommended],
     })
+
+    Object.keys(group.controls).forEach(controlName => {
+      if (controlName !== 'action') {
+        group.get(controlName)?.disable();
+      }
+    });
+
+    return group;
+  }
+
+  deletePopUp(articles: any) {
+    let data = articles;
+    if(Array.isArray(data)) {
+      this.articles.controls.forEach((element) => {
+        if(element.get('action')?.value == true) {
+          data.push(element.getRawValue());
+        }
+      })
+    }
+    this.dialog.open(DeleteComponent, {
+      maxWidth: '700px',
+      data: { articles: articles }
+    });
+  }
+
+  modifyPopUp(article: any) {
+    this.dialog.open(ModifyComponent, {
+      maxWidth: '900px',
+      width: '800px',
+      data: { article: article }
+    });
   }
 
   articlesTemporary = [
@@ -73,7 +143,7 @@ export class ArticleStorageComponent {
         title: "Article One",
         description: "First article with serial number",
         refidarticle: 101,
-        um: {acronym: "kg", id: 1, description: ""},
+        um: { acronym: "kg", id: 1, description: "" },
         date_snapshot: "2025-01-20T10:00:00Z",
         user_created: {
           id: 1,
@@ -116,7 +186,7 @@ export class ArticleStorageComponent {
         title: "Article Two",
         description: "Second article with serial number",
         refidarticle: 102,
-        um: {acronym: "kg", id: 1, description: ""},
+        um: { acronym: "kg", id: 1, description: "" },
         date_snapshot: "2025-01-21T10:00:00Z",
         user_created: {
           id: 3,
@@ -159,7 +229,7 @@ export class ArticleStorageComponent {
         title: "Article Three",
         description: "Article without serial number",
         refidarticle: 103,
-        um: {acronym: "kg", id: 1, description: ""},
+        um: { acronym: "kg", id: 1, description: "" },
         date_snapshot: "2025-01-22T10:00:00Z",
         user_created: {
           id: 5,

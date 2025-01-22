@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" style="min-width: 350px;">
     <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
         <div class="col-12 text-center mt-2 mb-2">
             <span style="color: white; font-weight: bold; font-size: large;">{{"ARTICLE.MODAL.HISTORY" | translate }}</span>
@@ -6,7 +6,7 @@
     </div>
 
     <div mat-dialog-content>
-        <div class="row justify-content-center align-items-center p-1">
+        <div *ngIf="articles.length > 0; else emptyBlock" class="row justify-content-center align-items-center p-1">
             <div  *ngFor="let article of articles; let i = index" class="col-12 mt-2 mb-3">
                 <mat-expansion-panel [expanded]="i == 0" style="width: 100%;">
                     <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
@@ -55,6 +55,20 @@
                 </mat-expansion-panel>
             </div>
         </div>
+
+        <ng-template #emptyBlock>
+            <div class="row justify-content-center align-items-center p-3">
+                <div class="col-12 text-center">
+                    <span>
+                        Questo articolo non ha subito variazioni di alcun tipo.
+                    </span>
+                </div>
+                <div class="col-12 text-center">
+                    <i class="bi bi-database-x" style="font-size: xx-large;"></i>
+                </div>
+            </div>
+        </ng-template>
+        
     </div>
 
     <div class="row justify-content-center align-items-center mt-2 mb-3">

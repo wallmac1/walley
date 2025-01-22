@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" style="min-width: 350px;">
     <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
         <div class="col-12 text-center mt-2 mb-2">
             <span style="color: white; font-weight: bold; font-size: large;">
@@ -7,32 +7,51 @@
     </div>
 
     <div mat-dialog-content>
-        <div class="row justify-content-center align-items-center p-1">
-            <div class="col-12 mt-2 mt-1">
-                {{"ARTICLE.MODAL.UPDATETEXT" | translate}}
+        <form [formGroup]="confirmForm">
+            <div class="row justify-content-center align-items-center p-1">
+                <div class="col-12 mt-1 ms-2 form-check form-switch">
+                    <label class="form-check-label" for="update">
+                        Aggiorna
+                    </label>
+                    <input class="form-check-input" type="checkbox" role="switch" id="update" formControlName="update" 
+                        (change)="formLogic(1)">
+                </div>
+                <div class="col-12">
+                    <span style="font-size: small; color: gray;">
+                        {{"ARTICLE.MODAL.UPDATETEXT" | translate}}
+                    </span>
+                </div>
+                <div class="col-12 mt-2 ms-2 form-check form-switch">
+                    <label class="form-check-label" for="varies">
+                        Varia
+                    </label>
+                    <input class="form-check-input" type="checkbox" role="switch" id="varies" formControlName="varies"
+                        (change)="formLogic(2)">
+                </div>
+                <div class="col-12">
+                    <span style="font-size: small; color: gray;">
+                        {{"ARTICLE.MODAL.VARYTEXT" | translate}}
+                    </span>
+                </div>
+                <div *ngIf="isBothFalse == true" class="col-12 text-center mt-2">
+                    <span style="font-size: small; color: red;">
+                        Selezionare una delle due opzioni di salvataggio
+                    </span>
+                </div>
             </div>
-            <div class="col-12 mt-2 mt-1">
-                {{"ARTICLE.MODAL.VARYTEXT" | translate}}
-            </div>
-        </div>
+        </form>
     </div>
 
     <div class="row justify-content-center align-items-center mt-2 mb-3">
-        <div class="col-4 text-start">
-            <button class="btn btn-outline-dark" style="width: 90px;" (click)="update()">
-                {{"ARTICLE.MODAL.UPDATE" | translate }}
-            </button>
-        </div>
-
         <div class="col-4 text-center">
-            <button class="btn btn-outline-dark" style="width: 90px;" (click)="close()">
+            <button class="btn btn-outline-dark" style="width: 100px;" (click)="close(null)">
                 {{"ARTICLE.MODAL.CLOSE" | translate }}
             </button>
         </div>
 
-        <div class="col-4 text-end">
-            <button class="btn btn-outline-dark" style="width: 90px;" (click)="vary()">
-                {{"ARTICLE.MODAL.VARY" | translate }}
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-success" style="width: 100px;" (click)="confirm()">
+                {{"ARTICLE.MODAL.CONFIRM" | translate }}
             </button>
         </div>
     </div>

@@ -15,6 +15,8 @@ import { ArticleHistoryComponent } from "../article-history/article-history.comp
 import { MatDialog } from '@angular/material/dialog';
 import { HistoricComponent } from '../pop-up/historic/historic.component';
 import { ConfirmComponent } from '../pop-up/confirm/confirm.component';
+import { UpdateQuantityComponent } from '../pop-up/update-quantity/update-quantity.component';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-article-modify',
@@ -38,6 +40,7 @@ export class ArticleModifyComponent {
   measurmentUnit: MeasurementUnit[] = [];
   article: Article | null = null;
   selectedTabIndex = 0;
+  idarticle: number = 0;
 
   articleForm = new FormGroup({
     code: new FormControl<string | null>(null, Validators.required),
@@ -47,7 +50,14 @@ export class ArticleModifyComponent {
     quantity: new FormControl<string | null>(null, [Validators.required, this.numberWithCommaValidator()])
   });
 
-  constructor(private connectServerService: ConnectServerService, public dialog: MatDialog) { }
+  constructor(private connectServerService: ConnectServerService, public dialog: MatDialog, private route: ActivatedRoute) {
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      const id = params.get('id');
+      if (id) {
+        this.idarticle = parseInt(id);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.getArticle();
@@ -143,16 +153,39 @@ export class ArticleModifyComponent {
       })
   }
 
-  updateQuantity() { }
+  updateArticle(action: number) {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'articles/storeOrUpdateArticle',
+      {
+        idarticle: this.idarticle, title: this.articleForm.get('title')?.value,
+        refidum: this.articleForm.get('refidum')?.value, description: this.articleForm.get('description')?.value,
+        code: this.articleForm.get('code')?.value, action: action
+      }).subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.getArticle();
+        }
+      })
+  }
 
-  historyPopUp() {
-    const dialogRef = this.dialog.open(HistoricComponent, {
-      maxWidth: '700px',
+  updateQuantityPopUp() {
+    const dialogRef = this.dialog.open(UpdateQuantityComponent, {
+      width: '900px',
+      minWidth: '375px',
       data: { articleid: this.article?.id }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      
+    
+    });
+  }
+
+  historyPopUp() {
+    const dialogRef = this.dialog.open(HistoricComponent, {
+      maxWidth: '700px',
+      data: { articleid: this.idarticle }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
     });
   }
 
@@ -163,11 +196,9 @@ export class ArticleModifyComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result == 1) {
-        // AGGIORNA QUANTITA'
-      }
-      else if(result == 2) {
-        // VARIA QUANTITA'
+      console.log(result);
+      if(result != null) {
+        this.updateArticle(result);
       }
     });
   }
