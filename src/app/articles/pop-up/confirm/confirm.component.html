@@ -1,58 +1,51 @@
-<div class="container-fluid" style="min-width: 350px;">
-    <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
-        <div class="col-12 text-center mt-2 mb-2">
-            <span style="color: white; font-weight: bold; font-size: large;">
-                {{"ARTICLE.MODAL.UPDATEORVARY" | translate}}</span>
-        </div>
-    </div>
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"ARTICLE.MODAL.UPDATEORVARY" | translate}}
+    </span>
+</h2>
 
-    <div mat-dialog-content>
-        <form [formGroup]="confirmForm">
-            <div class="row justify-content-center align-items-center p-1">
-                <div class="col-12 mt-1 ms-2 form-check form-switch">
-                    <label class="form-check-label" for="update">
-                        Aggiorna
-                    </label>
-                    <input class="form-check-input" type="checkbox" role="switch" id="update" formControlName="update" 
-                        (change)="formLogic(1)">
-                </div>
-                <div class="col-12">
-                    <span style="font-size: small; color: gray;">
-                        {{"ARTICLE.MODAL.UPDATETEXT" | translate}}
-                    </span>
-                </div>
-                <div class="col-12 mt-2 ms-2 form-check form-switch">
-                    <label class="form-check-label" for="varies">
-                        Varia
-                    </label>
-                    <input class="form-check-input" type="checkbox" role="switch" id="varies" formControlName="varies"
-                        (change)="formLogic(2)">
-                </div>
-                <div class="col-12">
-                    <span style="font-size: small; color: gray;">
-                        {{"ARTICLE.MODAL.VARYTEXT" | translate}}
-                    </span>
-                </div>
-                <div *ngIf="isBothFalse == true" class="col-12 text-center mt-2">
-                    <span style="font-size: small; color: red;">
-                        Selezionare una delle due opzioni di salvataggio
-                    </span>
-                </div>
+<mat-dialog-content>
+    <form [formGroup]="confirmForm">
+        <div class="row justify-content-center align-items-center p-1">
+            <div class="col-12 mt-1 ms-4 form-check form-switch">
+                <label class="form-check-label" for="update">
+                    Aggiorna
+                </label>
+                <input class="form-check-input" type="checkbox" role="switch" id="update" formControlName="update"
+                    (change)="formLogic(1)" [class.is-invalid]="isBothFalse">
             </div>
-        </form>
-    </div>
-
-    <div class="row justify-content-center align-items-center mt-2 mb-3">
-        <div class="col-4 text-center">
-            <button class="btn btn-outline-dark" style="width: 100px;" (click)="close(null)">
-                {{"ARTICLE.MODAL.CLOSE" | translate }}
-            </button>
+            <div class="col-12">
+                <span style="font-size: small; color: gray;">
+                    {{"ARTICLE.MODAL.UPDATETEXT" | translate}}
+                </span>
+            </div>
+            <div class="col-12 mt-2 ms-4 form-check form-switch">
+                <label class="form-check-label" for="varies">
+                    Varia
+                </label>
+                <input class="form-check-input" type="checkbox" role="switch" id="varies" formControlName="varies"
+                    (change)="formLogic(2)" [class.is-invalid]="isBothFalse">
+            </div>
+            <div class="col-12">
+                <span style="font-size: small; color: gray;">
+                    {{"ARTICLE.MODAL.VARYTEXT" | translate}}
+                </span>
+            </div>
+            <div *ngIf="isBothFalse == true" class="col-12 text-center mt-2">
+                <span style="font-size: small; color: red;">
+                    Selezionare una delle due opzioni di salvataggio
+                </span>
+            </div>
         </div>
+    </form>
+</mat-dialog-content>
 
-        <div class="col-4 text-center">
-            <button class="btn btn-outline-success" style="width: 100px;" (click)="confirm()">
-                {{"ARTICLE.MODAL.CONFIRM" | translate }}
-            </button>
-        </div>
-    </div>
-</div>
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+        <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close(null)">
+            {{"ARTICLE.MODAL.CLOSE" | translate }}
+        </button>
+
+        <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="confirm()">
+            {{"ARTICLE.MODAL.CONFIRM" | translate }}
+        </button>
+</mat-dialog-actions>

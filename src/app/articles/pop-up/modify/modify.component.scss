@@ -8,8 +8,37 @@
         font-size: small;
     }
 
-    @media screen and (min-width: 880px) {
+    @media screen and (min-width: 1000px) {
         font-size: medium;
     }
 
+}
+
+.btn-outline-dark {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+.vatPadding {
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+
+    @media screen and (min-width: 576px) {
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
+    }
+
+    @media screen and (min-width: 700px) {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+.form-control {
+    max-width: 200px;
 }

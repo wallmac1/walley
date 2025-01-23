@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -13,7 +13,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     ReactiveFormsModule,
     MatTooltipModule,
-    TranslateModule
+    TranslateModule,
+    MatDialogModule
   ],
   templateUrl: './delete.component.html',
   styleUrl: './delete.component.scss'

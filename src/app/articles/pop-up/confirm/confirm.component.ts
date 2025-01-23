@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -12,7 +12,8 @@ import { Connect } from '../../../classes/connect';
   imports: [
     CommonModule,
     TranslateModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule
   ],
   templateUrl: './confirm.component.html',
   styleUrl: './confirm.component.scss'

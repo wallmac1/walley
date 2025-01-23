@@ -66,61 +66,16 @@ export class ArticleModifyComponent {
   }
 
   private getArticle() {
-    const articleExample: Article =
-    {
-      id: 6,
-      code: "8745",
-      progressive: 1,
-      quantity: "1,00",
-      article_data: {
-        refidarticle: 6,
-        title: "Prodotto D",
-        description: "Descrizione del prodotto D.",
-        um: {
-          id: 4,
-          description: "",
-          acronym: "cm"
-        },
-        date_snapshot: "",
-        user_created: {
-          id: 20,
-          nickname: "And",
-          datetime: "20/12/24"
-        },
-        user_updated: {
-          id: 20,
-          nickname: "And",
-          datetime: "24/12/24"
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'articles/articleData', { idarticle: this.idarticle })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.articleForm.get('code')?.setValue(val.data.code);
+          this.articleForm.get('title')?.setValue(val.data.title);
+          this.articleForm.get('refidum')?.setValue(val.data.refidum);
+          this.articleForm.get('quantity')?.setValue(val.data.quantity);
+          this.articleForm.get('description')?.setValue(val.data.description);
         }
-      },
-      article_price: {
-        refidarticle: 5,
-        serialnumber: "S83DLHB",
-        taxablepurchase: "400,25",
-        taxablesale: "450,75",
-        taxablerecommended: "450,00",
-        vatpurchase: "5%",
-        vatsale: "15%",
-        vatrecommended: "15%",
-        user_created: {
-          id: 20,
-          nickname: "And",
-          datetime: "20/12/24"
-        },
-        user_updated: {
-          id: 20,
-          nickname: "And",
-          datetime: "24/12/24"
-        }
-      }
-    };
-
-    this.article = articleExample;
-    this.articleForm.get('code')?.setValue(this.article.code);
-    this.articleForm.get('title')?.setValue(this.article.article_data.title);
-    this.articleForm.get('refidum')?.setValue(this.article.article_data.um?.id || null);
-    this.articleForm.get('quantity')?.setValue(this.article.quantity);
-    this.articleForm.get('description')?.setValue(this.article.article_data.description);
+      })
   }
 
   private initForm() {
@@ -168,19 +123,24 @@ export class ArticleModifyComponent {
 
   updateQuantityPopUp() {
     const dialogRef = this.dialog.open(UpdateQuantityComponent, {
-      width: '900px',
-      minWidth: '375px',
-      data: { articleid: this.article?.id }
+      maxWidth: '800px',
+      minWidth: '350px',
+      maxHeight: '500px',
+      width: '90%',
+      data: { idarticle: this.idarticle }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-    
+
     });
   }
 
   historyPopUp() {
     const dialogRef = this.dialog.open(HistoricComponent, {
       maxWidth: '700px',
+      minWidth: '350px',
+      maxHeight: '500px',
+      width: '90%',
       data: { articleid: this.idarticle }
     });
 
@@ -192,12 +152,15 @@ export class ArticleModifyComponent {
   updateArticlePopup() {
     const dialogRef = this.dialog.open(ConfirmComponent, {
       maxWidth: '700px',
+      minWidth: '350px',
+      maxHeight: '500px',
+      width: '90%',
       data: { articleid: this.article?.id }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      if(result != null) {
+      if (result != null) {
         this.updateArticle(result);
       }
     });

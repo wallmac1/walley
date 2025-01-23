@@ -1,59 +1,52 @@
-<div class="container-fluid" style="min-width: 350px;">
-    <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
-        <div class="col-12 text-center mt-2 mb-2">
-            <span style="color: white; font-weight: bold; font-size: large;">{{"ARTICLE.MODAL.DELETEARTICLES" | translate
-                }}</span>
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"ARTICLE.MODAL.DELETEARTICLES" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content>
+    <div *ngIf="articles.length == 1; else multipleBlock" class="row justify-content-center align-items-center p-1">
+        <div class="col-12 text-center p-1">
+            <span>
+                Sei sicuro di voler cancellare tutte le quantità dell'articolo?
+            </span>
+        </div>
+        <div class="col-6 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Serial Number:<br>
+            </span>
+            {{articles[0].serialnumber || '-'}}
+        </div>
+        <div class="col-6 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Quantità:<br>
+            </span>
+            {{articles[0].quantity}}
         </div>
     </div>
 
-    <div mat-dialog-content>
-        <div *ngIf="articles.length == 1; else multipleBlock" class="row justify-content-center align-items-center p-1">
+    <ng-template #multipleBlock>
+        <div class="row justify-content-center align-items-center p-1">
             <div class="col-12 text-center p-1">
                 <span>
-                    Sei sicuro di voler cancellare tutte le quantità dell'articolo?
+                    Sei sicuro di voler cancellare tutte le quantità degli articoli?
                 </span>
             </div>
-            <div class="col-6 text-center p-1">
+            <div class="col-12 text-center p-1">
                 <span style="font-weight: bold; font-size: small;">
-                    Serial Number:<br>
+                    Quantità Totale:<br>
                 </span>
-                {{articles[0].serialnumber || '-'}}
-            </div>
-            <div class="col-6 text-center p-1">
-                <span style="font-weight: bold; font-size: small;">
-                    Quantità:<br>
-                </span>
-                {{articles[0].quantity}}
+                {{totalQuantity}}
             </div>
         </div>
+    </ng-template>
+</mat-dialog-content>
 
-        <ng-template #multipleBlock>
-            <div class="row justify-content-center align-items-center p-1">
-                <div class="col-12 text-center p-1">
-                    <span>
-                        Sei sicuro di voler cancellare tutte le quantità degli articoli?
-                    </span>
-                </div>
-                <div class="col-12 text-center p-1">
-                    <span style="font-weight: bold; font-size: small;">
-                        Quantità Totale:<br>
-                    </span>
-                    {{totalQuantity}}
-                </div>
-            </div>
-        </ng-template>
-    </div>
-
-    <div class="row justify-content-center align-items-center mt-2 mb-3">
-        <div class="col-6 text-start">
-            <button class="btn btn-outline-dark" style="width: 80px;" (click)="close()">
-                {{"ARTICLE.MODAL.CANCEL" | translate }}
-            </button>
-        </div>
-        <div class="col-6 text-end">
-            <button class="btn btn-outline-danger" style="width: 80px;" (click)="deleteArticle()">
-                {{"ARTICLE.MODAL.DELETE" | translate }}
-            </button>
-        </div>
-    </div>
-</div>
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button class="btn btn-outline-dark me-2" style="width: 80px;" (click)="close()">
+        {{"ARTICLE.MODAL.CANCEL" | translate }}
+    </button>
+    <button class="btn btn-outline-danger me-2" style="width: 80px;" (click)="deleteArticle()">
+        {{"ARTICLE.MODAL.DELETE" | translate }}
+    </button>
+</mat-dialog-actions>

@@ -1,80 +1,74 @@
-<div class="container-fluid" style="min-width: 350px;">
-    <div class="row justify-content-center align-items-center" style="background-color: #002D5D;">
-        <div class="col-12 text-center mt-2 mb-2">
-            <span style="color: white; font-weight: bold; font-size: large;">{{"ARTICLE.MODAL.HISTORY" | translate }}</span>
-        </div>
-    </div>
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">{{"ARTICLE.MODAL.HISTORY" | translate }}</span>
+</h2>
 
-    <div mat-dialog-content>
-        <div *ngIf="articles.length > 0; else emptyBlock" class="row justify-content-center align-items-center p-1">
-            <div  *ngFor="let article of articles; let i = index" class="col-12 mt-2 mb-3">
-                <mat-expansion-panel [expanded]="i == 0" style="width: 100%;">
-                    <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
-                        <mat-panel-title class="panel-title">
-                            <span style="font-weight: bold;">
-                                {{article.date_snapshot}}
-                            </span>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
+<mat-dialog-content>
+    <div *ngIf="articles.length > 0; else emptyBlock" class="row justify-content-center align-items-center p-1">
+        <div *ngFor="let article of articles; let i = index" class="col-12 mt-2 mb-3">
+            <mat-expansion-panel [expanded]="i == 0" style="width: 100%;">
+                <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
+                    <mat-panel-title class="panel-title">
+                        <span style="font-weight: bold;">
+                            {{article.date_snapshot}}
+                        </span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
 
-                    <div class="row justify-content-center align-items-center mt-1">
-                        <div class="col-12">
-                            {{article.title}}
-                        </div>
-                        <div class="col-12">
-                            {{"ARTICLE.MODAL.MEASUREMENTUNIT" | translate }}: {{article.um?.acronym}}
-                        </div>
-                        <div class="col-12">
-                            {{article.description}}
-                        </div>
+                <div class="row justify-content-center align-items-center mt-1">
+                    <div class="col-12">
+                        {{article.title}}
                     </div>
-
-                    <div class="row d-none d-md-flex justify-content-center align-items-center mt-1">
-                        <div class="col-6 text-start">
-                            <span *ngIf="article?.user_created" class="userInfo">
-                                {{"TICKET.DATETIMELOG.CREATED" | translate}}:
-                                {{article?.user_created?.nickname}} -
-                                {{article?.user_created?.datetime}}
-                            </span>
-                        </div>
-                        <div class="col-6 text-end">
-                            <span *ngIf="article?.user_updated != null" class="userInfo">
-                                {{"TICKET.DATETIMELOG.UPDATED" | translate}}:
-                                {{article?.user_updated?.nickname}} -
-                                {{article?.user_updated?.datetime}}
-                            </span>
-                        </div>
+                    <div class="col-12">
+                        {{"ARTICLE.MODAL.MEASUREMENTUNIT" | translate }}: {{article.um?.acronym}}
                     </div>
-                    <div class="row d-md-none justify-content-center mt-1">
-                        <div class="col-12 text-start">
-                            <i class="bi bi-info-circle"
-                                matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: {{article?.user_created?.nickname}} - {{article?.user_created?.datetime}}, &#10;
+                    <div class="col-12">
+                        {{article.description}}
+                    </div>
+                </div>
+
+                <div class="row d-none d-md-flex justify-content-center align-items-center mt-1">
+                    <div class="col-6 text-start">
+                        <span *ngIf="article?.user_created" class="userInfo">
+                            {{"TICKET.DATETIMELOG.CREATED" | translate}}:
+                            {{article?.user_created?.nickname}} -
+                            {{article?.user_created?.datetime}}
+                        </span>
+                    </div>
+                    <div class="col-6 text-end">
+                        <span *ngIf="article?.user_updated != null" class="userInfo">
+                            {{"TICKET.DATETIMELOG.UPDATED" | translate}}:
+                            {{article?.user_updated?.nickname}} -
+                            {{article?.user_updated?.datetime}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row d-md-none justify-content-center mt-1">
+                    <div class="col-12 text-start">
+                        <i class="bi bi-info-circle"
+                            matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: {{article?.user_created?.nickname}} - {{article?.user_created?.datetime}}, &#10;
                                 {{'TICKET.DATETIMELOG.UPDATED' | translate}}: {{article?.user_updated?.nickname}} - {{article?.user_updated?.datetime}}"></i>
-                        </div>
                     </div>
-                </mat-expansion-panel>
-            </div>
-        </div>
-
-        <ng-template #emptyBlock>
-            <div class="row justify-content-center align-items-center p-3">
-                <div class="col-12 text-center">
-                    <span>
-                        Questo articolo non ha subito variazioni di alcun tipo.
-                    </span>
                 </div>
-                <div class="col-12 text-center">
-                    <i class="bi bi-database-x" style="font-size: xx-large;"></i>
-                </div>
-            </div>
-        </ng-template>
-        
-    </div>
-
-    <div class="row justify-content-center align-items-center mt-2 mb-3">
-        <div class="col-12 text-end">
-            <button class="btn btn-outline-dark" style="width: 80px;" (click)="close()">{{"ARTICLE.MODAL.CLOSE" |
-                translate }}</button>
+            </mat-expansion-panel>
         </div>
     </div>
-</div>
+
+    <ng-template #emptyBlock>
+        <div class="row justify-content-center align-items-center p-3">
+            <div class="col-12 text-center">
+                <span>
+                    Questo articolo non ha subito variazioni di alcun tipo.
+                </span>
+            </div>
+            <div class="col-12 text-center">
+                <i class="bi bi-database-x" style="font-size: xx-large;"></i>
+            </div>
+        </div>
+    </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button class="btn btn-outline-dark me-2" style="width: 80px;" (click)="close()">
+        {{"ARTICLE.MODAL.CLOSE" | translate }}
+    </button>
+</mat-dialog-actions>

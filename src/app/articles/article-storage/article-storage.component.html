@@ -1,4 +1,4 @@
-<div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 375px; max-width: 1600px;">
+<div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 375px; max-width: 1800px;">
 
     <form [formGroup]="storageForm">
         <!-- <div class="row justify-content-center align-items-center mb-2">
@@ -12,7 +12,7 @@
         <!-- GROUP ACTION -->
         <div class="row justify-content-center align-items-center pb-2" style="border-bottom: 1px solid lightgray;">
             <!-- CHECKBOX -->
-            <div class="checkboxPadding col-2 col-sm-1">
+            <div class="checkboxPadding col-auto me-2 me-md-4">
                 <div class="form-check">
                     <input class="form-check-input group-checkbox" type="checkbox" formControlName="groupAction"
                         id="groupAction" (change)="formLogicGroup()">
@@ -37,7 +37,7 @@
                 class="row justify-content-center align-items-group mt-2 pb-2"
                 style="border-bottom: 1px solid lightgray;">
                 <!-- CHECKBOX -->
-                <div class="checkboxPadding col-2 col-sm-1">
+                <div class="checkboxPadding col-auto me-2 me-md-4">
                     <div class="form-check" style="margin-top: 0.5rem;">
                         <input class="form-check-input" type="checkbox" formControlName="action" id="action-{{i}}"
                             (change)="formLogic()">
@@ -46,7 +46,7 @@
 
                 <div class="col-10 col-sm-11">
                     <div class="row justify-content-start align-items-center">
-                        <div class="articleColumn col-6 col-sm-2">
+                        <div class="articleColumn col-3 col-sm-2 col-lg-1">
                             <label class="form-label" for="quantity-{{i}}">
                                 Quantità
                             </label>
@@ -56,58 +56,108 @@
 
                         <div class="articleColumn col-3 col-sm-2 col-md-1" style="margin-top: 1.6rem;">
                             <i class="bi bi-pencil iconMargin iconSize" (click)="modifyPopUp(item.getRawValue())"></i>
-                            <i class="bi bi-trash iconSize" style="color: red;" (click)="deletePopUp(item.getRawValue())"></i>
+                            <i class="bi bi-trash iconSize" style="color: red;"
+                                (click)="deletePopUp(item.getRawValue())"></i>
                         </div>
 
-                        <div class="articleColumn col-8 col-sm-5 col-sm-4 col-md-3 col-lg-4">
+                        <div class="col-6 d-md-none d-xl-flex col-xl-10"></div>
+
+                        <div class="articleColumn col-4 col-sm-3 col-xl-2">
                             <label class="form-label" for="taxablepurchase-{{i}}">
-                                Imponibile Acquisto
+                                <span *ngIf="!isSmall; else smallBlockA">
+                                    Imponibile Acquisto
+                                </span>
+                                <ng-template #smallBlockA>
+                                    <span>
+                                        Imp. Acq.
+                                    </span>
+                                </ng-template>
                             </label>
-                            <input class="form-control" type="text" name="taxablepurchase-{{i}}"
-                                id="taxablepurchase-{{i}}" formControlName="taxablepurchase">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="taxablepurchase-{{i}}"
+                                    id="taxablepurchase-{{i}}" formControlName="taxablepurchase">
+                                <span *ngIf="!isSmall" class="input-group-text" id="taxablepurchase-{{i}}">€</span>
+                            </div>
                         </div>
-                        <div class="articleColumn col-3 col-sm-2 col-md-1">
+                        <div class="articleColumn col-3 col-md-2 col-xl-1">
                             <label class="form-label" for="vatpurchase-{{i}}">
                                 IVA
                             </label>
-                            <input class="form-control vatPadding" type="text" name="vatpurchase-{{i}}"
-                                id="vatpurchase-{{i}}" formControlName="vatpurchase">
+                            <div class="input-group">
+                                <input class="form-control vatPadding" type="text" name="vatpurchase-{{i}}"
+                                    id="vatpurchase-{{i}}" formControlName="vatpurchase">
+                                <span class="input-group-text vatPadding" id="vatpurchase-{{i}}">%</span>
+                            </div>
                         </div>
-                        <div class="articleColumn col-6 col-md-5 col-lg-4">
+                        <div class="articleColumn col-4 col-sm-3 col-lg-2">
                             <label class="form-label" for="pricesale-{{i}}">
-                                Prezzo di Acquisto
+                                <span *ngIf="!isSmall; else smallBlockPA">
+                                    Prezzo Acquisto
+                                </span>
+                                <ng-template #smallBlockPA>
+                                    <span>
+                                        Prz. Acq.
+                                    </span>
+                                </ng-template>
                             </label>
-                            <input class="form-control" type="text" name="pricesale-{{i}}" id="pricesale-{{i}}"
-                                formControlName="pricesale">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="pricesale-{{i}}" id="pricesale-{{i}}"
+                                    formControlName="pricesale">
+                                <span *ngIf="!isSmall" class="input-group-text" id="pricesale-{{i}}">€</span>
+                            </div>
                         </div>
-
-                        <div class="articleColumn col-5 col-md-3">
+                        <div class="col-3 d-none d-lg-flex d-xl-none"></div>
+                        <div class="articleColumn col-5 col-md-3 col-lg-2">
                             <label class="form-label" for="serialnumber-{{i}}">
                                 SN
                             </label>
                             <input class="form-control" type="text" name="serialnumber-{{i}}" id="serialnumber-{{i}}"
                                 formControlName="serialnumber">
                         </div>
-                        <div class="articleColumn col-8 col-sm-4 col-md-3 col-lg-4">
+                        <div class="col-7 d-md-none"></div>
+                        <div class="articleColumn col-4 col-sm-3 col-xl-2">
                             <label class="form-label" for="taxablerecommended-{{i}}">
-                                Imponibile Consigliato
+                                <span *ngIf="!isSmall; else smallBlockC">
+                                    Imponibile Consigliato
+                                </span>
+                                <ng-template #smallBlockC>
+                                    <span>
+                                        Imp. Cons.
+                                    </span>
+                                </ng-template>
                             </label>
-                            <input class="form-control" type="text" name="taxablerecommended-{{i}}"
-                                id="taxablerecommended-{{i}}" formControlName="taxablerecommended">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="taxablerecommended-{{i}}"
+                                    id="taxablerecommended-{{i}}" formControlName="taxablerecommended">
+                                <span *ngIf="!isSmall" class="input-group-text" id="taxablerecommended-{{i}}">€</span>
+                            </div>
                         </div>
-                        <div class="articleColumn col-3 col-sm-2 col-md-1">
+                        <div class="articleColumn col-3 col-md-2 col-xl-1">
                             <label class="form-label" for="vatrecommended-{{i}}">
                                 IVA
                             </label>
-                            <input class="form-control vatPadding" type="text" name="vatrecommended-{{i}}"
-                                id="vatrecommended-{{i}}" formControlName="vatrecommended">
+                            <div class="input-group">
+                                <input class="form-control vatPadding" type="text" name="vatrecommended-{{i}}"
+                                    id="vatrecommended-{{i}}" formControlName="vatrecommended">
+                                <span class="input-group-text vatPadding" id="vatrecommended-{{i}}">%</span>
+                            </div>
                         </div>
-                        <div class="articleColumn col-8 col-sm-5 col-md-5 col-lg-4">
+                        <div class="articleColumn col-4 col-sm-3 col-lg-2">
                             <label class="form-label" for="pricerecommended-{{i}}">
-                                Prezzo Consigliato
+                                <span *ngIf="!isSmall; else smallBlockPC">
+                                    Prezzo Consigliato
+                                </span>
+                                <ng-template #smallBlockPC>
+                                    <span>
+                                        Prz. Cons.
+                                    </span>
+                                </ng-template>
                             </label>
-                            <input class="form-control" type="text" name="pricerecommended-{{i}}"
-                                id="pricerecommended-{{i}}" formControlName="pricerecommended">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="pricerecommended-{{i}}"
+                                    id="pricerecommended-{{i}}" formControlName="pricerecommended">
+                                <span *ngIf="!isSmall" class="input-group-text" id="pricerecommended-{{i}}">€</span>
+                            </div>
                         </div>
                     </div>
                 </div>

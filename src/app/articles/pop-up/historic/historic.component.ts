@@ -6,7 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Article, ArticleData } from '../../interfaces/article';
 import { DialogRef } from '@angular/cdk/dialog';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { Connect } from '../../../classes/connect';
 import { ApiResponse } from '../../../weco/interfaces/api-response';
@@ -19,7 +19,8 @@ import { ApiResponse } from '../../../weco/interfaces/api-response';
     ReactiveFormsModule,
     TranslateModule,
     MatTooltipModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatDialogModule
   ],
   templateUrl: './historic.component.html',
   styleUrl: './historic.component.scss'

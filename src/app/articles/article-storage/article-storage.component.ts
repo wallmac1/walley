@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,6 +7,9 @@ import { Article } from '../interfaces/article';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../pop-up/delete/delete.component';
 import { ModifyComponent } from '../pop-up/modify/modify.component';
+import { ConnectServerService } from '../../services/connect-server.service';
+import { Connect } from '../../classes/connect';
+import { ApiResponse } from '../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-article-storage',
@@ -24,8 +27,15 @@ export class ArticleStorageComponent {
 
   checkboxGroup = document.querySelector('#groupAction') as HTMLElement;
   storageForm: FormGroup;
+  isSmall: boolean = false;
+  @Input() idarticle: number = 0;
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog) {
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateWindowDimensions();
+  }
+
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private connectServerService: ConnectServerService) {
     this.storageForm = this.fb.group({
       groupAction: [false],
       articles: this.fb.array([])
@@ -34,6 +44,16 @@ export class ArticleStorageComponent {
 
   ngOnInit(): void {
     this.getArticles();
+    this.updateWindowDimensions();
+  }
+
+  updateWindowDimensions() {
+    if(window.innerWidth < 700) {
+      this.isSmall = true;
+    }
+    else {
+      this.isSmall = false;
+    }
   }
 
   formLogicGroup() {
@@ -74,6 +94,10 @@ export class ArticleStorageComponent {
 
   getArticles() {
     // CHIAMATA AL SERVER PER OTTENERE GLI ARTICOLI E CREARE I FORM ARRAY NEL SUBSCRIBE
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'articles/articlePricesList', {idarticle: this.idarticle})
+      .subscribe((val: ApiResponse<any>) => {
+
+      })
     this.createArticlesForm(this.articlesTemporary);
   }
 
@@ -112,23 +136,26 @@ export class ArticleStorageComponent {
 
   deletePopUp(articles: any) {
     let data = articles;
-    if(Array.isArray(data)) {
+    if (Array.isArray(data)) {
       this.articles.controls.forEach((element) => {
-        if(element.get('action')?.value == true) {
+        if (element.get('action')?.value == true) {
           data.push(element.getRawValue());
         }
       })
     }
     this.dialog.open(DeleteComponent, {
       maxWidth: '700px',
+      maxHeight: '500px',
+      width: '94%',
       data: { articles: articles }
     });
   }
 
   modifyPopUp(article: any) {
     this.dialog.open(ModifyComponent, {
-      maxWidth: '900px',
-      width: '800px',
+      maxWidth: '800px',
+      maxHeight: '500px',
+      width: '94%',
       data: { article: article }
     });
   }
