@@ -38,3 +38,36 @@
 .title {
     font-size: large;
 }
+
+.form-label {
+    font-size: small;
+
+    @media screen and (min-width: 1000px) {
+        font-size: medium;
+    }
+}
+
+// .quantityClass {
+//     max-width: 200px;
+// }
+
+.elementPadding {
+    padding: 0.2rem;
+}
+
+.unitMeasurement {
+    padding-left: 0.4rem;
+}
+
+.settingsIcon {
+    position: absolute; 
+    font-size: 20px;
+    top: 66px;
+    left: 0;
+
+    @media screen and (min-width: 577px) {
+        top: 50px; 
+        left: 48%;
+    }
+     
+}

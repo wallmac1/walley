@@ -1,34 +1,36 @@
-import { CommonModule } from '@angular/common';
 import { Component, HostListener, Input } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ModifyComponent } from '../../pop-up/modify/modify.component';
+import { DeleteComponent } from '../../pop-up/delete/delete.component';
+import { Article } from '../../interfaces/article';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ApiResponse } from '../../../weco/interfaces/api-response';
+import { Connect } from '../../../classes/connect';
+import { ConnectServerService } from '../../../services/connect-server.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { Article } from '../interfaces/article';
-import { MatDialog } from '@angular/material/dialog';
-import { DeleteComponent } from '../pop-up/delete/delete.component';
-import { ModifyComponent } from '../pop-up/modify/modify.component';
-import { ConnectServerService } from '../../services/connect-server.service';
-import { Connect } from '../../classes/connect';
-import { ApiResponse } from '../../weco/interfaces/api-response';
 
 @Component({
-  selector: 'app-article-storage',
+  selector: 'app-storage-line-sn-qnt',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslateModule,
-    MatTooltipModule
+    MatTooltipModule,
+    TranslateModule
   ],
-  templateUrl: './article-storage.component.html',
-  styleUrl: './article-storage.component.scss'
+  templateUrl: './storage-line-sn-qnt.component.html',
+  styleUrl: './storage-line-sn-qnt.component.scss'
 })
-export class ArticleStorageComponent {
-
-  checkboxGroup = document.querySelector('#groupAction') as HTMLElement;
+export class StorageLineSnQntComponent {
+checkboxGroup = document.querySelector('#groupAction') as HTMLElement;
   storageForm: FormGroup;
   isSmall: boolean = false;
+
   @Input() idarticle: number = 0;
+  @Input() manage_sn: boolean = false;
+  @Input() manage_qnt: boolean = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
@@ -37,7 +39,6 @@ export class ArticleStorageComponent {
 
   constructor(private fb: FormBuilder, private dialog: MatDialog, private connectServerService: ConnectServerService) {
     this.storageForm = this.fb.group({
-      groupAction: [false],
       articles: this.fb.array([])
     })
   }
@@ -113,9 +114,8 @@ export class ArticleStorageComponent {
 
   createArticle(article: Article) {
     const group = this.fb.group({
-      action: [false],
       id: [article.id],
-      quantity: [article.quantity],
+      unit: [article.unit],
       serialnumber: [article.article_price.serialnumber],
       taxablepurchase: [article.article_price.taxablepurchase],
       pricesale: [article.article_price.taxablesale], // DA CAMBIARE QUANDO FINITA INTERFACCIA
@@ -123,6 +123,8 @@ export class ArticleStorageComponent {
       taxablerecommended: [article.article_price.taxablerecommended],
       vatpurchase: [article.article_price.vatpurchase],
       vatrecommended: [article.article_price.vatrecommended],
+      stored_qnt: [50],
+      available_qnt: [40]
     })
 
     Object.keys(group.controls).forEach(controlName => {
@@ -165,7 +167,7 @@ export class ArticleStorageComponent {
       id: 1,
       code: "ART001",
       progressive: 1,
-      quantity: "1",
+      unit: 1,
       article_data: {
         title: "Article One",
         description: "First article with serial number",
@@ -208,7 +210,7 @@ export class ArticleStorageComponent {
       id: 2,
       code: "ART002",
       progressive: 2,
-      quantity: "1",
+      unit: 1,
       article_data: {
         title: "Article Two",
         description: "Second article with serial number",
@@ -251,7 +253,7 @@ export class ArticleStorageComponent {
       id: 3,
       code: "ART003",
       progressive: 3,
-      quantity: "10",
+      unit: 10,
       article_data: {
         title: "Article Three",
         description: "Article without serial number",
@@ -291,5 +293,4 @@ export class ArticleStorageComponent {
       }
     }
   ];
-
 }

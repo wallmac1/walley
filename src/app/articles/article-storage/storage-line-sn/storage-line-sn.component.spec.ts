@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ArticleStorageComponent } from './article-storage.component';
+import { StorageLineSnComponent } from './storage-line-sn.component';
 
-describe('ArticleStorageComponent', () => {
-  let component: ArticleStorageComponent;
-  let fixture: ComponentFixture<ArticleStorageComponent>;
+describe('StorageLineSnComponent', () => {
+  let component: StorageLineSnComponent;
+  let fixture: ComponentFixture<StorageLineSnComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ArticleStorageComponent]
+      imports: [StorageLineSnComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ArticleStorageComponent);
+    fixture = TestBed.createComponent(StorageLineSnComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

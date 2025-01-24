@@ -6,13 +6,15 @@ import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { Router } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-article-new',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTooltipModule
   ],
   templateUrl: './article-new.component.html',
   styleUrl: './article-new.component.scss'
@@ -30,13 +32,25 @@ export class ArticleNewComponent {
     code: new FormControl<string | null>(null, Validators.required),
     title: new FormControl<string | null>(null, Validators.required),
     refidum: new FormControl<number | null>(null),
-    description: new FormControl<string | null>(null)
+    description: new FormControl<string | null>(null),
+    manage_sn: new FormControl<number>(1),
+    manage_qnt: new FormControl<number>(1),
+    notes: new FormControl<string | null>(null)
   })
 
   constructor(private connectServerService: ConnectServerService, private router: Router) { }
 
   ngOnInit(): void {
     this.getMeasurmentUnits();
+    this.articleForm.get('manage_sn')?.valueChanges.subscribe((val: any) => {
+      if(val == 1) {
+        this.articleForm.get('manage_qnt')?.enable();
+      }
+      else {
+        this.articleForm.get('manage_qnt')?.setValue(0);
+        this.articleForm.get('manage_qnt')?.disable();
+      }
+    })
   }
 
   private getMeasurmentUnits() {

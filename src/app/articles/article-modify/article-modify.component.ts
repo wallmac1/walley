@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MeasurementUnit } from '../../tickets/interfaces/article';
 import { ConnectServerService } from '../../services/connect-server.service';
@@ -9,7 +9,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Article } from '../interfaces/article';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ArticleStorageComponent } from "../article-storage/article-storage.component";
 import { ArticleTaxableComponent } from "../article-taxable/article-taxable.component";
 import { ArticleHistoryComponent } from "../article-history/article-history.component";
 import { MatDialog } from '@angular/material/dialog';
@@ -17,6 +16,7 @@ import { HistoricComponent } from '../pop-up/historic/historic.component';
 import { ConfirmComponent } from '../pop-up/confirm/confirm.component';
 import { UpdateQuantityComponent } from '../pop-up/update-quantity/update-quantity.component';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { StorageLineComponent } from '../article-storage/storage-line/storage-line.component';
 
 @Component({
   selector: 'app-article-modify',
@@ -27,7 +27,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
     MatTooltipModule,
     TranslateModule,
     MatTabsModule,
-    ArticleStorageComponent,
+    StorageLineComponent,
     ArticleTaxableComponent,
     ArticleHistoryComponent
   ],
@@ -41,14 +41,29 @@ export class ArticleModifyComponent {
   article: Article | null = null;
   selectedTabIndex = 0;
   idarticle: number = 0;
+  isSmall: boolean = false;
+  isSmallUm: boolean = false;
+  notesHeight: number = 6;
+  manage_sn: boolean = false;
+  manage_qnt: boolean = false;
 
   articleForm = new FormGroup({
     code: new FormControl<string | null>(null, Validators.required),
     title: new FormControl<string | null>(null, Validators.required),
     refidum: new FormControl<number | null>(null),
     description: new FormControl<string | null>(null),
-    quantity: new FormControl<string | null>(null, [Validators.required, this.numberWithCommaValidator()])
+    //quantity: new FormControl<string | null>(null, [Validators.required, this.numberWithCommaValidator()]),
+    available_qnt: new FormControl<string | null>(null),
+    storage_qnt: new FormControl<string | null>(null),
+    available_unt: new FormControl<number>(0),
+    storage_unt: new FormControl<number>(0),
+    notes: new FormControl<string | null>(null)
   });
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateWindowDimensions();
+  }
 
   constructor(private connectServerService: ConnectServerService, public dialog: MatDialog, private route: ActivatedRoute) {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -63,6 +78,30 @@ export class ArticleModifyComponent {
     this.getArticle();
     this.initForm();
     this.getMeasurmentUnits();
+    this.updateWindowDimensions();
+  }
+
+  updateWindowDimensions() {
+    if(window.innerWidth < 1200 && window.innerWidth > 575) {
+      this.isSmall = true;
+    }
+    else {
+      this.isSmall = false;
+    }
+
+    if(window.innerWidth > 976) {
+      this.isSmallUm = true;
+    }
+    else {
+      this.isSmallUm = false;
+    }
+
+    if(window.innerWidth < 768) {
+      this.notesHeight = 2;
+    }
+    else {
+      this.notesHeight = 6;
+    }
   }
 
   private getArticle() {
@@ -72,8 +111,20 @@ export class ArticleModifyComponent {
           this.articleForm.get('code')?.setValue(val.data.code);
           this.articleForm.get('title')?.setValue(val.data.title);
           this.articleForm.get('refidum')?.setValue(val.data.refidum);
-          this.articleForm.get('quantity')?.setValue(val.data.quantity);
+          this.articleForm.get('available_unt')?.setValue(val.data.quantity); // Da modificare
+          this.articleForm.get('storage_unt')?.setValue(val.data.quantity); // Da modificare
           this.articleForm.get('description')?.setValue(val.data.description);
+          this.articleForm.get('notes')?.setValue(val.data.notes);
+
+          if(val.data.manage_qnt == 1) {
+            this.articleForm.get('available_qnt')?.setValue(val.data.quantity); // Da modificare
+            this.articleForm.get('storage_qnt')?.setValue(val.data.quantity); // Da modificare
+            this.manage_qnt = true; // Da inserire valore reale
+          }
+
+          if(val.data.manage_sn == 1) {
+            this.manage_sn = true; // Da inserire valore reale
+          }
         }
       })
   }

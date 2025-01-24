@@ -23,8 +23,8 @@
 }
 
 .articleColumn {
-    padding-left: 0.2rem;
-    padding-right: 0.2rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
 
     @media screen and (min-width: 1000px) {
         padding-left: 0.4rem;
@@ -42,29 +42,19 @@
     }
 
     @media screen and (min-width: 1400px) {
-        padding-left: 0.8rem;
-        padding-right: 0.8rem;
-    }
-
-    @media screen and (min-width: 1500px) {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-}
-
-.vatPadding {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-
-    @media screen and (min-width: 768px) {
         padding-left: 0.2rem;
         padding-right: 0.2rem;
     }
 
-    @media screen and (min-width: 850px) {
-        padding-left: 0.4rem;
-        padding-right: 0.4rem;
-    }
+    // @media screen and (min-width: 1500px) {
+    //     padding-left: 1rem;
+    //     padding-right: 1rem;
+    // }
+}
+
+.vatPadding {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
 
     @media screen and (min-width: 992px) {
         padding-left: 0.5rem;
@@ -98,6 +88,8 @@
 
 .iconSize {
     font-size: 20px;
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 .iconSize:hover {
@@ -112,3 +104,36 @@
         padding-left: 0.6rem;
     }
 }
+
+.iconAbsoluteP {
+    z-index: 100;
+    position: absolute;
+    top: 24%;
+    left: 24%;
+    font-size: 20px;
+}
+
+.iconAbsoluteF {
+    z-index: 100;
+    position: absolute;
+    top: 48%;
+    left: 24%;
+    font-size: 20px;
+}
+
+.iconAbsoluteT {
+    z-index: 100;
+    position: absolute;
+    top: 74%;
+    left: 24%;
+    font-size: 20px;
+}
+
+.displayIcons {
+    display: none;
+    
+    @media screen and (min-width: 768px) {
+        display: flex;
+    }
+}
+

@@ -1,103 +1,207 @@
 <div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 375px; min-height: 90vh;">
 
-    <form [formGroup]="articleForm">
-        <div class="row justify-content-center align-items-center mt-2 mb-2">
-            <div class="col-12 text-center">
-                <span style="font-size: xx-large; font-weight: bold;">
-                    SCHEDA ARTICOLO
-                </span>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 mt-2">
-                <label class="form-label" for="code">
-                    Codice Articolo<sup>*</sup>
-                </label>
-                <div class="input-group">
-                    <button class="btn btn-outline-dark" [matTooltip]="'Storico Articolo'" (click)="historyPopUp()">
-                        <i class="bi bi-clock-history"></i>
-                    </button>
-                    <input id="code" name="code" class="form-control" formControlName="code">
-                </div>
-            </div>
-            <div class="col-12 col-sm-3 col-lg-2 mt-2">
-                <label class="form-label" for="refidum">
-                    Unità di Misura
-                </label>
-                <select name="refidum" id="refidum" class="form-select" formControlName="refidum">
-                    <option [value]="null">--</option>
-                    <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">{{unit.acronym}}</option>
-                </select>
-            </div>
-            <div class="col-12 col-sm-3 col-lg-2 mt-2">
-                <label class="form-label" for="quantity">
-                    Quantità
-                </label>
-                <input name="quantity" id="quantity" formControlName="quantity" class="form-control">
-            </div>
-
-            <div class="col-12 col-md-10 col-lg-8 mt-2">
-                <label class="form-label" for="title">
-                    Titolo<sup>*</sup>
-                </label>
-                <input id="title" name="title" class="form-control" formControlName="title"
-                    [class.is-invalid]="articleForm.get('title')?.invalid && submitted">
-            </div>
-
-            <div class="col-12 col-md-10 col-lg-8 mt-2">
-                <label class="form-label" for="description">
-                    Descrizione
-                </label>
-                <textarea id="description" name="description" class="form-control" formControlName="description"
-                    rows="3">
-                </textarea>
-            </div>
-
-
-            <div *ngIf="articleForm.get('title')?.invalid && submitted" class="col-12 mt-1 text-center">
-                <span style="color: red; font-size: small;">
-                    Inserire un titolo valido
-                </span>
-            </div>
-
-            <div class="row d-none d-md-flex justify-content-center align-items-center mt-1">
-                <div class="col-5 col-lg-4 text-start">
-                    <span *ngIf="article?.article_data?.user_created" class="userInfo">
-                        {{"TICKET.DATETIMELOG.CREATED" | translate}}:
-                        {{article?.article_data?.user_created?.nickname}} -
-                        {{article?.article_data?.user_created?.datetime}}
+    <div class="container d-flex justify-content-center" style="max-width: 1200px;">
+        <form [formGroup]="articleForm">
+            <div class="row justify-content-center mt-2 mb-2" style="position: relative;">
+                <div class="col-12 mb-1 text-center">
+                    <span style="font-size: xx-large; font-weight: bold;">
+                        SCHEDA ARTICOLO
                     </span>
                 </div>
-                <div class="col-5 col-lg-4 text-end">
-                    <span *ngIf="article?.article_data?.user_updated != null" class="userInfo">
-                        {{"TICKET.DATETIMELOG.UPDATED" | translate}}:
-                        {{article?.article_data?.user_updated?.nickname}} -
-                        {{article?.article_data?.user_updated?.datetime}}
+
+                <div class="col-12 text-center col-sm-6 col-md-4">
+                    <span style="color: gray; font-style: italic; font-size: small;">
+                        Gestione serial number: {{articleForm.get('manage_sn')?.value ? 'Si' : 'No'}}
                     </span>
                 </div>
+                <div class="col-12 text-center col-sm-6 col-md-4">
+                    <span style="color: gray; font-style: italic; font-size: small;">
+                        Gestione quantità: {{articleForm.get('manage_qnt')?.value ? 'Si' : 'No'}}
+                    </span>
+                </div>
+
+                <i class="bi bi-gear settingsIcon"></i>
             </div>
-            <div class="row d-md-none justify-content-center mt-1">
-                <div class="col-12 text-start">
-                    <i class="bi bi-info-circle"
-                        matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: {{article?.article_data?.user_created?.nickname}} - {{article?.article_data?.user_created?.datetime}}, &#10;
+
+            <div class="row justify-content-start align-items-center">
+                <!-- CODICE -->
+                <div class="col-8 col-sm-4 col-md-3 col-xl-3 mt-2 elementPadding">
+                    <label class="form-label" for="code">
+                        Codice Articolo<sup>*</sup>
+                    </label>
+                    <div class="input-group">
+                        <button class="btn btn-outline-dark" [matTooltip]="'Storico Articolo'" (click)="historyPopUp()">
+                            <i class="bi bi-clock-history"></i>
+                        </button>
+                        <input id="code" name="code" class="form-control" formControlName="code">
+                    </div>
+                </div>
+                <!-- UNITA' DI MISURA -->
+                <div class="col-4 col-sm-2 col-lg-1 col-xl-1 mt-2 elementPadding">
+                    <label class="form-label" for="refidum">
+                        <span *ngIf="!isSmallUm; else smallBlockU">
+                            Unità di Misura
+                        </span>
+                        <ng-template #smallBlockU>
+                            <span>
+                                U. M.
+                            </span>
+                        </ng-template>
+                    </label>
+                    <select name="refidum" id="refidum" class="form-select quantityClass unitMeasurement" formControlName="refidum">
+                        <option [value]="null">--</option>
+                        <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">{{unit.acronym}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="articleForm.get('manage_qnt')?.value == true"
+                    class="col-4 col-md-6 d-none d-sm-flex d-lg-none"></div>
+
+                <!-- UNITA' -->
+                <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
+                    <label class="form-label" for="available_unt">
+                        <span *ngIf="!isSmall; else smallBlockUD">
+                            Unità Disponibili
+                        </span>
+                        <ng-template #smallBlockUD>
+                            <span>
+                                Unt. Disp.
+                            </span>
+                        </ng-template>
+                    </label>
+                    <input id="available_unt" name="available_unt" class="form-control quantityClass"
+                        formControlName="available_unt"
+                        [class.is-invalid]="articleForm.get('available_unt')?.invalid && submitted">
+                </div>
+                <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
+                    <label class="form-label" for="storage_unt">
+                        <span *ngIf="!isSmall; else smallBlockUM">
+                            Unità Magazzino
+                        </span>
+                        <ng-template #smallBlockUM>
+                            <span>
+                                Unt. Mag.
+                            </span>
+                        </ng-template>
+                    </label>
+                    <input id="storage_unt" name="storage_unt" class="form-control quantityClass"
+                        formControlName="storage_unt"
+                        [class.is-invalid]="articleForm.get('storage_unt')?.invalid && submitted">
+                </div>
+
+                <!-- QUANTITA' -->
+                <ng-container *ngIf="articleForm.get('manage_qnt')?.value == true">
+                    <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
+                        <label class="form-label" for="available_qnt">
+                            <span *ngIf="!isSmall; else smallBlockD">
+                                Quantità Disponibile
+                            </span>
+                            <ng-template #smallBlockD>
+                                <span>
+                                    Qnt. Disp.
+                                </span>
+                            </ng-template>
+                        </label>
+                        <input id="available_qnt" name="available_qnt" class="form-control quantityClass"
+                            formControlName="available_qnt"
+                            [class.is-invalid]="articleForm.get('available_qnt')?.invalid && submitted">
+                    </div>
+                    <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
+                        <label class="form-label" for="storage_qnt">
+                            <span *ngIf="!isSmall; else smallBlockM">
+                                Quantità Magazzino
+                            </span>
+                            <ng-template #smallBlockM>
+                                <span>
+                                    Qnt. Mag.
+                                </span>
+                            </ng-template>
+                        </label>
+                        <input id="storage_qnt" name="storage_qnt" class="form-control quantityClass"
+                            formControlName="storage_qnt"
+                            [class.is-invalid]="articleForm.get('storage_qnt')?.invalid && submitted">
+                    </div>
+                </ng-container>
+
+                <div class="col-12 col-md-8 p-0">
+                    <!-- TITOLO -->
+                    <div class="col-12 mt-2 elementPadding">
+                        <label class="form-label" for="title">
+                            Titolo<sup>*</sup>
+                        </label>
+                        <input id="title" name="title" class="form-control" formControlName="title"
+                            [class.is-invalid]="articleForm.get('title')?.invalid && submitted">
+                    </div>
+
+                    <!-- DESCRIZIONE -->
+                    <div class="col-12 elementPadding">
+                        <label class="form-label" for="description">
+                            Descrizione
+                        </label>
+                        <textarea id="description" name="description" class="form-control" formControlName="description"
+                            rows="3">
+                    </textarea>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 p-0">
+                    <!-- NOTE -->
+                    <div class="col-12 mt-2 pb-0 pt-0 elementPadding">
+                        <label class="form-label" for="notes">
+                            Note
+                        </label>
+                        <textarea id="notes" name="notes" class="form-control" formControlName="notes" [rows]="notesHeight">
+                        </textarea>
+                    </div>
+                </div>
+
+
+                <div *ngIf="articleForm.get('title')?.invalid && submitted" class="col-12 mt-1 text-center">
+                    <span style="color: red; font-size: small;">
+                        Inserire un titolo valido
+                    </span>
+                </div>
+
+                <div class="row d-none d-md-flex justify-content-center align-items-center mt-1">
+                    <div class="col-5 col-lg-4 text-start">
+                        <span *ngIf="article?.article_data?.user_created" class="userInfo">
+                            {{"TICKET.DATETIMELOG.CREATED" | translate}}:
+                            {{article?.article_data?.user_created?.nickname}} -
+                            {{article?.article_data?.user_created?.datetime}}
+                        </span>
+                    </div>
+                    <div class="col-5 col-lg-4 text-end">
+                        <span *ngIf="article?.article_data?.user_updated != null" class="userInfo">
+                            {{"TICKET.DATETIMELOG.UPDATED" | translate}}:
+                            {{article?.article_data?.user_updated?.nickname}} -
+                            {{article?.article_data?.user_updated?.datetime}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row d-md-none justify-content-center mt-1">
+                    <div class="col-12 text-start">
+                        <i class="bi bi-info-circle"
+                            matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: {{article?.article_data?.user_created?.nickname}} - {{article?.article_data?.user_created?.datetime}}, &#10;
                         {{'TICKET.DATETIMELOG.UPDATED' | translate}}: {{article?.article_data?.user_updated?.nickname}} - {{article?.article_data?.user_updated?.datetime}}"></i>
+                    </div>
                 </div>
-            </div>
 
 
-            <div class="row justify-content-center align-items-center mt-4 mb-2">
-                <div class="col-6 col-sm-5 col-md-4 text-center">
-                    <button class="btn btn-outline-dark" (click)="updateQuantityPopUp()">
-                        Aggiorna Quantità
-                    </button>
-                </div>
-                <div class="col-6 col-sm-5 col-md-4 text-center">
-                    <button class="btn btn-outline-dark" (click)="updateArticlePopup()">
-                        Aggiorna Articolo
-                    </button>
+                <div class="row justify-content-center align-items-center mt-4 mb-2">
+                    <div class="col-6 col-sm-5 col-md-4 text-center">
+                        <button class="btn btn-outline-dark" (click)="updateQuantityPopUp()">
+                            Aggiungi
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-5 col-md-4 text-center">
+                        <button class="btn btn-outline-dark" (click)="updateArticlePopup()">
+                            Aggiorna
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 
     <div class="row justify-content-center align-items-center mt-4">
         <div class="col-12">
@@ -108,7 +212,8 @@
                         <i class="bi bi-building titleIcon"></i>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-article-storage [idarticle]="idarticle"></app-article-storage>
+                        <app-storage-line *ngIf="manage_qnt == false && manage_sn == false" 
+                        [idarticle]="idarticle"></app-storage-line>
                     </ng-template>
                 </mat-tab>
 

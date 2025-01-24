@@ -1,7 +1,7 @@
 <div class="container-fluid p-2 p-md-3 p-lg-4 d-flex justify-content-center"
     style="min-width: 375px; min-height: 90vh;">
     <form [formGroup]="articleForm">
-        <div class="row justify-content-center align-items-center mt-2 mb-2" style="max-width: 1200px;">
+        <div class="row justify-content-center align-items-center mb-2" style="max-width: 1400px;">
             <div class="col-12 text-center mt-2">
                 <span style="font-size: xx-large; font-weight: bold;">
                     INSERISCI ARTICOLO
@@ -10,12 +10,12 @@
             <div class="col-12 text-center col-md-8 mt-2">
                 <span style="font-size: small; color: gray; font-style: italic">
                     In questa pagina è possibile inserire un nuovo articolo aggiungendo un codice univoco.
-                    Se il codice è già associato ad un articolo esistente si verrà reindirizzati alla pagina di motifica
+                    Se il codice è già associato ad un articolo esistente si verrà reindirizzati alla pagina di modifica
                     dello stesso e non verrà effettuata alcuna nuova aggiunta.
                 </span>
             </div>
 
-            <div class="col-12 col-sm-8 col-md-6 mt-4">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-5 mt-5">
                 <label class="form-label" for="code">
                     Codice Articolo<sup>*</sup>
                 </label>
@@ -29,8 +29,7 @@
             </div>
 
             <div class="col-12 mt-2 text-center">
-                <button *ngIf="!stepTwo; else resetBlock" class="btn btn-outline-dark"
-                    (click)="insertArticle()">
+                <button *ngIf="!stepTwo; else resetBlock" class="btn btn-outline-dark" (click)="insertArticle()">
                     Aggiungi
                 </button>
                 <ng-template #resetBlock>
@@ -39,52 +38,81 @@
                     </button>
                 </ng-template>
             </div>
-        </div>
+        </div>  
 
-        <div class="row justify-content-center align-items-center mt-5 mb-2" style="max-width: 1200px;"
-            *ngIf="stepTwo">
-            <div class="col-12 col-sm-8 col-md-5 mt-2 col-lg-4">
-                <label class="form-label" for="code">
-                    Codice Articolo<sup>*</sup>
-                </label>
-                <input id="code" name="code" class="form-control" formControlName="code">
-            </div>
-            <div class="col-12 col-sm-4 col-md-3 mt-2 col-lg-4">
-                <label class="form-label" for="refidum">
-                    Unità di Misura
-                </label>
-                <select name="refidum" id="refidum" class="form-select" formControlName="refidum">
-                    <option [value]="null">--</option>
-                    <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">{{unit.acronym}}</option>
-                </select>
-            </div>
-
-            <div class="col-12 mt-2 col-md-8">
-                <label class="form-label" for="title">
-                    Titolo<sup>*</sup>
-                </label>
-                <input id="title" name="title" class="form-control" formControlName="title"
-                    [class.is-invalid]="articleForm.get('title')?.invalid && submittedSave">
+        <div *ngIf="stepTwo" class="container-fluid mt-5 mb-2" style="max-width: 1000px;">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 col-md-8 col-lg-4 mt-1">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="manage_sn" formControlName="manage_sn">
+                        <label class="form-check-label" for="manage_sn" style="font-weight: bold;">
+                            Gestione serial number
+                            <i class="bi bi-info-circle ms-2" matTooltip="Spiegazione da tradurre"></i>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12 col-md-8 col-lg-4 mt-1">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="manage_qnt" formControlName="manage_qnt">
+                        <label class="form-check-label" for="manage_qnt" style="font-weight: bold;">
+                            Gestione quantità articoli
+                            <i class="bi bi-info-circle ms-2" matTooltip="Spiegazione da tradurre"></i>
+                        </label>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-12 mt-2 col-md-8">
-                <label class="form-label" for="description">
-                    Descrizione
-                </label>
-                <textarea id="description" name="description" class="form-control" formControlName="description" rows="3"></textarea>
-            </div>
+            <div class="row justify-content-center align-items-center">
+                <div class="col-8 col-md-5 mt-2 col-lg-5">
+                    <label class="form-label" for="code">
+                        Codice Articolo<sup>*</sup>
+                    </label>
+                    <input id="code" name="code" class="form-control" formControlName="code">
+                </div>
+                <div class="col-4 col-md-3 mt-2 col-lg-3">
+                    <label class="form-label" for="refidum">
+                        Unità di Misura
+                    </label>
+                    <select name="refidum" id="refidum" class="form-select" formControlName="refidum">
+                        <option [value]="null">--</option>
+                        <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">{{unit.acronym}}</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-2 col-md-8">
+                    <label class="form-label" for="title">
+                        Titolo<sup>*</sup>
+                    </label>
+                    <input id="title" name="title" class="form-control" formControlName="title"
+                        [class.is-invalid]="articleForm.get('title')?.invalid && submittedSave">
+                </div>
+
+                <div class="col-12 col-md-8 mt-2">
+                    <label class="form-label" for="description">
+                        Descrizione
+                    </label>
+                    <textarea id="description" name="description" class="form-control" formControlName="description"
+                        rows="3"></textarea>
+                </div>
+                <div class="col-12 col-md-8 mt-2">
+                    <label class="form-label" for="notes">
+                        Note
+                    </label>
+                    <textarea id="notes" name="notes" class="form-control" formControlName="notes" rows="2"></textarea>
+                </div>
 
 
-            <div *ngIf="articleForm.get('title')?.invalid && submittedSave" class="col-12 mt-1 text-center">
-                <span style="color: red; font-size: small;">
-                    Inserire un titolo valido
-                </span>
-            </div>
+                <div *ngIf="articleForm.get('title')?.invalid && submittedSave" class="col-12 mt-1 text-center">
+                    <span style="color: red; font-size: small;">
+                        Inserire un titolo valido
+                    </span>
+                </div>
 
-            <div class="col-12 mt-2 text-center">
-                <button class="btn btn-outline-dark" (click)="saveArticle()">
-                    Salva
-                </button>
+                <div class="col-12 mt-2 text-center">
+                    <button class="btn btn-outline-dark" (click)="saveArticle()">
+                        Salva
+                    </button>
+                </div>
             </div>
         </div>
     </form>

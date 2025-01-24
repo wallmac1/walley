@@ -4,7 +4,8 @@ export interface Article {
     id: number;
     code: string;
     progressive: number;
-    quantity: string;
+    quantity?: string;
+    unit?: number;
     article_data: ArticleData;
     article_price: ArticlePrice;
 }
