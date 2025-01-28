@@ -12,6 +12,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from '../environments/environment';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 // required for AoT
 export function HttpLoaderFactory(http: HttpClient) {
@@ -20,6 +21,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideNativeDateAdapter(),
     provideRouter(routes), 
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])) ,

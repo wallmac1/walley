@@ -628,5 +628,62 @@
       "CONFIRM": "Conferma",
       "UPDATEQUANTITY": "Aggiorna Quantità"
     }
+  },
+  "INVOICE": {
+    "LIST": {
+      "INVOICE": "Fatture",
+      "TOTALRESULTS": "Risultati Totali",
+      "OBJPERPAGE": "Oggetti Per Pagina",
+      "ORDEREDBYDEFAULT": "Ordinato per Numero",
+      "PAGE": "Pagina",
+      "DOCUMENTS": "Documenti",
+      "DATE": "Data",
+      "TYPE": "Tipo",
+      "NUMBER": "Numero",
+      "CUSTOMER": "Cliente",
+      "TOTAL": "Totale",
+      "STATUS": "Stato",
+      "SENDDATE": "Data di Invio",
+      "PDF": "Visualizza file pdf",
+      "XML": "Visualizza file xml",
+      "INVOICEDOCUMENT": "Visualizza fattura completa",
+      "DUPLICATE": "Duplica"
+    },
+    "FILTERS": {
+      "FILTERS": "Filtri",
+      "DATEINTERVAL": "Intervallo di Date",
+      "NUMBER": "Numero",
+      "TYPE": "Tipo",
+      "STATUS": "Stato",
+      "FISCALCODE": "Codice Fiscale",
+      "VAT": "Partita IVA",
+      "FILTER": "Filtra"
+    },
+    "INFO": {
+      "INVOICE": "Fattura",
+      "NUMBER": "Numero",
+      "DATE": "Data",
+      "CUSTOMER": "Cliente",
+      "SEARCHCUSTOMER": "Seleziona un cliente",
+      "CUSTOMERDATA": "Dati Cliente",
+      "HEADING": "Intestazione",
+      "NOCUSTOMERDATA": "Nessun cliente selezionato, utilizzare la lente per effettuare una ricerca",
+      "CUSTOMERCOMPONENT": {
+        "TYPE": "Tipo",
+        "NAME": "Nome",
+        "VAT": "Partita IVA",
+        "FISCALCODE": "Codice Fiscale",
+        "ADDRESS": "Indirizzo",
+        "NUMBER": "Numero Civico",
+        "CITY": "Città",
+        "POSTALCODE": "CAP",
+        "COUNTRY": "Paese",
+        "PHONE": "Telefono",
+        "EMAIL": "Email",
+        "REGION": "Provincia",
+        "PEC": "PEC",
+        "SDI": "SDI"
+      }
+    }
   }
 }

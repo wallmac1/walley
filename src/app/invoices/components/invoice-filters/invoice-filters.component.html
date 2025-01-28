@@ -1,0 +1,127 @@
+<div class="row justify-content-center align-items-center fontStyle">
+    <mat-expansion-panel [expanded]="true" class="p-0" style="max-width: 1100px; width: 100%;">
+        <mat-expansion-panel-header class="specific-class" style="background-color: #002D5D; height: 50px;">
+            <mat-panel-title class="panel-title">
+                <div class="col-12 text-center mt-1 mb-2">
+                    <span class="title">{{"INVOICE.FILTERS.FILTERS" | translate }}</span>
+                </div>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row justify-content-center mt-2 align-items-end" [formGroup]="invoiceFilterForm">
+
+            <!-- DATE INTERVAL -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="dateinterval">
+                    {{"INVOICE.FILTERS.DATEINTERVAL" | translate }}
+                </label>
+                <!-- <mat-form-field id="dateinterval">
+                    <mat-label style="font-size: small;">DD/MM/YYYY – DD/MM/YYYY</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate formControlName="datefrom" placeholder="Start date">
+                        <input matEndDate formControlName="dateto" placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+
+                    @if (invoiceFilterForm.controls.datefrom.hasError('matStartDateInvalid')) {
+                    <mat-error>Invalid start date</mat-error>
+                    }
+                    @if (invoiceFilterForm.controls.dateto.hasError('matEndDateInvalid')) {
+                    <mat-error>Invalid end date</mat-error>
+                    }
+                </mat-form-field> -->
+                <mat-form-field id="dateinterval" class="bootstrap-style w-100">
+                    <mat-date-range-input [rangePicker]="picker">
+                      <input
+                        matStartDate
+                        formControlName="datefrom"
+                        placeholder="dd/mm/yyyy"
+                        class="form-control innerInput">
+                      <input
+                        matEndDate
+                        formControlName="dateto"
+                        placeholder="dd/mm/yyyy"
+                        class="form-control ms-2 innerInput">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                
+                    <mat-error *ngIf="invoiceFilterForm.controls.datefrom.hasError('matStartDateInvalid')">
+                      Invalid start date
+                    </mat-error>
+                    <mat-error *ngIf="invoiceFilterForm.controls.dateto.hasError('matEndDateInvalid')">
+                      Invalid end date
+                    </mat-error>
+                  </mat-form-field>
+            </div>
+
+            <!-- NUMBER -->
+            <div class="col-12 col-sm-6 col-md-2 mt-1 mb-1">
+                <label class="form-label" for="number">{{"INVOICE.FILTERS.NUMBER" | translate }}</label>
+                <input class="form-control" type="text" id="number" formControlName="number">
+            </div>
+
+
+            <!-- TYPE -->
+            <div class="col-12 col-sm-6 col-md-3 mt-1 mb-1">
+                <label class="form-label" for="documenttype">{{"INVOICE.FILTERS.TYPE" | translate }}</label>
+                <select type="string" class="form-select" id="documenttype" formControlName="documenttype"
+                    [class.is-invalid]="invoiceFilterForm.get('documenttype')?.invalid && invoiceFilterForm.get('documenttype')?.touched">
+                    <option [value]="null">--</option>
+                    <option *ngFor="let type of listTypes" [ngValue]="type.id">
+                        {{type.value}}
+                    </option>
+                </select>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-12 col-sm-6 col-md-3 mt-1 mb-1">
+                <label class="form-label" for="status">{{"INVOICE.FILTERS.STATUS" | translate }}</label>
+                <select type="string" class="form-select" id="status" formControlName="status"
+                    [class.is-invalid]="invoiceFilterForm.get('status')?.invalid && invoiceFilterForm.get('status')?.touched">
+                    <option [value]="null">--</option>
+                    <option *ngFor="let status of listStatus" [ngValue]="status.id">
+                        {{status.name}}
+                    </option>
+                </select>
+            </div>
+
+            <!-- CUSTOMER -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="customer">{{"TICKET.FILTERS.CUSTOMER" | translate }}</label>
+                <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
+                    formControlName="customer"
+                    [class.is-invalid]="invoiceFilterForm.get('customer')?.invalid && submitted">
+                <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                    <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
+                        <div>
+                            {{option.denominazione}}
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+
+            <!-- FISCALCODE -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="fiscalcode">
+                    {{"INVOICE.FILTERS.FISCALCODE" | translate}}
+                </label>
+                <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
+            </div>
+
+            <!-- VAT -->
+            <div class="col-12 col-sm-6 col-md-4 mt-1 mb-1">
+                <label class="form-label" for="vat">
+                    {{"INVOICE.FILTERS.VAT" | translate}}
+                </label>
+                <input class="form-control" type="text" id="vat" formControlName="vat">
+            </div>
+        </div>
+
+        <div class="col-12 text-center mb-1 mt-1">
+            <button class="btn btn-outline-dark" (click)="filter()">
+                {{"TICKET.FILTERS.FILTER" | translate}}
+            </button>
+        </div>
+    </mat-expansion-panel>
+</div>

@@ -15,6 +15,8 @@ import { TicketListComponent } from './tickets/ticket-list/ticket-list.component
 import { AccessPageComponent } from './tickets/access-page/access-page.component';
 import { ArticleNewComponent } from './articles/article-new/article-new.component';
 import { ArticleModifyComponent } from './articles/article-modify/article-modify.component';
+import { InvoiceListComponent } from './invoices/invoice-list/invoice-list.component';
+import { InvoiceInfoComponent } from './invoices/invoice-info/invoice-info.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -34,5 +36,7 @@ export const routes: Routes = [
     { path: "voucherList", component: VoucherListComponent },
     { path: "newArticle", component: ArticleNewComponent },
     { path: "article/:id", component: ArticleModifyComponent },
+    { path: "invoiceList", component: InvoiceListComponent },
+    { path: "invoice/:id", component: InvoiceInfoComponent },
     { path: '**', redirectTo: '/login' },
 ];

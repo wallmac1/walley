@@ -1,0 +1,129 @@
+.title {
+    font-size: large;
+    font-weight: bold;
+    color: white;
+}
+
+.form-label {
+    font-weight: bold;
+    margin-bottom: 0.1rem;
+}
+
+.card-title {
+    background-color: #002D5D;
+    color: white;
+}
+
+.btn-outline-dark {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+.form-check-input:hover {
+    cursor: pointer;
+}
+
+.btn-check:checked+.btn {
+    border-color: #002D5D !important;
+    background-color: #002D5D !important;
+}
+
+.btn-outline-primary {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-primary:hover {
+    border-color: #002D5D;
+}
+
+.fontStyle {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.innerInput:focus {
+    box-shadow: none;
+}
+
+/* Personalizza il mat-form-field per somigliare a Bootstrap */
+::ng-deep .bootstrap-style {
+    height: 38px;
+    display: block;
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da;
+    border-radius: 0.30rem;
+    padding: 0;
+    position: relative;
+
+    .mat-mdc-form-field-subscript-wrapper {
+        display: none !important;
+        height: 0;
+    }
+
+    .mat-form-field-wrapper {
+        padding: 0;
+    }
+
+    .mat-form-field-flex {
+        align-items: baseline;
+    }
+
+    .mat-form-field-label {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: #495057;
+    }
+
+    input {
+        border: none;
+        outline: none;
+        font-size: 0.875rem;
+    }
+
+    .mat-datepicker-toggle {
+        margin-left: 0.5rem;
+        color: #495057;
+    }
+
+    mat-error {
+        color: #dc3545;
+        font-size: 0.75rem;
+    }
+
+    .mat-mdc-form-field-infix {
+        padding: 0.5rem !important;
+        height: 38px !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+        background-color: white !important;
+    }
+
+    .mat-mdc-text-field-wrapper:focus {
+        background-color: white !important;
+    }
+
+    .mat-mdc-icon-button.mat-mdc-button-base {
+        transform: translateY(-8px);
+        padding: 0rem !important;
+        height: 38px !important;
+    }
+
+    .mat-form-field-outline {
+        display: none !important;
+    }
+}
+
+/* Rimuove i bordi predefiniti di Material */
+::ng-deep .mat-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+    display: none !important;
+}
+
+// ::ng-deep .mat-form-field.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+//     display: none !important;
+// }
