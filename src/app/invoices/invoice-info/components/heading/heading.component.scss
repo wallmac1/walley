@@ -1,0 +1,101 @@
+.form-label {
+    font-size: small;
+    font-weight: 800;
+    margin-top: 0.3rem;
+    margin-bottom: 0rem;
+}
+
+.content {
+    font-weight: 150;
+}
+
+.conformityCol {
+    padding-left: 0.75rem;
+
+    @media screen and (min-width: 576px) {
+        padding-left: 0rem;
+        padding-right: 0rem;
+    }
+
+    @media screen and (min-width: 700px) {
+        padding-left: 0.55rem;
+        padding-right: 0.55rem;
+    }
+
+    @media screen and (min-width: 768px) {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+.dateInput {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+
+    @media screen and (min-width: 992px) {
+        padding-left: 0.10rem;
+        padding-right: 0.10rem;
+    }
+
+    @media screen and (min-width: 1150px) {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+.form-check-input {
+    height: 20px;
+    width: 20px;
+}
+
+input, textarea, select {
+    font-weight: 150;
+}
+
+.lengthError {
+    font-size: x-small; 
+    color: red; 
+    position: absolute; 
+    top: 10px; 
+}
+
+.partTwo {
+    left: 34%;
+
+    @media screen and (min-width: 500px) {
+        left: 32%;
+    }
+
+    @media screen and (min-width: 700px) {
+        left: 34%;
+    }
+
+    @media screen and (min-width: 992px) {
+        left: 36%;
+    }
+}
+
+.partThree {
+    left: 64%;
+
+    @media screen and (min-width: 500px) {
+        left: 60%;
+    }
+
+    @media screen and (min-width: 500px) {
+        left: 64%;
+    }
+
+    @media screen and (min-width: 992px) {
+        left: 66%;
+    }
+}
+
+.numberInput {
+    padding-left: 0.2rem;
+    //padding-right: 1.6rem;
+}
+
+.numberColumn {
+    padding-left: 0.75rem;
+}

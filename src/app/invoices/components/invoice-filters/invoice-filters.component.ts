@@ -33,7 +33,7 @@ export class InvoiceFiltersComponent {
   submitted: boolean = false;
   filteredCustomer$!: Observable<Customer[]>;
   listNumbers: { id: number, value: string }[] = [];
-  listUser: Customer[] = [];
+  listCustomer: Customer[] = [];
   listTypes: { id: number, value: string }[] = [];
   listStatus: { id: number, name: string }[] = [];
 

@@ -1,1 +1,149 @@
-<p>heading works!</p>
+<div class="container-fluid ps-0 pe-0 pt-2 pb-2 ps-sm-1 pe-sm-1 ps-md-2 pe-md-2 ps-xl-3 pe-xl-3">
+    <div [formGroup]="headingForm" class="row justify-content-start">
+
+        <!-- TYPE -->
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label class="form-label" for="type">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.TYPE' | translate}}
+            </label>
+            <select class="form-select" formControlName="type" id="type"
+                [class.is-invalid]="headingForm.get('type')?.invalid && submitted">
+                <option [ngValue]="null">
+                    <span class="optionText">
+                        --
+                    </span>
+                </option>
+                <option *ngFor="let type of typeList" [ngValue]="type.id">
+                    <span class="optionText">
+                        {{type.name}}
+                    </span>
+                </option>
+            </select>
+        </div>
+
+        <!-- FORMAT -->
+        <div class="col-12 col-sm-6 col-lg-5">
+            <label class="form-label" for="format">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.FORMAT' | translate}}
+            </label>
+            <select class="form-select" formControlName="format" id="format"
+                [class.is-invalid]="headingForm.get('format')?.invalid && submitted">
+                <option [ngValue]="null">
+                    <span class="optionText">
+                        --
+                    </span>
+                </option>
+                <option *ngFor="let format of formatList" [ngValue]="format.id">
+                    <span class="optionText">
+                        {{format.name}}
+                    </span>
+                </option>
+            </select>
+        </div>
+
+        <!-- NUMBER -->
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 numberColumn" style="position: relative;">
+            <label class="form-label" for="number">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.NUMBER' | translate}}
+            </label>
+            <div class="input-group" id="number">
+                <input class="form-control numberInput" type="text" formControlName="number_part1" id="number_part1"
+                    [class.is-invalid]="headingForm.get('number_part1')?.invalid && submitted">
+                <input class="form-control numberInput" type="text" formControlName="number_part2" id="number_part2"
+                    [class.is-invalid]="headingForm.get('number_part2')?.invalid" style="min-width: 76px;">
+                <input class="form-control numberInput" type="text" formControlName="number_part3" id="number_part3"
+                    [class.is-invalid]="headingForm.get('number_part3')?.invalid" style="min-width: 76px;">
+            </div>
+            <ng-container *ngIf="headingForm.get('number_part2')?.invalid">
+                <span class="lengthError partTwo">
+                    {{'INVOICE.INFO.HEADINGCOMPONENT.MAXLENGTHSM' | translate}}
+                </span>
+            </ng-container>
+            <ng-container *ngIf="headingForm.get('number_part3')?.invalid">
+                <span class="lengthError partThree">
+                    {{'INVOICE.INFO.HEADINGCOMPONENT.MAXLENGTHSM' | translate}}
+                </span>
+            </ng-container>
+        </div>
+
+        <!-- CONFORMITY -->
+        <div class="col-4 col-sm-2 conformityCol">
+            <label class="form-label" for="conformity">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.CONFORMITY' | translate}}
+            </label><br>
+            <input class="form-check-input" type="checkbox" id="conformity" formControlName="conformity">
+        </div>
+
+        <!-- DATE -->
+        <div class="col-8 col-sm-4 col-md-3 col-lg-2">
+            <label class="form-label" for="date">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.DATE' | translate}}
+            </label>
+            <input type="date" class="form-control dateInput" id="date" formControlName="date"
+                [class.is-invalid]="headingForm.get('date')?.invalid && submitted">
+        </div>
+
+        <!-- AMMINISTRATIVE REFERENCE -->
+        <div class="col-12 col-sm-6 col-lg-5">
+            <label class="form-label" for="administrativeref">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.AMMINISTRATIVEREF' | translate}}
+            </label>
+            <input class="form-control" type="text" formControlName="administrativeref" id="administrativeref">
+        </div>
+
+        <!-- CURRENCY -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <label class="form-label" for="currency">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.CURRENCY' | translate}}
+            </label>
+            <select class="form-select" formControlName="currency" id="currency"
+                [class.is-invalid]="headingForm.get('currency')?.invalid && submitted">
+                <option [ngValue]="null">
+                    <span class="optionText">
+                        --
+                    </span>
+                </option>
+                <option *ngFor="let currency of currencyList" [ngValue]="currency.id">
+                    <span class="optionText">
+                        {{currency.name}}
+                    </span>
+                </option>
+            </select>
+        </div>
+
+        <!-- REASON -->
+        <div class="col-12">
+            <label class="form-label" for="reason">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.REASON' | translate}}
+            </label>
+            <textarea class="form-control" type="text" formControlName="reason" id="reason" rows="2"></textarea>
+        </div>
+
+        <!-- <div class="col-12 col-sm-4 col-md-6">
+            <span *ngIf="!isSmallScreen; else numberBlock" class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.NUMBER' | translate}}:
+            </span>
+            <ng-template #numberBlock>
+                <span class="title me-2">
+                    {{'INVOICE.INFO.CUSTOMERCOMPONENT.NUMBERSHORT' | translate}}:
+                </span>
+            </ng-template>
+
+            <span class="content">
+                {{customer?.codicefiscale}}
+            </span>
+        </div> -->
+
+        <div *ngIf="submitted && headingForm.invalid" class="col-12 text-center mt-2">
+            <span style="color: red; font-size: small;">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.MISSINGFIELDS' | translate}}
+            </span>
+        </div>
+
+        <div class="col-12 text-end mt-2">
+            <button class="btn btn-outline-dark" (click)="saveHeading()">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.SAVE' | translate}}
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">{{"INVOICE.MODAL.MODIFYCUSTOMER" | translate }}</span>
+</h2>
+
+<mat-dialog-content>
+    <div [formGroup]="modifyCustomerForm" class="row justify-content-center align-items-center mt-1">
+        <div class="col-12 mt-1 mb-1">
+            <label class="form-label" for="type">{{"INVOICE.INFO.CUSTOMERCOMPONENT.TYPE" | translate }}</label>
+            <input type="text" class="form-control" id="type" formControlName="type">
+        </div>
+        <div class="col-12 mt-1 mb-1">
+            <label class="form-label" for="customer">{{"INVOICE.INFO.CUSTOMERCOMPONENT.CUSTOMER" | translate }}</label>
+            <input type="text" class="form-control" id="customer" formControlName="customer">
+        </div>
+
+        <div class="col-12 col-sm-6 mt-1 mb-1">
+            <label class="form-label" for="fiscalcode">{{"INVOICE.INFO.CUSTOMERCOMPONENT.FISCALCODE" | translate }}</label>
+            <input type="text" class="form-control" id="fiscalcode" formControlName="fiscalcode">
+        </div>
+        <div class="col-12 mt-1 mb-1">
+            <label class="form-label" for="vat">{{"INVOICE.INFO.CUSTOMERCOMPONENT.VAT" | translate }}</label>
+            <input type="text" class="form-control" id="vat" formControlName="vat">
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="confirm()">
+        {{"INVOICE.MODAL.CONFIRM" | translate }}
+    </button>
+    <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+        {{"INVOICE.MODAL.CLOSE" | translate }}
+    </button>
+</mat-dialog-actions>

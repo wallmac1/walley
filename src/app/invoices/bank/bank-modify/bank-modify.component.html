@@ -1,0 +1,118 @@
+<div style="min-width: 100%; min-height: 100vh; background-color: whitesmoke;">
+    <div class="container-fluid" style="max-width: 1100px; min-width: 350px;">
+        <div class="row justify-content-center align-items-center mt-2">
+            <div class="col-auto ps-3 pe-3 pt-1 pb-1 titleColumn">
+                <span class="title">
+                    BANCA
+                </span>
+            </div>
+        </div>
+
+        <div class="row justify-content-start align-items-center mb-4">
+            <div class="col-12 mt-4">
+                <div [formGroup]="bankForm" class="pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4 cardElement">
+                    <div class="row justify-content-start align-items-center selectCustomer">
+                        <div class="col-12">
+                            Dati
+                        </div>
+                    </div>
+                    <div
+                        class="row justify-content-start mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+                        <div class="col-12 col-sm-3 col-lg-1">
+                            <label class="form-label" for="active">Attiva</label><br>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="active"
+                                    formControlName="active">
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-lg-4">
+                            <label class="form-label" for="ccn3">Paese</label>
+                            <select class="form-select" name="ccn3" id="ccn3" formControlName="ccn3">
+                                <option [ngValue]="null">--</option>
+                                <option *ngFor="let country of countriesList" [ngValue]="country.ccn3">
+                                    {{country.common_name}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-lg-7">
+                            <label class="form-label" for="denomination">Denominazione</label>
+                            <input class="form-control" type="text" id="denomination" formControlName="denomination">
+                        </div>
+
+                        <div class="col-12 col-sm-8 col-md-4">
+                            <label class="form-label" for="bic">BIC</label>
+                            <input class="form-control" type="text" id="bic" formControlName="bic">
+                        </div>
+
+                        <div class="col-12 col-md-8">
+                            <label class="form-label" for="iban">IBAN</label>
+                            <div class="input-group">
+                                <input class="form-control" type="text" id="iban" formControlName="iban"
+                                    [class.is-invalid]="bankForm.get('iban')?.invalid && submittedC">
+                                <button *ngIf="this.bankForm.get('ccn3')?.value == 380" class="btn btn-outline-success"
+                                    (click)="checkIban()">
+                                    <i class="bi bi-check2"></i>
+                                    <span *ngIf="!isSmallScreen">
+                                        Controlla
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-1 text-center">
+                            <span *ngIf="bankForm.get('iban')?.invalid && submittedC" class="errorText">
+                                Per eseguire un controllo inserire un IBAN valido
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-start align-items-top pt-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4"
+                        *ngIf="bankForm.get('iban')?.valid && submittedC && bankForm.get('ccn3')?.value == 380"
+                        style="border-top: 1px solid lightgray;">
+                        <div class="col-8 col-sm-4 col-md-2">
+                            <label class="form-label" for="acronym">Sigla</label>
+                            <select class="form-select" name="acronym" id="acronym" formControlName="acronym">
+                                <option [ngValue]="null">--</option>
+                                <option *ngFor="let country of countriesList" [ngValue]="country.ccn3">
+                                    {{country.cca2}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-10 col-sm-6 col-md-3" style="position: relative;">
+                            <label class="form-label" for="abi">ABI</label>
+                            <input class="form-control" type="text" id="abi" formControlName="abi">
+                            <i class="bi bi-info-circle-fill text-warning" style="position: absolute; top: 32px; right: 20px; font-size: 20px;"></i>
+                        </div>
+
+                        <div class="col-10 col-sm-4 col-md-3" style="position: relative;">
+                            <label class="form-label" for="cab">CAB</label>
+                            <input class="form-control" type="text" id="cab" formControlName="cab">
+                            <i class="bi bi-info-circle-fill text-warning" style="position: absolute; top: 32px; right: 20px; font-size: 20px;"></i>
+                        </div>
+
+                        <div class="col-10 col-sm-6 col-md-4">
+                            <label class="form-label" for="cc">CC</label>
+                            <input class="form-control" type="text" id="cc" formControlName="cc">
+                        </div>
+
+                        <div class="col-12 mt-2">
+                            <span>
+                                - Indirizzo della banca molto lungo per testare il comportamento
+                            </span>
+                        </div>
+
+                        <div class="col-12">
+                            <span>
+                                - Denominazione della banca molto lunga per testare il comportamento
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

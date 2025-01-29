@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { Customer } from '../../../../tickets/interfaces/customer';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -17,6 +17,26 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class CustomerDataComponent {
 
+  isSmallScreen: boolean = false;
+
   @Input() customer: Customer | null = null;
+
+  ngOnInit(): void {
+    this.updateWindowDimensions();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateWindowDimensions();
+  }
+
+  updateWindowDimensions() {
+    if (window.innerWidth < 768) {
+      this.isSmallScreen = true;
+    }
+    else {
+      this.isSmallScreen = false;
+    }
+  }
 
 }

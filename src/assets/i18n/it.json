@@ -586,7 +586,7 @@
     "INCHARGE": "In Carico",
     "RELEASED": "Rilasciato",
     "FILTERS": {
-      "TOOLTIP": "Se attivato verranno mostrati solo i ticket nuovi, in lavorazione ed in attesa", 
+      "TOOLTIP": "Se attivato verranno mostrati solo i ticket nuovi, in lavorazione ed in attesa",
       "FILTERS": "Filtri",
       "INCHARGE": "In Carico",
       "DEPARTMENT": "Dipartimento",
@@ -657,10 +657,18 @@
       "STATUS": "Stato",
       "FISCALCODE": "Codice Fiscale",
       "VAT": "Partita IVA",
-      "FILTER": "Filtra"
+      "FILTER": "Filtra",
+      "MODIFYCUSTOMER": "Modifica Cliente",
+      "NAME": "Denominazione"
+    },
+    "MODAL": {
+      "SELECTCUSTOMER": "Seleziona un cliente",
+      "CUSTOMER": "Cliente",
+      "CONFIRM": "Conferma",
+      "CLOSE": "Chiudi"
     },
     "INFO": {
-      "INVOICE": "Fattura",
+      "INVOICE": "FATTURA",
       "NUMBER": "Numero",
       "DATE": "Data",
       "CUSTOMER": "Cliente",
@@ -682,7 +690,21 @@
         "EMAIL": "Email",
         "REGION": "Provincia",
         "PEC": "PEC",
-        "SDI": "SDI"
+        "SDI": "SDI",
+        "NUMBERSHORT": "N."
+      },
+      "HEADINGCOMPONENT": {
+        "TYPE": "Tipo",
+        "FORMAT": "Formato",
+        "NUMBER": "Numero",
+        "CONFORMITY": "Conformità",
+        "DATE": "Data",
+        "AMMINISTRATIVEREF": "Riferimento Amministrativo",
+        "CURRENCY": "Valuta",
+        "REASON": "Causale",
+        "SAVE": "Salva",
+        "MAXLENGTHSM": "Max. 6 Char.",
+        "MISSINGFIELDS": "Compilare i campi obbligatori"
       }
     }
   }

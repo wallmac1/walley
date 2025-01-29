@@ -1,50 +1,55 @@
-<div class="container-fluid" style="max-width: 1200px;">
-    <div class="row justify-content-center align-items-center mt-2 mb-4">
-        <div class="col-12 text-center">
-            <span class="title">
-                {{'INVOICE.INFO.INVOICE' | translate}}
-            </span>
+<div style="min-width: 100%; min-height: 100vh; background-color: whitesmoke;">
+    <div class="container-fluid" style="max-width: 1200px; min-width: 350px;">
+        <div class="row justify-content-center align-items-center mt-2 mb-4">
+            <div class="col-auto ps-3 pe-3 pt-1 pb-1 text-center titleColumn">
+                <span class="title">
+                    {{'INVOICE.INFO.INVOICE' | translate}}
+                </span>
+            </div>
         </div>
-    </div>
 
-    <!-- CUSTOMER INFO -->
-    <div class="row justify-content-start align-items-center mb-4">
-        <div class="col-12">
-            <div class="cardElement pt-2 pb-2 ps-4 pe-4">
-                <div class="row">
-                    <div class="selectCustomer col-12">
-                        {{'INVOICE.INFO.CUSTOMERDATA' | translate}}
-                        <span class="ms-3 me-2">
-                            <i class="bi bi-search me-3 iconField search" [matTooltip]="'INVOICE.INFO.SEARCHCUSTOMER' | translate"></i>
-                            <i *ngIf="customer" class="bi bi-file-text me-3 iconField file"
-                                [matTooltip]="'INVOICE.INFO.MODIFYCUSTOMER' | translate"></i>
-                            <i *ngIf="customer" class="bi bi-x-circle me-3 iconField xCircle" 
-                                [matTooltip]="'INVOICE.INFO.DELETECUSTOMERINFO' | translate"></i>
-                        </span>
-                    </div>
-                    <div class="col-12">
-                        <app-customer-data *ngIf="customer; else noCustomerBlock" [customer]="customer"></app-customer-data>
-                        <ng-template #noCustomerBlock>
-                            <span style="color: gray; font-style: italic;">
-                                {{'INVOICE.INFO.NOCUSTOMERDATA' | translate}}
+        <!-- CUSTOMER INFO -->
+        <div class="row justify-content-start align-items-center mb-4">
+            <div class="col-12">
+                <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                    <div class="row justify-content-center">
+                        <div class="selectCustomer col-12">
+                            {{'INVOICE.INFO.CUSTOMERDATA' | translate}}
+                            <span class="ms-3 me-2">
+                                <i class="bi bi-search me-3 iconField search" (click)="selectCustomer()"
+                                    [matTooltip]="'INVOICE.INFO.SEARCHCUSTOMER' | translate"></i>
+                                <i *ngIf="customer" class="bi bi-file-text me-3 iconField file" (click)="modifyCustomerData()"
+                                    [matTooltip]="'INVOICE.INFO.MODIFYCUSTOMER' | translate"></i>
+                                <i *ngIf="customer" class="bi bi-x-circle me-3 iconField xCircle" (click)="removeCustomer()"
+                                    [matTooltip]="'INVOICE.INFO.DELETECUSTOMERINFO' | translate"></i>
                             </span>
-                        </ng-template>
+                        </div>
+                        <div class="col-12 ps-0 pe-0 ps-md-2 pe-md-2">
+                            <app-customer-data *ngIf="customer; else noCustomerBlock"
+                                [customer]="customer"></app-customer-data>
+                            <ng-template #noCustomerBlock>
+                                <span style="color: gray; font-style: italic;">
+                                    {{'INVOICE.INFO.NOCUSTOMERDATA' | translate}}
+                                </span>
+                            </ng-template>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- HEADING -->
-    <div class="row justify-content-start align-items-center mb-4">
-        <div class="col-12">
-            <div class="cardElement pt-2 pb-2 ps-4 pe-4">
-                <div class="row">
-                    <div class="selectCustomer col-12">
-                        {{'INVOICE.INFO.HEADING' | translate}}
-                    </div>
-                    <div class="col-12">
-                        <app-heading></app-heading>
+        <!-- HEADING -->
+        <div class="row justify-content-start align-items-center mb-4">
+            <div class="col-12">
+                <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                    <div class="row">
+                        <div class="selectCustomer col-12">
+                            {{'INVOICE.INFO.HEADING' | translate}}
+                        </div>
+                        <div class="col-12">
+                            <app-heading [heading]="heading" [typeList]="typeList" [formatList]="formatList"
+                                [currencyList]="currencyList"></app-heading>
+                        </div>
                     </div>
                 </div>
             </div>

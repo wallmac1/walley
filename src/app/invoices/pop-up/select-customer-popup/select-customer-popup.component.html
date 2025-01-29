@@ -1,0 +1,34 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">{{"INVOICE.MODAL.SELECTCUSTOMER" | translate }}</span>
+</h2>
+
+<mat-dialog-content>
+    <div [formGroup]="customerForm" class="row justify-content-center align-items-center mt-1">
+        <div class="col-12 col-md-8 mt-1 mb-1">
+            <label class="form-label" for="customer">{{"INVOICE.MODAL.CUSTOMER" | translate }}</label>
+            <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
+                formControlName="customer" [class.is-invalid]="customerForm.get('customer')?.invalid && submitted">
+            <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
+                    <div>
+                        {{option.denominazione}}
+                    </div>
+                </mat-option>
+            </mat-autocomplete>
+        </div>
+        <div *ngIf="customerForm.get('customer')?.invalid && submitted" class="col-12 mt-1 text-center">
+            <span style="font-size: small; color: red;">
+                Il cliente deve essere selezionato dall'elenco che compare dopo aver digitato almeno un carattere
+            </span>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="confirm()">
+        {{"INVOICE.MODAL.CONFIRM" | translate }}
+    </button>
+    <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+        {{"INVOICE.MODAL.CLOSE" | translate }}
+    </button>
+</mat-dialog-actions>
