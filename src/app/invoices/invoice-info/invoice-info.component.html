@@ -1,5 +1,5 @@
 <div style="min-width: 100%; min-height: 100vh; background-color: whitesmoke;">
-    <div class="container-fluid" style="max-width: 1200px; min-width: 350px;">
+    <div class="container-fluid" style="max-width: 1300px; min-width: 350px; padding-bottom: 10rem;">
         <div class="row justify-content-center align-items-center mt-2 mb-4">
             <div class="col-auto ps-3 pe-3 pt-1 pb-1 text-center titleColumn">
                 <span class="title">
@@ -18,13 +18,15 @@
                             <span class="ms-3 me-2">
                                 <i class="bi bi-search me-3 iconField search" (click)="selectCustomer()"
                                     [matTooltip]="'INVOICE.INFO.SEARCHCUSTOMER' | translate"></i>
-                                <i *ngIf="customer" class="bi bi-file-text me-3 iconField file" (click)="modifyCustomerData()"
+                                <i *ngIf="customer" class="bi bi-file-text me-3 iconField file"
+                                    (click)="modifyCustomerData()"
                                     [matTooltip]="'INVOICE.INFO.MODIFYCUSTOMER' | translate"></i>
-                                <i *ngIf="customer" class="bi bi-x-circle me-3 iconField xCircle" (click)="removeCustomer()"
+                                <i *ngIf="customer" class="bi bi-x-circle me-3 iconField xCircle"
+                                    (click)="removeCustomer()"
                                     [matTooltip]="'INVOICE.INFO.DELETECUSTOMERINFO' | translate"></i>
                             </span>
                         </div>
-                        <div class="col-12 ps-0 pe-0 ps-md-2 pe-md-2">
+                        <div class="col-12 ps-3 pe-3">
                             <app-customer-data *ngIf="customer; else noCustomerBlock"
                                 [customer]="customer"></app-customer-data>
                             <ng-template #noCustomerBlock>
@@ -46,9 +48,71 @@
                         <div class="selectCustomer col-12">
                             {{'INVOICE.INFO.HEADING' | translate}}
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 ps-0 pe-0">
                             <app-heading [heading]="heading" [typeList]="typeList" [formatList]="formatList"
                                 [currencyList]="currencyList"></app-heading>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="row justify-content-start align-items-center mb-4">
+            <div class="col-12">
+                <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                    <div class="row">
+                        <div class="selectCustomer col-12">
+                            {{'INVOICE.INFO.BODY' | translate}}
+                        </div>
+                        <div class="col-12 ps-0 pe-0">
+                            <app-body [umList]="umList" [vatList]="vatList"></app-body>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VAT & PAYMENT & TOTAL (SCREEN XL) -->
+        <div class="row justify-content-start align-items-top mb-5">
+            <div class="col-12 col-lg-8">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                            <div class="row">
+                                <div class="selectCustomer col-12">
+                                    {{'INVOICE.INFO.VAT' | translate}}
+                                </div>
+                                <div class="col-12 ps-0 pe-0">
+                                    <app-vat></app-vat>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                            <div class="row">
+                                <div class="selectCustomer col-12">
+                                    {{'INVOICE.INFO.PAYMENTS' | translate}}
+                                </div>
+                                <div class="col-12 ps-0 pe-0">
+                                    <app-payments></app-payments>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                    <div class="row">
+                        <div class="selectCustomer col-12">
+                            {{'INVOICE.INFO.TOTAL' | translate}}
+                        </div>
+                        <div class="col-12 ps-0 pe-0">
+                            <app-total></app-total>
                         </div>
                     </div>
                 </div>

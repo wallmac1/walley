@@ -6,6 +6,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Country } from '../../../weco/interfaces/country';
 import { ConnectServerService } from '../../../services/connect-server.service';
+import { BankListComponent } from "../bank-list/bank-list.component";
 
 @Component({
   selector: 'app-bank-modify',
@@ -14,8 +15,9 @@ import { ConnectServerService } from '../../../services/connect-server.service';
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
-    MatTooltipModule
-  ],
+    MatTooltipModule,
+    BankListComponent
+],
   templateUrl: './bank-modify.component.html',
   styleUrl: './bank-modify.component.scss'
 })
@@ -25,6 +27,9 @@ export class BankModifyComponent {
   countriesList: Country[] = [];
   isSmallScreen: boolean = false;
   submittedC: boolean = false;
+  submittedS: boolean = false;
+  bankName: string | null = null;
+  bankAddress: string | null = null;
 
   bankForm = new FormGroup({
     active: new FormControl<number>(1),
@@ -32,10 +37,10 @@ export class BankModifyComponent {
     denomination: new FormControl<string | null>(null, Validators.required),
     iban: new FormControl<string | null>(null, [Validators.required, this.ibanValidator()]),
     bic: new FormControl<string | null>(null),
-    acronym: new FormControl<number | null>(null),
-    abi: new FormControl<string | null>(null),
-    cab: new FormControl<string | null>(null),
-    cc: new FormControl<string | null>(null),
+    acronym: new FormControl<number | null>({value: null, disabled: true}),
+    abi: new FormControl<string | null>({value: null, disabled: true}),
+    cab: new FormControl<string | null>({value: null, disabled: true}),
+    cc: new FormControl<string | null>({value: null, disabled: true}),
     abi_info: new FormControl<string | null>(null),
     cab_info: new FormControl<string | null>(null)
   })
@@ -51,7 +56,6 @@ export class BankModifyComponent {
   }
 
   ngOnInit(): void {
-
     this.getCountries();
     this.updateWindowDimensions();
   }
@@ -70,12 +74,12 @@ export class BankModifyComponent {
     }
   }
 
-  initForm() {
-    this.bankForm.get('abi')?.disable();
-    this.bankForm.get('cab')?.disable();
-    this.bankForm.get('cc')?.disable();
-    this.bankForm.get('acronym')?.disable();
-  }
+  // initForm() {
+  //   this.bankForm.get('abi')?.disable();
+  //   this.bankForm.get('cab')?.disable();
+  //   this.bankForm.get('cc')?.disable();
+  //   this.bankForm.get('acronym')?.disable();
+  // }
 
   getCountries() {
     this.connectServerService.getRequestCountry().subscribe((val: any) => {
@@ -88,7 +92,7 @@ export class BankModifyComponent {
   ibanValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const iban: string = control.value;
-      if(this.bankForm && this.bankForm.get('ccn3')?.value == 380) {
+      if (this.bankForm && this.bankForm.get('ccn3')?.value == 380) {
         if (!iban) {
           return { invalidIban: true };
         }
@@ -120,6 +124,38 @@ export class BankModifyComponent {
       const cc = iban.value?.substring(15, 27);  // Conto Corrente (12 cifre)
       this.bankForm.patchValue({ abi, cab, cc });
       // INVIA AL SERVER L'IBAN
+    }
+  }
+
+  checkSubmitted() {
+    if(this.submittedC == true) {
+      this.submittedC = false;
+      this.bankAddress = null;
+      this.bankName = null;
+    }
+  }
+
+  saveBank() {
+    this.submittedS = true;
+    if(this.bankForm.valid) {
+      // INVIARE AL SERVER
+    }
+  }
+
+  selectedCountry() {
+    const control = this.bankForm.get('iban');
+    if (this.bankForm.get('ccn3')?.value != 380) {
+      if (control) {
+        const currentValidators = control.validator ? [Validators.required] : [];
+        control.setValidators(currentValidators);
+        control.updateValueAndValidity();
+      }
+    }
+    else {
+      if (control) {
+        control.setValidators([Validators.required, this.ibanValidator()]);
+        control.updateValueAndValidity();
+      }
     }
   }
 

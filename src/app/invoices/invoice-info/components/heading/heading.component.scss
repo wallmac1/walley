@@ -5,10 +5,6 @@
     margin-bottom: 0rem;
 }
 
-.content {
-    font-weight: 150;
-}
-
 .conformityCol {
     padding-left: 0.75rem;
 
@@ -98,4 +94,14 @@ input, textarea, select {
 
 .numberColumn {
     padding-left: 0.75rem;
+}
+
+.btn-outline-dark {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
 }

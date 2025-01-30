@@ -661,11 +661,35 @@
       "MODIFYCUSTOMER": "Modifica Cliente",
       "NAME": "Denominazione"
     },
+
     "MODAL": {
       "SELECTCUSTOMER": "Seleziona un cliente",
       "CUSTOMER": "Cliente",
       "CONFIRM": "Conferma",
       "CLOSE": "Chiudi"
+    },
+    "BANK": {
+      "BANK": "BANCA",
+      "DATA": "Dati",
+      "ACTIVATE": "Attiva",
+      "COUNTRY": "Paese",
+      "DENOMINATION": "Denominazione",
+      "BIC": "BIC",
+      "IBAN": "IBAN",
+      "CONTROL": "Controlla",
+      "IBANERROR": "Per eseguire un controllo inserire un IBAN valido",
+      "FIELDERROR": "Per salvare compilare correttamente tutti i campi richiesti",
+      "ACRONYM": "Sigla",
+      "ABI": "ABI",
+      "CAB": "CAB",
+      "CC": "CC",
+      "SAVE": "Save",
+      "DATE": "Data",
+      "ACTIVE": "Attiva",
+      "YES": "Si",
+      "NO": "No",
+      "ADDRESS": "Indirizzo",
+      "INSTITUTE": "Istituto"
     },
     "INFO": {
       "INVOICE": "FATTURA",
@@ -675,6 +699,10 @@
       "SEARCHCUSTOMER": "Seleziona un cliente",
       "CUSTOMERDATA": "Dati Cliente",
       "HEADING": "Intestazione",
+      "BODY": "Corpo",
+      "VAT": "Quadro IVA",
+      "TOTAL": "Totale",
+      "PAYMENTS": "Pagamenti",
       "NOCUSTOMERDATA": "Nessun cliente selezionato, utilizzare la lente per effettuare una ricerca",
       "CUSTOMERCOMPONENT": {
         "TYPE": "Tipo",
@@ -693,6 +721,12 @@
         "SDI": "SDI",
         "NUMBERSHORT": "N."
       },
+      "VATCOMPONENT": {
+        "VATNATURE": "IVA - Natura",
+        "TAXABLE": "Imponibile",
+        "TAX": "Imposta",
+        "COLLECTABILITY": "Esigibilità"
+      },
       "HEADINGCOMPONENT": {
         "TYPE": "Tipo",
         "FORMAT": "Formato",
@@ -705,6 +739,19 @@
         "SAVE": "Salva",
         "MAXLENGTHSM": "Max. 6 Char.",
         "MISSINGFIELDS": "Compilare i campi obbligatori"
+      },
+      "BODYCOMPONENT": {
+        "DESCRIPTION": "Descrizione",
+        "UM": "U.M.",
+        "QUANTITY": "Quantità",
+        "PRICE": "Prezzo",
+        "DISCOUNT": "Sconto",
+        "TOTAL": "Totale",
+        "VAT": "IVA",
+        "SAVE": "Salva",
+        "MISSINGFIELDS": "Compilare i campi obbligatori",
+        "ACTIONS": "Azioni",
+        "UNITOFMEASUREMENT": "Unità di Misura"
       }
     }
   }

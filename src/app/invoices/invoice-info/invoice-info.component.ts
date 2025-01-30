@@ -10,6 +10,14 @@ import { InvoiceHeading } from '../interfaces/invoice-heading';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectCustomerPopupComponent } from '../pop-up/select-customer-popup/select-customer-popup.component';
 import { ModifyCustomerPopupComponent } from '../pop-up/modify-customer-popup/modify-customer-popup.component';
+import { BodyComponent } from "./components/body/body.component";
+import { Connect } from '../../classes/connect';
+import { MeasurementUnit } from '../../interfaces/measurement-unit';
+import { ApiResponse } from '../../weco/interfaces/api-response';
+import { ConnectServerService } from '../../services/connect-server.service';
+import { VatComponent } from "./components/vat/vat.component";
+import { TotalComponent } from "./components/total/total.component";
+import { PaymentsComponent } from "./components/payments/payments.component";
 
 @Component({
   selector: 'app-invoice-info',
@@ -20,8 +28,12 @@ import { ModifyCustomerPopupComponent } from '../pop-up/modify-customer-popup/mo
     MatTooltipModule,
     TranslateModule,
     CustomerDataComponent,
-    HeadingComponent
-  ],
+    HeadingComponent,
+    BodyComponent,
+    VatComponent,
+    TotalComponent,
+    PaymentsComponent
+],
   templateUrl: './invoice-info.component.html',
   styleUrl: './invoice-info.component.scss'
 })
@@ -35,8 +47,10 @@ export class InvoiceInfoComponent {
   typeList: { id: number, name: string }[] = [];
   formatList: { id: number, name: string }[] = [];
   currencyList: { id: number, name: string }[] = [];
+  umList: MeasurementUnit[] = [];
+  vatList: { id: number, name: string }[] = [];
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private connectServerService: ConnectServerService) { }
 
   ngOnInit(): void {
     this.getSelectOptions();
@@ -49,11 +63,11 @@ export class InvoiceInfoComponent {
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
-      data: { }
+      data: {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      if (result) {
         this.customer = result;
       }
     });
@@ -65,11 +79,11 @@ export class InvoiceInfoComponent {
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
-      data: {customer: this.customer}
+      data: { customer: this.customer }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      if (result) {
         this.customer = result;
       }
     });
@@ -122,7 +136,31 @@ export class InvoiceInfoComponent {
     };
   }
 
+  private getMeasurmentUnits() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/unitOfMeasurements', {})
+      .subscribe((val: ApiResponse<{ unitOfMeasurements: MeasurementUnit[] }>) => {
+        if (val) {
+          this.umList = val.data.unitOfMeasurements;
+        }
+      })
+  }
+
   getSelectOptions() {
+    this.getMeasurmentUnits();
+
+    this.vatList = [
+      {
+        id: 1,
+        name: "22%"
+      }, {
+        id: 2,
+        name: "55%"
+      }, {
+        id: 1,
+        name: "N2.2"
+      }
+    ];
+
     this.typeList = [{
       id: 1,
       name: "Fattura"

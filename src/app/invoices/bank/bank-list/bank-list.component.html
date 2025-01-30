@@ -1,1 +1,130 @@
-<p>bank-list works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="row justify-content-center ms-0 me-0 mt-5 pt-2 pb-1" 
+            style="border: 1px solid lightgray; background-color: white;">
+                <div class="d-none d-md-inline col-4 text-start">
+                    <span style="font-size: small;">{{"INVOICE.LIST.TOTALRESULTS" | translate }}:
+                        {{totalResults}}
+                    </span>
+                </div>
+
+                <div class="d-none d-md-inline col-4 text-center">
+                    <span style="font-size: small;">{{"INVOICE.LIST.OBJPERPAGE" | translate }}:
+                        {{itemsPerPage}}
+                    </span>
+                </div>
+
+                <div class="col-6 d-sm-none text-start">
+                    <span style="font-size: small;">
+                        {{"INVOICE.LIST.ORDEREDBYDEFAULT" | translate}}
+                    </span>
+                </div>
+
+                <div class="col-6 col-sm-12 col-md-4 text-end">
+                    <span>
+                        <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
+                            <i class="bi bi-caret-left"></i>
+                        </button>
+                        <span style="font-size: small;">{{"INVOICE.LIST.PAGE" | translate }} {{currentPage}} di
+                            {{totalPages}}
+                        </span>
+                        <button [disabled]="currentPage == totalPages" class="btn btn-link ms-2 p-0"
+                            (click)="nextPage()">
+                            <i class="bi bi-caret-right"></i>
+                        </button>
+                    </span>
+                </div>
+
+            </div>
+
+            <table *ngIf="!isSmall; else smallTableBlock" mat-table [dataSource]="dataSource" class="mat-tab mb-2"
+                    matSort #sort="matSort" matSortActive="lastupdate" matSortDirection="desc" matSortDisableClear>
+
+                    <!-- Denominations Column -->
+                    <ng-container matColumnDef="denomination">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear
+                            class="d-none d-lg-table-cell d-none d-sm-table-cell">
+                            {{"INVOICE.BANK.DENOMINATION" | translate}} 
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell"
+                            (click)="goToBank(element)">
+                            {{ element.denomination }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Institute Column -->
+                    <ng-container matColumnDef="institute">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-md-table-cell">
+                            {{"INVOICE.BANK.INSTITUTE" | translate}} </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-md-table-cell">
+                            {{element.institute}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Address Column -->
+                    <ng-container matColumnDef="address">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell headerScale">
+                            {{"INVOICE.BANK.ADDRESS" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell truncate-text">
+                            <span [matTooltip]="element.address">
+                                {{element.address}}
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- iban Column -->
+                    <ng-container matColumnDef="iban">
+                        <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-sm-table-cell headerScale">
+                            {{"INVOICE.BANK.IBAN" | translate}} 
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="limitedWidth d-none d-sm-table-cell">
+                            {{element.iban}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Active Column -->
+                    <ng-container matColumnDef="active">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell"> 
+                            {{"INVOICE.BANK.ACTIVE" | translate }} 
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell"> 
+                            <span *ngIf="element.active == 1; else notActiveBlock">
+                                {{"INVOICE.BANK.YES" | translate }} 
+                            </span>
+                            <ng-template #notActiveBlock>
+                                {{"INVOICE.BANK.NO" | translate }} 
+                            </ng-template>
+                            
+                        </td>
+                    </ng-container>
+
+                    <!-- Header and Row Definitions -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover"
+                        (click)="goToBank(row)"></tr>
+                </table>
+
+                <ng-template #smallTableBlock>
+                    <table mat-table [dataSource]="bankList" class="mat-table" matSort #sort="matSort"
+                        matSortActive="lastupdate" matSortDirection="desc" matSortDisableClear>
+                        <!-- Small Screen Column -->
+                        <ng-container matColumnDef="smallScreenCol">
+                            <th mat-header-cell *matHeaderCellDef class="d-none">Denominazion - IBAN</th>
+                            <td mat-cell *matCellDef="let element" class="d-sm-none"> 
+                                {{element.denomination}}
+                                <br> 
+                                {{element.iban}}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsSmall" class="d-none"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsSmall;" class="rowHoverSm"
+                            (click)="goToBank(row)">
+                        </tr>
+                    </table>
+                </ng-template>
+        </div>
+    </div>
+</div>
