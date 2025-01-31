@@ -1,10 +1,16 @@
 <div style="min-width: 100%; min-height: 98vh; background-color: whitesmoke;">
     <div class="container-fluid" style="max-width: 1100px; min-width: 350px;">
-        <div class="row justify-content-center align-items-center pt-4">
+        <div class="row justify-content-center align-items-center pt-4" style="position: relative;">
             <div class="col-auto ps-3 pe-3 pt-1 pb-1 titleColumn">
                 <span class="title">
                     {{"INVOICE.BANK.BANK" | translate}}
                 </span>
+            </div>
+
+            <div style="position: absolute; top: 30px; left: 20px;">
+                <button class="btn btn-outline-dark" (click)="goBack()">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
             </div>
         </div>
 
@@ -27,11 +33,11 @@
                         </div>
 
                         <div class="col-12 col-sm-9 col-lg-4">
-                            <label class="form-label" for="ccn3">{{"INVOICE.BANK.COUNTRY" | translate}}<sup>*</sup></label>
-                            <select class="form-select" name="ccn3" id="ccn3" formControlName="ccn3" (change)="selectedCountry()"
-                                [class.is-invalid]="bankForm.get('ccn3')?.invalid && submittedS">
+                            <label class="form-label" for="idcountry">{{"INVOICE.BANK.COUNTRY" | translate}}<sup>*</sup></label>
+                            <select class="form-select" name="idcountry" id="idcountry" formControlName="idcountry" (change)="selectedCountry()"
+                                [class.is-invalid]="bankForm.get('idcountry')?.invalid && submittedS">
                                 <option [ngValue]="null">--</option>
-                                <option *ngFor="let country of countriesList" [ngValue]="country.ccn3">
+                                <option *ngFor="let country of countriesList" [ngValue]="country.id">
                                     {{country.common_name}}
                                 </option>
                             </select>
@@ -55,7 +61,7 @@
                                     [class.is-invalid]="(bankForm.get('iban')?.invalid && submittedC) ||
                                         (bankForm.get('iban')?.invalid && submittedS)" 
                                     (input)="checkSubmitted()">
-                                <button *ngIf="this.bankForm.get('ccn3')?.value == 380" class="btn btn-outline-success"
+                                <button *ngIf="ccn3 == '380'" class="btn btn-outline-success"
                                     (click)="checkIban()">
                                     <i class="bi bi-check2"></i>
                                     <span *ngIf="!isSmallScreen">
@@ -78,13 +84,13 @@
                     </div>
 
                     <div class="row justify-content-start align-items-top pt-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4"
-                        *ngIf="bankForm.get('iban')?.valid && submittedC && bankForm.get('ccn3')?.value == 380"
+                        *ngIf="bankForm.get('iban')?.valid && submittedC && ccn3 == '380'"
                         style="border-top: 1px solid lightgray;">
                         <div class="col-8 col-sm-4 col-md-2">
                             <label class="form-label" for="acronym">{{"INVOICE.BANK.ACRONYM" | translate}}</label>
                             <select class="form-select" name="acronym" id="acronym" formControlName="acronym">
                                 <option [ngValue]="null">--</option>
-                                <option *ngFor="let country of countriesList" [ngValue]="country.ccn3">
+                                <option *ngFor="let country of countriesList" [ngValue]="country.id">
                                     {{country.cca2}}
                                 </option>
                             </select>
@@ -93,15 +99,15 @@
                         <div class="col-10 col-sm-6 col-md-3" style="position: relative;">
                             <label class="form-label" for="abi">{{"INVOICE.BANK.ABI" | translate}}</label>
                             <input class="form-control" type="text" id="abi" formControlName="abi">
-                            <i *ngIf="!bankName"
-                                class="bi bi-info-circle-fill text-warning iconPosition"></i>
+                            <i *ngIf="!bankName" class="bi bi-info-circle-fill text-warning iconPosition"
+                                matTooltip="{{'INVOICE.BANK.ABIERROR' | translate}}"></i>
                         </div>
 
                         <div class="col-10 col-sm-4 col-md-3" style="position: relative;">
                             <label class="form-label" for="cab">{{"INVOICE.BANK.CAB" | translate}}</label>
                             <input class="form-control" type="text" id="cab" formControlName="cab">
-                            <i *ngIf="!bankAddress"
-                                class="bi bi-info-circle-fill text-warning iconPosition"></i>
+                            <i *ngIf="!bankAddress" class="bi bi-info-circle-fill text-warning iconPosition"
+                                matTooltip="{{'INVOICE.BANK.CABERROR' | translate}}"></i>
                         </div>
 
                         <div class="col-10 col-sm-6 col-md-4">
@@ -122,7 +128,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="bankForm.get('ccn3')?.value != 380 || (bankForm.get('ccn3')?.value == 380 && submittedC 
+                    <div *ngIf="ccn3 != '380' || (ccn3 == '380' && submittedC 
                         && bankForm.get('iban')?.valid)" 
                         class="row justify-content-center mt-3 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
                         <div class="col-12 text-end">

@@ -670,6 +670,7 @@
     },
     "BANK": {
       "BANK": "BANCA",
+      "BANKLIST": "LISTA BANCHE",
       "DATA": "Dati",
       "ACTIVATE": "Attiva",
       "COUNTRY": "Paese",
@@ -689,7 +690,9 @@
       "YES": "Si",
       "NO": "No",
       "ADDRESS": "Indirizzo",
-      "INSTITUTE": "Istituto"
+      "INSTITUTE": "Istituto",
+      "ABIERROR": "Il codice ABI fornito non risulta corrispondere ad alcuna banca. Controllare la correttezza dell'IBAN prima di procedere con il salvataggio dati.",
+      "CABERROR": "Il codice CAB fornito non risulta corrispondere ad alcuna banca. Controllare la correttezza dell'IBAN prima di procedere con il salvataggio dati."
     },
     "INFO": {
       "INVOICE": "FATTURA",
@@ -745,7 +748,7 @@
         "UM": "U.M.",
         "QUANTITY": "Quantità",
         "PRICE": "Prezzo",
-        "DISCOUNT": "Sconto",
+        "DISCOUNT": "Sconto(%)",
         "TOTAL": "Totale",
         "VAT": "IVA",
         "SAVE": "Salva",

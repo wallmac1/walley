@@ -216,7 +216,7 @@ export class InvoiceListComponent {
   // }
 
   newInvoice() {
-    this.router.navigate(['newInvoice']);
+    this.router.navigate(['invoice', 0]);
   }
 
   goToInvoice(row: InvoiceTable) {

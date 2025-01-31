@@ -19,6 +19,7 @@ import { InvoiceListComponent } from './invoices/invoice-list/invoice-list.compo
 import { InvoiceInfoComponent } from './invoices/invoice-info/invoice-info.component';
 import { BankModifyComponent } from './invoices/bank/bank-modify/bank-modify.component';
 import { BankListComponent } from './invoices/bank/bank-list/bank-list.component';
+import { GeneralMenuComponent } from './invoices/menu/general-menu/general-menu.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -42,5 +43,6 @@ export const routes: Routes = [
     { path: "invoice/:id", component: InvoiceInfoComponent },
     { path: "bankModify/:id", component: BankModifyComponent },
     { path: "bankList", component: BankListComponent },
+    { path: "generalMenu", component: GeneralMenuComponent },
     { path: '**', redirectTo: '/login' },
 ];

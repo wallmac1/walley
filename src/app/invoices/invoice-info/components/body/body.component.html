@@ -6,7 +6,7 @@
         <div class="col-1 columnTitle">
             {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
         </div>
-        <div class="col-3 columnTitle">
+        <div class="col-3 descriptionElement columnTitle">
             {{'INVOICE.INFO.BODYCOMPONENT.DESCRIPTION' | translate}}
         </div>
         <div class="col-1 columnElement columnTitle"
@@ -37,7 +37,7 @@
                 style="border-bottom: 1px solid lightgray;" cdkDrag>
 
                 <!-- ICONS -->
-                <div class="col-4 col-sm-2 col-xl-1 mb-2 mb-xl-0 ">
+                <div class="col-sm-2 col-xl-1 mb-2 mb-xl-0 d-none d-sm-inline">
                     <label *ngIf="isSmallScreen" class="form-label" for="actions" style="margin-bottom: 0.5rem;">
                         {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
                     </label>
@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- DESCRIPTION -->
-                <div class="col-8 col-sm-10 col-xl-3 mb-2 mb-xl-0 columnElement" style="padding-left: 0.75rem;">
+                <div class="col-12 col-sm-10 col-xl-3 mb-2 mb-xl-0 descriptionElement">
                     <label *ngIf="isSmallScreen" class="form-label" for="description-{{i}}">
                         {{'INVOICE.INFO.BODYCOMPONENT.DESCRIPTION' | translate}}
                     </label>
@@ -83,7 +83,8 @@
                     <label *ngIf="isSmallScreen" class="form-label" for="quantity-{{i}}">
                         {{'INVOICE.INFO.BODYCOMPONENT.QUANTITY' | translate}}
                     </label>
-                    <input class="form-control" type="text" id="quantity-{{i}}" formControlName="quantity">
+                    <input class="form-control" type="text" id="quantity-{{i}}" formControlName="quantity"
+                        [class.is-invalid]="lines.at(i).get('quantity')?.invalid">   
                 </div>
 
                 <!-- PRICE -->
@@ -91,7 +92,8 @@
                     <label *ngIf="isSmallScreen" class="form-label" for="price-{{i}}">
                         {{'INVOICE.INFO.BODYCOMPONENT.PRICE' | translate}}
                     </label>
-                    <input class="form-control" type="text" id="price-{{i}}" formControlName="price">
+                    <input class="form-control" type="text" id="price-{{i}}" formControlName="price"
+                    [class.is-invalid]="lines.at(i).get('price')?.invalid">
                 </div>
 
                 <!-- DISCOUNT -->
@@ -100,7 +102,7 @@
                         {{'INVOICE.INFO.BODYCOMPONENT.DISCOUNT' | translate}}
                     </label>
                     <input type="text" class="form-control" id="discount-{{i}}" formControlName="discount"
-                        [class.is-invalid]="bodyForm.get('discount')?.invalid && submitted">
+                        [class.is-invalid]="lines.at(i).get('discount')?.invalid">
                 </div>
 
                 <!-- TOTAL -->
@@ -136,20 +138,36 @@
                         {{'INVOICE.INFO.BODYCOMPONENT.MISSINGFIELDS' | translate}}
                     </span>
                 </div>
+
+                <div *ngIf="lines.at(i).get('quantity')?.invalid" class="col-12 text-center">
+                    <span style="font-size: small; color: red;">
+                        Il campo 'quantità' può contenere solamente valori numerici con al massimo due decimali dopo la virgola
+                    </span> 
+                </div>
+                <div *ngIf="lines.at(i).get('discount')?.invalid" class="col-12 text-center">
+                    <span style="font-size: small; color: red;">
+                        Il campo 'sconto' può contenere solamente valori numerici con al massimo due decimali dopo la virgola
+                    </span> 
+                </div>
+                <div *ngIf="lines.at(i).get('price')?.invalid" class="col-12 text-center">
+                    <span style="font-size: small; color: red;">
+                        Il campo 'prezzo' può contenere solamente valori numerici con al massimo quattro decimali dopo la virgola
+                    </span> 
+                </div>
             </div>
         </div>
     </ng-container>
 
-    <div class="row justify-content-center align-items-center">
-        <div class="col-6 text-start mt-2">
+    <div class="row justify-content-end align-items-center">
+        <div class="col-auto text-end mt-2">
             <button class="btn btn-dark btn-circle rounded-circle" (click)="addLine()">
                 <i class="bi bi-plus-lg"></i>
             </button>
         </div>
-        <div class="col-6 text-end mt-2">
+        <!-- <div class="col-6 text-end mt-2">
             <button class="btn btn-outline-dark" (click)="saveBody()">
                 {{'INVOICE.INFO.BODYCOMPONENT.SAVE' | translate}}
             </button>
-        </div>
+        </div> -->
     </div>
 </div>

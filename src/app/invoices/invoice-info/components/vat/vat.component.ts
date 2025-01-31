@@ -1,6 +1,6 @@
 import { Constructor } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -21,8 +21,10 @@ export class VatComponent {
 
   vatForm!: FormGroup;
   submitted: boolean = false;
+  isSmallScreen: Boolean = false;
 
-  @Input() collectabilityList: {id: number, name: string}[] = []
+  @Input() collectabilityList: { id: number, name: string }[] = []
+  @Input() vatSummary: { total: {taxable: string, tax: string}, vat: { id: number, value: number } }[] = [];
 
   constructor(private fb: FormBuilder) {
     this.vatForm = this.fb.group({
@@ -30,10 +32,42 @@ export class VatComponent {
     })
   }
 
-  ngOnInit(): void {}
+  ngOnChanges(changes: SimpleChanges) {
+    this.initForm();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateWindowDimensions();
+  }
+
+  updateWindowDimensions() {
+    if (window.innerWidth < 768) {
+      this.isSmallScreen = true;
+    }
+    else {
+      this.isSmallScreen = false;
+    }
+  }
+
+  initForm() {
+    this.lines.clear();
+    this.vatSummary.forEach(line => {
+      this.lines.push(this.createLine(line));
+    })
+  }
 
   get lines(): FormArray {
     return this.vatForm.get('lines') as FormArray
+  }
+
+  createLine(line: { total: {taxable: string, tax: string}, vat: { id: number, value: number } }) {
+    return this.fb.group({
+      vat: [line.vat.id],
+      collectability: [null],
+      taxable: [line.total.taxable],
+      tax: [line.total.tax]
+    })
   }
 
 }

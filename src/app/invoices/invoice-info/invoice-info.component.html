@@ -27,13 +27,7 @@
                             </span>
                         </div>
                         <div class="col-12 ps-3 pe-3">
-                            <app-customer-data *ngIf="customer; else noCustomerBlock"
-                                [customer]="customer"></app-customer-data>
-                            <ng-template #noCustomerBlock>
-                                <span style="color: gray; font-style: italic;">
-                                    {{'INVOICE.INFO.NOCUSTOMERDATA' | translate}}
-                                </span>
-                            </ng-template>
+                            <app-customer-data [customer]="customer"></app-customer-data>
                         </div>
                     </div>
                 </div>
@@ -66,16 +60,17 @@
                             {{'INVOICE.INFO.BODY' | translate}}
                         </div>
                         <div class="col-12 ps-0 pe-0">
-                            <app-body [umList]="umList" [vatList]="vatList"></app-body>
+                            <app-body [umList]="umList" [vatList]="vatList" 
+                                (vatSummary)="changedVatSummary($event)"></app-body>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- VAT & PAYMENT & TOTAL (SCREEN XL) -->
+        <!-- VAT & PAYMENT & TOTAL -->
         <div class="row justify-content-start align-items-top mb-5">
-            <div class="col-12 col-lg-8">
+            <div class="col-12 col-lg-7 col-xl-8 mb-4">
                 <div class="row">
                     <div class="col-12 mb-4">
                         <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
@@ -84,7 +79,7 @@
                                     {{'INVOICE.INFO.VAT' | translate}}
                                 </div>
                                 <div class="col-12 ps-0 pe-0">
-                                    <app-vat></app-vat>
+                                    <app-vat [vatSummary]="vatSummary"></app-vat>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +100,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-5 col-xl-4">
                 <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
                     <div class="row">
                         <div class="selectCustomer col-12">

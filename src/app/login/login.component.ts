@@ -48,7 +48,7 @@ export class LoginComponent {
   
         // Verifica se il login è riuscito
         if (!this.authService.invalidCredentials) {
-          this.router.navigate(['/newTicket']);
+          this.router.navigate(['generalMenu']);
         } else {
           this.invalidCredentials = true; // Mostra messaggio di errore
         }

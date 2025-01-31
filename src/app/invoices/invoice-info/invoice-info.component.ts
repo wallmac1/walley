@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -42,19 +42,27 @@ export class InvoiceInfoComponent {
   // Info of the invoice
   customer: Customer | null = null;
   heading: InvoiceHeading | null = null;
+  vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[] = [];
 
   // Select options
   typeList: { id: number, name: string }[] = [];
   formatList: { id: number, name: string }[] = [];
   currencyList: { id: number, name: string }[] = [];
   umList: MeasurementUnit[] = [];
-  vatList: { id: number, name: string }[] = [];
+  vatList: { id: number, name: string, value: number }[] = [];
 
-  constructor(public dialog: MatDialog, private connectServerService: ConnectServerService) { }
+  constructor(public dialog: MatDialog, private connectServerService: ConnectServerService,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getSelectOptions();
     this.getInvoiceInfo();
+  }
+
+  changedVatSummary(event: {vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[]}) {
+    //console.log("COMPONENTE PADRE", event)
+    this.vatSummary = event.vatSummary;
+    this.cdr.detectChanges();
   }
 
   selectCustomer() {
@@ -151,13 +159,16 @@ export class InvoiceInfoComponent {
     this.vatList = [
       {
         id: 1,
-        name: "22%"
+        name: "22%",
+        value: 22
       }, {
         id: 2,
-        name: "55%"
+        name: "55%",
+        value: 55
       }, {
-        id: 1,
-        name: "N2.2"
+        id: 3,
+        name: "N2.2",
+        value: 0
       }
     ];
 

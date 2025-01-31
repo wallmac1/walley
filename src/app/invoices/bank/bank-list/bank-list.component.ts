@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Connect } from '../../../classes/connect';
+import { ApiResponse } from '../../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-bank-list',
@@ -35,31 +37,17 @@ export class BankListComponent {
   totalPages: number = 1;
   totalResults: number = 0;
   itemsPerPage: number = 50;
-  displayedColumns: string[] = ['denomination', 'institute', 'address', 'iban', 'active'];
+  displayedColumns: string[] = ['denomination', 'iban', 'obsolete'];
   displayedColumnsSmall: string[] = ['smallScreenCol']
 
-  // lastSearch: InvoiceFilters = {
-  //   datefrom: null,
-  //   dateto: null,
-  //   number: null,
-  //   name: null,
-  //   documenttype: null,
-  //   status: null,
-  //   fiscalcode: null,
-  //   vat: null,
-  // }
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  //@ViewChild(InvoiceFiltersComponent) filtersChild!: InvoiceFiltersComponent;
 
-  constructor(private connectServerService: ConnectServerService, private router: Router, 
+  constructor(private connectServerService: ConnectServerService, private router: Router,
     private cdr: ChangeDetectorRef) { }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
     this.checkScreenSize();
-    //this.verifyTextTruncated();
   }
 
   checkScreenSize(): void {
@@ -69,108 +57,18 @@ export class BankListComponent {
 
   ngOnInit(): void {
     this.checkScreenSize();
+    this.getBankList();
   }
 
-  ngAfterViewInit(): void {
-    //this.verifyTextTruncated();
-    this.sort.sortChange.subscribe(() => {
-      this.currentPage = 1;
-      this.getBankList(2);
-    });
-    this.getBankList(2);
+  getBankList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'bank/banksList', {})
+      .subscribe((val: ApiResponse<{ bankList: BankTable[] }>) => {
+        if (val.data) {
+          this.bankList = val.data.bankList;
+          this.dataSource.data = this.bankList;
+        }
+      })
   }
-
-  changeOrderCreation() {
-    if (this.orderby_creation == 'asc' || this.orderby_creation == 'null') {
-      this.orderby_creation = 'desc';
-    }
-    else {
-      this.orderby_creation = 'asc';
-    }
-    this.getBankList(2)
-  }
-
-  getBankList(type: number) {
-    // if (type == 1) {
-    //   this.lastSearch = this.filtersChild.getFilters();
-    // }
-
-    // console.log('filters')
-    if (this.sort.active === 'denomination') {
-      this.orderby_creation = this.sort.direction;
-      this.orderby_update = null;
-      console.log("NUMBER", this.orderby_creation)
-    } else if (this.sort.active === 'active') {
-      this.orderby_update = this.sort.direction;
-      this.orderby_creation = null;
-      console.log("SENDDATE", this.orderby_update)
-    }
-    this.bankList = [
-      {
-        id: 1,
-        denomination: "Intesa San Paolo",
-        institute: "Sezione A",
-        address: "Via Curtatone Montanara",
-        iban: "IT38Y1796509537327379260909",
-        active: 0
-      },
-      {
-        id: 1,
-        denomination: "Banca d'Italia",
-        institute: "Sede F",
-        address: "Via del Corso",
-        iban: "IT38Y1796509537327379260909",
-        active: 1
-      },
-      {
-        id: 1,
-        denomination: "ENG",
-        institute: "Centrale",
-        address: "Viale dei Mille",
-        iban: "IT38Y1796509537327379260909",
-        active: 0
-      },
-    ]
-
-    this.dataSource.data = this.bankList;
-
-    // list.forEach((val: any) => {
-    //   this.invoiceList.push(val);
-    // })
-
-    // CHIAMATA AL SERVER
-    // this.connectServerService.getRequest(Connect.urlServerLaraApi, 'ticket/ticketsList', {
-    //   idcustomer: this.lastSearch.customer || null, idstatusticket: this.lastSearch.status || null,
-    //   idsubstatusticket: this.lastSearch.substatus || null, incharge: this.lastSearch.incharge || null,
-    //   iddepartment: this.lastSearch.department || null, notclosed: this.lastSearch.notclosed, orderby_creation: this.orderby_creation,
-    //   orderby_lastupdate: this.orderby_update, itemsPerPage: this.itemsPerPage, currentPageIndex: this.currentPage
-    // }).subscribe((val: ApiResponse<any>) => {
-    //   if (val) {
-    //     //console.log(val.data)
-    //     this.ticketList = val.data.tickets;
-    //     this.totalResults = val.data.pagination.total;
-    //     this.totalPages = val.data.pagination.lastPage;
-    //   }
-    // })
-  }
-
-  prevPage() {
-    if (this.currentPage > 1) {
-      this.currentPage -= 1;
-      this.getBankList(2);
-    }
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage += 1;
-      this.getBankList(2);
-    }
-  }
-
-  // verifyTextTruncated() {
-  //   this.isTextTruncated = this.customerColumn.nativeElement.offsetWidth < this.customerColumn.nativeElement.scrollWidth;
-  // }
 
   newBank() {
     this.router.navigate(['bankModify', 0]);

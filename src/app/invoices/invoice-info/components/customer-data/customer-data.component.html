@@ -1,11 +1,11 @@
 <div class="container-fluid pe-0 ps-0 pb-2">
-    <div class="row justify-content-center align-items-center">
+    <div *ngIf="customer; else noCustomerBlock" class="row justify-content-center align-items-center">
         <div class="col-12">
             <span class="title me-2">
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.TYPE' | translate}}:
             </span>
             <span class="content">
-                {{customer?.type}}
+                {{customer.type}}
             </span>
         </div>
 
@@ -14,7 +14,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.NAME' | translate}}:
             </span>
             <span class="content">
-                {{customer?.denominazione}}
+                {{customer.denominazione}}
             </span>
         </div>
 
@@ -23,7 +23,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.FISCALCODE' | translate}}:
             </span>
             <span class="content">
-                {{customer?.codicefiscale}}
+                {{customer.codicefiscale}}
             </span>
         </div>
 
@@ -32,7 +32,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.VAT' | translate}}:
             </span>
             <span class="content">
-                {{customer?.piva}}
+                {{customer.piva}}
             </span>
         </div>
 
@@ -41,7 +41,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.ADDRESS' | translate}}:
             </span>
             <span class="content">
-                {{customer?.address}}
+                {{customer.address}}
             </span>
         </div>
 
@@ -56,7 +56,7 @@
             </ng-template>
             
             <span class="content">
-                {{customer?.codicefiscale}}
+                {{customer.codicefiscale}}
             </span>
         </div>
 
@@ -65,7 +65,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.POSTALCODE' | translate}}:
             </span>
             <span class="content">
-                {{customer?.cap}}
+                {{customer.cap}}
             </span>
         </div>
 
@@ -74,7 +74,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.CITY' | translate}}:
             </span>
             <span class="content">
-                {{customer?.city}}
+                {{customer.city}}
             </span>
         </div>
 
@@ -83,7 +83,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.REGION' | translate}}:
             </span>
             <span class="content">
-                {{customer?.region}}
+                {{customer.region}}
             </span>
         </div>
 
@@ -92,7 +92,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.COUNTRY' | translate}}:
             </span>
             <span class="content">
-                {{customer?.country}}
+                {{customer.country}}
             </span>
         </div>
 
@@ -101,7 +101,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.PEC' | translate}}:
             </span>
             <span class="content">
-                {{customer?.pec}}
+                {{customer.pec}}
             </span>
         </div>
 
@@ -110,8 +110,17 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.SDI' | translate}}:
             </span>
             <span class="content">
-                {{customer?.sdi}}
+                {{customer.sdi}}
             </span>
         </div>
     </div>
+    <ng-template #noCustomerBlock>
+        <div class="row row justify-content-center align-items-center mt-2">
+            <div class="col-12 text-center">
+                <span style="color: gray; font-style: italic; font-weight: 150;">
+                    {{'INVOICE.INFO.NOCUSTOMERDATA' | translate}}
+                </span>
+            </div>
+        </div>
+    </ng-template>
 </div>
