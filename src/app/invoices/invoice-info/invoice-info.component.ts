@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -37,7 +37,7 @@ import { PaymentsComponent } from "./components/payments/payments.component";
   templateUrl: './invoice-info.component.html',
   styleUrl: './invoice-info.component.scss'
 })
-export class InvoiceInfoComponent {
+export class InvoiceInfoComponent implements OnInit {
 
   // Info of the invoice
   customer: Customer | null = null;
@@ -45,9 +45,9 @@ export class InvoiceInfoComponent {
   vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[] = [];
 
   // Select options
-  typeList: { id: number, name: string }[] = [];
-  formatList: { id: number, name: string }[] = [];
-  currencyList: { id: number, name: string }[] = [];
+  typeList: { id: number, code: string, description: string }[] = [];
+  formatList: { id: number, code: string, description: string }[] = [];
+  currencyList: { id: number, code: string, description: string }[] = [];
   umList: MeasurementUnit[] = [];
   vatList: { id: number, name: string, value: number }[] = [];
 
@@ -55,10 +55,38 @@ export class InvoiceInfoComponent {
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.getTipiDocumento();
+    this.getFormatoTrasmissione();
+    this.getCurrencies();
     this.getSelectOptions();
     this.getInvoiceInfo();
   }
 
+  private getTipiDocumento(){
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/tipiDocumento', {})
+    .subscribe((val: ApiResponse<{ tipoDocumento: { id: number, code: string, description: string }[] }>) => {
+      if (val.data) {
+        this.typeList = val.data.tipoDocumento;
+      }
+    })
+  }
+  private getFormatoTrasmissione(){
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/formatiTrasmissione', {})
+    .subscribe((val: ApiResponse<{ formatoTrasmissione: { id: number, code: string, description: string }[] }>) => {
+      if (val.data) {
+        this.formatList = val.data.formatoTrasmissione;
+      }
+    })
+  }
+
+  private getCurrencies(){
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/currenciesList', {})
+    .subscribe((val: ApiResponse<{ currenciesList: { id: number, code: string, description: string }[] }>) => {
+      if (val.data) {
+        this.currencyList = val.data.currenciesList;
+      }
+    })
+  }
   changedVatSummary(event: {vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[]}) {
     //console.log("COMPONENTE PADRE", event)
     this.vatSummary = event.vatSummary;
@@ -172,29 +200,29 @@ export class InvoiceInfoComponent {
       }
     ];
 
-    this.typeList = [{
-      id: 1,
-      name: "Fattura"
-    }, {
-      id: 2,
-      name: "Nota di credito"
-    }];
+    // this.typeList = [{
+    //   id: 1,
+    //   name: "Fattura"
+    // }, {
+    //   id: 2,
+    //   name: "Nota di credito"
+    // }];
 
-    this.currencyList = [{
-      id: 1,
-      name: "Euro"
-    }, {
-      id: 2,
-      name: "Dollaro"
-    }];
+    // this.currencyList = [{
+    //   id: 1,
+    //   name: "Euro"
+    // }, {
+    //   id: 2,
+    //   name: "Dollaro"
+    // }];
 
-    this.formatList = [{
-      id: 1,
-      name: "Elettronica"
-    }, {
-      id: 2,
-      name: "Cartacea"
-    }];
+    // this.formatList = [{
+    //   id: 1,
+    //   name: "Elettronica"
+    // }, {
+    //   id: 2,
+    //   name: "Cartacea"
+    // }];
   }
 
 }

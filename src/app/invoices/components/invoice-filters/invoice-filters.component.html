@@ -45,7 +45,7 @@
                     </mat-date-range-input>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>
-                
+
                     <mat-error *ngIf="invoiceFilterForm.controls.datefrom.hasError('matStartDateInvalid')">
                       Invalid start date
                     </mat-error>
@@ -68,8 +68,8 @@
                 <select type="string" class="form-select" id="documenttype" formControlName="documenttype"
                     [class.is-invalid]="invoiceFilterForm.get('documenttype')?.invalid && invoiceFilterForm.get('documenttype')?.touched">
                     <option [value]="null">--</option>
-                    <option *ngFor="let type of listTypes" [ngValue]="type.id">
-                        {{type.value}}
+                    <option *ngFor="let type of typeList" [ngValue]="type.id">
+                        {{type.code}} - {{type.description}}
                     </option>
                 </select>
             </div>

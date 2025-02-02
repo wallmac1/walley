@@ -23,9 +23,9 @@ export class HeadingComponent {
   isSmallScreen: boolean = false;
 
   @Input() heading: any | null = null;
-  @Input() typeList: { id: number, name: string }[] = [];
-  @Input() formatList: { id: number, name: string }[] = [];
-  @Input() currencyList: { id: number, name: string }[] = [];
+  @Input() typeList: { id: number, code: string, description: string }[] = [];
+  @Input() formatList: { id: number, code: string, description: string }[] = [];
+  @Input() currencyList: { id: number, code: string, description: string }[] = [];
 
   headingForm = new FormGroup({
     type: new FormControl<number | null>(null, Validators.required),

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -9,6 +9,9 @@ import { Customer } from '../../../tickets/interfaces/customer';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatError, MatFormFieldModule, MatHint } from '@angular/material/form-field';
+import { ConnectServerService } from '../../../services/connect-server.service';
+import { Connect } from '../../../classes/connect';
+import { ApiResponse } from '../../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-invoice-filters',
@@ -34,9 +37,9 @@ export class InvoiceFiltersComponent {
   filteredCustomer$!: Observable<Customer[]>;
   listNumbers: { id: number, value: string }[] = [];
   listCustomer: Customer[] = [];
-  listTypes: { id: number, value: string }[] = [];
+  typeList: { id: number, code: string, description: string }[] = [];
   listStatus: { id: number, name: string }[] = [];
-
+  private connectServerService = inject(ConnectServerService);
   todayDate = new Date();
 
   invoiceFilterForm = new FormGroup({
@@ -51,11 +54,19 @@ export class InvoiceFiltersComponent {
   })
 
   ngOnInit(): void {
+    this.getTipiDocumento();
     this.setDate();
     this.searchCustomer();
     this.getInvoiceInfo();
   }
-
+private getTipiDocumento(){
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/tipiDocumento', {})
+    .subscribe((val: ApiResponse<{ tipoDocumento: { id: number, code: string, description: string }[] }>) => {
+      if (val.data) {
+        this.typeList = val.data.tipoDocumento;
+      }
+    })
+  }
   setDate() {
     const threeMonthsAgo = new Date(this.todayDate);
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
@@ -77,7 +88,7 @@ export class InvoiceFiltersComponent {
 
   getInvoiceInfo() {
     this.getInvoiceNumbers();
-    this.getTypes();
+    // this.getTypes();
     this.getStatus();
   }
 
@@ -91,12 +102,12 @@ export class InvoiceFiltersComponent {
     ]
   }
 
-  getTypes() {
-    this.listTypes = [
-      { id: 1, value: 'Invoice' },
-      { id: 2, value: 'Other Types' },
-    ]
-  }
+  // getTypes() {
+  //   this.listTypes = [
+  //     { id: 1, value: 'Invoice' },
+  //     { id: 2, value: 'Other Types' },
+  //   ]
+  // }
 
   getStatus() {
     this.listStatus = [
