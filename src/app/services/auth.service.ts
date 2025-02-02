@@ -14,7 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class AuthService {
 
   serverError: string = '';
-  invalidCredentials = false
+  invalidCredentials = true
   private userSubject = new Subject<User | null>();
   getInfoUserLogged(): Observable<User | null> {
     return this.userSubject.asObservable();
@@ -27,9 +27,12 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    if (localStorage.getItem('loggedW') && localStorage.getItem('loggedW') == 'ok') {
-      return true;
-    }
+    // if (localStorage.getItem('loggedW') && localStorage.getItem('loggedW') == 'ok') {
+    //   return true;
+    // }
+    if (localStorage.getItem('authOk') && localStorage.getItem('authOk') == 'YES') {
+        return true;
+      }
     return false;
   }
 
@@ -40,22 +43,28 @@ export class AuthService {
   }
 
   async loginServer(email: string, password: string, rememberMe: boolean): Promise<void> {
-    try {
-      const response = await this.connectServerService.postRequest(Connect.urlServerLara, 'login', {
-        email,
-        password,
-      }).toPromise();
-  
-      if (response) {
-        localStorage.setItem('authOk', 'YES');
-        this.invalidCredentials = false;
-      } else {
-        this.invalidCredentials = true; // Credenziali non valide
-      }
-    } catch (error) {
-      console.error('Errore nella chiamata al server:', error);
-      this.invalidCredentials = true; // Gestione errore server
-    }
+    this.getCsrf().then(
+      (response) => {
+        try {
+          const response = this.connectServerService.postRequest(Connect.urlServerLara, 'login', {
+            email,
+            password,
+          }).subscribe((response: any) => {
+            localStorage.setItem('authOk', 'YES');
+            this.invalidCredentials = false;
+             // Verifica se il login è riuscito
+
+          this.router.navigate(['generalMenu']);
+
+          });
+
+
+        } catch (error) {
+          console.error('Errore nella chiamata al server:', error);
+          this.invalidCredentials = true; // Gestione errore server
+        }
+      });
+
   }
 
   // async loginUser(email_value: string, password_value: string) {

@@ -8,7 +8,7 @@
         </div>
 
         <div class="navbar-menu d-flex">
-            <div class="navbarElement d-flex align-items-center">
+            <div class="navbarElement d-flex align-items-center" (click)="goHome()">
                 <i class="bi bi-house navbarIcon"></i>
                 <span *ngIf="!isSmall" class="navbarVoice">Home</span>
             </div>
@@ -24,8 +24,8 @@
                 <i class="bi bi-person navbarIcon"></i>
                 <span *ngIf="!isSmall" class="navbarVoice">Profile</span>
             </div>
-            <div class="d-none d-lg-flex align-items-center" style="margin-left: 20px;">
-                <img src="assets/img/logoWeco.png" style="height: 15px;">
+            <div class="d-none d-lg-flex align-items-center" style="margin-left: 20px;" (click)="logout()">
+                <img src="assets/img/walley_w.png" style="height: 15px;">
             </div>
         </div>
     </div>

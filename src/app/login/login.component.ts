@@ -36,7 +36,7 @@ export class LoginComponent {
 
   async login() {
     this.submitted = true;
-  
+
     if (this.loginForm.valid) {
       try {
         // Chiama loginServer e attendi la risposta
@@ -45,13 +45,6 @@ export class LoginComponent {
           this.loginForm.get('password')?.value!,
           true
         );
-  
-        // Verifica se il login è riuscito
-        if (!this.authService.invalidCredentials) {
-          this.router.navigate(['generalMenu']);
-        } else {
-          this.invalidCredentials = true; // Mostra messaggio di errore
-        }
       } catch (error) {
         console.error('Errore durante il login:', error);
         this.invalidCredentials = true; // Gestione errore server

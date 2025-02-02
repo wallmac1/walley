@@ -4,7 +4,7 @@ import { FormControl, FormGroup, NgForm, ReactiveFormsModule, Validators } from 
 import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+// import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { environment } from '../../../environments/environment';
 import { InViewportDirective } from '../../directives/in-viewport.directive';
 
@@ -15,7 +15,7 @@ import { InViewportDirective } from '../../directives/in-viewport.directive';
     CommonModule,
     ReactiveFormsModule,
     MatSelectModule,
-    RecaptchaV3Module,
+    // RecaptchaV3Module,
     InViewportDirective
   ],
   // providers: [{

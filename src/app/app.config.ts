@@ -10,7 +10,7 @@ import { userReducer } from './ngrx/user/user.reducer';
 import { countryReducer } from './ngrx/country/country.reducer';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+// import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from '../environments/environment';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
@@ -22,10 +22,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideNativeDateAdapter(),
-    provideRouter(routes), 
+    provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])) ,
-    provideStore({ user: userReducer, countries: countryReducer }), 
+    provideStore({ user: userReducer, countries: countryReducer }),
     importProvidersFrom(TranslateModule.forRoot({
       defaultLanguage: 'it',
       loader: {
@@ -34,11 +34,11 @@ export const appConfig: ApplicationConfig = {
         deps: [HttpClient]
       }
     })),
-    importProvidersFrom(RecaptchaV3Module),  // Importa il modulo V3
-    {
-      provide: RECAPTCHA_V3_SITE_KEY,
-      useValue: environment.recaptcha.siteKey,  // Fornisci la chiave di reCAPTCHA
-    }
+    // importProvidersFrom(RecaptchaV3Module),  // Importa il modulo V3
+    // {
+    //   provide: RECAPTCHA_V3_SITE_KEY,
+    //   useValue: environment.recaptcha.siteKey,  // Fornisci la chiave di reCAPTCHA
+    // }
   ]
 };
 
