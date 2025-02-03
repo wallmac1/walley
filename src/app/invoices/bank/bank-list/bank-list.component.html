@@ -1,10 +1,13 @@
 <div class="container-fluid">
-    <div class="row justify-content-center align-items-center pt-4">
+    <div class="row justify-content-center align-items-center pt-4" style="position: relative;">
         <div class="col-auto ps-3 pe-3 pt-1 pb-1 titleColumn">
             <span class="title">
                 {{"INVOICE.BANK.BANKLIST" | translate}}
             </span>
         </div>
+        <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer ms-2" (click)="newBank()">
+            <i class="bi bi-plus-lg"></i>
+        </button>
     </div>
 
     <div class="row justify-content-center">

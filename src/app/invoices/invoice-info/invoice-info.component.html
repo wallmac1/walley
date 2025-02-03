@@ -1,10 +1,15 @@
 <div style="min-width: 100%; min-height: 100vh; background-color: whitesmoke;">
     <div class="container-fluid" style="max-width: 1300px; min-width: 350px; padding-bottom: 10rem;">
-        <div class="row justify-content-center align-items-center mt-2 mb-4">
+        <div class="row justify-content-center align-items-center mt-2 mb-4" style="position: relative;">
             <div class="col-auto ps-3 pe-3 pt-1 pb-1 text-center titleColumn">
                 <span class="title">
                     {{'INVOICE.INFO.INVOICE' | translate}}
                 </span>
+            </div>
+            <div style="position: absolute; top: 10px; left: 20px;">
+                <button class="btn btn-outline-dark" (click)="goBack()">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
             </div>
         </div>
 

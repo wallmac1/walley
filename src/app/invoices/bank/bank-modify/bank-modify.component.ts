@@ -30,11 +30,11 @@ export class BankModifyComponent {
   submittedS: boolean = false;
   bankName: string | null = null;
   bankAddress: string | null = null;
-  ccn3: string | null = null;
+  ccn3: string | null = "380";
 
   bankForm = new FormGroup({
     active: new FormControl<boolean>(true),
-    idcountry: new FormControl<number | null>(null, Validators.required),
+    idcountry: new FormControl<number | null>(12, Validators.required),
     denomination: new FormControl<string | null>(null, Validators.required),
     iban: new FormControl<string | null>(null, [Validators.required, this.ibanValidator()]),
     bic: new FormControl<string | null>(null),
@@ -112,7 +112,7 @@ export class BankModifyComponent {
   ibanValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const iban: string = control.value;
-      if (this.bankForm && this.bankForm.get('ccn3')?.value == 380) {
+      if (this.bankForm && this.ccn3 == "380") {
         if (!iban) {
           return { invalidIban: true };
         }

@@ -631,7 +631,7 @@
   },
   "INVOICE": {
     "LIST": {
-      "INVOICE": "Fatture",
+      "INVOICE": "FATTURE",
       "TOTALRESULTS": "Risultati Totali",
       "OBJPERPAGE": "Oggetti Per Pagina",
       "ORDEREDBYDEFAULT": "Ordinato per Numero",

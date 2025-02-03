@@ -1,11 +1,13 @@
 <div class="container-fluid p-1 p-sm-2 p-md-3 p-lg-4" style="min-width: 375px; min-height: 90vh;">
     <div class="row justify-content-center align-items-center mt-2 mb-2">
-        <div class="col-12 text-center title">
-            <label class="me-3">{{"INVOICE.LIST.INVOICE" | translate }}</label>
-            <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer" (click)="newInvoice()">
-                <i class="bi bi-plus-lg"></i>
-            </button>
+        <div class="col-auto ps-3 pe-3 pt-1 pb-1 text-center titleColumn">
+            <span class="title">
+                {{"INVOICE.LIST.INVOICE" | translate }}
+            </span>
         </div>
+        <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer ms-2" (click)="newInvoice()">
+            <i class="bi bi-plus-lg"></i>
+        </button>
     </div>
 
     <div class="row justify-content-center align-items-center p-3">

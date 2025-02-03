@@ -18,6 +18,7 @@ import { ConnectServerService } from '../../services/connect-server.service';
 import { VatComponent } from "./components/vat/vat.component";
 import { TotalComponent } from "./components/total/total.component";
 import { PaymentsComponent } from "./components/payments/payments.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoice-info',
@@ -52,7 +53,7 @@ export class InvoiceInfoComponent implements OnInit {
   vatList: { id: number, name: string, value: number }[] = [];
 
   constructor(public dialog: MatDialog, private connectServerService: ConnectServerService,
-    private cdr: ChangeDetectorRef) { }
+    private cdr: ChangeDetectorRef, private router: Router) { }
 
   ngOnInit(): void {
     this.getTipiDocumento();
@@ -91,6 +92,10 @@ export class InvoiceInfoComponent implements OnInit {
     //console.log("COMPONENTE PADRE", event)
     this.vatSummary = event.vatSummary;
     this.cdr.detectChanges();
+  }
+
+  goBack() {
+    this.router.navigate(['invoiceList'])
   }
 
   selectCustomer() {
