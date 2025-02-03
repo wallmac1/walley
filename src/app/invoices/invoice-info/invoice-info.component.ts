@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,6 +19,7 @@ import { VatComponent } from "./components/vat/vat.component";
 import { TotalComponent } from "./components/total/total.component";
 import { PaymentsComponent } from "./components/payments/payments.component";
 import { Router } from '@angular/router';
+import { StampComponent } from "./components/stamp/stamp.component";
 
 @Component({
   selector: 'app-invoice-info',
@@ -33,17 +34,22 @@ import { Router } from '@angular/router';
     BodyComponent,
     VatComponent,
     TotalComponent,
-    PaymentsComponent
+    PaymentsComponent,
+    StampComponent
 ],
   templateUrl: './invoice-info.component.html',
   styleUrl: './invoice-info.component.scss'
 })
 export class InvoiceInfoComponent implements OnInit {
 
+  @ViewChild(BodyComponent) bodyComponent!: BodyComponent;
+  @ViewChild(TotalComponent) totalComponent!: TotalComponent;
+
   // Info of the invoice
   customer: Customer | null = null;
   heading: InvoiceHeading | null = null;
   vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[] = [];
+  totalSummary: {taxable: string, tax: string, notTaxable: string} = {taxable: "0,00", tax: "0,00", notTaxable: "0,00"};
 
   // Select options
   typeList: { id: number, code: string, description: string }[] = [];
@@ -88,9 +94,15 @@ export class InvoiceInfoComponent implements OnInit {
       }
     })
   }
+
   changedVatSummary(event: {vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[]}) {
     //console.log("COMPONENTE PADRE", event)
     this.vatSummary = event.vatSummary;
+    this.cdr.detectChanges();
+  }
+
+  changedTotalSummary(event: {totalSummary: {taxable: string, tax: string, notTaxable: string}}) {
+    this.totalSummary = event.totalSummary;
     this.cdr.detectChanges();
   }
 
@@ -157,6 +169,18 @@ export class InvoiceInfoComponent implements OnInit {
       country: "Italia",
       region: "Firenze"
     };
+  }
+
+  deleteStampLine() {
+    this.bodyComponent.deleteStampLine()
+  }
+
+  addStampLine(event: {total: string, vat: number, description: string}) {
+    this.bodyComponent.addStampLine(event.total, event.vat, event.description);
+  }
+
+  changeStampLine(event: {total: string, vat: number, description: string}) {
+    this.bodyComponent.changeStampLine(event.total, event.vat, event.description);
   }
 
   getInvoiceInfo() {

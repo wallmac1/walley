@@ -703,6 +703,7 @@
       "CUSTOMERDATA": "Dati Cliente",
       "HEADING": "Intestazione",
       "BODY": "Corpo",
+      "STAMP": "Bollo",
       "VAT": "Quadro IVA",
       "TOTAL": "Totale",
       "PAYMENTS": "Pagamenti",
@@ -744,6 +745,12 @@
         "MISSINGFIELDS": "Compilare i campi obbligatori"
       },
       "BODYCOMPONENT": {
+        "LINE": "Linea",
+        "LINENUMBER": "Numero Linea",
+        "MOVELINE": "Muovi Linea",
+        "DELETELINE": "Cancella Linea",
+        "DUPLICATELINE": "Duplica Linea",
+        "ADDITIONALINFO": "Apri Informazioni Aggiuntive",
         "DESCRIPTION": "Descrizione",
         "UM": "U.M.",
         "QUANTITY": "Quantità",

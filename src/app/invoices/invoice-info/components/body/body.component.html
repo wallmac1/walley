@@ -4,7 +4,7 @@
     <div *ngIf="!isSmallScreen" class="row justify-content-center align-items-center"
         style="border-bottom: 1px solid lightgray;">
         <div class="col-1 columnTitle">
-            {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
+            {{'INVOICE.INFO.BODYCOMPONENT.LINE' | translate}}
         </div>
         <div class="col-3 descriptionElement columnTitle">
             {{'INVOICE.INFO.BODYCOMPONENT.DESCRIPTION' | translate}}
@@ -19,14 +19,14 @@
         <div class="col-2 columnElement columnTitle">
             {{'INVOICE.INFO.BODYCOMPONENT.PRICE' | translate}}
         </div>
-        <div class="col-1 columnElement columnTitle">
-            {{'INVOICE.INFO.BODYCOMPONENT.DISCOUNT' | translate}}
-        </div>
         <div class="col-2 columnElement columnTitle">
             {{'INVOICE.INFO.BODYCOMPONENT.TOTAL' | translate}}
         </div>
         <div class="col-1 columnElement columnTitle">
             {{'INVOICE.INFO.BODYCOMPONENT.VAT' | translate}}
+        </div>
+        <div class="col-1 columnElement columnTitle">
+            {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
         </div>
     </div>
 
@@ -36,15 +36,26 @@
                 *ngFor="let item of lines.controls; let i = index" [formGroupName]="i"
                 style="border-bottom: 1px solid lightgray;" cdkDrag>
 
-                <!-- ICONS -->
+                <!-- ICONS 1 -->
                 <div class="col-sm-2 col-xl-1 mb-2 mb-xl-0 d-none d-sm-inline">
                     <label *ngIf="isSmallScreen" class="form-label" for="actions" style="margin-bottom: 0.5rem;">
                         {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
                     </label>
                     <div id="actions">
-                        <i class="bi bi-arrows-move p-0" cdkDragHandle></i>
-                        <i *ngIf="lines.length > 1" class="bi bi-trash p-0 ms-4" style="color: red;"
-                            (click)="deleteLine(i)"></i>
+                        <span style="font-size: 20px; font-weight: bold;"
+                            matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.LINENUMBER' | translate}}">
+                            {{i+1}}
+                        </span>
+                        <i class="bi bi-arrows-move p-0 ms-2" cdkDragHandle
+                            matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.MOVELINE' | translate}}"></i>
+                        <i *ngIf="!additionalInfo; else additionalInfoBlock" class="bi bi-caret-down-fill p-0 ms-2"
+                            (click)="toggleAdditionalInfo()"
+                            matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
+                        <ng-template #additionalInfoBlock>
+                            <i class="bi bi-caret-up-fill p-0 ms-2" (click)="toggleAdditionalInfo()"
+                                matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
+                        </ng-template>
+
                     </div>
                 </div>
 
@@ -84,7 +95,7 @@
                         {{'INVOICE.INFO.BODYCOMPONENT.QUANTITY' | translate}}
                     </label>
                     <input class="form-control" type="text" id="quantity-{{i}}" formControlName="quantity"
-                        [class.is-invalid]="lines.at(i).get('quantity')?.invalid">   
+                        [class.is-invalid]="lines.at(i).get('quantity')?.invalid">
                 </div>
 
                 <!-- PRICE -->
@@ -93,16 +104,7 @@
                         {{'INVOICE.INFO.BODYCOMPONENT.PRICE' | translate}}
                     </label>
                     <input class="form-control" type="text" id="price-{{i}}" formControlName="price"
-                    [class.is-invalid]="lines.at(i).get('price')?.invalid">
-                </div>
-
-                <!-- DISCOUNT -->
-                <div class="col-6 col-sm-4 col-md-2 col-xl-1 columnElement">
-                    <label *ngIf="isSmallScreen" class="form-label" for="discount-{{i}}">
-                        {{'INVOICE.INFO.BODYCOMPONENT.DISCOUNT' | translate}}
-                    </label>
-                    <input type="text" class="form-control" id="discount-{{i}}" formControlName="discount"
-                        [class.is-invalid]="lines.at(i).get('discount')?.invalid">
+                        [class.is-invalid]="lines.at(i).get('price')?.invalid">
                 </div>
 
                 <!-- TOTAL -->
@@ -133,6 +135,26 @@
                     </select>
                 </div>
 
+                <!-- ICONS 2 -->
+                <div class="col-sm-2 col-xl-1 mb-2 mb-xl-0 d-none d-sm-inline">
+                    <label *ngIf="isSmallScreen" class="form-label" for="actions" style="margin-bottom: 0.5rem;">
+                        {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
+                    </label>
+                    <div id="actions">
+                        <i class="bi bi-copy p-0" (click)="duplicateLine(i)"
+                            matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.DUPLICATELINE' | translate}}"></i>
+                        <i *ngIf="lines.length > 1" class="bi bi-trash p-0 ms-4" style="color: red;"
+                            (click)="deleteLine(i)"
+                            matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.DELETELINE' | translate}}"></i>
+                    </div>
+                </div>
+
+                <!-- ADDITIONAL INFO -->
+                <div *ngIf="additionalInfo" class="col-12">
+                    <app-additional-info [lineIndex]="i" [discountList]="additionalFields.discountList" (modifiedDiscount)="setDiscount($event)"></app-additional-info>
+                </div>
+
+
                 <div *ngIf="submitted && bodyForm.invalid" class="col-12 text-center mt-2">
                     <span style="color: red; font-size: small;">
                         {{'INVOICE.INFO.BODYCOMPONENT.MISSINGFIELDS' | translate}}
@@ -141,18 +163,21 @@
 
                 <div *ngIf="lines.at(i).get('quantity')?.invalid" class="col-12 text-center">
                     <span style="font-size: small; color: red;">
-                        Il campo 'quantità' può contenere solamente valori numerici con al massimo due decimali dopo la virgola
-                    </span> 
+                        Il campo 'quantità' può contenere solamente valori numerici con al massimo due decimali dopo la
+                        virgola
+                    </span>
                 </div>
                 <div *ngIf="lines.at(i).get('discount')?.invalid" class="col-12 text-center">
                     <span style="font-size: small; color: red;">
-                        Il campo 'sconto' può contenere solamente valori numerici con al massimo due decimali dopo la virgola
-                    </span> 
+                        Il campo 'sconto' può contenere solamente valori numerici con al massimo due decimali dopo la
+                        virgola
+                    </span>
                 </div>
                 <div *ngIf="lines.at(i).get('price')?.invalid" class="col-12 text-center">
                     <span style="font-size: small; color: red;">
-                        Il campo 'prezzo' può contenere solamente valori numerici con al massimo quattro decimali dopo la virgola
-                    </span> 
+                        Il campo 'prezzo' può contenere solamente valori numerici con al massimo quattro decimali dopo
+                        la virgola
+                    </span>
                 </div>
             </div>
         </div>

@@ -1,1 +1,39 @@
-<p>total works!</p>
+<div [formGroup]="totalForm" class="container-fluid ps-1 pe-1 pb-2 ps-md-2 pe-md-2 ps-xl-3 pe-xl-3">
+    <div class="row justify-content-center align-items-center">
+        <!-- TAXABLE -->
+        <div class="col-8 text-start">
+            <span>
+                Imponibile
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <span>
+                {{totalSummary.taxable}}
+            </span>
+        </div>
+
+        <!-- TAX -->
+        <div class="col-8 text-start">
+            <span>
+                IVA
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <span>
+                {{totalSummary.tax}}
+            </span>
+        </div>
+
+        <!-- NOT TAXABLE -->
+        <div class="col-8 text-start">
+            <span>
+                Importi non soggetti a IVA
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <span>
+                {{totalSummary.notTaxable}}
+            </span>
+        </div>
+    </div>
+</div>

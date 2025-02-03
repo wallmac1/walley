@@ -16,7 +16,7 @@
         <!-- CUSTOMER INFO -->
         <div class="row justify-content-start align-items-center mb-4">
             <div class="col-12">
-                <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
                     <div class="row justify-content-center">
                         <div class="selectCustomer col-12">
                             {{'INVOICE.INFO.CUSTOMERDATA' | translate}}
@@ -42,7 +42,7 @@
         <!-- HEADING -->
         <div class="row justify-content-start align-items-center mb-4">
             <div class="col-12">
-                <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
                     <div class="row">
                         <div class="selectCustomer col-12">
                             {{'INVOICE.INFO.HEADING' | translate}}
@@ -59,14 +59,14 @@
         <!-- BODY -->
         <div class="row justify-content-start align-items-center mb-4">
             <div class="col-12">
-                <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
                     <div class="row">
                         <div class="selectCustomer col-12">
                             {{'INVOICE.INFO.BODY' | translate}}
                         </div>
                         <div class="col-12 ps-0 pe-0">
-                            <app-body [umList]="umList" [vatList]="vatList" 
-                                (vatSummary)="changedVatSummary($event)"></app-body>
+                            <app-body [umList]="umList" [vatList]="vatList" (totalSummary)="changedTotalSummary($event)"
+                                (vatSummary)="changedVatSummary($event)" #bodyComponent></app-body>
                         </div>
                     </div>
                 </div>
@@ -78,13 +78,13 @@
             <div class="col-12 col-lg-7 col-xl-8 mb-4">
                 <div class="row">
                     <div class="col-12 mb-4">
-                        <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                        <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
                             <div class="row">
                                 <div class="selectCustomer col-12">
                                     {{'INVOICE.INFO.VAT' | translate}}
                                 </div>
                                 <div class="col-12 ps-0 pe-0">
-                                    <app-vat [vatSummary]="vatSummary"></app-vat>
+                                    <app-vat [vatSummary]="vatSummary" #vatComponent></app-vat>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                        <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
                             <div class="row">
                                 <div class="selectCustomer col-12">
                                     {{'INVOICE.INFO.PAYMENTS' | translate}}
@@ -106,13 +106,32 @@
                 </div>
             </div>
             <div class="col-12 col-lg-5 col-xl-4">
-                <div class="cardElement pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
-                    <div class="row">
-                        <div class="selectCustomer col-12">
-                            {{'INVOICE.INFO.TOTAL' | translate}}
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                            <div class="row">
+                                <div class="selectCustomer col-12">
+                                    {{'INVOICE.INFO.STAMP' | translate}}
+                                </div>
+                                <div class="col-12 ps-0 pe-0">
+                                    <app-stamp [vatList]="vatList" (deleteStampLine)="deleteStampLine()" 
+                                        (addStampLine)="addStampLine($event)" (changeStampLine)="changeStampLine($event)"></app-stamp>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-12 ps-0 pe-0">
-                            <app-total></app-total>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                            <div class="row">
+                                <div class="selectCustomer col-12">
+                                    {{'INVOICE.INFO.TOTAL' | translate}}
+                                </div>
+                                <div class="col-12 ps-0 pe-0">
+                                    <app-total [totalSummary]="totalSummary" #totalComponent></app-total>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

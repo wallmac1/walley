@@ -7,6 +7,8 @@ import { InvoiceBodyLine } from '../../../interfaces/invoice-body-line';
 import { MeasurementUnit } from '../../../../interfaces/measurement-unit';
 import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { debounceTime } from 'rxjs';
+import { InViewportDirective } from '../../../../directives/in-viewport.directive';
+import { AdditionalInfoComponent } from "./components/additional-info/additional-info.component";
 
 @Component({
   selector: 'app-body',
@@ -16,7 +18,8 @@ import { debounceTime } from 'rxjs';
     TranslateModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    DragDropModule
+    DragDropModule,
+    AdditionalInfoComponent
   ],
   templateUrl: './body.component.html',
   styleUrl: './body.component.scss'
@@ -26,10 +29,13 @@ export class BodyComponent {
   submitted: boolean = false;
   isSmallScreen: boolean = false;
   bodyForm!: FormGroup;
+  additionalInfo: boolean = false;
+  additionalFields: { discountList: { isDiscount: boolean, value: string }[] } = { discountList: [] };
 
   @Input() umList: MeasurementUnit[] = [];
   @Input() vatList: { id: number, name: string, value: number }[] = [];
   @Output() vatSummary = new EventEmitter<{ vatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] }>();
+  @Output() totalSummary = new EventEmitter<{ totalSummary: { taxable: string, tax: string, notTaxable: string } }>()
 
   constructor(private fb: FormBuilder) {
     this.bodyForm = this.fb.group({
@@ -57,19 +63,37 @@ export class BodyComponent {
     }
   }
 
+  setDiscount(event: {index: number, discountList: {isDiscount: boolean, value: string}[]}) {
+    this.additionalFields.discountList = [...event.discountList];
+    this.calculateTotal(event.index);
+  }
+
+  calculateDiscount(): number {
+    let discount = 1;
+    this.additionalFields.discountList.forEach(line => {
+      if(line.isDiscount) {
+        discount *= (1 - parseFloat(line.value.replace(',', '.') || '0') / 100)
+      }
+      else {
+        discount *= (1 + parseFloat(line.value.replace(',', '.') || '0') / 100)
+      }
+    })
+    return discount
+  }
+
   calculateTotal(index: number) {
     if (this.lines.valid) {
       const line = this.lines.at(index);
       const quantity = parseFloat(line.get('quantity')?.value.replace(',', '.') || '0');
       const price = parseFloat(line.get('price')?.value.replace(',', '.') || '0');
-      const discount = parseFloat(line.get('discount')?.value.replace(',', '.') || '0');
+      const discount = this.calculateDiscount();
 
       // Calcolo del totale con lo sconto
-      let total = quantity * price;
-      total -= (total * discount) / 100;
+      let total = quantity * price * discount;
       line.patchValue({ total: total.toFixed(4).toString().replace('.', ',') }, { emitEvent: false });
       //console.log("CALCOLA TOTALE", total)
       this.calculateVatSummary();
+      this.calculateTotalSummary();
     }
   }
 
@@ -77,8 +101,7 @@ export class BodyComponent {
     this.lines.controls.forEach((group, index) => {
       group.get('quantity')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.calculateTotal(index));
       group.get('price')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.calculateTotal(index));
-      group.get('discount')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.calculateTotal(index));
-      group.get('vat')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.calculateVatSummary());
+      group.get('vat')?.valueChanges.pipe(debounceTime(300)).subscribe(() => { this.calculateVatSummary(); this.calculateTotalSummary() });
     });
   }
 
@@ -123,6 +146,32 @@ export class BodyComponent {
     this.vatSummary.emit({ vatSummary: arrayVatSummary });
   }
 
+  calculateTotalSummary() {
+    let totalSummary: { taxable: string, tax: string, notTaxable: string } =
+    {
+      taxable: '0,00', tax: '0,00', notTaxable: '0,00'
+    };
+    let taxable = 0;
+    let tax = 0;
+    let notTaxable = 0;
+    this.lines.controls.forEach((line) => {
+      if (line.get('vat')?.value != null && this.vatList.find(vat => vat.id == line.get('vat')?.value)?.value! > 0) {
+        // SE C'È IVA, CALCOLARE E SOMMARE A TAX E TAXABLE
+        // ARROTONDARE SULLE SINGOLE LINEE
+        taxable += parseFloat(line.get('total')?.value.replace(',', '.'));
+        tax += (this.vatList.find(vat => vat.id == line.get('vat')?.value)?.value! * 0.01) * parseFloat(line.get('total')?.value.replace(',', '.'));
+      }
+      else {
+        // SE NON C'È IVA, SOMMARE A NOT TAXABLE
+        notTaxable += parseFloat(line.get('total')?.value.replace(',', '.'));
+      }
+    });
+    totalSummary.taxable = taxable.toFixed(2).toString().replace('.', ',');
+    totalSummary.tax = tax.toFixed(2).toString().replace('.', ',');
+    totalSummary.notTaxable = notTaxable.toFixed(2).toString().replace('.', ',');
+    this.totalSummary.emit({ totalSummary: totalSummary });
+  }
+
   scientificRound(value: number, decimalPlaces: number = 2): string {
     const factor = Math.pow(10, decimalPlaces);
     return (Math.round(value * factor) / factor).toFixed(2).toString().replace('.', ',');
@@ -137,9 +186,11 @@ export class BodyComponent {
   }
 
   getLines() {
-    // CHIAMATA AL SERVER, SE LINEE > 0 ALLORA RESET DEL FORM E CREA QUELLE ESISTENTI
+    // CHIAMATA AL SERVER, SE LINEE > 0 ALLORA RESET DEL FORM E CREA QUELLE ESISTENTI. 
+    // INOLTRE ASSEGNA TUTTI I CAMPI AGGIUNTIVI A "additionalFields" CHE LI RIFLETTE NEL COMPONENTE FIGLIO
     // NEL SUBSCRIBE: this.createBodyForm();
     this.calculateVatSummary();
+    this.calculateTotalSummary();
   }
 
   get lines(): FormArray {
@@ -151,9 +202,52 @@ export class BodyComponent {
     this.addValueChangesListener();
   }
 
+  addStampLine(total: string, vat: number, description: string) {
+    const stampLine = this.fb.group({
+      id: [0],
+      description: [{ value: description, disabled: true }],
+      refidum: [{ value: null, disabled: true }],
+      quantity: [{ value: "1,00", disabled: true }],
+      price: [{ value: "", disabled: true }],
+      total: [{ value: total, disabled: true }],
+      vat: [{ value: vat, disabled: true }],
+      stampLine: [true]
+    })
+    this.lines.push(stampLine);
+    this.calculateVatSummary();
+    this.calculateTotalSummary();
+  }
+
   deleteLine(index: number) {
     this.lines.removeAt(index);
     this.calculateVatSummary();
+    this.calculateTotalSummary();
+  }
+
+  duplicateLine(index: number) {
+    const duplicateLine = this.lines.at(index);
+    this.lines.insert(index + 1, duplicateLine);
+  }
+
+  toggleAdditionalInfo() {
+    this.additionalInfo = !this.additionalInfo;
+  }
+
+  deleteStampLine() {
+    const index = this.lines.controls.findIndex(line => line.get('stampLine')?.value == true);
+    this.lines.removeAt(index);
+    this.calculateVatSummary();
+    this.calculateTotalSummary();
+  }
+
+  changeStampLine(total: string, vat: number, description: string) {
+    const stampLineIndex = this.lines.controls.findIndex(line => line.get('stampLine')?.value == true);
+    if (stampLineIndex) {
+      this.lines.at(stampLineIndex).get('total')?.setValue(total);
+      this.lines.at(stampLineIndex).get('vat')?.setValue(vat);
+      this.calculateVatSummary();
+      this.calculateTotalSummary();
+    }
   }
 
   createBodyForm(lines: InvoiceBodyLine[]) {
@@ -171,9 +265,9 @@ export class BodyComponent {
       refidum: [line.refidum],
       quantity: [line.quantity?.toString().replace('.', ','), this.numberWithCommaValidator(2)],
       price: [line.price?.toString().replace('.', ','), this.numberWithCommaValidator(4)],
-      discount: [line.discount?.toString().replace('.', ','), this.numberWithCommaValidator(2)],
       total: [{ value: line.total?.toString().replace('.', ','), disabled: true }],
-      vat: [line.vat]
+      vat: [line.vat],
+      stampLine: [line.stampLine]
     })
   }
 
@@ -184,9 +278,9 @@ export class BodyComponent {
       refidum: [null],
       quantity: ["1,00", this.numberWithCommaValidator(2)],
       price: ["0,0000", this.numberWithCommaValidator(4)],
-      discount: ["0,00", this.numberWithCommaValidator(2)],
       total: [{ value: "0,0000", disabled: true }],
-      vat: [null]
+      vat: [null],
+      stampLine: [false]
     })
   }
 

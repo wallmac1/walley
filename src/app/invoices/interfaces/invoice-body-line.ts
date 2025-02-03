@@ -7,4 +7,5 @@ export interface InvoiceBodyLine {
     discount: string | null;
     total: string | null;
     vat: number | null;
+    stampLine: boolean;
 }
