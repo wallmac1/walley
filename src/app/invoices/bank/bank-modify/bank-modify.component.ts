@@ -30,7 +30,6 @@ export class BankModifyComponent {
   submittedS: boolean = false;
   bankName: string | null = null;
   bankAddress: string | null = null;
-  ccn3: string | null = "380";
 
   bankForm = new FormGroup({
     active: new FormControl<boolean>(true),
@@ -87,14 +86,13 @@ export class BankModifyComponent {
       .subscribe((val: ApiResponse<any>) => {
         if (val) {
           this.bankForm.patchValue(val.data.bankInfo);
-          this.bankForm.get('abi')?.setValue(val.data.bankInfo.abi.code);
-          this.bankName = val.data.bankInfo.abi.description;
-          this.bankForm.get('cab')?.setValue(val.data.bankInfo.cab.code);
-          this.bankAddress = val.data.bankInfo.cab.description;
+          this.bankForm.get('abi')?.setValue(val.data.bankInfo.abi?.code);
+          this.bankName = val.data.bankInfo.abi?.description;
+          this.bankForm.get('cab')?.setValue(val.data.bankInfo.cab?.code);
+          this.bankAddress = val.data.bankInfo.cab?.description;
           this.bankForm.get('active')?.setValue(val.data.bankInfo.obsolete == 1 ? false : true);
-          this.ccn3 = this.countriesList.find(country => country.id == val.data.bankInfo.idcountry)?.ccn3 || null;
           this.bankForm.get('acronym')?.setValue(val.data.bankInfo.idcountry);
-          if (this.ccn3 = '380') {
+          if (this.bankForm.get('idcountry')?.value == 12) {
             this.submittedC = true;
           }
         }
@@ -112,7 +110,7 @@ export class BankModifyComponent {
   ibanValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const iban: string = control.value;
-      if (this.bankForm && this.ccn3 == "380") {
+      if (this.bankForm && this.bankForm.get('idcountry')?.value == 12) {
         if (!iban) {
           return { invalidIban: true };
         }
@@ -192,8 +190,7 @@ export class BankModifyComponent {
   selectedCountry() {
     const control = this.bankForm.get('iban');
     this.bankForm.get('acronym')?.setValue(this.bankForm.get('idcountry')?.value || null);
-    this.ccn3 = this.countriesList.find(country => country.id == this.bankForm.get('idcountry')?.value)?.ccn3 || null;
-    if (this.ccn3 != '380') {
+    if (this.bankForm.get('idcountry')?.value == 12) {
       if (control) {
         const currentValidators = control.validator ? [Validators.required] : [];
         control.setValidators(currentValidators);

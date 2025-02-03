@@ -33,8 +33,10 @@
                         </div>
 
                         <div class="col-12 col-sm-9 col-lg-4">
-                            <label class="form-label" for="idcountry">{{"INVOICE.BANK.COUNTRY" | translate}}<sup>*</sup></label>
-                            <select class="form-select" name="idcountry" id="idcountry" formControlName="idcountry" (change)="selectedCountry()"
+                            <label class="form-label" for="idcountry">{{"INVOICE.BANK.COUNTRY" |
+                                translate}}<sup>*</sup></label>
+                            <select class="form-select" name="idcountry" id="idcountry" formControlName="idcountry"
+                                (change)="selectedCountry()"
                                 [class.is-invalid]="bankForm.get('idcountry')?.invalid && submittedS">
                                 <option [ngValue]="null">--</option>
                                 <option *ngFor="let country of countriesList" [ngValue]="country.id">
@@ -44,7 +46,8 @@
                         </div>
 
                         <div class="col-12 col-lg-7">
-                            <label class="form-label" for="denomination">{{"INVOICE.BANK.DENOMINATION" | translate}}<sup>*</sup></label>
+                            <label class="form-label" for="denomination">{{"INVOICE.BANK.DENOMINATION" |
+                                translate}}<sup>*</sup></label>
                             <input class="form-control" type="text" id="denomination" formControlName="denomination"
                                 [class.is-invalid]="bankForm.get('denomination')?.invalid && submittedS">
                         </div>
@@ -59,10 +62,8 @@
                             <div class="input-group">
                                 <input class="form-control" type="text" id="iban" formControlName="iban"
                                     [class.is-invalid]="(bankForm.get('iban')?.invalid && submittedC) ||
-                                        (bankForm.get('iban')?.invalid && submittedS)" 
-                                    (input)="checkSubmitted()">
-                                <button *ngIf="ccn3 == '380'" class="btn btn-outline-success"
-                                    (click)="checkIban()">
+                                        (bankForm.get('iban')?.invalid && submittedS)" (input)="checkSubmitted()">
+                                <button *ngIf="bankForm.get('idcountry')?.value == 12" class="btn btn-outline-success" (click)="checkIban()">
                                     <i class="bi bi-check2"></i>
                                     <span *ngIf="!isSmallScreen">
                                         {{"INVOICE.BANK.CONTROL" | translate}}
@@ -77,14 +78,14 @@
                             </span>
                         </div>
                         <div *ngIf="bankForm.invalid && submittedS" class="col-12 text-center">
-                            <span  class="errorText">
+                            <span class="errorText">
                                 {{"INVOICE.BANK.FIELDERROR" | translate}}
                             </span>
                         </div>
                     </div>
 
                     <div class="row justify-content-start align-items-top pt-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4"
-                        *ngIf="bankForm.get('iban')?.valid && submittedC && ccn3 == '380'"
+                        *ngIf="bankForm.get('iban')?.valid && submittedC && bankForm.get('idcountry')?.value == 12"
                         style="border-top: 1px solid lightgray;">
                         <div class="col-8 col-sm-4 col-md-2">
                             <label class="form-label" for="acronym">{{"INVOICE.BANK.ACRONYM" | translate}}</label>
@@ -128,8 +129,8 @@
                         </div>
                     </div>
 
-                    <div *ngIf="ccn3 != '380' || (ccn3 == '380' && submittedC 
-                        && bankForm.get('iban')?.valid)" 
+                    <div *ngIf="bankForm.get('idcountry')?.value != 12 || (bankForm.get('idcountry')?.value == 12 && submittedC 
+                        && bankForm.get('iban')?.valid)"
                         class="row justify-content-center mt-3 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
                         <div class="col-12 text-end">
                             <button class="btn btn-outline-dark" (click)="saveBank()">
