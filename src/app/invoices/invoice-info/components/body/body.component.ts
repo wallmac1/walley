@@ -19,7 +19,8 @@ import { AdditionalInfoComponent } from "./components/additional-info/additional
     MatTooltipModule,
     ReactiveFormsModule,
     DragDropModule,
-    AdditionalInfoComponent
+    AdditionalInfoComponent,
+    InViewportDirective
   ],
   templateUrl: './body.component.html',
   styleUrl: './body.component.scss'
@@ -29,11 +30,12 @@ export class BodyComponent {
   submitted: boolean = false;
   isSmallScreen: boolean = false;
   bodyForm!: FormGroup;
-  additionalInfo: boolean = false;
-  additionalFields: { discountList: { isDiscount: boolean, value: string }[] } = { discountList: [] };
 
+  // LISTE PER SELECT EREDITATE DA INVOICE-INFO
   @Input() umList: MeasurementUnit[] = [];
   @Input() vatList: { id: number, name: string, value: number }[] = [];
+
+  // EVENTI DI MODIFICA IVA E TOTALE DELLE LINEE, INVIATI AL COMPONENTE "INVOICE-INFO"
   @Output() vatSummary = new EventEmitter<{ vatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] }>();
   @Output() totalSummary = new EventEmitter<{ totalSummary: { taxable: string, tax: string, notTaxable: string } }>()
 
@@ -44,8 +46,8 @@ export class BodyComponent {
   }
 
   ngOnInit(): void {
-    this.addValueChangesListener();
     this.getLines();
+    this.addValueChangesListener();
     this.updateWindowDimensions();
   }
 
@@ -63,40 +65,39 @@ export class BodyComponent {
     }
   }
 
-  setDiscount(event: {index: number, discountList: {isDiscount: boolean, value: string}[]}) {
-    this.additionalFields.discountList = [...event.discountList];
-    this.calculateTotal(event.index);
+  getLine(index: number): FormGroup {
+    return this.lines.at(index) as FormGroup
   }
 
-  calculateDiscount(): number {
-    let discount = 1;
-    this.additionalFields.discountList.forEach(line => {
-      if(line.isDiscount) {
-        discount *= (1 - parseFloat(line.value.replace(',', '.') || '0') / 100)
-      }
-      else {
-        discount *= (1 + parseFloat(line.value.replace(',', '.') || '0') / 100)
-      }
-    })
-    return discount
-  }
-
+  // CALCOLA IL VALORE DEL TOTALE SOLAMENTE SULLA LINEA CHE HA SUBITO UNA MODIFICA
   calculateTotal(index: number) {
     if (this.lines.valid) {
       const line = this.lines.at(index);
       const quantity = parseFloat(line.get('quantity')?.value.replace(',', '.') || '0');
       const price = parseFloat(line.get('price')?.value.replace(',', '.') || '0');
-      const discount = this.calculateDiscount();
 
-      // Calcolo del totale con lo sconto
-      let total = quantity * price * discount;
+      // Calcolo del totale senza sconto
+      let total = quantity * price;
+      // Calcolo sconto
+      this.getDiscounts(index).controls.forEach((line) => {
+        let discount = total * parseFloat(line.get('value')?.value.replace(',', '.') || '0') / 100;
+        if (line.get('isDiscount')?.value == 1) {
+          total -= discount;
+        }
+        else {
+          total += discount;
+        }
+      })
+
       line.patchValue({ total: total.toFixed(4).toString().replace('.', ',') }, { emitEvent: false });
-      //console.log("CALCOLA TOTALE", total)
+
+      // Aggiorna i valori del resoconto iva e totale a seguito della modifica effettuata
       this.calculateVatSummary();
       this.calculateTotalSummary();
     }
   }
 
+  // AGGIUNGE UN LISTENER PER LE MODIFICHE SUI CAMPI DEL FORM CHE DETERMINANO L'IVA E IL TOTALE 
   private addValueChangesListener() {
     this.lines.controls.forEach((group, index) => {
       group.get('quantity')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.calculateTotal(index));
@@ -105,48 +106,62 @@ export class BodyComponent {
     });
   }
 
+  // CALCOLA UN RESOCONTO IVA PER IL COMPONENTE "VAT"
   calculateVatSummary() {
+    // Crea un array orientato all'interfaccia richiesta dal componente "vat"
     let arrayVatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] = [];
+
     this.lines.controls.forEach((line) => {
+      // Crea un oggetto che rappresenta un singolo elemento del precedente array, inizializzato a 0.
       let lineVatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } } =
       {
         total: { taxable: '0,0000', tax: '0,0000' },
         vat: { id: 0, value: 0 }
       };
+
+      // Assegna all'oggetto appena creato il valore del totale e l'id dell'iva selezionata
       lineVatSummary.total.taxable = line.get('total')?.value;
       lineVatSummary.vat.id = line.get('vat')?.value;
+
       if (lineVatSummary.vat.id && lineVatSummary.vat.id != 0) {
+        // Se l'iva è stata assegnata, recupera il valore effettivo dell'iva selezionata
         lineVatSummary.vat.value = this.vatList.find(vat => vat.id == line.get('vat')?.value)?.value ?? 0;
+        // Calcola l'imposta sul totale in base al valore di iva appena recuperato
         lineVatSummary.total.tax = this.scientificRound((lineVatSummary.vat.value * 0.01) * parseFloat(lineVatSummary.total.taxable.replace(',', '.')));
-        console.log("TASSA SINGOLA LINEA", lineVatSummary.total.tax)
+        
         if (arrayVatSummary.length > 0) {
+          // Se è presente almeno un elemento nell'array, controlla se l'iva dell'oggetto corrente è uguale a quella di un altro elemento
           let foundSameVat: boolean = false;
           arrayVatSummary.forEach(arrayLine => {
             if (arrayLine.vat.id == lineVatSummary.vat.id) {
+              // Se iva è la stessa somma il totale e l'imposta della linea corrente con quella già presente (arrotondando a 2 cifre)
               let taxableResult = parseFloat(arrayLine.total.taxable.replace(',', '.')) + parseFloat(lineVatSummary.total.taxable.replace(',', '.'));
               arrayLine.total.taxable = this.scientificRound(taxableResult);
               let taxResult = parseFloat(arrayLine.total.tax.replace(',', '.')) + parseFloat(lineVatSummary.total.tax.replace(',', '.'));
               arrayLine.total.tax = this.scientificRound(taxResult);
-              console.log("TASSA LINEE UNITE", arrayLine.total.tax)
               foundSameVat = true;
             }
           });
           if (foundSameVat == false) {
+            // Se nell'array non esiste un elemento con la stessa iva inserisce l'oggetto
             lineVatSummary.total.taxable = this.scientificRound(parseFloat(lineVatSummary.total.taxable.replace(',', '.')));
             arrayVatSummary.push(lineVatSummary);
           }
         }
         else {
+          // Se l'array è vuoto inserisce l'oggetto
           lineVatSummary.total.taxable = this.scientificRound(parseFloat(lineVatSummary.total.taxable.replace(',', '.')));
           arrayVatSummary.push(lineVatSummary);
         }
       }
     })
-    console.log("EMETTI VATSUMMARY", arrayVatSummary);
+    // Emette l'evento al componente padre "invoice-info"
     this.vatSummary.emit({ vatSummary: arrayVatSummary });
   }
 
+  // CALCOLA UN RESOCONTO PER IL COMPONENTE "TOTAL"
   calculateTotalSummary() {
+    // Crea un array orientato all'interfaccia richiesta dal componente "total"
     let totalSummary: { taxable: string, tax: string, notTaxable: string } =
     {
       taxable: '0,00', tax: '0,00', notTaxable: '0,00'
@@ -154,47 +169,54 @@ export class BodyComponent {
     let taxable = 0;
     let tax = 0;
     let notTaxable = 0;
+
     this.lines.controls.forEach((line) => {
       if (line.get('vat')?.value != null && this.vatList.find(vat => vat.id == line.get('vat')?.value)?.value! > 0) {
-        // SE C'È IVA, CALCOLARE E SOMMARE A TAX E TAXABLE
-        // ARROTONDARE SULLE SINGOLE LINEE
+        // Se è stato selezionato un valore per l'iva, calcola l'imposta, e cumula totale e imposta con le altre linee con iva
         taxable += parseFloat(line.get('total')?.value.replace(',', '.'));
         tax += (this.vatList.find(vat => vat.id == line.get('vat')?.value)?.value! * 0.01) * parseFloat(line.get('total')?.value.replace(',', '.'));
       }
       else {
-        // SE NON C'È IVA, SOMMARE A NOT TAXABLE
+        // Se non è stato selezionato un valore per l'iva somma il totale della linea con i valori non tassati
         notTaxable += parseFloat(line.get('total')?.value.replace(',', '.'));
       }
     });
+    // Converti in stringhe
     totalSummary.taxable = taxable.toFixed(2).toString().replace('.', ',');
     totalSummary.tax = tax.toFixed(2).toString().replace('.', ',');
     totalSummary.notTaxable = notTaxable.toFixed(2).toString().replace('.', ',');
+
+    // Emetti l'evento al comonente padre "invoice-info"
     this.totalSummary.emit({ totalSummary: totalSummary });
   }
 
+  // ARROTONDA I VALORI
   scientificRound(value: number, decimalPlaces: number = 2): string {
     const factor = Math.pow(10, decimalPlaces);
     return (Math.round(value * factor) / factor).toFixed(2).toString().replace('.', ',');
   }
 
+  // SPOSTA LE LINE A SEGUITO DEL TRASCINAMENTO
   drop(event: CdkDragDrop<FormGroup[]>) {
-    // Sposta l'elemento all'interno del FormArray
     moveItemInArray(this.lines.controls, event.previousIndex, event.currentIndex);
-
-    // Aggiorna il valore del FormArray (necessario per Angular)
-    this.bodyForm.setControl('lines', this.fb.array(this.lines.controls));
+    this.addValueChangesListener();
   }
 
+  // PRENDE LE LINEE DAL SERVER, CREA I FORM ARRAY E CALCOLA I NUOVI RESOCONTI
   getLines() {
     // CHIAMATA AL SERVER, SE LINEE > 0 ALLORA RESET DEL FORM E CREA QUELLE ESISTENTI. 
-    // INOLTRE ASSEGNA TUTTI I CAMPI AGGIUNTIVI A "additionalFields" CHE LI RIFLETTE NEL COMPONENTE FIGLIO
-    // NEL SUBSCRIBE: this.createBodyForm();
+    // NEL SUBSCRIBE: this.createBodyForm(lines);
     this.calculateVatSummary();
     this.calculateTotalSummary();
+    //this.addValueChangesListener(); Se ci sono linee aggiungi i valuechanges
   }
 
   get lines(): FormArray {
     return this.bodyForm.get('lines') as FormArray;
+  }
+
+  getDiscounts(index: number): FormArray {
+    return this.lines.at(index).get('discounts') as FormArray;
   }
 
   addLine() {
@@ -202,6 +224,7 @@ export class BodyComponent {
     this.addValueChangesListener();
   }
 
+  // AGGIUNGE LA LINEA DEL BOLLO
   addStampLine(total: string, vat: number, description: string) {
     const stampLine = this.fb.group({
       id: [0],
@@ -218,6 +241,25 @@ export class BodyComponent {
     this.calculateTotalSummary();
   }
 
+  // ELIMINA LA LINEA DEL BOLLO
+  deleteStampLine() {
+    const index = this.lines.controls.findIndex(line => line.get('stampLine')?.value == true);
+    this.lines.removeAt(index);
+    this.calculateVatSummary();
+    this.calculateTotalSummary();
+  }
+
+  // SPOSTA LA LINEA DEL BOLLO
+  changeStampLine(total: string, vat: number, description: string) {
+    const stampLineIndex = this.lines.controls.findIndex(line => line.get('stampLine')?.value == true);
+    if (stampLineIndex) {
+      this.lines.at(stampLineIndex).get('total')?.setValue(total);
+      this.lines.at(stampLineIndex).get('vat')?.setValue(vat);
+      this.calculateVatSummary();
+      this.calculateTotalSummary();
+    }
+  }
+
   deleteLine(index: number) {
     this.lines.removeAt(index);
     this.calculateVatSummary();
@@ -229,31 +271,14 @@ export class BodyComponent {
     this.lines.insert(index + 1, duplicateLine);
   }
 
-  toggleAdditionalInfo() {
-    this.additionalInfo = !this.additionalInfo;
-  }
-
-  deleteStampLine() {
-    const index = this.lines.controls.findIndex(line => line.get('stampLine')?.value == true);
-    this.lines.removeAt(index);
-    this.calculateVatSummary();
-    this.calculateTotalSummary();
-  }
-
-  changeStampLine(total: string, vat: number, description: string) {
-    const stampLineIndex = this.lines.controls.findIndex(line => line.get('stampLine')?.value == true);
-    if (stampLineIndex) {
-      this.lines.at(stampLineIndex).get('total')?.setValue(total);
-      this.lines.at(stampLineIndex).get('vat')?.setValue(vat);
-      this.calculateVatSummary();
-      this.calculateTotalSummary();
-    }
-  }
-
+  // CREA I FORM ARRAY CON I VALORI RECUPERATI DAL SERVER
   createBodyForm(lines: InvoiceBodyLine[]) {
-    lines.splice(0, lines.length);
+    this.lines.clear();
+    let index = 0;
     lines.forEach((line: InvoiceBodyLine) => {
       this.lines.push(this.createLine(line));
+      this.calculateTotal(index);
+      index += 1;
     });
     this.addValueChangesListener();
   }
@@ -267,7 +292,9 @@ export class BodyComponent {
       price: [line.price?.toString().replace('.', ','), this.numberWithCommaValidator(4)],
       total: [{ value: line.total?.toString().replace('.', ','), disabled: true }],
       vat: [line.vat],
-      stampLine: [line.stampLine]
+      stampLine: [line.stampLine],
+      isAdditionalFieldOpen: [false],
+      discounts: this.createDiscountsArray(line.discounts)
     })
   }
 
@@ -280,8 +307,47 @@ export class BodyComponent {
       price: ["0,0000", this.numberWithCommaValidator(4)],
       total: [{ value: "0,0000", disabled: true }],
       vat: [null],
-      stampLine: [false]
+      stampLine: [false],
+      isAdditionalFieldOpen: [false],
+      discounts: this.fb.array([])
     })
+  }
+
+  createEmptyDiscountLine() {
+    return this.fb.group({
+      isDiscount: [1],
+      value: ["0,00"]
+    })
+  }
+
+  createDiscountLine(discount: { isDiscount: number, value: string }): FormGroup {
+    return this.fb.group({
+      isDiscount: [discount.isDiscount],
+      value: [discount.value, this.numberWithCommaValidator(2)]
+    });
+  }
+
+  createDiscountsArray(discounts: { isDiscount: number, value: string }[] | null): FormArray {
+    const discountArray = this.fb.array([]) as FormArray;
+
+    if (discounts && discounts.length > 0) {
+      discounts.forEach((discount) => {
+        discountArray.push(this.createDiscountLine(discount));
+      });
+    } 
+
+    return discountArray;
+  }
+
+  // CHIAMATO DAL FIGLIO PER FORZARE LA RILEVAZIONE DELLA MODIFICA DEI VALORI
+  modifiedDiscount(event: { lineIndex: number }) {
+    this.calculateTotal(event.lineIndex);
+  }
+
+  // APRE E CHIUDE I VAMPI AGGIUNTIVI
+  toggleAdditionalInfo(index: number) {
+    this.lines.at(index).get('isAdditionalFieldOpen')?.setValue(!this.lines.at(index).get('isAdditionalFieldOpen')?.value);
+    //console.log("TOGGLE", this.lines.at(index).get('isAdditionalFieldOpen')?.value)
   }
 
   numberWithCommaValidator(total: number): ValidatorFn {

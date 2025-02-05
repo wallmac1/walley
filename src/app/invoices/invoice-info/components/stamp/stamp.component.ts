@@ -28,7 +28,7 @@ export class StampComponent {
 
   stampForm = new FormGroup({
     isStamp: new FormControl<boolean>(false),
-    supplierPays: new FormControl<boolean>(true),
+    supplierPays: new FormControl<boolean>(false),
     total: new FormControl<string>("0,00", this.numberWithCommaValidator()),
     vat: new FormControl<number>(3, Validators.required)
   })
@@ -50,6 +50,9 @@ export class StampComponent {
     this.stampForm.get('isStamp')?.valueChanges.subscribe((val: any) => {
       if(val == false && this.stampForm.get('supplierPays')?.value == false) {
         this.deleteStampLine.emit();
+      }
+      else if(val == true && this.stampForm.get('supplierPays')?.value == false) {
+        this.addStampLine.emit({total: this.stampForm.get('total')?.value!, vat: this.stampForm.get('vat')?.value!, description: this.description});
       }
     })
 

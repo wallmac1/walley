@@ -144,3 +144,23 @@ select {
     transform: translateY(0px);
     opacity: 1;
 }
+
+/* Per la transizione */
+.content-wrapper {
+    overflow: hidden; /* Necessario per la transizione sull'altezza */
+    transition: height 1s ease, opacity 1s ease; /* Transizione sull'altezza e opacità */
+    height: 0; /* Altezza iniziale (chiuso) */
+    opacity: 0; /* Opacità iniziale per una transizione più fluida */
+}
+
+/* Stato aperto */
+.content-wrapper.open {
+    height: auto; /* Altezza automatica quando aperto */
+    opacity: 1;
+}
+
+/* Stato chiuso */
+.content-wrapper.closed {
+    height: 0; /* Altezza 0 quando chiuso */
+    opacity: 0;
+}

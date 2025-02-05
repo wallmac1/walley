@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-additional-info',
@@ -16,61 +17,46 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class AdditionalInfoComponent {
 
-  @Input() discountList: { isDiscount: boolean, value: string }[] = [];
+  @Input() fatherLine!: FormGroup
   @Input() lineIndex: number = 0;
 
-  @Output() modifiedDiscount = new EventEmitter<{index: number, discountList: { isDiscount: boolean, value: string }[]}>
+  @Output() modifiedDiscount = new EventEmitter<{lineIndex: number}>
 
-  additionalInfoForm!: FormGroup;
+  //additionalInfoForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.additionalInfoForm = this.fb.group({
-      discounts: this.fb.array([])
-    })
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.initForm();
-    this.discounts.controls.forEach(line => { 
-      line.get('value')?.valueChanges
-      .subscribe(() => {this.modifiedDiscount.emit({index: this.lineIndex, discountList: this.discounts.getRawValue()})}) 
-      line.get('isDiscount')?.valueChanges
-      .subscribe(() => {this.modifiedDiscount.emit({index: this.lineIndex, discountList: this.discounts.getRawValue()})}) 
-    })
-  }
-
-  get discounts(): FormArray {
-    return this.additionalInfoForm.get('discounts') as FormArray
-  }
-
-  initForm() {
-    if (this.discountList.length > 0) {
-      this.discountList.forEach(line => {
-        this.discounts.push(this.createLine(line));
-      })
-    }
-    else {
-      this.discounts.push(this.createEmptyLine());
-      console.log(this.discounts)
-    }
+    this.onValueChanges();
   }
 
   createEmptyLine() {
     return this.fb.group({
-      isDiscount: [true],
+      isDiscount: [1],
       value: ["0,00", this.numberWithCommaValidator()]
     })
   }
 
-  createLine(line: { isDiscount: boolean, value: string }) {
-    return this.fb.group({
-      isDiscount: [line.isDiscount],
-      value: [line.value, this.numberWithCommaValidator()]
-    })
+  onValueChanges() {
+    this.discounts.controls.forEach((group, index) => {
+      group.get('value')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.modifiedDiscount.emit({lineIndex: this.lineIndex}));
+      group.get('isDiscount')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.modifiedDiscount.emit({lineIndex: this.lineIndex}));
+    });
+  }
+
+  get discounts(): FormArray {
+    return this.fatherLine.get('discounts') as FormArray;
   }
 
   addDiscountLine() {
     this.discounts.push(this.createEmptyLine());
+    this.onValueChanges();
+    //console.log(this.discounts.getRawValue())
+  }
+
+  deleteLine(index: number) {
+    this.discounts.controls.splice(index, 1);
+    this.modifiedDiscount.emit({lineIndex: this.lineIndex})
   }
 
   numberWithCommaValidator(): ValidatorFn {

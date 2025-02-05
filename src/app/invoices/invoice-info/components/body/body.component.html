@@ -42,19 +42,21 @@
                         {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
                     </label>
                     <div id="actions">
-                        <span style="font-size: 20px; font-weight: bold;"
+                        <span class="ps-1" style="font-size: 20px; font-weight: bold;"
                             matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.LINENUMBER' | translate}}">
                             {{i+1}}
                         </span>
                         <i class="bi bi-arrows-move p-0 ms-2" cdkDragHandle
                             matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.MOVELINE' | translate}}"></i>
-                        <i *ngIf="!additionalInfo; else additionalInfoBlock" class="bi bi-caret-down-fill p-0 ms-2"
-                            (click)="toggleAdditionalInfo()"
-                            matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
-                        <ng-template #additionalInfoBlock>
-                            <i class="bi bi-caret-up-fill p-0 ms-2" (click)="toggleAdditionalInfo()"
+                        <ng-container *ngIf="item.get('stampLine')?.value == false">
+                            <i *ngIf="item.get('isAdditionalFieldOpen')?.value == false; else additionalInfoBlock"
+                                class="bi bi-caret-down-fill p-0 ms-2" (click)="toggleAdditionalInfo(i)"
                                 matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
-                        </ng-template>
+                            <ng-template #additionalInfoBlock>
+                                <i class="bi bi-caret-up-fill p-0 ms-2" (click)="toggleAdditionalInfo(i)"
+                                    matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
+                            </ng-template>
+                        </ng-container>
 
                     </div>
                 </div>
@@ -150,8 +152,11 @@
                 </div>
 
                 <!-- ADDITIONAL INFO -->
-                <div *ngIf="additionalInfo" class="col-12">
-                    <app-additional-info [lineIndex]="i" [discountList]="additionalFields.discountList" (modifiedDiscount)="setDiscount($event)"></app-additional-info>
+                <div *ngIf="item.get('isAdditionalFieldOpen')?.value == true" class="col-12">
+                    <ng-container class="content-wrapper">
+                        <app-additional-info [lineIndex]="i" [fatherLine]="getLine(i)"
+                            (modifiedDiscount)="modifiedDiscount($event)"></app-additional-info>
+                    </ng-container>
                 </div>
 
 
