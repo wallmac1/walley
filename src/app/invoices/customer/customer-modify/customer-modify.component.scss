@@ -1,0 +1,53 @@
+.titleColumn {
+    background-color: #002D5D; 
+    border-radius: 18px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.title {
+    font-size: xx-large;
+    font-weight: bold;
+    color: white;
+}
+
+.form-label, .form-check-label {
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 0.3rem;
+    margin-bottom: 0rem;
+}
+
+input, textarea, select {
+    font-weight: 150;
+}
+
+.btn-outline-dark {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    color: white;
+    background-color: #002D5D;
+}
+
+.subtitle {
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.iconSize {
+    font-size: 28px;
+    color: #002D5D;
+}
+
+.titleRecords {
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.tabTitle {
+    font-size: x-large;
+    font-weight: bold;
+    color: #002D5D;
+}

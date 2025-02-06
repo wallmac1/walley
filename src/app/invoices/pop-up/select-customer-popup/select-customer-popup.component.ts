@@ -110,7 +110,7 @@ export class SelectCustomerPopupComponent {
         cap: "50100",
         city: "Firenze",
         house_number: "25A",
-        country: "Italia",
+        country: 12,
         region: "Firenze"
       },
       {
@@ -131,7 +131,7 @@ export class SelectCustomerPopupComponent {
         cap: "50100",
         city: "Firenze",
         house_number: "25A",
-        country: "Italia",
+        country: 12,
         region: "Firenze"
       }
     ];

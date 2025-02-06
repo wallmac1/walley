@@ -16,6 +16,6 @@ export interface Customer {
     cap?: string | null;
     city?: string | null;
     house_number?: string | null;
-    country?: string | null;
+    country?: number | null;
     region?: string | null;
 }
