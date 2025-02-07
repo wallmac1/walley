@@ -8,6 +8,7 @@ import { Country } from '../../interfaces/country';
 import { InViewportDirective } from '../../../directives/in-viewport.directive';
 import { ExistingCustomerPopupComponent } from '../../pop-up/existing-customer-popup/existing-customer-popup.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customer-new',
@@ -39,7 +40,8 @@ export class CustomerNewComponent {
     sameCode: new FormControl<number>(0)
   })
 
-  constructor(private connectServerService: ConnectServerService, public dialog: MatDialog) { }
+  constructor(private connectServerService: ConnectServerService, public dialog: MatDialog,
+      private router: Router) { }
 
   ngOnInit(): void {
     this.customerForm.get('naturalPerson')?.valueChanges.subscribe(() => { this.formLogic() });
@@ -88,6 +90,8 @@ export class CustomerNewComponent {
       //RICHIESTA AL SERVER PER SALVARE IL NUOVO CLIENTE
       //SE ESISTE GIA' POPUP
       this.existingCustomerPopUp();
+      // IN BASE ALLA RISPOSTA NAVIGA ALLA PAGINA CORRETTA
+      this.router.navigate(['modifyCustomer', 0])
     }
   }
 

@@ -13,8 +13,9 @@ import { City } from '../../interfaces/city';
 import { ModifyCustomerPopupComponent } from '../../pop-up/modify-customer-popup/modify-customer-popup.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AddressListComponent } from "./components/address-list/address-list.component";
-import { TaxSystemComponent } from "./components/tax-system/tax-system.component";
 import { PaymentDataComponent } from "./components/payment-data/payment-data.component";
+import { Address } from '../../interfaces/address';
+import { OrganizationComponent } from "./components/organization/organization.component";
 
 @Component({
   selector: 'app-customer-modify',
@@ -27,15 +28,16 @@ import { PaymentDataComponent } from "./components/payment-data/payment-data.com
     MatAutocompleteModule,
     MatTabsModule,
     AddressListComponent,
-    TaxSystemComponent,
-    PaymentDataComponent
-],
+    PaymentDataComponent,
+    OrganizationComponent
+  ],
   templateUrl: './customer-modify.component.html',
   styleUrl: './customer-modify.component.scss'
 })
 export class CustomerModifyComponent {
 
-
+  chargedTab: boolean[] = [false, false, false];
+  addressList: Address[] = [];
   filteredCities$!: Observable<City[]>;
   genderList: { id: number, name: string }[] = [];
   countriesList: Country[] = [];
@@ -56,7 +58,7 @@ export class CustomerModifyComponent {
 
   customerRecordsForm = new FormGroup({
     email: new FormControl<string | null>(null),
-    pec: new FormControl<string | null>(null),
+    pec: new FormControl<string | null>({ value: null, disabled: true }),
     phoneNumber: new FormControl<string | null>(null),
     fax: new FormControl<string | null>(null),
     website: new FormControl<string | null>(null),
@@ -91,6 +93,7 @@ export class CustomerModifyComponent {
     this.getCountries();
     this.getCustomer();
     this.searchCity();
+    this.getTabFiles(0);
   }
 
   @HostListener('window:resize', ['$event'])
@@ -104,6 +107,20 @@ export class CustomerModifyComponent {
     }
     else {
       this.isSmall = false;
+    }
+  }
+
+  onTabChange(index: number) {
+    if (!this.chargedTab[index]) {
+      this.getTabFiles(index);
+    }
+  }
+
+  getTabFiles(tab: number) {
+    // RICHIESTA AL SERVER, NEL SUBSCRIBE AGGIUNGERE chargedTab[tab] = true;
+    if(this.chargedTab[tab] == false) {
+      this.chargedTab[tab] = true;
+      console.log("creato", tab)
     }
   }
 
@@ -126,9 +143,9 @@ export class CustomerModifyComponent {
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
-      data: { 
-        customerGeneralForm: { 
-          naturalPerson: this.customerGeneralForm.get('naturalPerson')?.value, 
+      data: {
+        customerGeneralForm: {
+          naturalPerson: this.customerGeneralForm.get('naturalPerson')?.value,
           name: this.customerGeneralForm.get('name')?.value,
           surname: this.customerGeneralForm.get('surname')?.value,
           businessName: this.customerGeneralForm.get('businessName')?.value,
@@ -175,7 +192,14 @@ export class CustomerModifyComponent {
       eori: "IT 123456789 12345",
       gender: 1,
       birth_country: 12,
-      birth_city: "Borgo San Lorenzo",
+      birth_city: null,
+      birth_city_it: {
+        id: 88,
+        name: 'Borgo San Lorenzo',
+        cap: "50032",
+        region: "Toscana",
+        province: "Firenze",
+      },
       birthday: "1980-01-01",
       job: "Ingegnere",
       doctor: "Pippo Poppo",
@@ -214,7 +238,7 @@ export class CustomerModifyComponent {
     //     map(response => response.data.cities)
     //   );
     // Esempio di una lista di tre clienti
-    const city = [
+    const cities = [
       {
         id: 88,
         name: 'Borgo San Lorenzo',
@@ -224,8 +248,11 @@ export class CustomerModifyComponent {
       },
     ];
 
-    // Restituisce la lista come Observable
-    return of(city);
+    // Restituisce la lista come Observable FILTRO DA TOGLIERE QUANDO AVVIENE CHIAMATA AL SERVER
+    const filteredCities = cities.filter(city =>
+      city.name.toLowerCase().includes(val.toLowerCase())
+    );
+    return of(filteredCities);
   }
 
   save() { }

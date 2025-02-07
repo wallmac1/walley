@@ -109,8 +109,8 @@
             <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
         </div>
 
-        <!-- SAME CODE -->
-        <div class="col-12 d-md-none ps-2 form-check">
+        <!-- SAME CODE (SCREEN < SM) -->
+        <div class="col-12 d-md-none ps-2 form-check d-flex justify-content-end">
             <label class="form-check-label ms-2" for="sameCode">
                 {{"INVOICE.CUSTOMER.SAMECODE" | translate}}
             </label>
@@ -126,7 +126,7 @@
             <input class="form-control" type="text" id="vat" formControlName="vat">
         </div>
 
-        <!-- SAME CODE -->
+        <!-- SAME CODE (SCREEN > MD) -->
         <div class="col-12 d-none d-md-inline ps-2 form-check">
             <label class="form-check-label ms-2" for="sameCode">
                 {{"INVOICE.CUSTOMER.SAMECODE" | translate}}

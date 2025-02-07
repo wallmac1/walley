@@ -9,6 +9,7 @@ import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 
 import { City } from '../../../../interfaces/city';
 import { AddressPopupComponent } from '../../../../pop-up/address-popup/address-popup.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Address } from '../../../../interfaces/address';
 
 @Component({
   selector: 'app-address-list',
@@ -24,17 +25,16 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AddressListComponent {
 
-  @Input() addressList: any[] = [];
-
+  @Input() addressList: Address[] = [];
+  @Input() idcustomer: number = 0;
+  @Input() countriesList: Country[] = [];
   descriptionRows: number = 2;
   submitted: boolean = false;
   filteredCities$!: Observable<City[]>;
   addressForm!: FormGroup;
-  countriesList: Country[] = [];
 
   constructor(private fb: FormBuilder, private connectServerService: ConnectServerService,
     private dialog: MatDialog) {
-    console.log("creato 1")
     this.addressForm = this.fb.group({
       addresses: this.fb.array([])
     })
@@ -65,9 +65,6 @@ export class AddressListComponent {
       this.addressList.forEach((line) => {
         this.addresses.push(this.createAddress(line));
       })
-    }
-    else {
-      this.addresses.push(this.createEmptyAddress());
     }
   }
 
@@ -107,15 +104,8 @@ export class AddressListComponent {
 
   newAddress() {
     // APRI IL POPUP POI PUSH NEL FORMARRAY
-    this.addresses.push(this.createEmptyAddress());
-  }
-
-  getCountries() {
-    this.connectServerService.getRequestCountry().subscribe((val: any) => {
-      if (val) {
-        this.countriesList = val;
-      }
-    });
+    let emptyAddress = this.createEmptyAddress();
+    this.modifyAddressPopup(emptyAddress.getRawValue());
   }
 
   displayCityName(city?: City): string {
@@ -164,26 +154,49 @@ export class AddressListComponent {
     const dialogRef = this.dialog.open(AddressPopupComponent, {
       maxWidth: '600px',
       minWidth: '350px',
-      maxHeight: '500px',
+      maxHeight: '600px',
       width: '90%',
       data: { 
         addressid: idaddress,
         idpopup: 2,
+        idcustomer: this.idcustomer,
       }
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != null) {
+        // se è stato eliminato allora elimina dalla lista
+        let index = this.addresses.controls.findIndex(address => address.get('id')?.value == result.id);
+        this.addresses.controls.splice(index, 1);
+      }
+    })
   }
 
   modifyAddressPopup(address: any) {
     const dialogRef = this.dialog.open(AddressPopupComponent, {
-      maxWidth: '1000px',
+      maxWidth: '1200px',
       minWidth: '350px',
-      maxHeight: '500px',
+      maxHeight: '600px',
       width: '90%',
       data: { 
         address: address,
+        idcustomer: this.idcustomer,
         idpopup: 1,
         countriesList: this.countriesList,
       }
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != null) {
+        // Se è stato correttamente salvato sul server aggiorna. Se id == 0 inserisci.
+        if(result.obj.id != 0 && result.obj.id != null) {
+          let index = this.addresses.controls.findIndex(address => address.get('id')?.value == result.id);
+          this.addresses.at(index).patchValue(result.article);
+        }
+        else {
+          this.addresses.push(this.createAddress(result.obj));
+        }
+      }
+    })
   }
 }

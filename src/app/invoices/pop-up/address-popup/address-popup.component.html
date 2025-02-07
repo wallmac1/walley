@@ -13,21 +13,22 @@
     <div [formGroup]="addressForm" class="row justify-content-center align-items-center mt-1">
 
         <!-- DESCRIPTION -->
-        <div class="col-12 col-lg-7">
+        <div class="col-12 col-lg-6">
             <label class="form-label" for="description">
-                {{"INVOICE.ADDRESS.DESCRIPTION" | translate}}
+                {{"INVOICE.CUSTOMER.ADDRESS.DESCRIPTION" | translate}}
             </label>
             <textarea class="form-control" type="text" id="description"
                 formControlName="description" [rows]="descriptionRows"></textarea>
         </div>
 
         <!-- COUNTRY -->
-        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <label class="form-label" for="country">
-                {{"INVOICE.ADDRESS.COUNTRY" | translate}}
+                {{"INVOICE.CUSTOMER.ADDRESS.COUNTRY" | translate}}
             </label>
-            <select class="form-select" id="country" formControlName="country">
-                <option [value]="null">
+            <select class="form-select" id="country" formControlName="country"
+                [class.is-invalid]="addressForm.get('country')?.invalid && submitted">
+                <option [ngValue]="null">
                     --
                 </option>
                 <option *ngFor="let country of countriesList" [ngValue]="country.id">
@@ -39,10 +40,10 @@
         <!-- CITY -->
         <div *ngIf="addressForm.get('country')?.value == 12; else notItalianBlock"
             class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <label class="form-label" for="city">{{"INVOICE.ADDRESS.MUNICIPALITY" | translate }}</label>
+            <label class="form-label" for="city_it">{{"INVOICE.CUSTOMER.ADDRESS.MUNICIPALITY" | translate }}</label>
             <input type="text" matInput [matAutocomplete]="city" class="form-control" id="city"
-                formControlName="city"
-                [class.is-invalid]="addressForm.get('city')?.invalid && submitted">
+                formControlName="city_it"
+                [class.is-invalid]="addressForm.get('city_it')?.invalid && submitted">
             <mat-autocomplete #city="matAutocomplete" [displayWith]="displayCityName">
                 <mat-option *ngFor="let option of filteredCities$ | async" [value]="option">
                     <div>
@@ -54,48 +55,53 @@
         <ng-template #notItalianBlock>
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <label class="form-label" for="city">
-                    {{"INVOICE.ADDRESS.CITY" | translate}}
+                    {{"INVOICE.CUSTOMER.ADDRESS.CITY" | translate}}
                 </label>
-                <input class="form-control" type="text" id="city" formControlName="city">
+                <input class="form-control" type="text" id="city" formControlName="city"
+                    [class.is-invalid]="addressForm.get('city')?.invalid && submitted">
             </div>
         </ng-template>
 
         <!-- PROVINCE -->
         <div class="col-12 col-sm-8 col-md-4 col-lg-3">
             <label class="form-label" for="province">
-                {{"INVOICE.ADDRESS.PROVINCE" | translate}}
+                {{"INVOICE.CUSTOMER.ADDRESS.PROVINCE" | translate}}
             </label>
-            <input class="form-control" type="text" id="province" formControlName="province">
+            <input class="form-control" type="text" id="province" formControlName="province"
+                [class.is-invalid]="addressForm.get('province')?.invalid && submitted">
         </div>
 
         <!-- CAP -->
         <div class="col-12 col-sm-4 col-md-3 col-lg-2">
-            <label class="form-label" for="postalCode">
-                {{"INVOICE.ADDRESS.POSTALCODE" | translate}}
+            <label class="form-label" for="postalcode">
+                {{"INVOICE.CUSTOMER.ADDRESS.POSTALCODE" | translate}}
             </label>
-            <input class="form-control" type="text" id="postalCode" formControlName="postalCode">
+            <input class="form-control" type="text" id="postalcode" formControlName="postalcode"
+                [class.is-invalid]="addressForm.get('postalcode')?.invalid && submitted">
         </div>
 
         <!-- STREET -->
         <div class="col-12 col-sm-9 col-md-7 col-lg-6">
             <label class="form-label" for="street">
-                {{"INVOICE.ADDRESS.STREET" | translate}}
+                {{"INVOICE.CUSTOMER.ADDRESS.STREET" | translate}}
             </label>
-            <input class="form-control" type="text" id="street" formControlName="street">
+            <input class="form-control" type="text" id="street" formControlName="street"
+                [class.is-invalid]="addressForm.get('street')?.invalid && submitted">
         </div>
 
         <!-- NUMBER -->
         <div class="col-12 col-sm-3 col-md-2 col-lg-1">
             <label class="form-label" for="number">
-                {{"INVOICE.ADDRESS.NUMBER" | translate}}
+                {{"INVOICE.CUSTOMER.ADDRESS.NUMBER" | translate}}
             </label>
-            <input class="form-control" type="text" id="number" formControlName="number">
+            <input class="form-control" type="text" id="number" formControlName="number"
+                [class.is-invalid]="addressForm.get('number')?.invalid && submitted">
         </div>
 
         <!-- LEGAL OFFICE -->
         <div class="col-12 col-sm-6 ps-2 form-check">
             <label class="form-check-label ms-2" for="legalOffice">
-                {{"INVOICE.ADDRESS.LEGALOFFICE" | translate}}
+                {{"INVOICE.CUSTOMER.ADDRESS.LEGALOFFICE" | translate}}
             </label>
             <input class="form-check-input mt-2 ms-1" type="checkbox" id="legalOffice"
                 formControlName="legalOffice" style="height: 20px; width: 20px;">
@@ -104,10 +110,41 @@
         <!-- MAIN OFFICE -->
         <div class="col-12 col-sm-6 ps-2 form-check">
             <label class="form-check-label ms-2" for="mainOffice">
-                {{"INVOICE.ADDRESS.MAINOFFICE" | translate}}
+                {{"INVOICE.CUSTOMER.ADDRESS.MAINOFFICE" | translate}}
             </label>
             <input class="form-check-input mt-2 ms-1" type="checkbox" id="mainOffice"
                 formControlName="mainOffice" style="height: 20px; width: 20px;">
+        </div>
+    </div>
+
+    <div *ngIf="addressForm.invalid" class="row mt-2">
+        <div *ngIf="addressForm.get('country')?.value == null" class="col-12 text-center">
+            <span class="errorText">
+                {{"INVOICE.CUSTOMER.ADDRESS.ERRORSELECTCOUNTRY" | translate}}
+            </span>
+        </div>
+
+        <div *ngIf="addressForm.get('country')?.value != null && submitted" class="col-12 text-center">
+            <span class="errorText">
+                {{"INVOICE.CUSTOMER.ADDRESS.MANDATORYFIELDS" | translate}}
+            </span>
+        </div>
+
+        <div *ngIf="addressForm.get('country')?.value == 12 && submitted && addressForm.get('city_it')?.hasError('invalidCity')" 
+            class="col-12 text-center">
+            <span class="errorText">
+                {{"INVOICE.CUSTOMER.ADDRESS.INVALIDCITY" | translate}}
+            </span> 
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-content *ngIf="idPopup == 2">
+    <div class="row">
+        <div class="col-12 text-center p-2">
+            <span>
+                {{"INVOICE.MODAL.DELETEMSG" | translate }}
+            </span>
         </div>
     </div>
 </mat-dialog-content>
@@ -116,8 +153,8 @@
     <button *ngIf="idPopup == 1" class="btn btn-outline-success me-2" (click)="saveAddress()">
         {{"INVOICE.MODAL.ADDNEW" | translate }}
     </button>
-    <button *ngIf="idPopup == 2" class="btn btn-outline-success me-2" (click)="deleteAddress()">
-        {{"INVOICE.MODAL.ADDNEW" | translate }}
+    <button *ngIf="idPopup == 2" class="btn btn-outline-danger me-2" (click)="deleteAddress()">
+        {{"INVOICE.MODAL.DELETE" | translate }}
     </button>
     <button class="btn btn-outline-dark me-2" (click)="close()">
         {{"INVOICE.MODAL.CANCEL" | translate }}

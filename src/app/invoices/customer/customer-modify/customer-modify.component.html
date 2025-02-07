@@ -23,7 +23,7 @@
                 class="titleRecords">
                 {{customerGeneralForm.get('name')?.value}} {{customerGeneralForm.get('surname')?.value}}
                 <sup (click)="modifyPopUp()">
-                    <i class="bi bi-pencil ms-2" style="font-size: 16px;"></i>
+                    <i class="bi bi-pencil iconHover ms-2" style="font-size: 16px;"></i>
                 </sup>
             </span>
             <ng-template #companyNameBlock>
@@ -248,7 +248,7 @@
 <div class="container-fluid mt-4" style="min-width: 350px;">
     <div class="row justify-content-center">
         <div class="col-12">
-            <mat-tab-group>
+            <mat-tab-group (selectedIndexChange)="onTabChange($event)">
                 <mat-tab>
                     <ng-template mat-tab-label>
                         <span class="tabTitle">
@@ -257,7 +257,8 @@
                         <i class="bi bi-geo-alt-fill ms-4 iconSize"></i>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-address-list></app-address-list>
+                        <app-address-list [addressList]="addressList" [countriesList]="countriesList"
+                            [idcustomer]="idcustomer"></app-address-list>
                     </ng-template>
                 </mat-tab>
                 <mat-tab>
@@ -268,7 +269,7 @@
                         <i class="bi bi-building-gear iconSize ms-4"></i>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-tax-system></app-tax-system>
+                        <app-organization></app-organization>
                     </ng-template>
                 </mat-tab>
                 <mat-tab>
