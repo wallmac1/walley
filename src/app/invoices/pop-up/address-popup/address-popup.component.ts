@@ -94,6 +94,9 @@ export class AddressPopupComponent {
       this.addressForm.get('province')?.disable();
       this.addressForm.get('province')?.setValue(city?.province!);
     }
+    else {
+      this.addressForm.get('province')?.setValue(null);
+    }
   }
 
   formLogic() {

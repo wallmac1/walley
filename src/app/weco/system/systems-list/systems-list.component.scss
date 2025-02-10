@@ -3,3 +3,47 @@
     color: blue;
     text-decoration: underline;
 }
+
+.title {
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
+    background-color: #002D5D;
+    border-radius: 10px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-y: auto;
+    overflow-y: auto;
+    max-height: 450px;
+}
+
+.mat-table {
+    min-width: 2200px;
+}
+
+.insertion-date {
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 1000;
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.4);
+}
+
+th.insertion-date {
+    z-index: 1000;
+}
+
+th,
+td {
+    border-right: 1px solid lightgray;
+}
+
+.truncate-text {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}

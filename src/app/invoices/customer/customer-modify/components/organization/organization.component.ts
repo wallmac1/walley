@@ -7,6 +7,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { OrganizationPopupComponent } from '../../../../pop-up/organization-popup/organization-popup.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Organization } from '../../../../interfaces/organization';
+import { TaxRepresentative } from '../../../../interfaces/tax-representative';
 
 @Component({
   selector: 'app-organization',
@@ -22,8 +24,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class OrganizationComponent {
 
-  @Input() organization: any = null;
-  @Input() taxRepresentative: any = null;
+  @Input() organization: Organization | null = null;
+  @Input() taxRepresentative: TaxRepresentative | null = null;
   submitted: boolean = false;
 
   organizationForm = new FormGroup({
@@ -35,6 +37,7 @@ export class OrganizationComponent {
   })
 
   taxRepresentativeForm = new FormGroup({
+    naturalPerson: new FormControl<number>({value: 0, disabled: true}),
     surname: new FormControl<string | null>({ value: null, disabled: true }),
     name: new FormControl<string | null>({ value: null, disabled: true }),
     denomination: new FormControl<string | null>({ value: null, disabled: true }),

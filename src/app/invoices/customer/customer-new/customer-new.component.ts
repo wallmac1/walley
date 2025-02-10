@@ -9,6 +9,7 @@ import { InViewportDirective } from '../../../directives/in-viewport.directive';
 import { ExistingCustomerPopupComponent } from '../../pop-up/existing-customer-popup/existing-customer-popup.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Connect } from '../../../classes/connect';
 
 @Component({
   selector: 'app-customer-new',
@@ -46,6 +47,7 @@ export class CustomerNewComponent {
   ngOnInit(): void {
     this.customerForm.get('naturalPerson')?.valueChanges.subscribe(() => { this.formLogic() });
     this.formLogic();
+    this.getCountries();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -88,6 +90,7 @@ export class CustomerNewComponent {
     this.submitted = true;
     if (this.customerForm.valid) {
       //RICHIESTA AL SERVER PER SALVARE IL NUOVO CLIENTE
+      //this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer')
       //SE ESISTE GIA' POPUP
       this.existingCustomerPopUp();
       // IN BASE ALLA RISPOSTA NAVIGA ALLA PAGINA CORRETTA

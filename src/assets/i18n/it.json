@@ -170,11 +170,33 @@
     },
     "SYSTEMLIST": {
       "TITLE": "LISTA IMPIANTI",
+      "TOTALRESULTS": "Risultati Totali",
+      "OBJPERPAGE": "Oggetti Per Pagina",
       "BUTTONSEARCH": "Cerca",
+      "PAGE": "Pagina",
+      "FILTER": "Filtri",
+      "FILTERBTN": "Filtra",
+      "STATUSFILTER": "Status",
       "SEARCHPLACEHOLDER": "Nome dell'Impianto",
       "EMPTY": "Nessun impianto disponibile, aggiungine uno per visualizzare la garanzia o richiedere un RMA.",
       "DESCRIPTION": "Premi il pulsante qui sotto per aggiungere un nuovo impianto per l'estensione della garanzia",
       "ADDSYSTEM": "Aggiungi Nuovo Impianto",
+      "INSERTIONDATE": "Data Inserimento",
+      "STATUS": "Stato Impianto",
+      "TITLECOLUMN": "Titolo",
+      "DESCRIPTIONTOOLTIP": "Descrizione",
+      "TICKET": "Ticket",
+      "RMA": "RMA",
+      "OWNER": "Proprietario",
+      "USER": "Utente",
+      "USERTOOLTIP": "Utente che ha effettuato l'inserimento dell'impianto",
+      "TECHNICIAN": "Installatore",
+      "INSTALLATIONDATE": "Data Installazione",
+      "COMPONENTS": "Componenti",
+      "WECOCOMPONENTS": "Componenti Weco",
+      "BATTERYMODEL": "Modello Batteria",
+      "BATTERYTYPE": "Tipo Batteria",
+      "EMPTYLIST": "La ricerca non ha prodotto risultati",
       "SYSTEMCARD": {
         "DESCRIPTION": "Descrizione dell'Impianto",
         "WARRANTY": "Stato della Garanzia",
@@ -662,7 +684,9 @@
       "NAME": "Denominazione"
     },
     "MODAL": {
+      "SEARCHBANK": "Cerca Banca",
       "SELECTCUSTOMER": "Seleziona un cliente",
+      "UPDATEORHISTORICIZE": "Aggiorna o Storicizza",
       "EXISTINGCUSTOMER": "Cliente Esistente",
       "EXISTINGCUSTOMERDESCRIPTION": "Il Cliente inserito risulta essere già presente. Inserire comunque?",
       "CUSTOMER": "Cliente",
@@ -671,6 +695,9 @@
       "DELETE": "Elimina",
       "ADDNEW": "Aggiungi Nuovo",
       "CANCEL": "Annulla",
+      "UPDATE": "Aggiorna",
+      "DENOMINATION": "Denominazione",
+      "HISTORICIZE": "Storicizza",
       "MODIFYCUSTOMER": "Modifica Dati Cliente",
       "MODIFYADDRESS": "Modifica Indirizzo",
       "DELETEADDRESS": "Elimina Indirizzo",
@@ -685,6 +712,7 @@
       "DENOMINATION": "Denominazione",
       "BIC": "BIC",
       "IBAN": "IBAN",
+      "DENOMINATIONIBAN": "Denominazion - IBAN",
       "CONTROL": "Controlla",
       "IBANERROR": "Per eseguire un controllo inserire un IBAN valido",
       "FIELDERROR": "Per salvare compilare correttamente tutti i campi richiesti",
@@ -754,6 +782,7 @@
         "MANDATORYFIELDS": "Compilare tutti i campi obbligatori"
       },
       "ORGANIZATION": {
+        "NATURALPERSON":"Persona Fisica",
         "INFONOTE": "Note informative ..",
         "COUNTRY": "Paese",
         "PROVINCE": "Provincia",
@@ -763,13 +792,26 @@
         "NUMBER": "Civico",
         "ORGANIZATION": "Stabile Organizzazione",
         "TAXREPRESENTATIVE": "Rappresentante Fiscale",
-        "MISSINGFIELDS": "Compilare i campi obbligatori"
+        "MISSINGFIELDS": "Compilare i campi obbligatori",
+        "INFOHISTORICIZE": "Se scegli 'Storicizza', le modifiche verranno salvate per i successivi utilzzi senza sovrascrivere i file già presenti",
+        "INFOUPDATE": "Se scegli 'Aggiorna', le modifiche sovrasciveranno completamente i valori presenti."
       },
       "TAXREPRESENTATIVE": {
         "VAT": "P. IVA",
         "DENOMINATION": "Denominazione",
         "SURNAME": "Cognome",
         "NAME": "Nome"
+      },
+      "PAYMENTTAB": {
+        "PAYMENTMETHOD": "Metodo di Pagamento Preferito",
+        "DENOMINATION": "Denominazione",
+        "ABI": "ABI",
+        "CAB": "CAB",
+        "CC": "CC",
+        "BIC": "BIC",
+        "IBAN": "IBAN",
+        "COMPANYBANK": "Banca Azienda",
+        "CUSTOMERBANK": "Banca Cliente"
       }
     },
       "INFO": {

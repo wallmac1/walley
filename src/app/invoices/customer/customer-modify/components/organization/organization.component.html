@@ -79,36 +79,48 @@
                 </span>
             </div>
 
-            <!-- NAME -->
-            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 formColumn">
-                <label class="form-label" for="name">
-                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
+            <!-- NATURAL PERSON -->
+            <div class="form-check col-12 mt-1">
+                <input class="form-check-input" type="checkbox" id="naturalPerson" formControlName="naturalPerson">
+                <label class="form-check-label mt-0" for="naturalPerson">
+                    {{"INVOICE.CUSTOMER.ORGANIZATION.NATURALPERSON" | translate}}
                 </label>
-                <input class="form-control" type="text" id="name" formControlName="name">
             </div>
 
-            <!-- SURNAME -->
-            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 formColumn">
-                <label class="form-label" for="surname">
-                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
-                </label>
-                <input class="form-control" type="text" id="surname" formControlName="surname">
-            </div>
+            <ng-container *ngIf="taxRepresentativeForm.get('naturalPerson')?.value == 1; else businessBlock">
+                <!-- NAME -->
+                <div class="col-12 col-sm-6 col-lg-4 formColumn">
+                    <label class="form-label" for="name">
+                        {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="name" formControlName="name">
+                </div>
+
+                <!-- SURNAME -->
+                <div class="col-12 col-sm-6 col-lg-4 formColumn">
+                    <label class="form-label" for="surname">
+                        {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="surname" formControlName="surname">
+                </div>
+            </ng-container>
+
+            <!-- DENOMINATION -->
+            <ng-template #businessBlock>
+                <div class="col-12 col-lg-6 formColumn">
+                    <label class="form-label" for="denomination">
+                        {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="denomination" formControlName="denomination">
+                </div>
+            </ng-template>
 
             <!-- VAT -->
-            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 formColumn">
+            <div class="col-12 col-md-6 col-lg-4 formColumn">
                 <label class="form-label" for="vat">
                     {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.VAT" | translate}}
                 </label>
                 <input class="form-control" type="text" id="vat" formControlName="vat">
-            </div>
-
-            <!-- DENOMINATION -->
-            <div class="col-12 col-md-6 col-lg-8 col-xl-3 formColumn">
-                <label class="form-label" for="denomination">
-                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
-                </label>
-                <input class="form-control" type="text" id="denomination" formControlName="denomination">
             </div>
         </div>
     </form>

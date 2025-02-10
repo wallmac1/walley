@@ -90,7 +90,7 @@
                     {{"INVOICE.CUSTOMER.COUNTRY" | translate}}
                 </label>
                 <select class="form-select" id="country" formControlName="country">
-                    <option [value]="null">
+                    <option [ngValue]="null">
                         --
                     </option>
                     <option *ngFor="let country of countriesList" [ngValue]="country.id">

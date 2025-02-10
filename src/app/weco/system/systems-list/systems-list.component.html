@@ -1,42 +1,212 @@
-<div class="container p-1 p-md-2 p-lg-3" style="min-height: 80%; min-width: 350px; max-width: 1400px;">
-    <div class="row p-1 justify-content-center align-items-center text-center"
-        style="margin-left: 0 !important; margin-right: 0 !important;">
-        <div class="col-8 text-center">
-            <span style="font-weight: bold; font-size: x-large;">
-                LISTA IMPIANTI
+<div class="container-fluid p-1 p-sm-2 p-md-3 p-lg-4" style="min-width: 375px; min-height: 90vh;">
+    <div class="row justify-content-center align-items-center mt-2 mb-2">
+        <div class="col-auto ps-3 pe-3 pt-1 pb-1 text-center titleColumn">
+            <span class="title p-2">
+                {{"SYSTEM.SYSTEMLIST.TITLE" | translate }}
             </span>
         </div>
+        <!-- <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer ms-2" (click)="newInvoice()">
+            <i class="bi bi-plus-lg"></i>
+        </button> -->
+    </div>
 
-        <div class="col-12 col-lg-10 mt-2">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Data Inserimento</th>
-                        <th>Operatore</th>
-                        <th>Impianto</th>
-                        <th>Stato Impianto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let system of systemList; let i = index">
-                        <!-- Campo come stringa: date -->
-                        <td>{{ system.date }}</td>
+    <div class="row justify-content-center align-items-center p-1">
+        <app-filters (filterEmit)="getSystemList(1)"></app-filters>
+    </div>
 
-                        <!-- Campo come stringa: denomination -->
-                        <td>{{ system.denomination}}</td>
+    <div class="row justify-content-center align-items-center p-3 mt-1">
+        <div class="col-12 p-0">
+            <div class="mat-elevation-z8" style="position: relative;">
+                <div class="row justify-content-center p-3">
+                    <div class="d-none d-md-inline col-4 text-start">
+                        <span style="font-size: small;">{{"SYSTEM.SYSTEMLIST.TOTALRESULTS" | translate }}:
+                            {{totalResults}}
+                        </span>
+                    </div>
 
-                        <!-- Campo come stringa: title -->
-                        <td class="clickManagement" (click)="goTo(system.idsystem)">{{ system.title }}</td>
+                    <div class="d-none d-md-inline col-4 text-center">
+                        <span style="font-size: small;">{{"SYSTEM.SYSTEMLIST.OBJPERPAGE" | translate }}:
+                            {{itemsPerPage}}
+                        </span>
+                    </div>
 
-                        <!-- Campo come stringa: status -->
-                        <td>
-                            <i class="bi bi-circle-fill me-2"
-                                [ngStyle]="{'color': '#'+system.status.color}"></i>
-                            {{ system.status.name }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                    <div class="col-6 col-sm-12 col-md-4 text-end">
+                        <span>
+                            <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
+                                <i class="bi bi-caret-left"></i>
+                            </button>
+                            <span style="font-size: small;">{{"SYSTEM.SYSTEMLIST.PAGE" | translate }} {{currentPage}} di
+                                {{totalPages}}
+                            </span>
+                            <button [disabled]="currentPage == totalPages" class="btn btn-link ms-2 p-0"
+                                (click)="nextPage()">
+                                <i class="bi bi-caret-right"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="table-container mb-5">
+                    <table mat-table [dataSource]="dataSource" class="mat-table" matSort
+                        matSortDisableClear (matSortChange)="changeOrderCreation()"
+                        style="border-top: 1px solid lightgray;">
+
+                        <!-- Insertion Date -->
+                        <ng-container matColumnDef="insertion_date">
+                            <th mat-header-cell *matHeaderCellDef class="insertion-date" style="width: 150px;"
+                                mat-sort-header disableClear>
+                                {{"SYSTEM.SYSTEMLIST.INSERTIONDATE" | translate }} </th>
+                            <td mat-cell *matCellDef="let element" class="insertion-date">
+                                {{ element.insertion_date }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Status -->
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef style="width: 240px;">
+                                {{"SYSTEM.SYSTEMLIST.STATUS" | translate }} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="p-2" style="color: white; border-radius: 10px; opacity: 0.7;"
+                                    [ngStyle]="{'background-color': '#'+element.status.color}">
+                                    {{ element.status.name }}
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Title -->
+                        <ng-container matColumnDef="title">
+                            <th mat-header-cell *matHeaderCellDef style="max-width: 200px;">
+                                {{"SYSTEM.SYSTEMLIST.TITLECOLUMN" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element" style="max-width: 200px;">
+                                <span>
+                                    <button class="btn btn-link text-start" (click)="goToSystem(element.system)"
+                                        style="max-width: 90%;">
+                                        <span class="truncate-text">
+                                            {{ element.title }}
+                                        </span>
+                                    </button>
+                                    <i class="bi bi-info-circle ms-1"
+                                        matTooltip="{{'SYSTEM.SYSTEMLIST.DESCRIPTIONTOOLTIP' | translate}}: {{element.description}}">
+                                    </i>
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Ticket -->
+                        <ng-container matColumnDef="ticket_list">
+                            <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell"
+                                style="min-width: 100px;">
+                                {{"SYSTEM.SYSTEMLIST.TICKET" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span *ngFor="let ticket of element.ticket; let i = index">
+                                    <button class="btn btn-link p-0 me-1" (click)="goToTicket(ticket.id)">
+                                        {{ticket.progressive}}
+                                    </button>
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- RMA -->
+                        <ng-container matColumnDef="rma_list">
+                            <th mat-header-cell *matHeaderCellDef class="limitedWidth" style="width: 100px;">
+                                {{"SYSTEM.SYSTEMLIST.RMA" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="limitedWidth" class="clickable">
+                                {{element.rma}}
+                            </td>
+                        </ng-container>
+
+                        <!-- Owner -->
+                        <ng-container matColumnDef="owner">
+                            <th mat-header-cell *matHeaderCellDef class="limitedWidth">
+                                {{"SYSTEM.SYSTEMLIST.OWNER" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="limitedWidth">
+                                {{element.owner}}
+                            </td>
+                        </ng-container>
+
+                        <!-- User -->
+                        <ng-container matColumnDef="user">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"SYSTEM.SYSTEMLIST.USER" | translate }}
+                                <i class="bi bi-info-circle ms-2"
+                                    matTooltip="{{'SYSTEM.SYSTEMLIST.USERTOOLTIP' | translate}}"></i>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span>
+                                    {{ element.user.nickname }}
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Installer -->
+                        <ng-container matColumnDef="installer_companyname">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"SYSTEM.SYSTEMLIST.TECHNICIAN" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span>
+                                    {{element.installer_companyname}}
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Installation Date -->
+                        <ng-container matColumnDef="installation_date">
+                            <th mat-header-cell *matHeaderCellDef style="width: 150px;">
+                                {{"SYSTEM.SYSTEMLIST.INSTALLATIONDATE" | translate }} </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.installation_date }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Components -->
+                        <ng-container matColumnDef="product_systemcomposition">
+                            <th mat-header-cell *matHeaderCellDef class="limitedWidth">
+                                {{"SYSTEM.SYSTEMLIST.COMPONENTS" | translate}} </th>
+                            <td mat-cell *matCellDef="let element" class="limitedWidth">
+                                {{element.product_systemcomposition}}
+                            </td>
+                        </ng-container>
+
+                        <!-- Weco Components -->
+                        <ng-container matColumnDef="product_systemweco">
+                            <th mat-header-cell *matHeaderCellDef class="limitedWidth">
+                                {{"SYSTEM.SYSTEMLIST.WECOCOMPONENTS" | translate}} </th>
+                            <td mat-cell *matCellDef="let element" class="limitedWidth">
+                                {{element.product_systemweco}}
+                            </td>
+                        </ng-container>
+
+                        <!-- Battery Model -->
+                        <ng-container matColumnDef="battery_model">
+                            <th mat-header-cell *matHeaderCellDef style="width: 130px;">
+                                {{"SYSTEM.SYSTEMLIST.BATTERYMODEL" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.battery_model }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Battery Type -->
+                        <ng-container matColumnDef="battery_type">
+                            <th mat-header-cell *matHeaderCellDef style="width: 130px;">
+                                {{"SYSTEM.SYSTEMLIST.BATTERYTYPE" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.battery_type }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Header and Row Definitions -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="goToSystem(row)"></tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

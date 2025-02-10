@@ -1,0 +1,29 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"INVOICE.MODAL.SEARCHBANK" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12">
+            <mat-dialog-content [formGroup]="bankForm">
+                <label class="form-label" for="denomination">{{"INVOICE.MODAL.DENOMINATION" | translate}}</label>
+                <input type="text" matInput [matAutocomplete]="denomination" class="form-control" id="denomination"
+                    formControlName="denomination" [class.is-invalid]="denomination && submitted">
+                <mat-autocomplete #denomination="matAutocomplete" [displayWith]="displayBankName">
+                    <mat-option *ngFor="let option of filteredBanks$ | async" [value]="option"
+                        (onSelectionChange)="save(option)">
+                        <div>
+                            {{option.denomination}}
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-dialog-content>
+        </div>
+
+        <div class="col-12 text-end mb-2">
+            <button class="btn btn-outline-danger" (click)="close()">{{"INVOICE.MODAL.CLOSE" | translate}}</button>
+        </div>
+    </div>
+</mat-dialog-content>

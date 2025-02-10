@@ -1,0 +1,24 @@
+.title {
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
+}
+
+.form-label {
+    font-weight: bold;
+    margin-bottom: 0.1rem;
+}
+
+.btn-outline-dark {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+::ng-deep .specific-class>.mat-expansion-indicator:after {
+    color: white;
+}

@@ -16,6 +16,8 @@ import { AddressListComponent } from "./components/address-list/address-list.com
 import { PaymentDataComponent } from "./components/payment-data/payment-data.component";
 import { Address } from '../../interfaces/address';
 import { OrganizationComponent } from "./components/organization/organization.component";
+import { Organization } from '../../interfaces/organization';
+import { TaxRepresentative } from '../../interfaces/tax-representative';
 
 @Component({
   selector: 'app-customer-modify',
@@ -44,6 +46,8 @@ export class CustomerModifyComponent {
   isSmall: boolean = false;
   submitted: boolean = false;
   idcustomer: number = 0;
+  organization: Organization = {municipality: null, province: null, postalcode: null, street: null, number: null};
+  taxRepresentative: TaxRepresentative = {naturalPerson: 0, name: null, surname: null, denomination: null, vat: null};
 
   customerGeneralForm = new FormGroup({
     naturalPerson: new FormControl<number>(0),
@@ -120,7 +124,7 @@ export class CustomerModifyComponent {
     // RICHIESTA AL SERVER, NEL SUBSCRIBE AGGIUNGERE chargedTab[tab] = true;
     if(this.chargedTab[tab] == false) {
       this.chargedTab[tab] = true;
-      console.log("creato", tab)
+      console.log("creato", tab);
     }
   }
 
