@@ -1,0 +1,43 @@
+.titleColumn {
+    background-color: #002D5D; 
+    border-radius: 18px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.additionalFields {
+    transform: translateY(-200px);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 1s ease;
+}
+
+.additionalFields.visible {
+    transform: translateY(0px);
+    opacity: 1;
+}
+
+.title {
+    font-size: xx-large;
+    font-weight: bold;
+    color: white;
+}
+
+.form-label, .form-check-label {
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 0.3rem;
+    margin-bottom: 0rem;
+}
+
+input, textarea, select, span {
+    font-weight: 150;
+}
+
+.btn-outline-dark {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    color: white;
+    background-color: #002D5D;
+}

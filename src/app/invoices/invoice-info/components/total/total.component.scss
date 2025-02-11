@@ -1,0 +1,13 @@
+.input-no-border {
+    border: none;
+    border-bottom: 1px solid black;
+    text-align: right;
+    outline: none;
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.input-no-border.invalid {
+    border-bottom: 1px solid red;
+}

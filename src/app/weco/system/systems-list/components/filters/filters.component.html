@@ -1,0 +1,36 @@
+<div class="container-fluid" style="max-width: 1100px;">
+    <mat-expansion-panel [expanded]="true" class="p-0" style="max-width: 1100px; width: 100%;">
+        <mat-expansion-panel-header class="specific-class" style="background-color: #002D5D; height: 50px;">
+            <mat-panel-title class="panel-title">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <span class="title p-1">
+                            {{"SYSTEM.SYSTEMLIST.FILTER" | translate}}
+                        </span>
+                    </div>
+                </div>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div [formGroup]="filterForm" class="row mt-2">
+            <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label" for="status">
+                    {{"SYSTEM.SYSTEMLIST.STATUSFILTER" | translate}}
+                </label>
+                <select class="form-select" id="status" formControlName="status">
+                    <option [ngValue]="null">--</option>
+                    <option *ngFor="let status of statusList" [ngValue]="status.id">
+                        {{status.name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <button class="btn btn-outline-dark" (click)="filter()">
+                    {{"SYSTEM.SYSTEMLIST.FILTERBTN" | translate}}
+                </button>
+            </div>
+        </div>
+    </mat-expansion-panel>
+</div>

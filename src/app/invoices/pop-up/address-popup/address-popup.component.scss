@@ -1,0 +1,21 @@
+.btn-outline-dark {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+.form-label, .form-check-label {
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 0.3rem;
+    margin-bottom: 0rem;
+}
+
+.errorText {
+    color: red;
+    font-size: small;
+}

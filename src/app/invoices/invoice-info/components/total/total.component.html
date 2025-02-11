@@ -1,1 +1,93 @@
-<p>total works!</p>
+<div [formGroup]="totalForm" class="container-fluid ps-1 pe-1 pb-2 ps-md-2 pe-md-2 ps-xl-3 pe-xl-3">
+    <div class="row justify-content-center align-items-center">
+        <!-- TAXABLE -->
+        <div class="col-8 text-start">
+            <span>
+                Imponibile
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <span>
+                {{totalSummary.taxable}}
+            </span>
+        </div>
+
+        <!-- TAX -->
+        <div class="col-8 text-start">
+            <span>
+                IVA
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <span>
+                {{totalSummary.tax}}
+            </span>
+        </div>
+
+        <!-- NOT TAXABLE -->
+        <div class="col-8 text-start">
+            <span>
+                Importi non soggetti a IVA
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <span>
+                {{totalSummary.notTaxable}}
+            </span>
+        </div>
+
+        <!-- DISCOUNT -->
+        <div class="col-8 text-start">
+            <span>
+                Sconto/Maggiorazione (€)
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <input class="form-control input-no-border pt-0 pb-0 pe-0" type="text" formControlName="discount"
+                [class.invalid]="totalForm.get('discount')?.invalid">
+        </div>
+        <div *ngIf="totalForm.get('discount')?.invalid" class="col-12 text-center"
+            style="font-size: small; color: red;">
+            <span *ngIf="totalForm.get('discount')?.hasError('maxNegativeExceeded')">
+                Lo sconto non può essere maggiore del totale documento
+            </span>
+            <span *ngIf="totalForm.get('discount')?.hasError('invalidNumber')">
+                Campo numerico con al massimo due cifre dopo la virgola
+            </span>
+        </div>
+
+        <!-- ROUNDING -->
+        <div class="col-8 text-start">
+            <span>
+                Arrotondamento
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <input class="form-control input-no-border pt-0 pb-0 pe-0" type="text" formControlName="rounding"
+            [class.invalid]="totalForm.get('rounding')?.invalid">
+        </div>
+        <div *ngIf="totalForm.get('rounding')?.invalid" class="col-12 text-center"
+            style="font-size: small; color: red;">
+            <span *ngIf="totalForm.get('rounding')?.hasError('maxNegativeExceeded')">
+                Lo sconto non può essere maggiore del totale documento
+            </span>
+            <span *ngIf="totalForm.get('rounding')?.hasError('invalidNumber')">
+                Campo numerico con al massimo due cifre dopo la virgola
+            </span>
+        </div>
+
+        <!-- DOCUMENT TOTAL -->
+        <div class="col-8 text-start">
+            <span>
+                Totale Documento
+            </span>
+        </div>
+        <div class="col-4 text-end">
+            <span>
+                {{totalForm.get('documentTotal')?.value}}
+            </span>
+        </div>
+
+        <!-- TOTAL TO BE PAYED -->
+    </div>
+</div>

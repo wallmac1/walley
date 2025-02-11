@@ -4,7 +4,8 @@ export interface InvoiceBodyLine {
     refidum: number | null;
     quantity: string | null;
     price: string | null;
-    discount: string | null;
+    discounts: {isDiscount: number, value: string}[] | null;
     total: string | null;
     vat: number | null;
+    stampLine: boolean;
 }

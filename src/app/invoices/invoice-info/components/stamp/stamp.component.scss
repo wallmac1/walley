@@ -1,0 +1,40 @@
+.form-label {
+    font-size: small;
+    font-weight: 800;
+    margin-top: 0.3rem;
+    margin-bottom: 0rem;
+}
+
+.checkboxPosition {
+    position: absolute;
+    top: -36px;
+    left: 18%;
+
+    @media screen and (min-width: 600px) {
+        left: 12%;
+    }
+
+    @media screen and (min-width: 768px) {
+        top: -44px;
+        left: 10%;
+    }
+
+    @media screen and (min-width: 992px) {
+        top: -44px;
+        left: 20%;
+    }
+}
+
+.checkboxDimension {
+    height: 16px;
+    width: 16px;
+
+    @media screen and (min-width: 768px) {
+        height: 20px; 
+        width: 20px;
+    }
+}
+
+input, select {
+    font-weight: 150;
+}

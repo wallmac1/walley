@@ -1,0 +1,149 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span *ngIf="idPopup == 1; else deletePopup" style="color: white; font-weight: bold; font-size: x-large;">
+        {{"INVOICE.MODAL.MODIFYADDRESS" | translate }}
+    </span>
+    <ng-template #deletePopup>
+        <span style="color: white; font-weight: bold; font-size: x-large;">
+            {{"INVOICE.MODAL.DELETEADDRESS" | translate }}
+        </span>
+    </ng-template>
+</h2>
+
+<mat-dialog-content *ngIf="idPopup == 1">
+    <div [formGroup]="organizationForm" class="row justify-content-start">
+        <!-- MUNICIPALITY -->
+        <div class="col-12 col-sm-6 col-md-5 formColumn">
+            <label class="form-label" for="municipality">{{"INVOICE.CUSTOMER.ORGANIZATION.MUNICIPALITY" | translate
+                }}</label>
+            <input type="text" matInput [matAutocomplete]="city" class="form-control" id="municipality"
+                formControlName="municipality"
+                [class.is-invalid]="organizationForm.get('municipality')?.invalid && submitted">
+            <mat-autocomplete #city="matAutocomplete" [displayWith]="displayCityName">
+                <mat-option *ngFor="let option of filteredCities$ | async" [value]="option">
+                    <div>
+                        {{option.name}}
+                    </div>
+                </mat-option>
+            </mat-autocomplete>
+        </div>
+
+        <!-- PROVINCE -->
+        <div class="col-12 col-sm-6 col-md-5 formColumn">
+            <label class="form-label" for="province">
+                {{"INVOICE.CUSTOMER.ORGANIZATION.PROVINCE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="province" formControlName="province">
+        </div>
+
+        <!-- CAP -->
+        <div class="col-10 col-sm-4 col-md-4 col-lg-2 formColumn">
+            <label class="form-label" for="postalcode">
+                {{"INVOICE.CUSTOMER.ORGANIZATION.POSTALCODE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="postalcode" formControlName="postalcode"
+                [class.is-invalid]="organizationForm.get('postalcode')?.invalid && submitted">
+        </div>
+
+        <!-- STREET -->
+        <div class="col-10 col-sm-9 col-md-7 col-lg-6 formColumn">
+            <label class="form-label" for="street">
+                {{"INVOICE.CUSTOMER.ORGANIZATION.STREET" | translate}}
+            </label>
+            <input class="form-control" type="text" id="street" formControlName="street"
+                [class.is-invalid]="organizationForm.get('street')?.invalid && submitted">
+        </div>
+
+        <!-- NUMBER -->
+        <div class="col-2 col-sm-3 col-md-2 col-lg-2 ps-0 formColumn">
+            <label class="form-label" for="number">
+                {{"INVOICE.CUSTOMER.ORGANIZATION.NUMBER" | translate}}
+            </label>
+            <input class="form-control" type="text" id="number" formControlName="number"
+                [class.is-invalid]="organizationForm.get('number')?.invalid && submitted">
+        </div>
+    </div>
+
+    <div *ngIf="organizationForm.invalid && submitted" class="row">
+        <div class="col-12 text-center">
+            <span style="font-size: small; color: red;">
+                {{"INVOICE.CUSTOMER.ORGANIZATION.MISSINGFIELDS" | translate}}
+            </span>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-content *ngIf="idPopup == 2">
+    <div [formGroup]="taxRepresentativeForm" class="row justify-content-start align-items-center mt-1 pb-2">
+
+        <!-- <div class="col-12">
+            <span class="smallInfo">
+                {{"INVOICE.CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
+            </span>
+        </div> -->
+
+        <!-- NATURAL PERSON -->
+        <div class="form-check col-12 ms-2">
+            <input class="form-check-input" type="checkbox" id="naturalPerson" formControlName="naturalPerson">
+            <label class="form-check-label" for="naturalPerson">
+                {{"INVOICE.CUSTOMER.ORGANIZATION.NATURALPERSON" | translate}}
+            </label>
+        </div>
+
+        <ng-container *ngIf="taxRepresentativeForm.get('naturalPerson')?.value == 1; else businessBlock">
+            <!-- NAME -->
+            <div class="col-12 col-md-6 formColumn">
+                <label class="form-label" for="name">
+                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
+                </label>
+                <input class="form-control" type="text" id="name" formControlName="name"
+                    [class.is-invalid]="taxRepresentativeForm.get('name')?.invalid && submitted">
+            </div>
+
+            <!-- SURNAME -->
+            <div class="col-12 col-md-6 formColumn">
+                <label class="form-label" for="surname">
+                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
+                </label>
+                <input class="form-control" type="text" id="surname" formControlName="surname"
+                    [class.is-invalid]="taxRepresentativeForm.get('surname')?.invalid && submitted">
+            </div>
+        </ng-container>
+
+        <!-- DENOMINATION -->
+        <ng-template #businessBlock>
+            <div class="col-12 col-lg-6 formColumn">
+                <label class="form-label" for="denomination">
+                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
+                </label>
+                <input class="form-control" type="text" id="denomination" formControlName="denomination"
+                    [class.is-invalid]="taxRepresentativeForm.get('denomination')?.invalid && submitted">
+            </div>
+        </ng-template>
+
+        <!-- VAT -->
+        <div class="col-12 col-lg-6 formColumn">
+            <label class="form-label" for="vat">
+                {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.VAT" | translate}}
+            </label>
+            <input class="form-control" type="text" id="vat" formControlName="vat"
+                [class.is-invalid]="taxRepresentativeForm.get('vat')?.invalid && submitted">
+        </div>
+
+        <div *ngIf="taxRepresentativeForm.invalid && submitted" class="row">
+            <div class="col-12 text-center">
+                <span style="font-size: small; color: red;">
+                    {{"INVOICE.CUSTOMER.ORGANIZATION.MISSINGFIELDS" | translate}}
+                </span>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button class="btn btn-outline-success me-2" (click)="update()">
+        {{"INVOICE.MODAL.UPDATE" | translate }}
+    </button>
+    <button class="btn btn-outline-dark me-2" (click)="close()">
+        {{"INVOICE.MODAL.CANCEL" | translate }}
+    </button>
+</mat-dialog-actions>

@@ -122,18 +122,45 @@ select {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.drag-handle {
-    cursor: grab;
-}
-
-.bi-trash {
+.bi-trash, .bi-caret-down-fill, .bi-copy {
     cursor: pointer;
 }
 
-.bi-arrows-move {
+.bi-arrows-move, .drag-handle {
     cursor: grab;
 }
 
 .bi {
     font-size: 20px;
+}
+
+.additionalInfo {
+    transform: translateY(-60px);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.additionalInfo.visible {
+    transform: translateY(0px);
+    opacity: 1;
+}
+
+/* Per la transizione */
+.content-wrapper {
+    overflow: hidden; /* Necessario per la transizione sull'altezza */
+    transition: height 1s ease, opacity 1s ease; /* Transizione sull'altezza e opacità */
+    height: 0; /* Altezza iniziale (chiuso) */
+    opacity: 0; /* Opacità iniziale per una transizione più fluida */
+}
+
+/* Stato aperto */
+.content-wrapper.open {
+    height: auto; /* Altezza automatica quando aperto */
+    opacity: 1;
+}
+
+/* Stato chiuso */
+.content-wrapper.closed {
+    height: 0; /* Altezza 0 quando chiuso */
+    opacity: 0;
 }
