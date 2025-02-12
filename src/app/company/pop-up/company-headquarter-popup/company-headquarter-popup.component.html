@@ -1,0 +1,287 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"COMPANY.POPUP.MODIFYHEADQUARTER" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-2" *ngIf="idPopup == 1" style="overflow-y: auto; overflow-x: hidden;">
+    <div [formGroup]="companyLegalHeadquarterForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- COUNTRY -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="country">
+                {{"COMPANY.HEADQUARTER.COUNTRY" | translate}}
+            </label>
+            <select class="form-select" name="idcountry" id="country" formControlName="country"
+                (change)="selectedCountry()">
+                <option [ngValue]="null">--</option>
+                <option *ngFor="let country of countriesList" [ngValue]="country.id">
+                    {{country.common_name}}
+                </option>
+            </select>
+        </div>
+
+        <!-- MUNICIPALITY -->
+        <div *ngIf="companyLegalHeadquarterForm.get('country')?.value == 12; else notItalianBlock"
+            class="col-12 col-lg-6">
+            <label class="form-label" for="municipality">{{"COMPANY.HEADQUARTER.MUNICIPALITY" | translate }}</label>
+            <input type="text" matInput [matAutocomplete]="city" class="form-control" id="municipality"
+                formControlName="municipality"
+                [class.is-invalid]="companyLegalHeadquarterForm.get('municipality')?.invalid && submitted">
+            <mat-autocomplete #city="matAutocomplete" [displayWith]="displayCityName">
+                <mat-option *ngFor="let option of filteredCities$ | async" [value]="option">
+                    <div>
+                        {{option.name}}
+                    </div>
+                </mat-option>
+            </mat-autocomplete>
+        </div>
+        <ng-template #notItalianBlock>
+            <div class="col-12 col-lg-6">
+                <label class="form-label" for="municipality">
+                    {{"COMPANY.HEADQUARTER.MUNICIPALITY" | translate}}
+                </label>
+                <input class="form-control" type="text" id="municipality" formControlName="municipality">
+            </div>
+        </ng-template>
+
+        <!-- POSTAL CODE -->
+        <div class="col-12 col-lg-6">
+            <label for="postalcode" class="form-label">
+                {{"COMPANY.HEADQUARTER.POSTALCODE" | translate }}
+            </label>
+            <input type="text" class="form-control" id="postalcode" formControlName="postalcode">
+        </div>
+
+        <!-- PROVINCE -->
+        <div class="col-12 col-lg-6">
+            <label for="province" class="form-label">
+                {{"COMPANY.HEADQUARTER.PROVINCE" | translate }}
+            </label>
+            <input type="text" class="form-control" id="province" formControlName="province">
+        </div>
+
+        <!-- STREET -->
+        <div class="col-10">
+            <label for="street" class="form-label">
+                {{"COMPANY.HEADQUARTER.STREET" | translate }}
+            </label>
+            <input type="text" class="form-control" id="street" formControlName="street">
+        </div>
+
+        <!-- STREETNUMBER -->
+        <div class="col-2">
+            <label for="street_number" class="form-label">
+                {{"COMPANY.HEADQUARTER.STREETNUMBER" | translate }}
+            </label>
+            <input type="text" class="form-control" id="street_number" formControlName="street_number">
+        </div>
+        <div class="col-12 mt-1">
+            <span style="font-size: small; color: gray; font-style: italic;">
+                {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
+                {{'COMPANY.POPUP.NBUPDATE' | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="historicize()">
+                {{"COMPANY.POPUP.HISTORICIZE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="update()">
+                {{"COMPANY.POPUP.UPDATE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"COMPANY.POPUP.CLOSE" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-content class="pb-2" *ngIf="idPopup == 2">
+    <div [formGroup]="companyBuildingForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- COUNTRY -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="country">
+                {{"COMPANY.HEADQUARTER.COUNTRY" | translate}}
+            </label>
+            <select class="form-select" name="idcountry" id="country" formControlName="country"
+                (change)="selectedCountry()">
+                <option [ngValue]="null">--</option>
+                <option *ngFor="let country of countriesList" [ngValue]="country.id">
+                    {{country.common_name}}
+                </option>
+            </select>
+        </div>
+
+        <!-- MUNICIPALITY -->
+        <div *ngIf="companyLegalHeadquarterForm.get('country')?.value == 12; else notItalianBlock"
+            class="col-12 col-lg-6">
+            <label class="form-label" for="municipality">{{"COMPANY.HEADQUARTER.MUNICIPALITY" | translate }}</label>
+            <input type="text" matInput [matAutocomplete]="city" class="form-control" id="municipality"
+                formControlName="municipality"
+                [class.is-invalid]="companyLegalHeadquarterForm.get('municipality')?.invalid && submitted">
+            <mat-autocomplete #city="matAutocomplete" [displayWith]="displayCityName">
+                <mat-option *ngFor="let option of filteredCities$ | async" [value]="option">
+                    <div>
+                        {{option.name}}
+                    </div>
+                </mat-option>
+            </mat-autocomplete>
+        </div>
+        <ng-template #notItalianBlock>
+            <div class="col-12 col-lg-6">
+                <label class="form-label" for="municipality">
+                    {{"COMPANY.HEADQUARTER.MUNICIPALITY" | translate}}
+                </label>
+                <input class="form-control" type="text" id="municipality" formControlName="municipality">
+            </div>
+        </ng-template>
+
+        <!-- POSTAL CODE -->
+        <div class="col-12 col-lg-6">
+            <label for="postalcode" class="form-label">
+                {{"COMPANY.HEADQUARTER.POSTALCODE" | translate }}
+            </label>
+            <input type="text" class="form-control" id="postalcode" formControlName="postalcode">
+        </div>
+
+        <!-- PROVINCE -->
+        <div class="col-12 col-lg-6">
+            <label for="province" class="form-label">
+                {{"COMPANY.HEADQUARTER.PROVINCE" | translate }}
+            </label>
+            <input type="text" class="form-control" id="province" formControlName="province">
+        </div>
+
+        <!-- STREET -->
+        <div class="col-10">
+            <label for="street" class="form-label">
+                {{"COMPANY.HEADQUARTER.STREET" | translate }}
+            </label>
+            <input type="text" class="form-control" id="street" formControlName="street">
+        </div>
+
+        <!-- STREET NUMBER -->
+        <div class="col-2">
+            <label for="street_number" class="form-label">
+                {{"COMPANY.HEADQUARTER.STREETNUMBER" | translate }}
+            </label>
+            <input type="text" class="form-control" id="street_number" formControlName="street_number">
+        </div>
+        <div class="col-12 mt-1">
+            <span style="font-size: small; color: gray; font-style: italic;">
+                {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
+                {{'COMPANY.POPUP.NBUPDATE' | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="historicize()">
+                {{"COMPANY.POPUP.HISTORICIZE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="update()">
+                {{"COMPANY.POPUP.UPDATE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"COMPANY.POPUP.CLOSE" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-content class="pb-2" *ngIf="idPopup == 3">
+    <div [formGroup]="companyReaForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- REA NUMBER -->
+        <div class="col-12 col-lg-6">
+            <label for="number" class="form-label">
+                {{"COMPANY.HEADQUARTER.REANUMBER" | translate }}
+            </label>
+            <input type="text" class="form-control" id="number" formControlName="number">
+        </div>
+
+        <!-- PROVINCE -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="province">
+                {{"COMPANY.HEADQUARTER.PROVINCE" | translate}}
+            </label>
+            <select class="form-select" id="province" formControlName="province">
+                <option [ngValue]="null">--</option>
+                <option *ngFor="let province of provinceList" [ngValue]="province.id">
+                    {{province.name}}
+                </option>
+            </select>
+        </div>
+
+        <!-- ASSETS -->
+        <div class="col-12 col-lg-6">
+            <label for="assets" class="form-label">
+                {{"COMPANY.HEADQUARTER.ASSETS" | translate }}
+            </label>
+            <input type="text" class="form-control" id="assets" formControlName="assets">
+        </div>
+
+        <div class="col-6 d-none d-lg-inline"></div>
+
+        <!-- SOLE SHAREHOLDER -->
+        <div class="col-12 col-lg-6 mt-1">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="sole_shareholder" formControlName="sole_shareholder">
+                <label for="sole_shareholder" class="form-check-label">
+                    {{"COMPANY.HEADQUARTER.SOLESHAREHOLDER" | translate }}
+                </label>
+            </div>
+        </div>
+
+        <!-- CLOSURE -->
+        <div class="col-12 col-lg-6 mt-1">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="closure" formControlName="closure">
+                <label for="closure" class="form-check-label">
+                    {{"COMPANY.HEADQUARTER.CLOSURE" | translate }}
+                </label>
+            </div>
+        </div>
+        
+        <div class="col-12 mt-1">
+            <span style="font-size: small; color: gray; font-style: italic;">
+                {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
+                {{'COMPANY.POPUP.NBUPDATE' | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="historicize()">
+                {{"COMPANY.POPUP.HISTORICIZE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="update()">
+                {{"COMPANY.POPUP.UPDATE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"COMPANY.POPUP.CLOSE" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>

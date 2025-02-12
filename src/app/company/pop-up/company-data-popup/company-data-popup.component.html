@@ -1,0 +1,182 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"COMPANY.POPUP.MODIFYDATA" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-2" *ngIf="idPopup == 1" style="overflow-y: auto; overflow-x: hidden;">
+    <div [formGroup]="companyInfoForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- NATURAL PERSON -->
+        <div class="col-12 mt-2">
+            <div class="form-check">
+                <label for="naturalPerson" class="form-check-label">
+                    {{"COMPANY.DATA.NATURALPERSON" | translate }}
+                </label>
+                <input type="checkbox" class="form-check-input" id="naturalPerson" formControlName="naturalPerson">
+            </div>
+        </div>
+
+        <ng-container *ngIf="companyInfoForm.get('naturalPerson')?.value != 0">
+            <!-- NAME -->
+            <div class="col-12 col-sm-6">
+                <label for="name" class="form-label">
+                    {{"COMPANY.NAME" | translate }}
+                </label>
+                <input type="text" class="form-control" id="name" formControlName="name">
+            </div>
+
+            <!-- SURNAME -->
+            <div class="col-12 col-sm-6">
+                <label for="surname" class="form-label">
+                    {{"COMPANY.SURNAME" | translate }}
+                </label>
+                <input type="text" class="form-control" id="surname" formControlName="surname">
+            </div>
+        </ng-container>
+
+
+        <ng-container *ngIf="companyInfoForm.get('naturalPerson')?.value != 1">
+            <!-- BUSINESSNAME -->
+            <div class="col-12">
+                <label for="business_name" class="form-label">
+                    {{"COMPANY.BUSINESSNAME" | translate }}
+                </label>
+                <input type="text" class="form-control" id="business_name" formControlName="business_name">
+            </div>
+        </ng-container>
+
+        <!-- TAX REGIME -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="tax_regime">
+                {{"COMPANY.DATA.TAXREGIME" | translate}}
+            </label>
+            <select class="form-select" id="tax_regime" formControlName="tax_regime">
+                <option [ngValue]="null">
+                    --
+                </option>
+                <option *ngFor="let regime of regimeList" [ngValue]="regime.id">
+                    {{regime.name}}
+                </option>
+            </select>
+        </div>
+
+        <!-- FISCALCODE -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="fiscalcode">
+                {{"COMPANY.DATA.FISCALCODE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
+        </div>
+
+        <!-- VAT -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="vat">
+                {{"COMPANY.DATA.VAT" | translate}}
+            </label>
+            <input class="form-control" type="text" id="vat" formControlName="vat">
+        </div>
+
+        <!-- PEC -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="pec">
+                {{"COMPANY.DATA.PEC" | translate}}
+            </label>
+            <input class="form-control" type="text" id="pec" formControlName="pec">
+        </div>
+        <div class="col-12 mt-1">
+            <span style="font-size: small; color: gray; font-style: italic;">
+                {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
+                {{'COMPANY.POPUP.NBUPDATE' | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="historicize()">
+                {{"COMPANY.POPUP.HISTORICIZE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="update()">
+                {{"COMPANY.POPUP.UPDATE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"COMPANY.POPUP.CLOSE" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-content class="pb-2" *ngIf="idPopup == 2">
+    <div [formGroup]="companyProfessionalBoardForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- BOARD NAME -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="board_name">
+                {{"COMPANY.DATA.BOARDNAME" | translate}}
+            </label>
+            <input type="text" class="form-control" id="board_name" formControlName="board_name">
+        </div>
+
+        <!-- BOARD NUMBER -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="board_number">
+                {{"COMPANY.DATA.BOARDNUMBER" | translate}}
+            </label>
+            <input class="form-control" type="text" id="board_number" formControlName="board_number">
+        </div>
+
+        <!-- SUBSCRIPTION DATE -->
+        <div class="col-10 col-lg-6">
+            <label class="form-label" for="subscription_date">
+                {{"COMPANY.DATA.SUBSCRIPTIONDATE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="subscription_date" formControlName="subscription_date">
+        </div>
+
+        <!-- PROVINCE -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="province">
+                {{"COMPANY.DATA.PROVINCE" | translate}}
+            </label>
+            <select class="form-select" id="province" formControlName="province">
+                <option [ngValue]="null">
+                    --
+                </option>
+                <option *ngFor="let province of provinceList" [ngValue]="province.id">
+                    {{province.name}}
+                </option>
+            </select>
+        </div>
+        <div class="col-12 mt-1">
+            <span style="font-size: small; color: gray; font-style: italic;">
+                {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
+                {{'COMPANY.POPUP.NBUPDATE' | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="historicize()">
+                {{"COMPANY.POPUP.HISTORICIZE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="update()">
+                {{"COMPANY.POPUP.UPDATE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"COMPANY.POPUP.CLOSE" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>

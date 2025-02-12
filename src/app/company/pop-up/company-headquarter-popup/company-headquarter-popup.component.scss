@@ -1,0 +1,40 @@
+.subtitle {
+    font-weight: bold;
+}
+
+.form-label {
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 0.3rem;
+    margin-bottom: 0rem;
+}
+
+input, textarea, select, span {
+    font-weight: 150;
+}
+
+.errorText {
+    font-size: small;
+    color: red;
+}
+
+.btn-outline-dark {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+.bi-pencil {
+    display: inline-block;
+    transform: scale(1);
+    transition: transform 0.5s ease;
+}
+
+.bi-pencil:hover {
+    transform: scale(1.4);
+    cursor: pointer;
+}

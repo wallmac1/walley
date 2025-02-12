@@ -884,5 +884,74 @@
           "UNITOFMEASUREMENT": "Unità di Misura"
         }
       }
+    },
+    "COMPANY": {
+      "BUSINESSNAME": "Ragione Sociale",
+      "NAME": "Nome",
+      "SURNAME": "Cognome",
+      "DATA": {
+        "NATURALPERSON": "Persona Fisica",
+        "DATA": "Dati",
+        "HEADQUARTER": "Sede",
+        "TAXREPRESENTATIVE": "Rappresentante Fiscale",
+        "BROKER": "Intermediario",
+        "INFO": "Info",
+        "PEC": "PEC",
+        "TAXREGIME": "Regime Fiscale",
+        "COUNTRY": "Paese",
+        "FISCALCODE": "Codice Fiscale",
+        "CODEINFO": "A fine amministrativo-contabile",
+        "VAT": "P. IVA",
+        "TITLE": "Titolo",
+        "EORI": "Eori",
+        "PHONE": "Telefono",
+        "FAX": "Fax",
+        "EMAIL": "Email",
+        "LENDERCODE": "Codice Cliente/Prestatore",
+        "PROFESSIONALBOARD": "Albo professionale",
+        "BOARDNAME": "Nome Albo",
+        "BOARDNUMBER": "Numero Albo",
+        "SUBSCRIPTIONDATE": "Data Iscrizione",
+        "PROVINCE": "Provincia",
+        "SAVE": "Salva"
+      },
+      "HEADQUARTER": {
+        "LEGALHEADQUARTER": "Sede Legale",
+        "COUNTRY": "Paese",
+        "STREET": "Indirizzo",
+        "STREETNUMBER": "N.C.",
+        "MUNICIPALITY": "Comune",
+        "POSTALCODE": "CAP",
+        "PROVINCE": "Provincia",
+        "COMPANYBUILDING": "Stabile Organizzazione",
+        "REA": "REA",
+        "REANUMBER": "Numero",
+        "ASSETS": "Capitale",
+        "SOLESHAREHOLDER": "Socio Unico",
+        "CLOSURE": "Liquidazione"
+      },
+      "BROKER": {
+        "INFO": "Info",
+        "COUNTRY": "Paese",
+        "TYPE": "Tipo",
+        "NAME": "Nome",
+        "SURNAME": "Cognome",
+        "BUSINESSNAME": "Ragione Sociale",
+        "FISCALCODE": "Codice Fiscale",
+        "VAT": "P. IVA",
+        "EORI": "Eori",
+        "TITLE": "Titolo"
+      },
+      "POPUP": {
+        "CLOSE": "Chiudi",
+        "HISTORICIZE": "Storicizza",
+        "UPDATE": "Aggiorna",
+        "MODIFYBROKER": "Modifica Intermediario",
+        "MODIFYHEADQUARTER": "Modifica Sede",
+        "MODIFYDATA": "Modifica Dati",
+        "NB": "NB.",
+        "NBHISTORICIZE": "Storicizza: Modifica i valori per tutti le successive compilazioni, lasciando inalterati tutti i file già prodotti",
+        "NBUPDATE": "Aggiorna: Modifica i valori anche sui file prodotti in precedenza"
+      } 
     }
   }

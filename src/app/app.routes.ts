@@ -22,6 +22,7 @@ import { BankListComponent } from './invoices/bank/bank-list/bank-list.component
 import { GeneralMenuComponent } from './invoices/menu/general-menu/general-menu.component';
 import { CustomerNewComponent } from './invoices/customer/customer-new/customer-new.component';
 import { CustomerModifyComponent } from './invoices/customer/customer-modify/customer-modify.component';
+import { CompanyRegistryComponent } from './company/company-registry/company-registry.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -48,5 +49,6 @@ export const routes: Routes = [
     { path: "generalMenu", component: GeneralMenuComponent },
     { path: "newCustomer", component: CustomerNewComponent },
     { path: "modifyCustomer/:id", component: CustomerModifyComponent },
+    { path: "companyRegistry/:id", component: CompanyRegistryComponent },
     { path: '**', redirectTo: '/login' },
 ];
