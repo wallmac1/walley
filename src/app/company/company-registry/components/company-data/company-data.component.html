@@ -1,0 +1,163 @@
+<div class="container-fluid pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4" style="max-width: 1400px;">
+
+    <!-- INFO -->
+    <div class="row justify-content-start align-items-center mb-2" style="border-bottom: 1px solid lightgray;">
+        <div class="col-12 subtitle">
+            {{"COMPANY.DATA.INFO" | translate}}
+        </div>
+    </div>
+    <div [formGroup]="companyInfoForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- TAX REGIME -->
+        <div class="col-12 col-sm-8 col-md-5 col-lg-3">
+            <label class="form-label" for="tax_regime">
+                {{"COMPANY.DATA.TAXREGIME" | translate}}
+            </label>
+            <select class="form-select" id="tax_regime" formControlName="tax_regime">
+                <option [ngValue]="null">
+                    --
+                </option>
+                <option *ngFor="let regime of regimeList" [ngValue]="regime.id">
+                    {{regime.name}}
+                </option>
+            </select>
+        </div>
+
+        <!-- FISCALCODE -->
+        <div class="col-12 col-md-7 col-lg-3">
+            <label class="form-label" for="fiscalcode">
+                {{"COMPANY.DATA.FISCALCODE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
+        </div>
+
+        <!-- VAT -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <label class="form-label" for="vat">
+                {{"COMPANY.DATA.VAT" | translate}}
+            </label>
+            <input class="form-control" type="text" id="vat" formControlName="vat">
+        </div>
+
+        <!-- PEC -->
+        <div class="col-10 col-md-4 col-lg-2">
+            <label class="form-label" for="pec">
+                {{"COMPANY.DATA.PEC" | translate}}
+            </label>
+            <input class="form-control" type="text" id="pec" formControlName="pec">
+        </div>
+
+        <div class="col-2 col-md-1 ps-0 ps-md-2 text-end">
+            <button class="btn btn-outline-dark" (click)="modifyInfoPopup(1)">
+                <i class="bi bi-pencil"></i>
+            </button>
+        </div>
+
+        <!-- TITLE -->
+        <div class="col-12 col-sm-6 col-md-4">
+            <label class="form-label" for="title">{{"COMPANY.DATA.TITLE" | translate}}</label>
+            <input class="form-control" type="text" id="title" formControlName="title">
+        </div>
+
+        <!-- EORI -->
+        <div class="col-12 col-sm-6 col-md-4">
+            <label class="form-label" for="eori">
+                {{"COMPANY.DATA.EORI" | translate}}
+            </label>
+            <input class="form-control" type="text" id="eori" formControlName="eori">
+        </div>
+
+        <!-- PHONE -->
+        <div class="col-12 col-sm-6 col-md-4">
+            <label class="form-label" for="phone">
+                {{"COMPANY.DATA.PHONE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="phone" formControlName="phone">
+        </div>
+
+        <!-- FAX -->
+        <div class="col-12 col-sm-6 col-md-4">
+            <label class="form-label" for="fax">
+                {{"COMPANY.DATA.FAX" | translate}}
+            </label>
+            <input class="form-control" type="text" id="fax" formControlName="fax">
+        </div>
+
+        <!-- EMAIL -->
+        <div class="col-12 col-sm-6 col-md-4">
+            <label class="form-label" for="email">
+                {{"COMPANY.DATA.EMAIL" | translate}}
+            </label>
+            <input class="form-control" type="text" id="email" formControlName="email">
+        </div>
+
+        <!-- LENDERCODE -->
+        <div class="col-12 col-sm-6 col-md-4" style="position: relative;">
+            <label class="form-label" for="lender_code">
+                {{"COMPANY.DATA.LENDERCODE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="lender_code" formControlName="lender_code">
+            <i class="bi bi-info-circle ms-1" style="position: absolute; bottom: 6px; right: 20px;"
+                matTooltip="{{'COMPANY.DATA.CODEINFO'}}">
+            </i>
+        </div>
+    </div>
+    <div class="row justify-content-end mt-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+        <div class="col-auto">
+            <button class="btn btn-outline-dark" (click)="save()">
+                {{"COMPANY.DATA.SAVE" |translate}}
+            </button>
+        </div>
+    </div>
+
+    <!-- PROFESSIONAL BOARD -->
+    <div class="row justify-content-start align-items-center mt-2 mb-2" style="border-bottom: 1px solid lightgray;">
+        <div class="col-12 subtitle">
+            {{"COMPANY.DATA.PROFESSIONALBOARD" | translate}}
+            <i class="bi bi-pencil ms-2" (click)="modifyInfoPopup(2)"></i>
+        </div>
+    </div>
+    <div [formGroup]="companyProfessionalBoardForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- BOARD NAME -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <label class="form-label" for="board_name">
+                {{"COMPANY.DATA.BOARDNAME" | translate}}
+            </label>
+            <input type="text" class="form-control" id="board_name" formControlName="board_name">
+        </div>
+
+        <!-- BOARD NUMBER -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <label class="form-label" for="board_number">
+                {{"COMPANY.DATA.BOARDNUMBER" | translate}}
+            </label>
+            <input class="form-control" type="text" id="board_number" formControlName="board_number">
+        </div>
+
+        <!-- SUBSCRIPTION DATE -->
+        <div class="col-10 col-sm-6 col-lg-3">
+            <label class="form-label" for="subscription_date">
+                {{"COMPANY.DATA.SUBSCRIPTIONDATE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="subscription_date" formControlName="subscription_date">
+        </div>
+
+        <!-- PROVINCE -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <label class="form-label" for="province">
+                {{"COMPANY.DATA.PROVINCE" | translate}}
+            </label>
+            <select class="form-select" id="province" formControlName="province">
+                <option [ngValue]="null">
+                    --
+                </option>
+                <option *ngFor="let province of provinceList" [ngValue]="province.id">
+                    {{province.name}}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<div style="min-width: 100%; min-height: 98vh; background-color: whitesmoke;">
+    <div class="container-fluid" style="min-width: 350px;">
+        <div class="row justify-content-center align-items-center mb-2 pt-4" style="position: relative;">
+            <div class="col-auto ps-3 pe-3 pt-1 pb-1 titleColumn" style="position: relative;">
+                <span *ngIf="companyDataForm.get('naturalPerson')?.value == 1" class="title">
+                    {{companyDataForm.get('name')?.value}} {{companyDataForm.get('surname')?.value}}
+                </span>
+                <span *ngIf="companyDataForm.get('naturalPerson')?.value == 0" class="title">
+                    {{companyDataForm.get('business_name')?.value}}
+                </span>
+                <span (click)="modifyDataPopup()" class="modifyIcon" 
+                    style="position: absolute; right: -10px; top: -10px;">
+                    <i class="bi bi-pencil"></i>
+                </span>
+            </div>
+
+            <div *ngIf="!isSmallScreen" style="position: absolute; top: 30px; left: 20px;">
+                <button class="btn btn-outline-dark" (click)="goBack()">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MAT TABS -->
+        <div class="row justify-content-start align-items-center mb-4" style="height: 100%;">
+            <div class="col-12 mt-4">
+                <mat-tab-group>
+
+                    <!-- COMPANY DATA -->
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <span class="tabTitle">
+                                {{"COMPANY.DATA.DATA" | translate}}
+                            </span>
+                            <i class="bi bi-file-text ms-3 iconSize"></i>
+                        </ng-template>
+
+                        <app-company-data #companyData [companyData]="companyDataObj"
+                            (modifyName)="modifyData($event)"></app-company-data>
+                    </mat-tab>
+
+                    <!-- COMPANY HOUSEHOLDER -->
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <span class="tabTitle">
+                                {{"COMPANY.DATA.HEADQUARTER" | translate}}
+                            </span>
+                            <i class="bi bi-buildings ms-3 iconSize"></i>
+                        </ng-template>
+
+                        <app-company-headquarter [countriesList]="countriesList"
+                            [companyHeadquarter]="companyHeadquarterObj"></app-company-headquarter>
+                    </mat-tab>
+
+                    <!-- TAX REPRESENTATIVE -->
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <span class="tabTitle">
+                                {{"COMPANY.DATA.TAXREPRESENTATIVE" | translate}}
+                            </span>
+                            <i class="bi bi-bank ms-3 iconSize"></i>
+                        </ng-template>
+
+                        <app-company-tax-representative></app-company-tax-representative>
+                    </mat-tab>
+
+                    <!-- REA -->
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <span class="tabTitle">
+                                {{"COMPANY.DATA.BROKER" | translate}}
+                            </span>
+                            <i class="bi bi-person ms-3 iconSize"></i>
+                        </ng-template>
+
+                        <app-company-broker [companyBroker]="companyBrokerObj"
+                            [typeList]="typeList"></app-company-broker>
+                    </mat-tab>
+                </mat-tab-group>
+
+            </div>
+        </div>
+    </div>
+</div>

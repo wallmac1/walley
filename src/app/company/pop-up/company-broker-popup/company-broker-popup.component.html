@@ -1,0 +1,126 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"COMPANY.POPUP.MODIFYBROKER" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-2" style="overflow-y: auto; overflow-x: hidden;">
+    <div [formGroup]="companyBrokerForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- COUNTRY -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <label class="form-label" for="country">
+                {{"COMPANY.HEADQUARTER.COUNTRY" | translate}}
+            </label>
+            <select class="form-select" name="idcountry" id="country" formControlName="country">
+                <option [ngValue]="null">--</option>
+                <option *ngFor="let country of countriesList" [ngValue]="country.id">
+                    {{country.common_name}}
+                </option>
+            </select>
+        </div>
+
+        <!-- TYPE -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <label class="form-label" for="type">
+                {{"COMPANY.BROKER.TYPE" | translate}}
+            </label>
+            <select class="form-select" id="type" formControlName="type">
+                <option [ngValue]="null">
+                    --
+                </option>
+                <option *ngFor="let type of typeList" [ngValue]="type.id">
+                    {{type.name}}
+                </option>
+            </select>
+        </div>
+
+        <!-- FISCAL CODE -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <label for="fiscalcode" class="form-label">
+                {{"COMPANY.BROKER.FISCALCODE" | translate }}
+            </label>
+            <input type="text" class="form-control" id="fiscalcode" formControlName="fiscalcode">
+        </div>
+
+        <!-- VAT -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <label for="vat" class="form-label">
+                {{"COMPANY.BROKER.VAT" | translate }}
+            </label>
+            <input type="text" class="form-control" id="vat" formControlName="vat">
+        </div>
+
+
+        <ng-container *ngIf="companyBrokerForm.get('type')?.value != 2">
+            <!-- NAME -->
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                <label for="name" class="form-label">
+                    {{"COMPANY.BROKER.NAME" | translate }}
+                </label>
+                <input type="text" class="form-control" id="name" formControlName="name">
+            </div>
+
+            <!-- SURNAME -->
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                <label for="surname" class="form-label">
+                    {{"COMPANY.BROKER.SURNAME" | translate }}
+                </label>
+                <input type="text" class="form-control" id="surname" formControlName="surname">
+            </div>
+        </ng-container>
+
+
+        <ng-container *ngIf="companyBrokerForm.get('type')?.value != 1">
+            <!-- BUSINESSNAME -->
+            <div class="col-12 col-md-6">
+                <label for="business_name" class="form-label">
+                    {{"COMPANY.BROKER.BUSINESSNAME" | translate }}
+                </label>
+                <input type="text" class="form-control" id="business_name" formControlName="business_name">
+            </div>
+        </ng-container>
+
+        <!-- TITLE -->
+        <div class="col-12 col-sm-6 col-lg-6 col-xl-3">
+            <label for="title" class="form-label">
+                {{"COMPANY.BROKER.TITLE" | translate }}
+            </label>
+            <input type="text" class="form-control" id="title" formControlName="title">
+        </div>
+
+        <!-- EORI -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <label for="eori" class="form-label">
+                {{"COMPANY.BROKER.EORI" | translate }}
+            </label>
+            <input type="text" class="form-control" id="eori" formControlName="eori">
+        </div>
+
+        <div class="col-12 mt-1">
+            <span style="font-size: small; color: gray; font-style: italic;">
+                {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
+                {{'COMPANY.POPUP.NBUPDATE' | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="historicize()">
+                {{"COMPANY.POPUP.HISTORICIZE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="update()">
+                {{"COMPANY.POPUP.UPDATE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"COMPANY.POPUP.CLOSE" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>
