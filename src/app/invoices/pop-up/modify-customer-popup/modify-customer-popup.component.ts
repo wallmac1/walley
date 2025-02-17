@@ -39,7 +39,7 @@ export class ModifyCustomerPopupComponent {
     sdi: new FormControl<string | null>(null),
     pec: new FormControl<string | null>(null),
     sameCode: new FormControl<number>(0)
-  })
+  });
 
   modifyCustomerForm = new FormGroup({
     denominazione: new FormControl<string | null>(null),
@@ -79,6 +79,7 @@ export class ModifyCustomerPopupComponent {
 
   ngOnInit(): void {
     this.initForm();
+    this.formLogic();
   }
 
   initForm() {
@@ -86,17 +87,49 @@ export class ModifyCustomerPopupComponent {
       parseInt(this.customer?.type?.toString()!);
       this.modifyCustomerForm.patchValue(this.customer!);
     }
-  }
-
-  confirm() {
-    this.submitted = true;
-    if (this.modifyCustomerForm.valid) {
-      this.dialogRef.close(this.modifyCustomerForm.getRawValue());
+    if (this.idPopup == 2) {
+      this.customerGeneralForm.get('naturalPerson')?.valueChanges.subscribe(() => {
+        this.formLogic();
+      })
     }
   }
 
-  save() {
-    this.dialogRef.close(this.customerGeneralForm.getRawValue());
+  formLogic() {
+    if (this.customerGeneralForm.get('naturalPerson')?.value == 1) {
+      this.customerGeneralForm.get('businessName')?.setValidators(null);
+      this.customerGeneralForm.get('businessName')?.reset();
+      this.customerGeneralForm.get('businessName')?.disable();
+      this.customerGeneralForm.get('name')?.setValidators(Validators.required);
+      this.customerGeneralForm.get('surname')?.setValidators(Validators.required);
+      this.customerGeneralForm.get('name')?.enable();
+      this.customerGeneralForm.get('surname')?.enable();
+    }
+    else {
+      this.customerGeneralForm.get('businessName')?.setValidators(Validators.required);
+      this.customerGeneralForm.get('businessName')?.enable();
+      this.customerGeneralForm.get('name')?.setValidators(null);
+      this.customerGeneralForm.get('surname')?.setValidators(null);
+      this.customerGeneralForm.get('name')?.disable();
+      this.customerGeneralForm.get('surname')?.disable();
+      this.customerGeneralForm.get('name')?.reset();
+      this.customerGeneralForm.get('surname')?.reset();
+    }
+  }
+
+  historicize() {
+    //IMPOSTARE STORICIZZA
+    this.submitted = true;
+    if (this.customerGeneralForm.valid) {
+      this.dialogRef.close(this.customerGeneralForm.getRawValue());
+    }
+  }
+
+  update() {
+    //IMPOSTARE AGGIORNA
+    this.submitted = true;
+    if (this.customerGeneralForm.valid) {
+      this.dialogRef.close(this.customerGeneralForm.getRawValue());
+    }
   }
 
   close() {

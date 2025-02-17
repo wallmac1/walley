@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { Country } from '../../../../interfaces/country';
-import { ConnectServerService } from '../../../../../services/connect-server.service';
+import { Country } from '../../../../../../interfaces/country';
+import { ConnectServerService } from '../../../../../../../services/connect-server.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
-import { City } from '../../../../interfaces/city';
-import { AddressPopupComponent } from '../../../../pop-up/address-popup/address-popup.component';
+import { City } from '../../../../../../interfaces/city';
+import { AddressPopupComponent } from '../../../../../../pop-up/address-popup/address-popup.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Address } from '../../../../interfaces/address';
+import { Address } from '../../../../../../interfaces/address';
 
 @Component({
   selector: 'app-address-list',

@@ -1,6 +1,7 @@
 <h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
-    <span style="color: white; font-weight: bold; font-size: x-large;">{{"INVOICE.MODAL.MODIFYCUSTOMER" | translate
-        }}</span>
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"INVOICE.MODAL.MODIFYCUSTOMER" | translate}}
+    </span>
 </h2>
 
 <mat-dialog-content *ngIf="idPopup == 1">
@@ -15,8 +16,9 @@
         </div>
 
         <div class="col-12 col-sm-6 mt-1 mb-1">
-            <label class="form-label" for="fiscalcode">{{"INVOICE.INFO.CUSTOMERCOMPONENT.FISCALCODE" | translate
-                }}</label>
+            <label class="form-label" for="fiscalcode">
+                {{"INVOICE.INFO.CUSTOMERCOMPONENT.FISCALCODE" | translate }}
+            </label>
             <input type="text" class="form-control" id="fiscalcode" formControlName="fiscalcode">
         </div>
         <div class="col-12 mt-1 mb-1">
@@ -141,16 +143,23 @@
             </span>
         </div>
     </div>
-</mat-dialog-content>
 
-<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
-    <button *ngIf="idPopup == 1" class="btn btn-outline-success me-2" style="width: 100px;" (click)="confirm()">
-        {{"INVOICE.MODAL.CONFIRM" | translate }}
-    </button>
-    <button *ngIf="idPopup == 2" class="btn btn-outline-success me-2" (click)="save()">
-        {{"INVOICE.CUSTOMER.ADD" | translate}}
-    </button>
-    <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
-        {{"INVOICE.MODAL.CLOSE" | translate }}
-    </button>
-</mat-dialog-actions>
+    <!-- ACTIONS -->
+    <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="update()">
+                {{"INVOICE.MODAL.CONFIRM" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-success me-2" (click)="historicize()">
+                {{"INVOICE.CUSTOMER.ADD" | translate}}
+            </button>
+        </div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-danger me-2" style="width: 100px;" (click)="close()">
+                {{"INVOICE.MODAL.CANCEL" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>

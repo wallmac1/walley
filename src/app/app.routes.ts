@@ -21,8 +21,12 @@ import { BankModifyComponent } from './invoices/bank/bank-modify/bank-modify.com
 import { BankListComponent } from './invoices/bank/bank-list/bank-list.component';
 import { GeneralMenuComponent } from './invoices/menu/general-menu/general-menu.component';
 import { CustomerNewComponent } from './invoices/customer/customer-new/customer-new.component';
-import { CustomerModifyComponent } from './invoices/customer/customer-modify/customer-modify.component';
 import { CompanyRegistryComponent } from './company/company-registry/company-registry.component';
+import { CustomerContainerComponent } from './invoices/customer/customer-container/customer-container.component';
+import { CustomerListComponent } from './invoices/customer/customer-list/customer-list.component';
+// import { TicketListComponent } from './weco/tickets/ticket-list/ticket-list.component';
+// import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.component';
+// import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modify.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -48,7 +52,11 @@ export const routes: Routes = [
     { path: "bankList", component: BankListComponent },
     { path: "generalMenu", component: GeneralMenuComponent },
     { path: "newCustomer", component: CustomerNewComponent },
-    { path: "modifyCustomer/:id", component: CustomerModifyComponent },
+    { path: "modifyCustomer/:id", component: CustomerContainerComponent },
+    { path: "customerList", component: CustomerListComponent },
     { path: "companyRegistry/:id", component: CompanyRegistryComponent },
+    // { path: "ticketListWeco", component: TicketListComponent },
+    // { path: "ticketNewWeco", component: TicketNewComponent },
+    // { path: "ticketModifyWeco/:id", component: TicketModifyComponent },
     { path: '**', redirectTo: '/login' },
 ];

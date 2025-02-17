@@ -11,7 +11,7 @@
     <form [formGroup]="addressForm">
         <ng-container formArrayName="addresses">
             <div *ngFor="let address of addresses.controls; let i = index" [formGroupName]="i"
-                class="row justify-content-center align-items-center mt-4 pb-2"
+                class="row justify-content-center align-items-center mt-2 pb-2"
                 style="border-bottom: 1px solid lightgray; position: relative;">
 
                 <div class="col-12" style="border-bottom: 1px solid lightgray;">

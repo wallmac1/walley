@@ -7,45 +7,13 @@
         </div>
     </div> -->
 
-    <div class="row justify-content-center align-items-center mt-4">
-        <div class="col-12 col-md-2 d-flex align-items-bottom text-start order-2 order-md-1">
-            <i *ngIf="customerGeneralForm.get('naturalPerson')?.value == 1; else companyBlock"
-                class="bi bi-person-fill iconSize" matTooltip="{{'INVOICE.CUSTOMER.NATURALPERSON' | translate}}"></i>
-            <ng-template #companyBlock>
-                <i class="bi bi-buildings iconSize" matTooltip="{{'INVOICE.CUSTOMER.COMPANY' | translate}}"></i>
-            </ng-template>
-            <button class="btn btn-sm btn-outline-dark ms-2 mt-1" style="height: 34px;">
-                {{"INVOICE.CUSTOMER.PDF" | translate}}
-            </button>
-        </div>
-        <div class="col-12 col-md-8 text-center order-1 order-md-2">
-            <span *ngIf="customerGeneralForm.get('naturalPerson')?.value == 1; else companyNameBlock"
-                class="titleRecords">
-                {{customerGeneralForm.get('name')?.value}} {{customerGeneralForm.get('surname')?.value}}
-                <sup (click)="modifyPopUp()">
-                    <i class="bi bi-pencil iconHover ms-2" style="font-size: 16px;"></i>
-                </sup>
-            </span>
-            <ng-template #companyNameBlock>
-                <span class="titleRecords">
-                    {{customerGeneralForm.get('businessName')?.value}}
-                </span>
-                <sup (click)="modifyPopUp()">
-                    <i class="bi bi-pencil ms-2" style="font-size: 16px;"></i>
-                </sup>
-            </ng-template>
-        </div>
-        <div class="d-none d-md-inline col-md-2 order-3">
-        </div>
-    </div>
-
-    <div class="row mt-4" style="border-bottom: 1px solid lightgray;">
+    <!-- <div class="row mt-4" style="border-bottom: 1px solid lightgray;">
         <div class="col-auto">
             <span class="subtitle">
                 {{"INVOICE.CUSTOMER.RECORDS" | translate}}
             </span>
         </div>
-    </div>
+    </div> -->
 
     <ng-container [formGroup]="customerRecordsForm">
         <div class="row justify-content-center align-items-end mt-2">
@@ -142,97 +110,100 @@
                 <input class="form-control" type="text" id="eori" formControlName="eori">
             </div>
 
-            <!-- GENDER -->
-            <div class="col-12 col-sm-6 col-md-3 col-lg-2">
-                <label class="form-label" for="gender">
-                    {{"INVOICE.CUSTOMER.GENDER" | translate}}
-                </label>
-                <select class="form-select" id="gender" formControlName="gender">
-                    <option [value]="null">
-                        --
-                    </option>
-                    <option *ngFor="let gender of genderList" [ngValue]="gender.id">
-                        {{gender.name}}
-                    </option>
-                </select>
-            </div>
-
-            <!-- BIRTH COUNTRY -->
-            <div class="col-12 col-sm-6 col-md-4">
-                <label class="form-label" for="birth_country">
-                    {{"INVOICE.CUSTOMER.BIRTHCOUNTRY" | translate}}
-                </label>
-                <select class="form-select" id="birth_country" formControlName="birth_country">
-                    <option [value]="null">
-                        --
-                    </option>
-                    <option *ngFor="let country of countriesList" [ngValue]="country.id">
-                        {{country.common_name}}
-                    </option>
-                </select>
-            </div>
-
-            <!-- BIRTH CITY -->
-            <div *ngIf="customerRecordsForm.get('birth_country')?.value == 12; else notItalianBlock"
-                class="col-12 col-sm-6 col-md-5 col-lg-5">
-                <label class="form-label" for="birth_city_it">{{"INVOICE.CUSTOMER.BIRTHCITY" | translate }}</label>
-                <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="birth_city_it"
-                    formControlName="birth_city_it"
-                    [class.is-invalid]="customerRecordsForm.get('birth_city_it')?.invalid && submitted">
-                <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCityName">
-                    <mat-option *ngFor="let option of filteredCities$ | async" [value]="option">
-                        <div>
-                            {{option.name}}
-                        </div>
-                    </mat-option>
-                </mat-autocomplete>
-            </div>
-            <ng-template #notItalianBlock>
-                <div class="col-12 col-sm-6 col-md-5 col-lg-5">
-                    <label class="form-label" for="birth_city">
-                        {{"INVOICE.CUSTOMER.BIRTHCITY" | translate}}
+            <ng-container *ngIf="customerGeneralForm.get('naturalPerson')?.value == 1">
+                <!-- GENDER -->
+                <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+                    <label class="form-label" for="gender">
+                        {{"INVOICE.CUSTOMER.GENDER" | translate}}
                     </label>
-                    <input class="form-control" type="text" id="birth_city" formControlName="birth_city">
+                    <select class="form-select" id="gender" formControlName="gender">
+                        <option [value]="null">
+                            --
+                        </option>
+                        <option *ngFor="let gender of genderList" [ngValue]="gender.id">
+                            {{gender.name}}
+                        </option>
+                    </select>
                 </div>
-            </ng-template>
 
-            <!-- BIRTHDAY -->
-            <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                <label class="form-label" for="birthday">
-                    {{"INVOICE.CUSTOMER.BIRTHDAY" | translate}}
-                </label>
-                <input class="form-control" type="date" id="birthday" formControlName="birthday">
+                <!-- BIRTH COUNTRY -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <label class="form-label" for="birth_country">
+                        {{"INVOICE.CUSTOMER.BIRTHCOUNTRY" | translate}}
+                    </label>
+                    <select class="form-select" id="birth_country" formControlName="birth_country">
+                        <option [value]="null">
+                            --
+                        </option>
+                        <option *ngFor="let country of countriesList" [ngValue]="country.id">
+                            {{country.common_name}}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- BIRTH CITY -->
+                <div *ngIf="customerRecordsForm.get('birth_country')?.value == 12; else notItalianBlock"
+                    class="col-12 col-sm-6 col-md-5 col-lg-5">
+                    <label class="form-label" for="birth_city_it">{{"INVOICE.CUSTOMER.BIRTHCITY" | translate }}</label>
+                    <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="birth_city_it"
+                        formControlName="birth_city_it"
+                        [class.is-invalid]="customerRecordsForm.get('birth_city_it')?.invalid && submitted">
+                    <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCityName">
+                        <mat-option *ngFor="let option of filteredCities$ | async" [value]="option">
+                            <div>
+                                {{option.name}}
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+                <ng-template #notItalianBlock>
+                    <div class="col-12 col-sm-6 col-md-5 col-lg-5">
+                        <label class="form-label" for="birth_city">
+                            {{"INVOICE.CUSTOMER.BIRTHCITY" | translate}}
+                        </label>
+                        <input class="form-control" type="text" id="birth_city" formControlName="birth_city">
+                    </div>
+                </ng-template>
+
+                <!-- BIRTHDAY -->
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <label class="form-label" for="birthday">
+                        {{"INVOICE.CUSTOMER.BIRTHDAY" | translate}}
+                    </label>
+                    <input class="form-control" type="date" id="birthday" formControlName="birthday">
+                </div>
+
+                <!-- JOB -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+                    <label class="form-label" for="job">
+                        {{"INVOICE.CUSTOMER.JOB" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="job" formControlName="job">
+                </div>
+
+                <!-- DOCTOR -->
+                <div class="col-12 col-sm-6 col-md-5 col-lg-4">
+                    <label class="form-label" for="doctor">
+                        {{"INVOICE.CUSTOMER.DOCTOR" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="doctor" formControlName="doctor">
+                </div>
+
+                <!-- SPECIALIST -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <label class="form-label" for="specialist">
+                        {{"INVOICE.CUSTOMER.SPECIALIST" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="specialist" formControlName="specialist">
+                </div>
+
+            </ng-container>
+
+            <div *ngIf="customerRecordsForm.invalid && submitted" class="col-12 text-center mt-2">
+                <span style="font-size: small; color: red;">
+                    {{"INVOICE.CUSTOMER.MISSINGFIELDS" | translate}}
+                </span>
             </div>
-
-            <!-- JOB -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                <label class="form-label" for="job">
-                    {{"INVOICE.CUSTOMER.JOB" | translate}}
-                </label>
-                <input class="form-control" type="text" id="job" formControlName="job">
-            </div>
-
-            <!-- DOCTOR -->
-            <div class="col-12 col-sm-6 col-md-5 col-lg-4">
-                <label class="form-label" for="doctor">
-                    {{"INVOICE.CUSTOMER.DOCTOR" | translate}}
-                </label>
-                <input class="form-control" type="text" id="doctor" formControlName="doctor">
-            </div>
-
-            <!-- SPECIALIST -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <label class="form-label" for="specialist">
-                    {{"INVOICE.CUSTOMER.SPECIALIST" | translate}}
-                </label>
-                <input class="form-control" type="text" id="specialist" formControlName="specialist">
-            </div>
-        </div>
-
-        <div *ngIf="customerRecordsForm.invalid && submitted" class="col-12 text-center mt-2">
-            <span style="font-size: small; color: red;">
-                {{"INVOICE.CUSTOMER.MISSINGFIELDS" | translate}}
-            </span>
         </div>
 
         <div class="row justify-content-center mt-4">
@@ -245,7 +216,7 @@
     </ng-container>
 </div>
 
-<div class="container-fluid mt-4" style="min-width: 350px;">
+<div class="container-fluid mt-4" style="min-width: 350px; max-width: 1400px;">
     <div class="row justify-content-center">
         <div class="col-12">
             <mat-tab-group (selectedIndexChange)="onTabChange($event)">
@@ -269,7 +240,8 @@
                         <i class="bi bi-building-gear iconSize ms-4"></i>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-organization [taxRepresentative]="taxRepresentative" [organization]="organization"></app-organization>
+                        <app-organization [taxRepresentative]="taxRepresentative"
+                            [organization]="organization"></app-organization>
                     </ng-template>
                 </mat-tab>
                 <mat-tab>
@@ -284,7 +256,6 @@
                     </ng-template>
                 </mat-tab>
             </mat-tab-group>
-
         </div>
     </div>
 </div>

@@ -1,0 +1,51 @@
+<div class="container-fluid p-1 p-md-2 p-lg-3 p-xl-4" style="background-color: whitesmoke; min-height: 90vh;">
+    <div class="row justify-content-center">
+
+        <!-- INFO PANEL -->
+        <!-- <div class="col-12 mt-4">
+            <mat-expansion-panel class="customPanel infoPanel" style="background-color: rgb(253, 253, 223);"
+                appInViewport>
+                <mat-expansion-panel-header class="customPanelHeader">
+                    <mat-panel-title>
+                        <span class="panelTitle">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Informazioni
+                        </span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p class="panelContent">
+                    QUIIIIIII
+                    is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. It
+                    has survived not only five centuries,
+                    but also the leap into electronic typesetting, remaining essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+                    passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of
+                    Lorem Ipsum.
+                </p>
+            </mat-expansion-panel>
+        </div> -->
+
+        <!-- TICKET PANEL -->
+        <div class="col-12 mt-4" style="max-width: 1200px;">
+            <mat-expansion-panel class="customPanel ticketPanel" expanded appInViewport>
+                <mat-expansion-panel-header class="cutomPanelHeader">
+                    <mat-panel-title>
+                        <span class="panelTitle">
+                            <i class="bi bi-file-earmark-text me-2"></i>
+                            {{"TICKET.TICKET" | translate}}
+                        </span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <app-ticket-table></app-ticket-table>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+</div>

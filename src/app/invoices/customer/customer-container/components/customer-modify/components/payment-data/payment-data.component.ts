@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
-import { BankPopupComponent } from '../../../../pop-up/bank-popup/bank-popup.component';
+import { BankPopupComponent } from '../../../../../../pop-up/bank-popup/bank-popup.component';
 
 @Component({
   selector: 'app-payment-data',

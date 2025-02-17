@@ -1,23 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { ConnectServerService } from '../../../services/connect-server.service';
+import { ConnectServerService } from '../../../../../services/connect-server.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Country } from '../../interfaces/country';
+import { Country } from '../../../../interfaces/country';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { City } from '../../interfaces/city';
-import { ModifyCustomerPopupComponent } from '../../pop-up/modify-customer-popup/modify-customer-popup.component';
+import { City } from '../../../../interfaces/city';
+import { ModifyCustomerPopupComponent } from '../../../../pop-up/modify-customer-popup/modify-customer-popup.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AddressListComponent } from "./components/address-list/address-list.component";
 import { PaymentDataComponent } from "./components/payment-data/payment-data.component";
-import { Address } from '../../interfaces/address';
+import { Address } from '../../../../interfaces/address';
 import { OrganizationComponent } from "./components/organization/organization.component";
-import { Organization } from '../../interfaces/organization';
-import { TaxRepresentative } from '../../interfaces/tax-representative';
+import { Organization } from '../../../../interfaces/organization';
+import { TaxRepresentative } from '../../../../interfaces/tax-representative';
+import { Customer } from '../../../interfaces/customer';
 
 @Component({
   selector: 'app-customer-modify',
@@ -38,16 +39,19 @@ import { TaxRepresentative } from '../../interfaces/tax-representative';
 })
 export class CustomerModifyComponent {
 
+  @Input() customer: Customer | null = null;
+  @Input() countriesList: Country[] = [];
+  @Output() modifiedCustomer = new EventEmitter<{ customer: Customer}>;
+
   chargedTab: boolean[] = [false, false, false];
   addressList: Address[] = [];
   filteredCities$!: Observable<City[]>;
   genderList: { id: number, name: string }[] = [];
-  countriesList: Country[] = [];
   isSmall: boolean = false;
   submitted: boolean = false;
   idcustomer: number = 0;
-  organization: Organization = {municipality: null, province: null, postalcode: null, street: null, number: null};
-  taxRepresentative: TaxRepresentative = {naturalPerson: 0, name: null, surname: null, denomination: null, vat: null};
+  organization: Organization = { municipality: null, province: null, postalcode: null, street: null, number: null };
+  taxRepresentative: TaxRepresentative = { naturalPerson: 0, name: null, surname: null, denomination: null, vat: null };
 
   customerGeneralForm = new FormGroup({
     naturalPerson: new FormControl<number>(0),
@@ -93,9 +97,8 @@ export class CustomerModifyComponent {
   }
 
   ngOnInit(): void {
+    this.initForms();
     this.getGenderSelect();
-    this.getCountries();
-    this.getCustomer();
     this.searchCity();
     this.getTabFiles(0);
   }
@@ -114,6 +117,13 @@ export class CustomerModifyComponent {
     }
   }
 
+  initForms() {
+    if (this.customer != null) {
+      this.customerGeneralForm.patchValue(this.customer);
+      this.customerRecordsForm.patchValue(this.customer);
+    }
+  }
+
   onTabChange(index: number) {
     if (!this.chargedTab[index]) {
       this.getTabFiles(index);
@@ -122,18 +132,10 @@ export class CustomerModifyComponent {
 
   getTabFiles(tab: number) {
     // RICHIESTA AL SERVER, NEL SUBSCRIBE AGGIUNGERE chargedTab[tab] = true;
-    if(this.chargedTab[tab] == false) {
+    if (this.chargedTab[tab] == false) {
       this.chargedTab[tab] = true;
       console.log("creato", tab);
     }
-  }
-
-  getCountries() {
-    this.connectServerService.getRequestCountry().subscribe((val: any) => {
-      if (val) {
-        this.countriesList = val;
-      }
-    });
   }
 
   getGenderSelect() {
@@ -170,48 +172,12 @@ export class CustomerModifyComponent {
         const customer = result;
         console.log(customer)
         // SALVARE IL CLIENTE
-        // UPDATE DEL FORM
+        // UPDATE DEL PADRE
+        this.modifiedCustomer.emit({ customer: customer });
         this.customerGeneralForm.patchValue(customer);
         this.customerRecordsForm.patchValue(customer);
       }
     });
-  }
-
-  getCustomer() {
-    // RICHIEDI IL CUSTOMER AL SERVER
-    const customer = {
-      naturalPerson: 1,
-      name: "Mario",
-      surname: "Rossi",
-      businessName: null,
-      fiscalcode: "RSSMRA80A01H501Z",
-      vat: "IT12345678901",
-      country: 12,
-      sameCode: 0,
-      pec: "mario.rossi@example.com",
-      email: "mario.rossi@example.com",
-      phoneNumber: "+39 328 1234567",
-      fax: "+39 06 9876543",
-      website: "https://www.mariorossi.com",
-      eori: "IT 123456789 12345",
-      gender: 1,
-      birth_country: 12,
-      birth_city: null,
-      birth_city_it: {
-        id: 88,
-        name: 'Borgo San Lorenzo',
-        cap: "50032",
-        region: "Toscana",
-        province: "Firenze",
-      },
-      birthday: "1980-01-01",
-      job: "Ingegnere",
-      doctor: "Pippo Poppo",
-      specialist: "Pippa Peppa",
-      sdi: "ABCDE12345"
-    }
-    this.customerGeneralForm.patchValue(customer);
-    this.customerRecordsForm.patchValue(customer);
   }
 
   displayCityName(city?: City): string {
