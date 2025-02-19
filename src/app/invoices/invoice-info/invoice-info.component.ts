@@ -8,8 +8,8 @@ import { CustomerDataComponent } from "./components/customer-data/customer-data.
 import { HeadingComponent } from "./components/heading/heading.component";
 import { InvoiceHeading } from '../interfaces/invoice-heading';
 import { MatDialog } from '@angular/material/dialog';
-import { SelectCustomerPopupComponent } from '../pop-up/select-customer-popup/select-customer-popup.component';
-import { ModifyCustomerPopupComponent } from '../pop-up/modify-customer-popup/modify-customer-popup.component';
+import { SelectCustomerPopupComponent } from '../../customer/pop-up/select-customer-popup/select-customer-popup.component';
+import { ModifyCustomerPopupComponent } from '../../customer/pop-up/modify-customer-popup/modify-customer-popup.component';
 import { BodyComponent } from "./components/body/body.component";
 import { Connect } from '../../classes/connect';
 import { MeasurementUnit } from '../../interfaces/measurement-unit';

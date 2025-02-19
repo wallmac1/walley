@@ -147,7 +147,7 @@ export class CompanyHeadquarterComponent {
       {
         id: 88,
         name: 'Borgo San Lorenzo',
-        cap: "50032",
+        postalcode: "50032",
         region: "Toscana",
         province: "Firenze",
       },
