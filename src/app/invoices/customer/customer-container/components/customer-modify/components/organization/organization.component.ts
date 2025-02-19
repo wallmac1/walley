@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { City } from '../../../../interfaces/city';
+import { City } from '../../../../../../interfaces/city';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
-import { OrganizationPopupComponent } from '../../../../pop-up/organization-popup/organization-popup.component';
+import { OrganizationPopupComponent } from '../../../../../../pop-up/organization-popup/organization-popup.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Organization } from '../../../../interfaces/organization';
-import { TaxRepresentative } from '../../../../interfaces/tax-representative';
+import { Organization } from '../../../../../../interfaces/organization';
+import { TaxRepresentative } from '../../../../../../interfaces/tax-representative';
 
 @Component({
   selector: 'app-organization',

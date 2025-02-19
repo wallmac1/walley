@@ -189,12 +189,16 @@ export class AddressPopupComponent {
     return of(filteredCities);
   }
 
-  saveAddress() {
+  historicize() {
     this.submitted = true;
     if (this.addressForm.valid) {
       // Salvare usando gli idcustomer e idarticle, poi nel subscribe chiudere e ritornare valori, oppure null se fallisce
       this.dialogRef.close({ obj: this.addressForm.getRawValue(), id: this.addressid });
     }
+  }
+
+  update() {
+    
   }
 
   deleteAddress() {

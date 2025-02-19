@@ -1,0 +1,146 @@
+.example-action-buttons {
+    padding-bottom: 20px;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.example-headers-align .mat-mdc-form-field+.mat-mdc-form-field {
+    margin-left: 8px;
+}
+
+.customPanel {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.panelTitle {
+    font-size: large;
+    font-weight: bold;
+}
+
+.panelContent {
+    padding: 1rem;
+}
+
+.panelContainer {
+    padding: 0.7rem;
+}
+
+mat-expansion-panel.mat-expanded mat-expansion-panel-header {
+    border-bottom: 1px solid lightgray;
+    height: 50px;
+    border-radius: 0;
+}
+
+.btn-primary-outline {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-primary-outline:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+.mat-mdc-tab-group {
+    --mdc-tab-indicator-active-indicator-color: #002D5D;
+    --mat-tab-header-active-label-text-color: #002D5D;
+    --mat-tab-header-active-ripple-color: #002D5D;
+    --mat-tab-header-inactive-ripple-color: #002D5D;
+    --mat-tab-header-active-focus-label-text-color: #002D5D;
+    --mat-tab-header-active-hover-label-text-color: #002D5D;
+    --mat-tab-header-active-focus-indicator-color: #002D5D;
+    --mat-tab-header-active-hover-indicator-color: #002D5D;
+}
+
+::ng-deep .mat-tab-label {
+    font-weight: bold;
+}
+
+.tabTitle {
+    font-size: large;
+    font-weight: bold;
+}
+
+.infoPanel {
+    transform: translateY(-50px);
+    opacity: 0;
+    transition: transform 1s ease, opacity 1.5s ease;
+}
+
+.ticketPanel {
+    transform: translateY(-50px);
+    opacity: 0;
+    transition: transform 1s ease, opacity 1.5s ease;
+}
+
+.infoPanel.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.ticketPanel.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.form-label {
+    font-weight: bold;
+    margin-bottom: 0.1rem;
+    font-size: small;
+}
+
+.btn-outline-dark {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+.cardElement {
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.ticketInfoTitle {
+    font-weight: 600;
+    font-size: medium;
+}
+
+.btn-dark {
+    position: fixed;
+    right: 50px;
+    bottom: 20px;
+    z-index: 101;
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.8);
+    background-color: #002D5D;
+    border-color: #002D5D;
+    transform: scale(1);
+    transition: transform 1s ease;
+}
+
+.btn-dark:hover {
+    transform: scale(1.15);
+}
+
+::ng-deep .mat-expansion-indicator svg,
+::ng-deep .mat-expansion-indicator svg path {
+    fill: white !important;
+}
+
+.profile-image {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: contain;
+    border: 2px solid #ccc;
+}

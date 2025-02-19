@@ -1,0 +1,80 @@
+<div class="container-fluid mt-4 pb-5" style="max-width: 1460px;">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-auto">
+            <button class="btn btn-outline-dark" (click)="openTraineePopup(1, null)">
+                {{"INVOICE.CUSTOMER.TRAINEESLIST.NEWTRAINEE" | translate}}
+                <i class="bi bi-plus-lg ms-1"></i>
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="traineesForm">
+        <ng-container formArrayName="trainees">
+            <div *ngFor="let trainee of trainees.controls; let i = index" [formGroupName]="i"
+                class="row justify-content-center align-items-end mt-2 pb-3"
+                style="border-bottom: 1px solid lightgray; position: relative;">
+
+                <!-- ACTION BUTTONS -->
+                <div class="col-4 col-sm-2 col-xxl-1">
+                    <button class="btn btn-link">
+                        <i class="bi bi-trash" style="color: red;"></i>
+                    </button>
+                    <button class="btn btn-link">
+                        <i class="bi bi-pencil" style="color: black;" (click)="openTraineePopup(2, trainee.getRawValue())"></i>
+                    </button>
+                </div>
+
+                <!-- NAME -->
+                <div class="col-8 col-sm-4 col-md-3 col-xxl-2 ps-xxl-1 pe-xxl-1">
+                    <label class="form-label" for="name-{{i}}">
+                        {{"INVOICE.CUSTOMER.TRAINEESLIST.NAME" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="name-{{i}}"
+                        formControlName="name">
+                </div>
+
+                 <!-- SURNAME -->
+                 <div class="col-12 col-sm-6 col-md-3 col-xxl-2 ps-xxl-1 pe-xxl-1">
+                    <label class="form-label" for="surname-{{i}}">
+                        {{"INVOICE.CUSTOMER.TRAINEESLIST.SURNAME" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="surname-{{i}}"
+                        formControlName="surname">
+                </div>
+
+                <!-- FISCALCODE -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
+                    <label class="form-label" for="fiscalcode-{{i}}">
+                        {{"INVOICE.CUSTOMER.TRAINEESLIST.FISCALCODE" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="fiscalcode-{{i}}"
+                        formControlName="fiscalcode">
+                </div>
+
+                <!-- BIRTHDAY -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-1 ps-xxl-1 pe-xxl-1">
+                    <label class="form-label" for="birthday-{{i}}">
+                        {{"INVOICE.CUSTOMER.TRAINEESLIST.BIRTHDAY" | translate}}
+                    </label>
+                    <input class="form-control ps-xxl-1 pe-xxl-1" type="date" id="birthday-{{i}}" formControlName="birthday">
+                </div>
+
+                <!-- EMAIL -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
+                    <label class="form-label" for="email-{{i}}">
+                        {{"INVOICE.CUSTOMER.TRAINEESLIST.EMAIL" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="email-{{i}}" formControlName="email">
+                </div>
+
+                <!-- PHONE -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
+                    <label class="form-label" for="phone-{{i}}">
+                        {{"INVOICE.CUSTOMER.TRAINEESLIST.PHONE" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="phone-{{i}}" formControlName="phone">
+                </div>
+            </div>
+        </ng-container>
+    </form>
+</div>

@@ -1,0 +1,144 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center pt-4" style="position: relative;">
+        <div class="col-auto ps-3 pe-3 pt-1 pb-1 titleColumn">
+            <span class="title">
+                {{"INVOICE.CUSTOMER.CUSTOMERLIST.CUSTOMERLIST" | translate}}
+            </span>
+        </div>
+        <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer ms-2" (click)="newCustomer()">
+            <i class="bi bi-plus-lg"></i>
+        </button>
+    </div>
+
+    <div class="row justify-content-center p-2 mt-4">
+        <div [formGroup]="filterForm" class="col-12 cardElement" style="max-width: 1200px;">
+            <div class="row">
+                <div class="col-12 pb-1" style="border-bottom: 1px solid lightgrey;">
+                    <span class="titleFilters">
+                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.SEARCH" | translate}}
+                    </span>
+                </div>
+
+                <div class="col-12 col-sm-6 mt-2">
+                    <!-- AUTOCOMPLETE DENOMINAZIONE -->
+                    <label for="denomination" class="form-label">
+                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.DENOMINATION" | translate}}
+                    </label>
+                    <input type="text" class="form-control" name="denomination" id="denomination"
+                        formControlName="denomination">
+                </div>
+
+                <div class="col-12 col-sm-6 mt-2">
+                    <!-- AUTOCOMPLETE FISCAL CODE -->
+                    <label for="denomination" class="form-label">
+                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.FISCALCODE" | translate}}
+                    </label>
+                    <input type="text" class="form-control" name="denomination" id="denomination"
+                        formControlName="denomination">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-12 text-center" style="max-width: 1200px;">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li *ngFor="let letter of alphabeth" class="page-item">
+                        <a class="page-link clickableElement" (click)="letterFilter(letter.id)">
+                            {{letter.name}}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 mt-4" style="max-width: 1400px;">
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mb-2">
+
+                <!-- Denominations Column -->
+                <ng-container matColumnDef="denomination">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell d-none d-sm-table-cell">
+                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.DENOMINATION" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell"
+                        (click)="goToCustomer(element.id)">
+                        <span class="clickableElement" style="text-decoration: underline; color: blue;">
+                            {{ element.denomination }}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Fiscal Code Column -->
+                <ng-container matColumnDef="fiscalcode">
+                    <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-sm-table-cell headerScale">
+                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.FISCALCODE" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="limitedWidth d-none d-sm-table-cell">
+                        {{element.fiscalcode}}
+                    </td>
+                </ng-container>
+
+                <!-- Vat Column -->
+                <ng-container matColumnDef="vat">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell">
+                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.VAT" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell">
+                        {{element.vat}}
+                    </td>
+                </ng-container>
+
+                <!-- Main Address Column -->
+                <ng-container matColumnDef="mainAddress">
+                    <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-sm-table-cell headerScale">
+                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.MAINADDRESS" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="limitedWidth d-none d-sm-table-cell">
+                        {{element.mainAddress}}
+                    </td>
+                </ng-container>
+
+                <!-- Info Column -->
+                <ng-container matColumnDef="info">
+                    <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-sm-table-cell headerScale">
+                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.INFO" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="limitedWidth d-none d-sm-table-cell">
+                        {{element.info}}
+                    </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover">
+                </tr>
+            </table>
+
+            <!-- <ng-template #smallTableBlock>
+                <table mat-table [dataSource]="bankList" class="mat-table" matSort #sort="matSort"
+                    matSortActive="lastupdate" matSortDirection="desc" matSortDisableClear>
+                    Small Screen Column
+                    <ng-container matColumnDef="smallScreenCol">
+                        <th mat-header-cell *matHeaderCellDef class="d-none">
+                            {{"INVOICE.BANK.DENOMINATIONIBAN"}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-sm-none">
+                            {{element.denomination}}
+                            <br>
+                            {{element.iban}}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsSmall" class="d-none"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsSmall;" class="rowHoverSm"
+                        (click)="goToBank(row)">
+                    </tr>
+                </table>
+            </ng-template> -->
+        </div>
+    </div>
+</div>

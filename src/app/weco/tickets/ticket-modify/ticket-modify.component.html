@@ -1,0 +1,276 @@
+<div class="container-fluid ps-1 pe-1 ps-md-2 pe-md-2 ps-lg-3 pe-lg-3 ps-xl-4 pe-xl-4 ps-xxl-5 pe-xxl-5" 
+    style="background-color: whitesmoke; min-height: 90vh; min-width: 350px;">
+        <!-- FIRST CARD -->
+        <div class="row justify-content-center mb-5"
+            style="position: sticky; top: 40px; z-index: 100;">
+            <div class="col-10 mt-4" style="max-width: 1800px; width: 100%;">
+                <mat-expansion-panel style="z-index: 101;" class="customPanel ticketPanel" #panel expanded
+                    appInViewport>
+                    <mat-expansion-panel-header class="cutomPanelHeader" style="background-color:#fcf3cf ">
+                        <mat-panel-title style="justify-content: center;">
+                            <span style="font-size: x-large; font-weight: bold;">
+                                Ticket Info {{ticketInfo?.id}}
+                            </span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <div class="row justify-content-center mt-2">
+                        <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+                            <span class="ticketInfoTitle">
+                                Progressivo:
+                            </span>
+                            <span class="ticketInfoContent">
+                                {{ticketInfo?.progressive}}
+                            </span>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+                            <span class="ticketInfoTitle">
+                                Data Creazione:
+                            </span>
+                            <span class="ticketInfoContent">
+                                {{ticketInfo?.openingDate}}
+                            </span>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+                            <span class="ticketInfoTitle">
+                                Email:
+                            </span>
+                            <span class="ticketInfoContent">
+                                {{ticketInfo?.email}}
+                            </span>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+                            <span class="ticketInfoTitle">
+                                Tipo Richiesta:
+                            </span>
+                            <span class="ticketInfoContent">
+                                {{ticketInfo?.requestType}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center mt-2">
+                        <div class="col-12 text-center">
+                            <span class="ticketInfoTitle" style="border-bottom: 1px solid lightgray;">
+                                Anomalie Riscontrate dal Cliente
+                            </span>
+                        </div>
+
+                        <!-- INVERTER LIST -->
+                        <div class="col-12 col-md-6 mt-3 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5"
+                            [ngStyle]="{'border-right': isSmallScreen ? 'none' : '1px solid lightgray'}">
+                            <span style="font-weight: 600;">
+                                Lista Inverter
+                            </span>
+                            <div *ngFor="let inverter of ticketInfo?.inverterList; let i = index"
+                                class="row justify-content-center align-items-group mt-2"
+                                style="border-bottom: 1px solid lightgray;">
+
+                                <div class="col-12">
+                                    <span class="">
+                                        {{inverter.sn}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BATTERY LIST -->
+                        <div class="col-12 col-md-6 mt-3 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5"
+                            [ngStyle]="{'border-left': isSmallScreen ? 'none' : '1px solid lightgray'}">
+                            <span style="font-weight: 600;">
+                                Lista Batterie
+                            </span>
+                            <div *ngFor="let battery of ticketInfo?.batteryList; let i = index"
+                                class="row justify-content-center align-items-group mt-2"
+                                style="border-bottom: 1px solid lightgray;">
+
+                                <div class="col-12">
+                                    <span class="">
+                                        {{battery.sn}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center mt-2">
+                        <div class="col-12">
+                            <label class="form-label" for="description">
+                                Descrizione del Problema
+                            </label>
+                            <textarea class="form-control" type="text" id="description"
+                                [value]="ticketInfo?.description" rows="3" disabled>
+                            </textarea>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <button class="btn btn-outline-dark">
+                                <i class="bi bi-paperclip"></i>
+                            </button>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </div>
+        </div>
+
+        <ng-container *ngFor="let message of messagesList; let i = index">
+            <div class="row ps-1 pe-1 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5 ">
+                <!-- TIMELINE -->
+                <div class="col-1 ps-0 pe-0" style="border-right: 4px solid #002D5D; position: relative;">
+                    <span class="text-center"
+                        style="position: absolute; top: 48%; right: 20px; font-size: small; font-weight: 700; color: #002D5D;">
+                        12-04-24 <br> 17:30:25
+                    </span>
+                    <span style="position: absolute; top: 50%; right: -10px;">
+                        <i class="bi bi-circle-fill" style="color: #002D5D;"></i>
+                    </span>
+                </div>
+
+                <div class="col-11">
+
+                    <!-- CUSTOMER -->
+                    <div *ngIf="message.sender == 1" class="row ps-lg-3 justify-content-start">
+                        <div class="col-10 mt-4 cardElement customPanel ticketPanel"
+                            style="max-width: 1200px; background-color: #f8f9fa;" appInViewport>
+                            <div class="row justify-content-center">
+                                <div class="col-6 text-start">
+                                    <img src="assets/img/profileThumb.jpg" class="profile-image">
+                                    <span class="panelTitle">
+                                        Messaggio {{i+1}}
+                                    </span>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span style="color: gray; font-size: small; font-style: italic;">
+                                        {{message.date}}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-12 mt-2">
+                                    <label class="form-label">
+                                        Messaggio
+                                    </label>
+                                    <textarea class="form-control" type="text" [value]="message.description" rows="3"
+                                        disabled></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center mt-2">
+                                <div *ngFor="let file of message.attached" class="col-auto">
+                                    <img style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;" 
+                                        [src]="'assets/img/'+file.src" [title]="file.src">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WECO TECHNICIAN -->
+                    <div *ngIf="message.sender == 2" class="row justify-content-end">
+                        <div class="col-10 mt-4 cardElement customPanel ticketPanel"
+                            style="max-width: 1200px; background-color: #edf5fe" appInViewport>
+                            <div class="row justify-content-center">
+                                <div class="col-6 text-start">
+                                    <img src="assets/img/wecoW.png" class="profile-image">
+                                    <span class="panelTitle">
+                                        Messaggio {{i+1}}
+                                    </span>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span style="color: gray; font-size: small; font-style: italic;">
+                                        {{message.date}}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-12 mt-2">
+                                    <label class="form-label">
+                                        Messaggio
+                                    </label>
+                                    <textarea class="form-control" type="text" rows="3" [value]="message.description"
+                                        disabled></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center mt-2">
+                                <div *ngFor="let file of message.attached" class="col-auto">
+                                    <img style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;" 
+                                        [src]="'assets/img/'+file.src" [title]="file.src">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- NUOVO MESSAGGIO -->
+        <div [formGroup]="newMessageForm" *ngIf="isNewMessage" class="row ps-1 pe-1 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5">
+            <!-- TIMELINE -->
+            <div class="col-1 ps-0 pe-0" style="border-right: 4px solid #002D5D; position: relative;">
+                <span class="text-center"
+                    style="position: absolute; top: 48%; right: 20px; font-size: small; font-weight: 700; color: #002D5D;">
+                    {{newMessageForm.get('date')?.value}} <br> {{newMessageForm.get('time')?.value}}
+                </span>
+                <span style="position: absolute; top: 50%; right: -10px;">
+                    <i class="bi bi-circle-fill" style="color: #002D5D;"></i>
+                </span>
+            </div>
+
+            <div class="col-11">
+                <!-- NUOVO MESSAGGIO -->
+                <div class="row ps-lg-3 justify-content-start">
+                    <div class="col-10 mt-4 cardElement customPanel ticketPanel"
+                        style="max-width: 1200px; background-color: #f8f9fa;" appInViewport>
+                        <div class="row justify-content-center">
+                            <div class="col-6 text-start">
+                                <img src="assets/img/profileThumb.jpg" class="profile-image">
+                                <span class="panelTitle">
+                                    Nuovo Messaggio
+                                </span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span style="color: gray; font-size: small; font-style: italic;">
+                                    <!-- {{message.date}} -->
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-12 mt-2">
+                                <label class="form-label">
+                                    Messaggio
+                                </label>
+                                <textarea class="form-control" type="text" rows="3" formControlName="description"></textarea>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <button class="btn btn-outline-dark">
+                                    <i class="bi bi-paperclip"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-end pt-2 mt-2" style="border-top: 1px solid lightgray;">
+                            <div class="col-auto">
+                                <button class="btn btn-outline-success" (click)="sendMessage()">
+                                    Invia
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div>
+        <button *ngIf="!isNewMessage" class="btn btn-dark" (click)="newMessage()">
+            <i class="bi bi-chat-right-text me-2"></i>
+            Aggiungi Messaggio
+        </button>
+    </div>
+</div>
+
+<div #bottomAnchor></div>

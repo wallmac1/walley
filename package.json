@@ -30,6 +30,8 @@
     "ng2-pdf-viewer": "^10.2.2",
     "ngx-cookie-service": "^18.0.0",
     "ngx-extended-pdf-viewer": "^21.3.5",
+    "ngx-quill": "^26.0.10",
+    "quill": "^2.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

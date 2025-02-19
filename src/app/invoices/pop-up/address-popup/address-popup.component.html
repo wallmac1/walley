@@ -17,8 +17,8 @@
             <label class="form-label" for="description">
                 {{"INVOICE.CUSTOMER.ADDRESS.DESCRIPTION" | translate}}
             </label>
-            <textarea class="form-control" type="text" id="description"
-                formControlName="description" [rows]="descriptionRows"></textarea>
+            <textarea class="form-control" type="text" id="description" formControlName="description"
+                [rows]="descriptionRows"></textarea>
         </div>
 
         <!-- COUNTRY -->
@@ -42,8 +42,7 @@
             class="col-12 col-sm-6 col-md-4 col-lg-3">
             <label class="form-label" for="city_it">{{"INVOICE.CUSTOMER.ADDRESS.MUNICIPALITY" | translate }}</label>
             <input type="text" matInput [matAutocomplete]="city" class="form-control" id="city"
-                formControlName="city_it"
-                [class.is-invalid]="addressForm.get('city_it')?.invalid && submitted">
+                formControlName="city_it" [class.is-invalid]="addressForm.get('city_it')?.invalid && submitted">
             <mat-autocomplete #city="matAutocomplete" [displayWith]="displayCityName">
                 <mat-option *ngFor="let option of filteredCities$ | async" [value]="option">
                     <div>
@@ -103,8 +102,8 @@
             <label class="form-check-label ms-2" for="legalOffice">
                 {{"INVOICE.CUSTOMER.ADDRESS.LEGALOFFICE" | translate}}
             </label>
-            <input class="form-check-input mt-2 ms-1" type="checkbox" id="legalOffice"
-                formControlName="legalOffice" style="height: 20px; width: 20px;">
+            <input class="form-check-input mt-2 ms-1" type="checkbox" id="legalOffice" formControlName="legalOffice"
+                style="height: 20px; width: 20px;">
         </div>
 
         <!-- MAIN OFFICE -->
@@ -112,8 +111,8 @@
             <label class="form-check-label ms-2" for="mainOffice">
                 {{"INVOICE.CUSTOMER.ADDRESS.MAINOFFICE" | translate}}
             </label>
-            <input class="form-check-input mt-2 ms-1" type="checkbox" id="mainOffice"
-                formControlName="mainOffice" style="height: 20px; width: 20px;">
+            <input class="form-check-input mt-2 ms-1" type="checkbox" id="mainOffice" formControlName="mainOffice"
+                style="height: 20px; width: 20px;">
         </div>
     </div>
 
@@ -130,11 +129,30 @@
             </span>
         </div>
 
-        <div *ngIf="addressForm.get('country')?.value == 12 && submitted && addressForm.get('city_it')?.hasError('invalidCity')" 
+        <div *ngIf="addressForm.get('country')?.value == 12 && submitted && addressForm.get('city_it')?.hasError('invalidCity')"
             class="col-12 text-center">
             <span class="errorText">
                 {{"INVOICE.CUSTOMER.ADDRESS.INVALIDCITY" | translate}}
-            </span> 
+            </span>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-4 text-start">
+            <button class="btn btn-outline-success me-2" (click)="update()">
+                {{"INVOICE.MODAL.UPDATE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-center">
+            <button class="btn btn-outline-danger me-2" (click)="historicize()">
+                {{"INVOICE.MODAL.HISTORICIZE" | translate }}
+            </button>
+        </div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark me-2" (click)="close()">
+                {{"INVOICE.MODAL.CANCEL" | translate }}
+            </button>
         </div>
     </div>
 </mat-dialog-content>
@@ -147,16 +165,18 @@
             </span>
         </div>
     </div>
-</mat-dialog-content>
 
-<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
-    <button *ngIf="idPopup == 1" class="btn btn-outline-success me-2" (click)="saveAddress()">
-        {{"INVOICE.MODAL.ADDNEW" | translate }}
-    </button>
-    <button *ngIf="idPopup == 2" class="btn btn-outline-danger me-2" (click)="deleteAddress()">
-        {{"INVOICE.MODAL.DELETE" | translate }}
-    </button>
-    <button class="btn btn-outline-dark me-2" (click)="close()">
-        {{"INVOICE.MODAL.CANCEL" | translate }}
-    </button>
-</mat-dialog-actions>
+    <!-- ACTIONS -->
+    <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-6 text-start">
+            <button class="btn btn-outline-danger me-2" (click)="deleteAddress()">
+                {{"INVOICE.MODAL.DELETE" | translate }}
+            </button>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-outline-dark me-2" (click)="close()">
+                {{"INVOICE.MODAL.CANCEL" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>
