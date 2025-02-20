@@ -23,7 +23,7 @@ export class CustomerTherapiesComponent {
 
   dataSource = new MatTableDataSource<TherapyTable>([]);
   therapies: TherapyTable[] = [];
-  displayedColumns: string[] = ['modify', 'therapy_date', 'sessions', 'description', 'info'];
+  displayedColumns: string[] = ['modify', 'therapy_date', 'totalsessions', 'description', 'info'];
   displayedColumnsSmall: string[] = ['smallScreenCol'];
 
   constructor(private dialog: MatDialog) { }
@@ -77,7 +77,7 @@ export class CustomerTherapiesComponent {
       {
         id: 1,
         therapy_date: "2023-05-20",
-        sessions: "3",
+        totalsessions: "3",
         description: "Terapia di gruppo iniziale",
         info: {
           files: [
@@ -89,7 +89,7 @@ export class CustomerTherapiesComponent {
       {
         id: 2,
         therapy_date: "2023-06-01",
-        sessions: "5",
+        totalsessions: "5",
         description: null,
         info: {
           files: [
@@ -100,7 +100,7 @@ export class CustomerTherapiesComponent {
       {
         id: 3,
         therapy_date: null,
-        sessions: null,
+        totalsessions: null,
         description: "Terapia individuale di follow-up",
         info: {
           files: []
