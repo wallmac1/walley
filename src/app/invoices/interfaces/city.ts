@@ -1,7 +1,7 @@
 export interface City {
     id: number;
     name: string;
-    cap: string;
+    postalcode: string;
     region: string;
     province: string;
 }

@@ -688,6 +688,7 @@
       "NAME": "Denominazione"
     },
     "MODAL": {
+      "ORGANIZATIONANDTAXREPRESENTATIVE": "Organizzazione e Rappresentante Fiscale",
       "TRAINEE": "Corsista",
       "NAME": "Nome",
       "SURNAME": "Cognome",
@@ -703,6 +704,7 @@
       "SEARCHBANK": "Cerca Banca",
       "SELECTCUSTOMER": "Seleziona un cliente",
       "UPDATEORHISTORICIZE": "Aggiorna o Storicizza",
+      "THERAPYERROR": "Compilare i campi obbligatori in modo corretto",
       "EXISTINGCUSTOMER": "Cliente Esistente",
       "EXISTINGCUSTOMERDESCRIPTION": "Il Cliente inserito risulta essere già presente. Inserire comunque?",
       "CUSTOMER": "Cliente",
@@ -714,8 +716,10 @@
       "UPDATE": "Aggiorna",
       "DENOMINATION": "Denominazione",
       "HISTORICIZE": "Storicizza",
+      "MODIFYORGANIZATION": "Modifica Organizzazione",
       "MODIFYCUSTOMER": "Modifica Dati Cliente",
       "MODIFYADDRESS": "Modifica Indirizzo",
+      "MODIFYTAXREPRESENTATIVE": "Modifica Rappresentanza Fiscale",
       "DELETEADDRESS": "Elimina Indirizzo",
       "DELETEMSG": "Sei sicuro di voler rimuovere l'indirizzo dall'elenco di questo cliente?"
     },
@@ -783,9 +787,11 @@
       "PAYMENTDATA": "Dati Pagamento",
       "MISSINGFIELDS": "Compilare i campi mancanti per salvare il cliente",
       "CUSTOMERLIST": {
+        "ALL": "Tutti",
         "SEARCH": "Ricerca",
         "CUSTOMERLIST": "Clienti",
         "DENOMINATION": "Denominazione",
+        "FISCALCODEVAT": "Codice Fiscale / P. IVA",
         "FISCALCODE": "Codice Fiscale",
         "VAT": "P. IVA",
         "MAINADDRESS": "Indirizzo",
@@ -818,6 +824,7 @@
         "LEGALOFFICE": "Sede Legale",
         "MAINOFFICE": "Sede Principale",
         "PLACEHOLDER": "Indirizzo",
+        "EMPTYADDRESSLIST": "Nessun indirizzo inserito",
         "MUNICIPALITY": "Comune",
         "CITY": "Città",
         "INVALIDCITY": "Selezionare il comune dal menù a tendina che compare dopo aver inserito almeno un carattere",
@@ -825,6 +832,7 @@
         "MANDATORYFIELDS": "Compilare tutti i campi obbligatori"
       },
       "ORGANIZATION": {
+        "MODIFYVALUES": "Modifica Valori",
         "NATURALPERSON":"Persona Fisica",
         "INFONOTE": "Note informative ..",
         "COUNTRY": "Paese",
@@ -854,7 +862,8 @@
         "BIC": "BIC",
         "IBAN": "IBAN",
         "COMPANYBANK": "Banca Azienda",
-        "CUSTOMERBANK": "Banca Cliente"
+        "CUSTOMERBANK": "Banca Cliente",
+        "SAVE": "Salva"
       }
     },
       "INFO": {
@@ -926,6 +935,36 @@
           "ACTIONS": "Azioni",
           "UNITOFMEASUREMENT": "Unità di Misura"
         }
+      }
+    },
+    "EVENT": {
+      "LIST": {
+        "EVENTS": "Eventi",
+        "SEARCH": "Ricerca",
+        "FILTERPERIOD": "Filtra Periodo",
+        "INVALIDSTARTDATE": "Data inizio non valida",
+        "INVALIDENDDATE": "Data fine non valida",
+        "TYPE": "Tipo",
+        "ALL": "Tutti",
+        "CUSTOMERS": "Clienti",
+        "TRAINEES": "Corsisti",
+        "CUSTOMER": "Cliente",
+        "TRAINEE": "Corsista",
+        "EVENTTYPE": "Tipologia Evento",
+        "COURSES": "Corsi",
+        "OTHERS": "Altri",
+        "COURSETYPE": "Tipologia Corso",
+        "EXCLUDEENDED": "Escludi Terminati",
+        "FILTER": "Filtra",
+        "TOTALRESULTS":"Risultati Totali",
+        "OBJPERPAGE": "Oggetti Per Pagina",
+        "ORDEREDBYDEFAULT": "Ordinato per data",
+        "PAGE": "Pagina",
+        "DATE": "Data",
+        "COURSE": "Corso / Altro",
+        "STARTTIME": "Orario Inizio",
+        "ENDTIME": "Orario Fine",
+        "DATECUSTOMERCOURSE": "Data - Cliente - Corso"
       }
     },
     "COMPANY": {

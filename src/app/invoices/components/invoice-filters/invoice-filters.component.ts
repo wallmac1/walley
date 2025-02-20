@@ -54,19 +54,21 @@ export class InvoiceFiltersComponent {
   })
 
   ngOnInit(): void {
-    this.getTipiDocumento();
+    this.getDocumentTypeo();
     this.setDate();
     this.searchCustomer();
     this.getInvoiceInfo();
   }
-private getTipiDocumento(){
+
+  private getDocumentTypeo() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/tipiDocumento', {})
-    .subscribe((val: ApiResponse<{ tipoDocumento: { id: number, code: string, description: string }[] }>) => {
-      if (val.data) {
-        this.typeList = val.data.tipoDocumento;
-      }
-    })
+      .subscribe((val: ApiResponse<{ tipoDocumento: { id: number, code: string, description: string }[] }>) => {
+        if (val.data) {
+          this.typeList = val.data.tipoDocumento;
+        }
+      })
   }
+  
   setDate() {
     const threeMonthsAgo = new Date(this.todayDate);
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);

@@ -32,27 +32,21 @@
                 </mat-form-field> -->
                 <mat-form-field id="dateinterval" class="bootstrap-style w-100">
                     <mat-date-range-input [rangePicker]="picker">
-                      <input
-                        matStartDate
-                        formControlName="datefrom"
-                        placeholder="dd/mm/yyyy"
-                        class="form-control innerInput">
-                      <input
-                        matEndDate
-                        formControlName="dateto"
-                        placeholder="dd/mm/yyyy"
-                        class="form-control ms-2 innerInput">
+                        <input matStartDate formControlName="datefrom" placeholder="dd/mm/yyyy"
+                            class="form-control innerInput">
+                        <input matEndDate formControlName="dateto" placeholder="dd/mm/yyyy"
+                            class="form-control ms-2 innerInput">
                     </mat-date-range-input>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>
 
                     <mat-error *ngIf="invoiceFilterForm.controls.datefrom.hasError('matStartDateInvalid')">
-                      Invalid start date
+                        Invalid start date
                     </mat-error>
                     <mat-error *ngIf="invoiceFilterForm.controls.dateto.hasError('matEndDateInvalid')">
-                      Invalid end date
+                        Invalid end date
                     </mat-error>
-                  </mat-form-field>
+                </mat-form-field>
             </div>
 
             <!-- NUMBER -->

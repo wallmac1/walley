@@ -17,13 +17,14 @@ import { ArticleNewComponent } from './articles/article-new/article-new.componen
 import { ArticleModifyComponent } from './articles/article-modify/article-modify.component';
 import { InvoiceListComponent } from './invoices/invoice-list/invoice-list.component';
 import { InvoiceInfoComponent } from './invoices/invoice-info/invoice-info.component';
-import { BankModifyComponent } from './invoices/bank/bank-modify/bank-modify.component';
-import { BankListComponent } from './invoices/bank/bank-list/bank-list.component';
+import { BankModifyComponent } from './bank/bank-modify/bank-modify.component';
+import { BankListComponent } from './bank/bank-list/bank-list.component';
 import { GeneralMenuComponent } from './invoices/menu/general-menu/general-menu.component';
-import { CustomerNewComponent } from './invoices/customer/customer-new/customer-new.component';
+import { CustomerNewComponent } from './customer/customer-new/customer-new.component';
 import { CompanyRegistryComponent } from './company/company-registry/company-registry.component';
-import { CustomerContainerComponent } from './invoices/customer/customer-container/customer-container.component';
-import { CustomerListComponent } from './invoices/customer/customer-list/customer-list.component';
+import { CustomerContainerComponent } from './customer/customer-container/customer-container.component';
+import { CustomerListComponent } from './customer/customer-list/customer-list.component';
+import { EventsListComponent } from './events/events-list/events-list.component';
 // import { TicketListComponent } from './weco/tickets/ticket-list/ticket-list.component';
 // import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.component';
 // import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modify.component';
@@ -55,6 +56,7 @@ export const routes: Routes = [
     { path: "modifyCustomer/:id", component: CustomerContainerComponent },
     { path: "customerList", component: CustomerListComponent },
     { path: "companyRegistry/:id", component: CompanyRegistryComponent },
+    { path: "eventList", component: EventsListComponent },
     // { path: "ticketListWeco", component: TicketListComponent },
     // { path: "ticketNewWeco", component: TicketNewComponent },
     // { path: "ticketModifyWeco/:id", component: TicketModifyComponent },

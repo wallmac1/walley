@@ -1,0 +1,130 @@
+<div class="container-fluid mt-4 pb-5" style="max-width: 1400px;">
+
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 pb-1 mb-3" style="border-bottom: 1px solid lightgray;">
+            <span class="titleLines">
+                {{"INVOICE.CUSTOMER.ORGANIZATION.MODIFYVALUES" | translate}}
+            </span>
+            <span class="ms-4">
+                <i class="bi bi-pencil" style="font-size: 20px;" (click)="organizationModifyPopup()"></i>
+            </span>
+        </div>
+        <div [formGroup]="organizationTaxForm" class="col-12 ps-2 ps-md-4 pe-2 pe-md-4">
+            <div class="row justify-content-center">
+                <div class="col-12" style="border-bottom: 1px solid lightgray; position: relative;">
+                    <span class="titleLines">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.ORGANIZATION" | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="row justify-content-start align-items-center mt-1 pb-2">
+
+                <div class="col-12">
+                    <span class="smallInfo">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
+                    </span>
+                </div>
+
+                <!-- MUNICIPALITY -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 formColumn">
+                    <label class="form-label" for="municipality">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.MUNICIPALITY" | translate }}
+                    </label>
+                    <input type="text" class="form-control" id="municipality" formControlName="municipality">
+                </div>
+
+                <!-- PROVINCE -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 formColumn">
+                    <label class="form-label" for="province">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.PROVINCE" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="province" formControlName="province">
+                </div>
+
+                <!-- CAP -->
+                <div class="col-10 col-sm-4 col-md-4 col-lg-2 formColumn">
+                    <label class="form-label" for="postalcode">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.POSTALCODE" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="postalcode" formControlName="postalcode">
+                </div>
+
+                <!-- STREET -->
+                <div class="col-10 col-sm-9 col-md-7 col-lg-4 formColumn">
+                    <label class="form-label" for="street">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.STREET" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="street" formControlName="street">
+                </div>
+
+                <!-- NUMBER -->
+                <div class="col-2 col-sm-3 col-md-2 col-lg-1 ps-0 formColumn">
+                    <label class="form-label" for="street_number">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.NUMBER" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="street_number" formControlName="street_number">
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-4">
+                <div class="col-12" style="border-bottom: 1px solid lightgray; position: relative;">
+                    <span class="titleLines">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.TAXREPRESENTATIVE" | translate}}
+                    </span>
+                </div>
+            </div>
+            <div class="row justify-content-start align-items-center mt-1 pb-2">
+
+                <div class="col-12">
+                    <span class="smallInfo">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
+                    </span>
+                </div>
+
+                <!-- NATURAL PERSON -->
+                <div class="form-check col-12 mt-1">
+                    <input class="form-check-input" type="checkbox" id="naturalPerson" formControlName="naturalPerson">
+                    <label class="form-check-label mt-0" for="naturalPerson">
+                        {{"INVOICE.CUSTOMER.ORGANIZATION.NATURALPERSON" | translate}}
+                    </label>
+                </div>
+
+                <ng-container *ngIf="organizationTaxForm.get('naturalPerson')?.value == 1; else businessBlock">
+                    <!-- NAME -->
+                    <div class="col-12 col-sm-6 col-lg-4 formColumn">
+                        <label class="form-label" for="name">
+                            {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
+                        </label>
+                        <input class="form-control" type="text" id="name" formControlName="name">
+                    </div>
+
+                    <!-- SURNAME -->
+                    <div class="col-12 col-sm-6 col-lg-4 formColumn">
+                        <label class="form-label" for="surname">
+                            {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
+                        </label>
+                        <input class="form-control" type="text" id="surname" formControlName="surname">
+                    </div>
+                </ng-container>
+
+                <!-- DENOMINATION -->
+                <ng-template #businessBlock>
+                    <div class="col-12 col-lg-6 formColumn">
+                        <label class="form-label" for="denomination">
+                            {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
+                        </label>
+                        <input class="form-control" type="text" id="denomination" formControlName="denomination">
+                    </div>
+                </ng-template>
+
+                <!-- VAT -->
+                <div class="col-12 col-md-6 col-lg-4 formColumn">
+                    <label class="form-label" for="vat">
+                        {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.VAT" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="vat" formControlName="vat">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+<div class="container-fluid mt-4" style="max-width: 1200px;">
+    <!-- <div class="row justify-content-center mb-4">
+        <div class="col-12 text-center">
+            <button class="btn btn-outline-dark" (click)="createTherapy()">
+                Aggiungi Terapia
+                <i class="bi bi-plus-lg ms-1"></i>
+            </button>
+        </div>
+    </div> -->
+
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <table mat-table [dataSource]="dataSource"
+                class="mat-elevation-z8 mb-2">
+
+                <!-- Modify Column -->
+                <ng-container matColumnDef="modify">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell d-none d-sm-table-cell"
+                        style="width: 80px;">
+                        {{"INVOICE.CUSTOMER.THERAPIESLIST.MODIFY" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell"
+                        style="width: 80px;">
+                        <button class="btn btn-link" (click)="modifyTherapy(element.id)">
+                            <i class="bi bi-pencil" style="color: black;"></i>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Date Column -->
+                <ng-container matColumnDef="therapy_date">
+                    <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-sm-table-cell headerScale"
+                        style="width: 120px;">
+                        {{"INVOICE.CUSTOMER.THERAPIESLIST.THERAPYDATE" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="limitedWidth d-none d-sm-table-cell"
+                        style="width: 120px;">
+                        {{element.therapy_date}}
+                    </td>
+                </ng-container>
+
+                <!-- Sessions Column -->
+                <ng-container matColumnDef="sessions">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell"
+                        style="width: 80px;">
+                        {{"INVOICE.CUSTOMER.THERAPIESLIST.SESSIONS" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell"
+                        style="width: 80px;">
+                        {{element.sessions}}
+                    </td>
+                </ng-container>
+
+                <!-- Description Column -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell">
+                        {{"INVOICE.CUSTOMER.THERAPIESLIST.DESCRIPTION" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell">
+                        {{element.description}}
+                    </td>
+                </ng-container>
+
+                <!-- Info Column -->
+                <ng-container matColumnDef="info">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 180px;">
+                        {{"INVOICE.CUSTOMER.THERAPIESLIST.INFO" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell" style="width: 180px;">
+                        <button class="btn btn-link">
+                            <i class="bi bi-paperclip"></i>
+                        </button>
+                        <button class="btn btn-link">
+                            <i class="bi bi-filetype-pdf"></i>
+                        </button>
+                        <button class="btn btn-link" (click)="deleteTherapy()">
+                            <i class="bi bi-trash" style="color: red;"></i>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover">
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
