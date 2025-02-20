@@ -937,6 +937,43 @@
         }
       }
     },
+    "PAYMENTCONDITIONS": {
+      "PAYMENTCONDITIONS": "Condizioni di Pagamento",
+      "POPUP": {
+        "SEARCH": "Ricerca",
+        "CODE": "Codice",
+        "XMLCODE": "Codice XML",
+        "DESCRIPTION": "Descrizione",
+        "INSTALLMENTNUMBER": "Numero rate",
+        "PERIODICITY": "Periodicità",
+        "DEADLINE": "Scadenza",
+        "DEADLINETYPE": "Tipo di Scadenza",
+        "EXACTDAY": "Giorno Esatto",
+        "BANK": "Banca",
+        "ADDNOTE": "Aggiungi Nota",
+        "NOTE": "Nota",
+        "SAVE": "Salva"
+      },
+      "TABLE": {
+        "TOTALRESULTS": "Risultati Totali",
+        "ITEMSPERPAGE": "Oggetti per Pagina",
+        "ORDEREDBYDEFAULT": "Ordinato per Codice",
+        "PAGE": "Pagina",
+        "CODE": "Codice",
+        "DESCRIPTION": "Descrizione",
+        "XMLCODE": "Codice Xml",
+        "INSTALLMENTNUMBER": "Numero Rate",
+        "PERIODICITY": "Periodicità",
+        "DEADLINE": "Scadenza",
+        "DEADLINETYPE": "Tipo di Scadenza",
+        "EXACTDATE": "Data Esatta",
+        "BANK": "Tipo Banca",
+        "CODEDESCRIPTION": "Codice / Descrizione",
+        "ACTIONS": "Azioni",
+        "MODIFY": "Modifica Condizione di Pagamento",
+        "DUPLICATE": "Duplica Riga"
+      }
+    },
     "EVENT": {
       "LIST": {
         "EVENTS": "Eventi",
