@@ -1,28 +1,28 @@
 <h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
     <span style="color: white; font-weight: bold; font-size: x-large;">
-        {{"INVOICE.MODAL.MODIFYCUSTOMER" | translate}}
+        {{"CUSTOMER.MODAL.MODIFYCUSTOMER" | translate}}
     </span>
 </h2>
 
 <mat-dialog-content *ngIf="idPopup == 1">
     <div [formGroup]="modifyCustomerForm" class="row justify-content-center align-items-center mt-1">
         <div class="col-12 mt-1 mb-1">
-            <label class="form-label" for="type">{{"INVOICE.INFO.CUSTOMERCOMPONENT.TYPE" | translate }}</label>
+            <label class="form-label" for="type">{{"CUSTOMER.INFO.CUSTOMERCOMPONENT.TYPE" | translate }}</label>
             <input type="text" class="form-control" id="type" formControlName="type">
         </div>
         <div class="col-12 mt-1 mb-1">
-            <label class="form-label" for="customer">{{"INVOICE.INFO.CUSTOMERCOMPONENT.CUSTOMER" | translate }}</label>
+            <label class="form-label" for="customer">{{"CUSTOMER.INFO.CUSTOMERCOMPONENT.CUSTOMER" | translate }}</label>
             <input type="text" class="form-control" id="customer" formControlName="customer">
         </div>
 
         <div class="col-12 col-sm-6 mt-1 mb-1">
             <label class="form-label" for="fiscalcode">
-                {{"INVOICE.INFO.CUSTOMERCOMPONENT.FISCALCODE" | translate }}
+                {{"CUSTOMER.INFO.CUSTOMERCOMPONENT.FISCALCODE" | translate }}
             </label>
             <input type="text" class="form-control" id="fiscalcode" formControlName="fiscalcode">
         </div>
         <div class="col-12 mt-1 mb-1">
-            <label class="form-label" for="vat">{{"INVOICE.INFO.CUSTOMERCOMPONENT.VAT" | translate }}</label>
+            <label class="form-label" for="vat">{{"CUSTOMER.INFO.CUSTOMERCOMPONENT.VAT" | translate }}</label>
             <input type="text" class="form-control" id="vat" formControlName="vat">
         </div>
     </div>
@@ -34,7 +34,7 @@
         <!-- NATURAL PERSON -->
         <div class="col-12 form-check ps-2">
             <label class="form-check-label ms-2" for="naturalPerson">
-                {{"INVOICE.CUSTOMER.NATURALPERSON" | translate}}
+                {{"CUSTOMER.NATURALPERSON" | translate}}
             </label>
             <input class="form-check-input mt-2 ms-1" type="checkbox" id="naturalPerson"
                 formControlName="naturalPerson">
@@ -44,7 +44,7 @@
             <!-- NAME -->
             <div class="col-12 col-sm-6">
                 <label class="form-label" for="name">
-                    {{"INVOICE.CUSTOMER.NAME" | translate}}
+                    {{"CUSTOMER.NAME" | translate}}
                 </label>
                 <input class="form-control" type="text" id="name" formControlName="name"
                     [class.is-invalid]="customerGeneralForm.get('name')?.invalid && submitted">
@@ -53,7 +53,7 @@
             <!-- SURNAME -->
             <div class="col-12 col-sm-6">
                 <label class="form-label" for="surname">
-                    {{"INVOICE.CUSTOMER.SURNAME" | translate}}
+                    {{"CUSTOMER.SURNAME" | translate}}
                 </label>
                 <input class="form-control" type="text" id="surname" formControlName="surname"
                     [class.is-invalid]="customerGeneralForm.get('surname')?.invalid && submitted">
@@ -64,7 +64,7 @@
             <!-- BUSINESSNAME -->
             <div class="col-12">
                 <label class="form-label" for="businessName">
-                    {{"INVOICE.CUSTOMER.BUSINESSNAME" | translate}}
+                    {{"CUSTOMER.BUSINESSNAME" | translate}}
                 </label>
                 <input class="form-control" type="text" id="businessName" formControlName="businessName"
                     [class.is-invalid]="customerGeneralForm.get('businessName')?.invalid && submitted">
@@ -74,7 +74,7 @@
         <!-- PEC -->
         <div class="col-12 col-sm-6 col-md-5 col-lg-4">
             <label class="form-label" for="pec">
-                {{"INVOICE.CUSTOMER.PEC" | translate}}
+                {{"CUSTOMER.PEC" | translate}}
             </label>
             <input class="form-control" type="text" id="pec" formControlName="pec"
                 [class.is-invalid]="customerGeneralForm.get('pec')?.invalid && submitted">
@@ -83,7 +83,7 @@
         <!-- COUNTRY -->
         <div class="col-12 col-sm-6 col-md-4">
             <label class="form-label" for="country">
-                {{"INVOICE.CUSTOMER.COUNTRY" | translate}}
+                {{"CUSTOMER.COUNTRY" | translate}}
             </label>
             <select class="form-select" id="country" formControlName="country">
                 <option [value]="null">
@@ -98,7 +98,7 @@
         <!-- SDI -->
         <div class="col-12 col-sm-6 col-md-3">
             <label class="form-label" for="sdi">
-                {{"INVOICE.CUSTOMER.SDI" | translate}}
+                {{"CUSTOMER.SDI" | translate}}
             </label>
             <input class="form-control" type="text" id="sdi" formControlName="sdi">
         </div>
@@ -106,7 +106,7 @@
         <!-- FISCAL CODE -->
         <div class="col-12 col-sm-6">
             <label class="form-label" for="fiscalcode">
-                {{"INVOICE.CUSTOMER.FISCALCODE" | translate}}
+                {{"CUSTOMER.FISCALCODE" | translate}}
             </label>
             <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
         </div>
@@ -114,7 +114,7 @@
         <!-- SAME CODE (SCREEN < SM) -->
         <div class="col-12 d-md-none ps-2 form-check d-flex justify-content-end">
             <label class="form-check-label ms-2" for="sameCode">
-                {{"INVOICE.CUSTOMER.SAMECODE" | translate}}
+                {{"CUSTOMER.SAMECODE" | translate}}
             </label>
             <input class="form-check-input mt-2 ms-1" type="checkbox" id="sameCode" formControlName="sameCode"
                 style="height: 20px; width: 20px;">
@@ -123,7 +123,7 @@
         <!-- VAT -->
         <div class="col-12 col-sm-6">
             <label class="form-label" for="vat">
-                {{"INVOICE.CUSTOMER.VAT" | translate}}
+                {{"CUSTOMER.VAT" | translate}}
             </label>
             <input class="form-control" type="text" id="vat" formControlName="vat">
         </div>
@@ -131,7 +131,7 @@
         <!-- SAME CODE (SCREEN > MD) -->
         <div class="col-12 d-none d-md-inline ps-2 form-check">
             <label class="form-check-label ms-2" for="sameCode">
-                {{"INVOICE.CUSTOMER.SAMECODE" | translate}}
+                {{"CUSTOMER.SAMECODE" | translate}}
             </label>
             <input class="form-check-input mt-2 ms-1" type="checkbox" id="sameCode" formControlName="sameCode"
                 style="height: 20px; width: 20px;">
@@ -139,7 +139,14 @@
 
         <div *ngIf="customerGeneralForm.invalid && submitted" class="col-12 text-center mt-2">
             <span style="font-size: small; color: red;">
-                {{"INVOICE.CUSTOMER.MISSINGFIELDS" | translate}}
+                {{"CUSTOMER.MISSINGFIELDS" | translate}}
+            </span>
+        </div>
+
+        <div class="col-12 mt-1">
+            <span style="font-size: small; color: gray; font-style: italic;">
+                {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
+                {{'COMPANY.POPUP.NBUPDATE' | translate}}
             </span>
         </div>
     </div>
@@ -148,17 +155,17 @@
     <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
         <div class="col-4 text-start">
             <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="update()">
-                {{"INVOICE.MODAL.UPDATE" | translate }}
+                {{"CUSTOMER.MODAL.UPDATE" | translate }}
             </button>
         </div>
         <div class="col-4 text-center">
             <button class="btn btn-outline-success me-2" (click)="historicize()">
-                {{"INVOICE.MODAL.HISTORICIZE" | translate}}
+                {{"CUSTOMER.MODAL.HISTORICIZE" | translate}}
             </button>
         </div>
         <div class="col-4 text-end">
             <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
-                {{"INVOICE.MODAL.CANCEL" | translate }}
+                {{"CUSTOMER.MODAL.CANCEL" | translate }}
             </button>
         </div>
     </div>

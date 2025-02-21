@@ -3,7 +3,7 @@
         <div class="row justify-content-center align-items-center pt-4" style="position: relative;">
             <div class="col-auto ps-3 pe-3 pt-1 pb-1 titleColumn">
                 <span class="title">
-                    {{"INVOICE.BANK.BANK" | translate}}
+                    {{"BANK.BANK" | translate}}
                 </span>
             </div>
 
@@ -19,13 +19,13 @@
                 <div [formGroup]="bankForm" class="pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4 cardElement">
                     <div class="row justify-content-start align-items-center selectCustomer">
                         <div class="col-12">
-                            {{"INVOICE.BANK.DATA" | translate}}
+                            {{"BANK.DATA" | translate}}
                         </div>
                     </div>
                     <div
                         class="row justify-content-start mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
                         <div class="col-12 col-sm-3 col-lg-1">
-                            <label class="form-label" for="active">{{"INVOICE.BANK.ACTIVATE" | translate}}</label><br>
+                            <label class="form-label" for="active">{{"BANK.ACTIVATE" | translate}}</label><br>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="active"
                                     formControlName="active">
@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="col-12 col-sm-9 col-lg-4">
-                            <label class="form-label" for="idcountry">{{"INVOICE.BANK.COUNTRY" |
+                            <label class="form-label" for="idcountry">{{"BANK.COUNTRY" |
                                 translate}}<sup>*</sup></label>
                             <select class="form-select" name="idcountry" id="idcountry" formControlName="idcountry"
                                 (change)="selectedCountry()"
@@ -46,19 +46,19 @@
                         </div>
 
                         <div class="col-12 col-lg-7">
-                            <label class="form-label" for="denomination">{{"INVOICE.BANK.DENOMINATION" |
+                            <label class="form-label" for="denomination">{{"BANK.DENOMINATION" |
                                 translate}}<sup>*</sup></label>
                             <input class="form-control" type="text" id="denomination" formControlName="denomination"
                                 [class.is-invalid]="bankForm.get('denomination')?.invalid && submittedS">
                         </div>
 
                         <div class="col-12 col-sm-8 col-md-4">
-                            <label class="form-label" for="bic">{{"INVOICE.BANK.BIC" | translate}}</label>
+                            <label class="form-label" for="bic">{{"BANK.BIC" | translate}}</label>
                             <input class="form-control" type="text" id="bic" formControlName="bic">
                         </div>
 
                         <div class="col-12 col-md-8">
-                            <label class="form-label" for="iban">{{"INVOICE.BANK.IBAN" | translate}}<sup>*</sup></label>
+                            <label class="form-label" for="iban">{{"BANK.IBAN" | translate}}<sup>*</sup></label>
                             <div class="input-group">
                                 <input class="form-control" type="text" id="iban" formControlName="iban"
                                     [class.is-invalid]="(bankForm.get('iban')?.invalid && submittedC) ||
@@ -66,7 +66,7 @@
                                 <button *ngIf="bankForm.get('idcountry')?.value == 12" class="btn btn-outline-success" (click)="checkIban()">
                                     <i class="bi bi-check2"></i>
                                     <span *ngIf="!isSmallScreen">
-                                        {{"INVOICE.BANK.CONTROL" | translate}}
+                                        {{"BANK.CONTROL" | translate}}
                                     </span>
                                 </button>
                             </div>
@@ -74,12 +74,12 @@
 
                         <div *ngIf="bankForm.get('iban')?.invalid && submittedC" class="col-12 mt-1 text-center">
                             <span class="errorText">
-                                {{"INVOICE.BANK.IBANERROR" | translate}}
+                                {{"BANK.IBANERROR" | translate}}
                             </span>
                         </div>
                         <div *ngIf="bankForm.invalid && submittedS" class="col-12 text-center">
                             <span class="errorText">
-                                {{"INVOICE.BANK.FIELDERROR" | translate}}
+                                {{"BANK.FIELDERROR" | translate}}
                             </span>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                         *ngIf="bankForm.get('iban')?.valid && submittedC && bankForm.get('idcountry')?.value == 12"
                         style="border-top: 1px solid lightgray;">
                         <div class="col-8 col-sm-4 col-md-2">
-                            <label class="form-label" for="acronym">{{"INVOICE.BANK.ACRONYM" | translate}}</label>
+                            <label class="form-label" for="acronym">{{"BANK.ACRONYM" | translate}}</label>
                             <select class="form-select" name="acronym" id="acronym" formControlName="acronym">
                                 <option [ngValue]="null">--</option>
                                 <option *ngFor="let country of countriesList" [ngValue]="country.id">
@@ -98,21 +98,21 @@
                         </div>
 
                         <div class="col-10 col-sm-6 col-md-3" style="position: relative;">
-                            <label class="form-label" for="abi">{{"INVOICE.BANK.ABI" | translate}}</label>
+                            <label class="form-label" for="abi">{{"BANK.ABI" | translate}}</label>
                             <input class="form-control" type="text" id="abi" formControlName="abi">
                             <i *ngIf="!bankName" class="bi bi-info-circle-fill text-warning iconPosition"
-                                matTooltip="{{'INVOICE.BANK.ABIERROR' | translate}}"></i>
+                                matTooltip="{{'BANK.ABIERROR' | translate}}"></i>
                         </div>
 
                         <div class="col-10 col-sm-4 col-md-3" style="position: relative;">
-                            <label class="form-label" for="cab">{{"INVOICE.BANK.CAB" | translate}}</label>
+                            <label class="form-label" for="cab">{{"BANK.CAB" | translate}}</label>
                             <input class="form-control" type="text" id="cab" formControlName="cab">
                             <i *ngIf="!bankAddress" class="bi bi-info-circle-fill text-warning iconPosition"
-                                matTooltip="{{'INVOICE.BANK.CABERROR' | translate}}"></i>
+                                matTooltip="{{'BANK.CABERROR' | translate}}"></i>
                         </div>
 
                         <div class="col-10 col-sm-6 col-md-4">
-                            <label class="form-label" for="cc">{{"INVOICE.BANK.CC" | translate}}</label>
+                            <label class="form-label" for="cc">{{"BANK.CC" | translate}}</label>
                             <input class="form-control" type="text" id="cc" formControlName="cc">
                         </div>
 
@@ -134,7 +134,7 @@
                         class="row justify-content-center mt-3 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
                         <div class="col-12 text-end">
                             <button class="btn btn-outline-dark" (click)="saveBank()">
-                                {{"INVOICE.BANK.SAVE" | translate}}
+                                {{"BANK.SAVE" | translate}}
                             </button>
                         </div>
                     </div>

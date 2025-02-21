@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { EventTable } from '../interfaces/event-table';
-import { Trainee } from '../../customer/interfaces/trainee';
+import { Student } from '../../customer/interfaces/student';
 import { Customer } from '../../customer/interfaces/customer';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
@@ -28,7 +28,7 @@ import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 
 })
 export class EventsListComponent {
 
-  filteredTrainee$!: Observable<Trainee[]>;
+  filteredStudent$!: Observable<Student[]>;
   filteredCustomer$!: Observable<Customer[]>;
   submitted: boolean = false;
   displayedColumns: string[] = ['date', 'customer', 'course', 'start_time', 'end_time'];
@@ -52,9 +52,9 @@ export class EventsListComponent {
     dateto: new FormControl<Date | null>(new Date(this.todayDate)),
     people_isAll: new FormControl<boolean>(true),
     people_isCustomer: new FormControl<boolean>(false),
-    people_isTrainee: new FormControl<boolean>(false),
+    people_isStudent: new FormControl<boolean>(false),
     customer: new FormControl<Customer | null>(null),
-    trainee: new FormControl<Trainee | null>(null),
+    student: new FormControl<Student | null>(null),
     event_isAll: new FormControl<boolean>(true),
     event_isOther: new FormControl<boolean>(false),
     event_isCourse: new FormControl<boolean>(false),
@@ -66,7 +66,7 @@ export class EventsListComponent {
     this.getEvents();
     this.setDate();
     this.searchCustomer();
-    this.searchTrainee();
+    this.searchStudent();
     this.initForm();
     this.checkScreenSize();
   }
@@ -89,7 +89,7 @@ export class EventsListComponent {
       console.log(result)
       this.peopleLogic(result!, 2);
     });
-    this.filterForm.get('people_isTrainee')?.valueChanges.subscribe((result) => {
+    this.filterForm.get('people_isStudent')?.valueChanges.subscribe((result) => {
       this.peopleLogic(result!, 3);
     });
 
@@ -115,7 +115,7 @@ export class EventsListComponent {
     this.filterForm.patchValue({
       people_isAll: type === 1,
       people_isCustomer: type === 2,
-      people_isTrainee: type === 3
+      people_isStudent: type === 3
     }, { emitEvent: false });
   }
 
@@ -181,7 +181,7 @@ export class EventsListComponent {
       people: {
         1: 'people_isAll',
         2: 'people_isCustomer',
-        3: 'people_isTrainee'
+        3: 'people_isStudent'
       },
       event: {
         1: 'event_isAll',
@@ -338,8 +338,8 @@ export class EventsListComponent {
     ));
   }
 
-  displayTraineeName(trainee?: Trainee): string {
-    return trainee ? trainee?.denomination! : '';
+  displayStudentName(student?: Student): string {
+    return student ? student?.denomination! : '';
   }
 
   // private filterLines(lines: Lines[]) {
@@ -349,22 +349,22 @@ export class EventsListComponent {
   //   }
   // }
 
-  private searchTrainee() {
-    const trainee_field = this.filterForm.get('trainee');
-    if (trainee_field) {
-      this.filteredTrainee$ = trainee_field.valueChanges
+  private searchStudent() {
+    const student_field = this.filterForm.get('student');
+    if (student_field) {
+      this.filteredStudent$ = student_field.valueChanges
         .pipe(
           startWith(''),
           map(value => typeof value === 'string' ? value : value?.denomination?.toLowerCase() || ''),
           filter(value => value.length > 0),
           debounceTime(400),
           switchMap((value: string) =>
-            value ? this.getTrainees(value) : [])
+            value ? this.getStudents(value) : [])
         );
     }
   }
 
-  private getTrainees(val: string): Observable<Trainee[]> {
+  private getStudents(val: string): Observable<Student[]> {
     // CHIAMATA AL SERVER
     // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
     //   {
@@ -373,7 +373,7 @@ export class EventsListComponent {
     //     map(response => response.data.cities)
     //   );
     // Esempio di una lista di tre clienti
-    const trainees: Trainee[] = [
+    const students: Student[] = [
       {
         id: 1,
         name: "Giulia",
@@ -407,8 +407,8 @@ export class EventsListComponent {
     ];
 
     // Restituisce la lista come Observable
-    return of(trainees.filter(trainees =>
-      trainees.denomination?.toLowerCase().includes(val.toLowerCase())
+    return of(students.filter(students =>
+      students.denomination?.toLowerCase().includes(val.toLowerCase())
     ));
   }
 

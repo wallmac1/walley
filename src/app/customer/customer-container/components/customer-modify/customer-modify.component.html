@@ -2,7 +2,7 @@
     <!-- <div class="row justify-content-center align-items-center pt-4">
         <div class="col-auto ps-3 pe-3 pt-1 pb-1 titleColumn">
             <span class="title">
-                {{"INVOICE.CUSTOMER.MODIFYCUSTOMER" | translate}}
+                {{"CUSTOMER.MODIFYCUSTOMER" | translate}}
             </span>
         </div>
     </div> -->
@@ -10,7 +10,7 @@
     <!-- <div class="row mt-4" style="border-bottom: 1px solid lightgray;">
         <div class="col-auto">
             <span class="subtitle">
-                {{"INVOICE.CUSTOMER.RECORDS" | translate}}
+                {{"CUSTOMER.RECORDS" | translate}}
             </span>
         </div>
     </div> -->
@@ -20,7 +20,7 @@
             <!-- FISCALCODE -->
             <div class="col-12 col-sm-6 col-lg-3">
                 <label class="form-label" for="fiscalcode">
-                    {{"INVOICE.CUSTOMER.FISCALCODE" | translate}}
+                    {{"CUSTOMER.FISCALCODE" | translate}}
                 </label>
                 <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
             </div>
@@ -28,7 +28,7 @@
             <!-- VAT -->
             <div class="col-12 col-sm-6 col-lg-3">
                 <label class="form-label" for="vat">
-                    {{"INVOICE.CUSTOMER.VAT" | translate}}
+                    {{"CUSTOMER.VAT" | translate}}
                 </label>
                 <input class="form-control" type="text" id="vat" formControlName="vat">
             </div>
@@ -36,7 +36,7 @@
             <!-- COUNTRY -->
             <div class="col-12 col-sm-5 col-md-6 col-lg-3">
                 <label class="form-label" for="country">
-                    {{"INVOICE.CUSTOMER.COUNTRY" | translate}}
+                    {{"CUSTOMER.COUNTRY" | translate}}
                 </label>
                 <select class="form-select" id="country" formControlName="country">
                     <option [value]="null">
@@ -51,7 +51,7 @@
             <!-- SDI -->
             <div class="col-8 col-sm-5 col-lg-2">
                 <label class="form-label" for="sdi">
-                    {{"INVOICE.CUSTOMER.SDI" | translate}}
+                    {{"CUSTOMER.SDI" | translate}}
                 </label>
                 <input class="form-control" type="text" id="sdi" formControlName="sdi">
             </div>
@@ -65,7 +65,7 @@
             <!-- PEC -->
             <div class="col-12 col-sm-6 col-lg-3">
                 <label class="form-label" for="pec">
-                    {{"INVOICE.CUSTOMER.PEC" | translate}}
+                    {{"CUSTOMER.PEC" | translate}}
                 </label>
                 <input class="form-control" type="text" id="pec" formControlName="pec">
             </div>
@@ -73,7 +73,7 @@
             <!-- EMAIL -->
             <div class="col-12 col-sm-6 col-lg-3">
                 <label class="form-label" for="email">
-                    {{"INVOICE.CUSTOMER.EMAIL" | translate}}
+                    {{"CUSTOMER.EMAIL" | translate}}
                 </label>
                 <input class="form-control" type="text" id="email" formControlName="email">
             </div>
@@ -81,7 +81,7 @@
             <!-- PHONE -->
             <div class="col-12 col-sm-6 col-lg-3">
                 <label class="form-label" for="phoneNumber">
-                    {{"INVOICE.CUSTOMER.PHONE" | translate}}
+                    {{"CUSTOMER.PHONE" | translate}}
                 </label>
                 <input class="form-control" type="text" id="phoneNumber" formControlName="phoneNumber">
             </div>
@@ -89,7 +89,7 @@
             <!-- FAX -->
             <div class="col-12 col-sm-6 col-lg-3">
                 <label class="form-label" for="fax">
-                    {{"INVOICE.CUSTOMER.FAX" | translate}}
+                    {{"CUSTOMER.FAX" | translate}}
                 </label>
                 <input class="form-control" type="text" id="fax" formControlName="fax">
             </div>
@@ -97,7 +97,7 @@
             <!-- WEBSITE -->
             <div class="col-12 col-sm-6 col-lg-5">
                 <label class="form-label" for="website">
-                    {{"INVOICE.CUSTOMER.WEBSITE" | translate}}
+                    {{"CUSTOMER.WEBSITE" | translate}}
                 </label>
                 <input class="form-control" type="text" id="website" formControlName="website">
             </div>
@@ -105,7 +105,7 @@
             <!-- EORI -->
             <div class="col-12 col-sm-6 col-lg-5">
                 <label class="form-label" for="eori">
-                    {{"INVOICE.CUSTOMER.EORI" | translate}}
+                    {{"CUSTOMER.EORI" | translate}}
                 </label>
                 <input class="form-control" type="text" id="eori" formControlName="eori">
             </div>
@@ -114,7 +114,7 @@
                 <!-- GENDER -->
                 <div class="col-12 col-sm-6 col-md-3 col-lg-2">
                     <label class="form-label" for="gender">
-                        {{"INVOICE.CUSTOMER.GENDER" | translate}}
+                        {{"CUSTOMER.GENDER" | translate}}
                     </label>
                     <select class="form-select" id="gender" formControlName="gender">
                         <option [value]="null">
@@ -129,7 +129,7 @@
                 <!-- BIRTH COUNTRY -->
                 <div class="col-12 col-sm-6 col-md-4">
                     <label class="form-label" for="birth_country">
-                        {{"INVOICE.CUSTOMER.BIRTHCOUNTRY" | translate}}
+                        {{"CUSTOMER.BIRTHCOUNTRY" | translate}}
                     </label>
                     <select class="form-select" id="birth_country" formControlName="birth_country">
                         <option [value]="null">
@@ -144,7 +144,7 @@
                 <!-- BIRTH CITY -->
                 <div *ngIf="customerRecordsForm.get('birth_country')?.value == 12; else notItalianBlock"
                     class="col-12 col-sm-6 col-md-5 col-lg-5">
-                    <label class="form-label" for="birth_city_it">{{"INVOICE.CUSTOMER.BIRTHCITY" | translate }}</label>
+                    <label class="form-label" for="birth_city_it">{{"CUSTOMER.BIRTHCITY" | translate }}</label>
                     <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="birth_city_it"
                         formControlName="birth_city_it"
                         [class.is-invalid]="customerRecordsForm.get('birth_city_it')?.invalid && submitted">
@@ -159,7 +159,7 @@
                 <ng-template #notItalianBlock>
                     <div class="col-12 col-sm-6 col-md-5 col-lg-5">
                         <label class="form-label" for="birth_city">
-                            {{"INVOICE.CUSTOMER.BIRTHCITY" | translate}}
+                            {{"CUSTOMER.BIRTHCITY" | translate}}
                         </label>
                         <input class="form-control" type="text" id="birth_city" formControlName="birth_city">
                     </div>
@@ -168,7 +168,7 @@
                 <!-- BIRTHDAY -->
                 <div class="col-12 col-sm-6 col-md-3 col-lg-3">
                     <label class="form-label" for="birthday">
-                        {{"INVOICE.CUSTOMER.BIRTHDAY" | translate}}
+                        {{"CUSTOMER.BIRTHDAY" | translate}}
                     </label>
                     <input class="form-control" type="date" id="birthday" formControlName="birthday">
                 </div>
@@ -176,7 +176,7 @@
                 <!-- JOB -->
                 <div class="col-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="form-label" for="job">
-                        {{"INVOICE.CUSTOMER.JOB" | translate}}
+                        {{"CUSTOMER.JOB" | translate}}
                     </label>
                     <input class="form-control" type="text" id="job" formControlName="job">
                 </div>
@@ -184,7 +184,7 @@
                 <!-- DOCTOR -->
                 <div class="col-12 col-sm-6 col-md-5 col-lg-4">
                     <label class="form-label" for="doctor">
-                        {{"INVOICE.CUSTOMER.DOCTOR" | translate}}
+                        {{"CUSTOMER.DOCTOR" | translate}}
                     </label>
                     <input class="form-control" type="text" id="doctor" formControlName="doctor">
                 </div>
@@ -192,7 +192,7 @@
                 <!-- SPECIALIST -->
                 <div class="col-12 col-sm-6 col-lg-4">
                     <label class="form-label" for="specialist">
-                        {{"INVOICE.CUSTOMER.SPECIALIST" | translate}}
+                        {{"CUSTOMER.SPECIALIST" | translate}}
                     </label>
                     <input class="form-control" type="text" id="specialist" formControlName="specialist">
                 </div>
@@ -201,7 +201,7 @@
 
             <div *ngIf="customerRecordsForm.invalid && submitted" class="col-12 text-center mt-2">
                 <span style="font-size: small; color: red;">
-                    {{"INVOICE.CUSTOMER.MISSINGFIELDS" | translate}}
+                    {{"CUSTOMER.MISSINGFIELDS" | translate}}
                 </span>
             </div>
         </div>
@@ -209,7 +209,7 @@
         <div class="row justify-content-center mt-4">
             <div class="col-12 text-center">
                 <button class="btn btn-outline-dark" (click)="save()">
-                    {{"INVOICE.CUSTOMER.SAVE" | translate}}
+                    {{"CUSTOMER.SAVE" | translate}}
                 </button>
             </div>
         </div>
@@ -224,7 +224,7 @@
                     <ng-template mat-tab-label>
                         <i class="bi bi-geo-alt-fill me-4 iconSize"></i>
                         <span class="tabTitle">
-                            {{'INVOICE.CUSTOMER.ADDRESSES' | translate}}
+                            {{'CUSTOMER.ADDRESSES' | translate}}
                         </span>
                         <i class="bi bi-plus-circle ms-4 iconSize addButton" (click)="addAddress()" ></i>
                     </ng-template>
@@ -237,7 +237,7 @@
                     <ng-template mat-tab-label>
                         <i class="bi bi-building-gear iconSize me-4"></i>
                         <span class="tabTitle">
-                            {{'INVOICE.CUSTOMER.TAXSYSTEM' | translate}}
+                            {{'CUSTOMER.TAXSYSTEM' | translate}}
                         </span>
                     </ng-template>
                     <ng-template matTabContent>
@@ -248,7 +248,7 @@
                     <ng-template mat-tab-label>
                         <i class="bi bi-cash-coin iconSize me-4"></i>
                         <span class="tabTitle">
-                            {{'INVOICE.CUSTOMER.PAYMENTDATA' | translate}}
+                            {{'CUSTOMER.PAYMENTDATA' | translate}}
                         </span>
                     </ng-template>
                     <ng-template matTabContent>

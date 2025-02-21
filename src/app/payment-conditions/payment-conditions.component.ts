@@ -31,12 +31,12 @@ export class PaymentConditionsComponent {
 
   modifyPopup(event: number) {
     // PRENDI INFO DAL SERVER (EVENT È L'ID DEL METODO DI PAGAMENTO)
-    const paymentMethod : PaymentConditions | null = null;
+    let paymentMethod : PaymentConditions | null = null;
 
     const dialogRef = this.dialog.open(PaymentModifyPopupComponent, {
-      maxWidth: '700px',
+      maxWidth: '800px',
       minWidth: '350px',
-      maxHeight: '500px',
+      maxHeight: '700px',
       width: '90%',
       data: { 
         paymentCondition: paymentMethod
@@ -44,7 +44,8 @@ export class PaymentConditionsComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      paymentMethod = result;
+      // Aggiungi valore alla tabella del figlio
     });
   }
 

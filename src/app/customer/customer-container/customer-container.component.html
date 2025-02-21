@@ -2,12 +2,12 @@
     <div class="row justify-content-center align-items-center mt-4">
         <div class="col-12 col-md-2 d-flex align-items-bottom text-start order-2 order-md-1">
             <i *ngIf="customer?.naturalPerson == 1; else companyBlock"
-                class="bi bi-person-fill iconSize" matTooltip="{{'INVOICE.CUSTOMER.NATURALPERSON' | translate}}"></i>
+                class="bi bi-person-fill iconSize" matTooltip="{{'CUSTOMER.NATURALPERSON' | translate}}"></i>
             <ng-template #companyBlock>
-                <i class="bi bi-buildings iconSize" matTooltip="{{'INVOICE.CUSTOMER.COMPANY' | translate}}"></i>
+                <i class="bi bi-buildings iconSize" matTooltip="{{'CUSTOMER.COMPANY' | translate}}"></i>
             </ng-template>
             <button class="btn btn-sm btn-outline-dark ms-2 mt-1" style="height: 34px;">
-                {{"INVOICE.CUSTOMER.PDF" | translate}}
+                {{"CUSTOMER.PDF" | translate}}
             </button>
         </div>
         <div class="col-12 col-md-8 text-center order-1 order-md-2">
@@ -37,7 +37,7 @@
                 <ng-template mat-tab-label>
                     <i class="bi bi-card-text me-4 iconSize"></i>
                     <span class="tabTitle">
-                        {{'INVOICE.CUSTOMER.RECORDS' | translate}}
+                        {{'CUSTOMER.RECORDS' | translate}}
                     </span>
                 </ng-template>
                 <ng-template matTabContent>
@@ -49,7 +49,7 @@
                 <ng-template mat-tab-label>
                     <i class="bi bi-heart-pulse iconSize me-4"></i>
                     <span class="tabTitle">
-                        {{'INVOICE.CUSTOMER.THERAPIES' | translate}}
+                        {{'CUSTOMER.THERAPIES' | translate}}
                     </span>
                     <i class="bi bi-plus-circle ms-4 iconSize addButton" (click)="addTherapy()" ></i>
                 </ng-template>
@@ -61,12 +61,12 @@
                 <ng-template mat-tab-label>
                     <i class="bi bi-people iconSize me-4"></i>
                     <span class="tabTitle">
-                        {{'INVOICE.CUSTOMER.TRAINEES' | translate}}
+                        {{'CUSTOMER.STUDENTS' | translate}}
                     </span>
-                    <i class="bi bi-plus-circle ms-4 iconSize addButton" (click)="addTrainee()" ></i>
+                    <i class="bi bi-plus-circle ms-4 iconSize addButton" (click)="addStudent()" ></i>
                 </ng-template>
                 <ng-template matTabContent>
-                    <app-customer-trainees #traineesComponent></app-customer-trainees>
+                    <app-customer-students #studentsComponent></app-customer-students>
                 </ng-template>
             </mat-tab>
         </mat-tab-group>

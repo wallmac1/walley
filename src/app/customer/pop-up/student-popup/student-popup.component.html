@@ -1,42 +1,42 @@
 <h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
-    <span style="color: white; font-weight: bold; font-size: x-large;">{{"INVOICE.MODAL.THERAPY" | translate }}</span>
+    <span style="color: white; font-weight: bold; font-size: x-large;">{{"CUSTOMER.MODAL.THERAPY" | translate }}</span>
 </h2>
 
 <mat-dialog-content>
-    <div [formGroup]="traineeForm" class="row justify-content-center align-items-center mt-1">
+    <div [formGroup]="studentForm" class="row justify-content-center align-items-center mt-1">
         <div class="col-12 col-sm-6 col-lg-4 mt-1 mb-1">
-            <label class="form-label" for="name">{{"INVOICE.MODAL.NAME" | translate }}</label>
+            <label class="form-label" for="name">{{"CUSTOMER.MODAL.NAME" | translate }}</label>
             <input type="text" class="form-control" id="name" formControlName="name"
-                [class.is-invalid]="traineeForm.get('name')?.invalid && submitted">
+                [class.is-invalid]="studentForm.get('name')?.invalid && submitted">
         </div>
 
         <div class="col-12 col-sm-6 col-lg-4 mt-1 mb-1">
-            <label class="form-label" for="surname">{{"INVOICE.MODAL.SURNAME" | translate }}</label>
+            <label class="form-label" for="surname">{{"CUSTOMER.MODAL.SURNAME" | translate }}</label>
             <input type="text" class="form-control" id="surname" formControlName="surname"
-                [class.is-invalid]="traineeForm.get('surname')?.invalid && submitted">
+                [class.is-invalid]="studentForm.get('surname')?.invalid && submitted">
         </div>
 
         <div class="col-12 col-sm-6 col-lg-4 mt-1 mb-1">
-            <label class="form-label" for="fiscalcode">{{"INVOICE.MODAL.FISCALCODE" | translate }}</label>
+            <label class="form-label" for="fiscalcode">{{"CUSTOMER.MODAL.FISCALCODE" | translate }}</label>
             <input type="text" class="form-control" id="fiscalcode" formControlName="fiscalcode">
         </div>
 
         <div class="col-12 col-sm-6 col-lg-4 mt-1 mb-1">
-            <label class="form-label" for="birthday">{{"INVOICE.MODAL.BIRTHDAY" | translate }}</label>
+            <label class="form-label" for="birthday">{{"CUSTOMER.MODAL.BIRTHDAY" | translate }}</label>
             <input type="date" class="form-control" id="birthday" formControlName="birthday">
         </div>
 
         <div class="col-12 col-sm-6 col-lg-4 mt-1 mb-1">
-            <label class="form-label" for="email">{{"INVOICE.MODAL.EMAIL" | translate }}</label>
+            <label class="form-label" for="email">{{"CUSTOMER.MODAL.EMAIL" | translate }}</label>
             <input type="text" class="form-control" id="email" formControlName="email">
         </div>
 
         <div class="col-12 col-sm-6 col-lg-4 mt-1 mb-1">
-            <label class="form-label" for="phone">{{"INVOICE.MODAL.PHONE" | translate }}</label>
+            <label class="form-label" for="phone">{{"CUSTOMER.MODAL.PHONE" | translate }}</label>
             <input type="text" class="form-control" id="phone" formControlName="phone">
         </div>
 
-        <div *ngIf="traineeForm?.invalid && submitted" class="col-12 mt-1 text-center">
+        <div *ngIf="studentForm?.invalid && submitted" class="col-12 mt-1 text-center">
             <span style="font-size: small; color: red;">
                 Compilare i campi obbligatori
             </span>
@@ -47,17 +47,17 @@
 <mat-dialog-actions class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
     <div *ngIf="idPopup == 2" class="col-6 text-start">
         <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="addOrUpdate()">
-            {{"INVOICE.MODAL.UPDATE" | translate }}
+            {{"CUSTOMER.MODAL.UPDATE" | translate }}
         </button>
     </div>
     <div *ngIf="idPopup == 1" class="col-6 text-start">
         <button *ngIf="idPopup == 1" class="btn btn-outline-success me-2" style="width: 100px;" (click)="addOrUpdate()">
-            {{"INVOICE.MODAL.ADD" | translate }}
+            {{"CUSTOMER.MODAL.ADD" | translate }}
         </button>
     </div>
     <div class="col-6 text-end">
         <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
-            {{"INVOICE.MODAL.CLOSE" | translate }}
+            {{"CUSTOMER.MODAL.CLOSE" | translate }}
         </button>
     </div>
 </mat-dialog-actions>

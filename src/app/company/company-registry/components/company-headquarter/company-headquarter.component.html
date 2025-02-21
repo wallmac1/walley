@@ -1,7 +1,7 @@
 <div class="container-fluid pt-2 pb-2 ps-3 pe-3 ps-md-4 pe-md-4" style="max-width: 1400px;">
 
     <!-- LEGAL HEADQUARTER -->
-    <div class="row justify-content-start align-items-center mb-2" style="border-bottom: 1px solid lightgray;">
+    <div class="row justify-content-start align-items-center mb-2" style="border-bottom: 1px solid lightgray; color: #002D5D;">
         <div class="col-12 subtitle">
             {{"COMPANY.DATA.INFO" | translate}}
             <i class="bi bi-pencil ms-2" (click)="modifyHeadquarterPopup(1)"></i>
@@ -15,7 +15,7 @@
             <label class="form-label" for="country">
                 {{"COMPANY.HEADQUARTER.COUNTRY" | translate}}
             </label>
-            <select class="form-select" name="idcountry" id="country" formControlName="country"
+            <select class="form-select" name="country" id="country" formControlName="country"
                 (change)="selectedCountry()">
                 <option [ngValue]="null">--</option>
                 <option *ngFor="let country of countriesList" [ngValue]="country.id">
@@ -82,7 +82,7 @@
     </div>
 
     <!-- HEADQUARTER BUILDING -->
-    <div class="row justify-content-start align-items-center mt-4 mb-2" style="border-bottom: 1px solid lightgray;">
+    <div class="row justify-content-start align-items-center mt-4 mb-2" style="border-bottom: 1px solid lightgray; color: #002D5D;">
         <div class="col-12 subtitle">
             {{"COMPANY.HEADQUARTER.COMPANYBUILDING" | translate}}
             <i class="bi bi-pencil ms-2" (click)="modifyHeadquarterPopup(2)"></i>
@@ -162,7 +162,7 @@
     </div>
 
     <!-- REA -->
-    <div class="row justify-content-start align-items-center mt-4 mb-2" style="border-bottom: 1px solid lightgray;">
+    <div class="row justify-content-start align-items-center mt-4 mb-2" style="border-bottom: 1px solid lightgray; color: #002D5D;">
         <div class="col-12 subtitle">
             {{"COMPANY.HEADQUARTER.REA" | translate}}
             <i class="bi bi-pencil ms-2" (click)="modifyHeadquarterPopup(3)"></i>

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
     <span style="color: white; font-weight: bold; font-size: x-large;">
-        {{"INVOICE.MODAL.ORGANIZATIONANDTAXREPRESENTATIVE" | translate }}
+        {{"CUSTOMER.MODAL.ORGANIZATIONANDTAXREPRESENTATIVE" | translate }}
     </span>
 </h2>
 
@@ -9,7 +9,7 @@
         <!-- MUNICIPALITY -->
         <div class="col-12 col-sm-6 col-md-5 formColumn">
             <label class="form-label" for="municipality">
-                {{"INVOICE.CUSTOMER.ORGANIZATION.MUNICIPALITY" | translate}}
+                {{"CUSTOMER.ORGANIZATION.MUNICIPALITY" | translate}}
             </label>
             <input type="text" matInput [matAutocomplete]="city" class="form-control" id="municipality"
                 formControlName="municipality"
@@ -26,7 +26,7 @@
         <!-- PROVINCE -->
         <div class="col-12 col-sm-6 col-md-5 formColumn">
             <label class="form-label" for="province">
-                {{"INVOICE.CUSTOMER.ORGANIZATION.PROVINCE" | translate}}
+                {{"CUSTOMER.ORGANIZATION.PROVINCE" | translate}}
             </label>
             <input class="form-control" type="text" id="province" formControlName="province">
         </div>
@@ -34,7 +34,7 @@
         <!-- CAP -->
         <div class="col-10 col-sm-4 col-md-4 col-lg-2 formColumn">
             <label class="form-label" for="postalcode">
-                {{"INVOICE.CUSTOMER.ORGANIZATION.POSTALCODE" | translate}}
+                {{"CUSTOMER.ORGANIZATION.POSTALCODE" | translate}}
             </label>
             <input class="form-control" type="text" id="postalcode" formControlName="postalcode"
                 [class.is-invalid]="organizationTaxForm.get('postalcode')?.invalid && submitted">
@@ -43,7 +43,7 @@
         <!-- STREET -->
         <div class="col-10 col-sm-9 col-md-7 col-lg-6 formColumn">
             <label class="form-label" for="street">
-                {{"INVOICE.CUSTOMER.ORGANIZATION.STREET" | translate}}
+                {{"CUSTOMER.ORGANIZATION.STREET" | translate}}
             </label>
             <input class="form-control" type="text" id="street" formControlName="street"
                 [class.is-invalid]="organizationTaxForm.get('street')?.invalid && submitted">
@@ -52,7 +52,7 @@
         <!-- NUMBER -->
         <div class="col-2 col-sm-3 col-md-2 col-lg-2 ps-0 formColumn">
             <label class="form-label" for="street_number">
-                {{"INVOICE.CUSTOMER.ORGANIZATION.NUMBER" | translate}}
+                {{"CUSTOMER.ORGANIZATION.NUMBER" | translate}}
             </label>
             <input class="form-control" type="text" id="street_number" formControlName="street_number"
                 [class.is-invalid]="organizationTaxForm.get('street_number')?.invalid && submitted">
@@ -60,7 +60,7 @@
 
         <!-- <div class="col-12">
             <span class="smallInfo">
-                {{"INVOICE.CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
+                {{"CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
             </span>
         </div> -->
 
@@ -68,7 +68,7 @@
         <div class="form-check col-12 ms-2 mt-2" style="border-top: 1px solid lightgray;">
             <input class="form-check-input" type="checkbox" id="naturalPerson" formControlName="naturalPerson">
             <label class="form-check-label form-label" for="naturalPerson">
-                {{"INVOICE.CUSTOMER.ORGANIZATION.NATURALPERSON" | translate}}
+                {{"CUSTOMER.ORGANIZATION.NATURALPERSON" | translate}}
             </label>
         </div>
 
@@ -76,7 +76,7 @@
             <!-- NAME -->
             <div class="col-12 col-md-6 formColumn">
                 <label class="form-label" for="name">
-                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
+                    {{"CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
                 </label>
                 <input class="form-control" type="text" id="name" formControlName="name"
                     [class.is-invalid]="organizationTaxForm.get('name')?.invalid && submitted">
@@ -85,7 +85,7 @@
             <!-- SURNAME -->
             <div class="col-12 col-md-6 formColumn">
                 <label class="form-label" for="surname">
-                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
+                    {{"CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
                 </label>
                 <input class="form-control" type="text" id="surname" formControlName="surname"
                     [class.is-invalid]="organizationTaxForm.get('surname')?.invalid && submitted">
@@ -96,7 +96,7 @@
         <ng-template #businessBlock>
             <div class="col-12 formColumn">
                 <label class="form-label" for="denomination">
-                    {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
+                    {{"CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
                 </label>
                 <input class="form-control" type="text" id="denomination" formControlName="denomination"
                     [class.is-invalid]="organizationTaxForm.get('denomination')?.invalid && submitted">
@@ -106,7 +106,7 @@
         <!-- VAT -->
         <div class="col-12 col-lg-6 formColumn">
             <label class="form-label" for="vat">
-                {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.VAT" | translate}}
+                {{"CUSTOMER.TAXREPRESENTATIVE.VAT" | translate}}
             </label>
             <input class="form-control" type="text" id="vat" formControlName="vat"
                 [class.is-invalid]="organizationTaxForm.get('vat')?.invalid && submitted">
@@ -115,7 +115,7 @@
         <div *ngIf="organizationTaxForm.invalid && submitted" class="row">
             <div class="col-12 text-center">
                 <span style="font-size: small; color: red;">
-                    {{"INVOICE.CUSTOMER.ORGANIZATION.MISSINGFIELDS" | translate}}
+                    {{"CUSTOMER.ORGANIZATION.MISSINGFIELDS" | translate}}
                 </span>
             </div>
         </div>
@@ -126,12 +126,12 @@
 <mat-dialog-actions class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
     <div class="col-6 text-start">
         <button class="btn btn-outline-success me-2" (click)="update()">
-            {{"INVOICE.MODAL.UPDATE" | translate }}
+            {{"CUSTOMER.MODAL.UPDATE" | translate }}
         </button>
     </div>
     <div class="col-6 text-end">
         <button class="btn btn-outline-dark me-2" (click)="close()">
-            {{"INVOICE.MODAL.CANCEL" | translate }}
+            {{"CUSTOMER.MODAL.CANCEL" | translate }}
         </button>
     </div>
 </mat-dialog-actions>

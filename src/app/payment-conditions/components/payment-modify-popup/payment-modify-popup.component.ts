@@ -55,7 +55,7 @@ export class PaymentModifyPopupComponent {
     private connectServerService: ConnectServerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     // Inizializza il form con i dati passati al dialog
-    this.paymentConditionsForm = data.paymentCondition;
+    this.paymentConditionsForm.patchValue(data.paymentCondition);
   }
 
   ngOnInit(): void {
@@ -75,6 +75,12 @@ export class PaymentModifyPopupComponent {
 
   filter() { }
 
-  save() { }
+  save() {
+    this.submitted = true;
+    if(this.paymentConditionsForm.valid) {
+      // Salva elemento al server
+      this.dialogRef.close(this.paymentConditionsForm.getRawValue());
+    }
+  }
 
 }

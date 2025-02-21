@@ -1,20 +1,12 @@
 <h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
     <span style="color: white; font-weight: bold; font-size: x-large;">
-        {{"COMPANY.POPUP.MODIFYBROKER" | translate}}
+        {{"PAYMENTCONDITIONS.POPUP.PAYMENTCONDITIONS" | translate}}
     </span>
 </h2>
 
 <mat-dialog-content class="pb-2" style="overflow-y: auto; overflow-x: hidden;">
-    <div class="row justify-content-center p-2 mt-4">
-        <div [formGroup]="paymentConditionsForm" class="col-12 cardElement" style="max-width: 1200px;">
-
-            <div class="row justify-content-start align-items-center">
-                <div class="col-12 pb-1" style="border-bottom: 1px solid lightgrey;">
-                    <span class="titleFilters">
-                        {{"PAYMENTCONDITIONS.POPUP.SEARCH" | translate}}
-                    </span>
-                </div>
-            </div>
+    <div class="row justify-content-center">
+        <div [formGroup]="paymentConditionsForm" class="col-12">
 
             <div class="row justify-content-start align-items-center rowDivider">
                 <!-- CODE -->

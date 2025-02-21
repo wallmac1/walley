@@ -4,10 +4,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConnectServerService } from '../../../services/connect-server.service';
-import { Trainee } from '../../interfaces/trainee';
 
 @Component({
-  selector: 'app-trainee-popup',
+  selector: 'app-student-popup',
   standalone: true,
   imports: [
     CommonModule,
@@ -15,15 +14,15 @@ import { Trainee } from '../../interfaces/trainee';
     ReactiveFormsModule,
     TranslateModule
   ],
-  templateUrl: './trainee-popup.component.html',
-  styleUrl: './trainee-popup.component.scss'
+  templateUrl: './student-popup.component.html',
+  styleUrl: './student-popup.component.scss'
 })
-export class TraineePopupComponent {
+export class StudentPopupComponent {
 
   idPopup: number = 0;
   submitted: boolean = false;
 
-  traineeForm = new FormGroup({
+  studentForm = new FormGroup({
     id: new FormControl<number>(0),
     name: new FormControl<string | null>(null, Validators.required),
     surname: new FormControl<string | null>(null, Validators.required),
@@ -33,19 +32,19 @@ export class TraineePopupComponent {
     phone: new FormControl<string | null>(null)
   })
 
-  constructor(public dialogRef: MatDialogRef<TraineePopupComponent>,
+  constructor(public dialogRef: MatDialogRef<StudentPopupComponent>,
     private connectServerService: ConnectServerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.idPopup = data.idPopup;
     if (this.idPopup == 2) {
-      this.traineeForm.patchValue(data.traineeInfo);
+      this.studentForm.patchValue(data.student);
     }
   }
 
   addOrUpdate() {
     this.submitted = true;
-    if(this.traineeForm.valid) {
-      this.dialogRef.close({type: this.idPopup, trainee: this.traineeForm.getRawValue()});
+    if(this.studentForm.valid) {
+      this.dialogRef.close({type: this.idPopup, student: this.studentForm.getRawValue()});
     }
   }
 

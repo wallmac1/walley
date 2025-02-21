@@ -1,29 +1,29 @@
 <h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
-    <span style="color: white; font-weight: bold; font-size: x-large;">{{"INVOICE.MODAL.THERAPY" | translate }}</span>
+    <span style="color: white; font-weight: bold; font-size: x-large;">{{"CUSTOMER.MODAL.THERAPY" | translate }}</span>
 </h2>
 
 <mat-dialog-content>
     <div [formGroup]="therapyForm" class="row justify-content-center align-items-center mt-1">
         <div class="col-12 col-sm-6 mt-1 mb-1">
-            <label class="form-label" for="therapy_date">{{"INVOICE.MODAL.DATE" | translate }}</label>
+            <label class="form-label" for="therapy_date">{{"CUSTOMER.MODAL.DATE" | translate }}</label>
             <input type="date" class="form-control" id="therapy_date" formControlName="therapy_date"
                 [class.is-invalid]="therapyForm.get('therapy_date')?.invalid && submitted">
         </div>
 
         <div class="col-12 col-sm-6 mt-1 mb-1">
-            <label class="form-label" for="totalsessions">{{"INVOICE.MODAL.NUMBER" | translate }}</label>
+            <label class="form-label" for="totalsessions">{{"CUSTOMER.MODAL.NUMBER" | translate }}</label>
             <input type="text" class="form-control" id="totalsessions" formControlName="totalsessions"
                 [class.is-invalid]="therapyForm.get('totalsessions')?.invalid && submitted">
         </div>
 
         <div class="col-12 mt-1 mb-1">
-            <label class="form-label" for="description">{{"INVOICE.MODAL.DESCRIPTION" | translate }}</label>
+            <label class="form-label" for="description">{{"CUSTOMER.MODAL.DESCRIPTION" | translate }}</label>
             <textarea type="description" class="form-control" id="description" formControlName="description" rows="2"
                 [class.is-invalid]="therapyForm.get('description')?.invalid && submitted"></textarea>
         </div>
         <div *ngIf="therapyForm.invalid && submitted" class="col-12 mt-1 text-center">
             <span style="font-size: small; color: red;">
-                {{"INVOICE.MODAL.THERAPYERROR" | translate }}
+                {{"CUSTOMER.MODAL.THERAPYERROR" | translate }}
             </span>
         </div>
     </div>
@@ -32,17 +32,17 @@
 <mat-dialog-actions class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
     <div *ngIf="idPopup == 2" class="col-6 text-start">
         <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="addOrUpdate()">
-            {{"INVOICE.MODAL.UPDATE" | translate }}
+            {{"CUSTOMER.MODAL.UPDATE" | translate }}
         </button>
     </div>
     <div *ngIf="idPopup == 1" class="col-6 text-start">
         <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="addOrUpdate()">
-            {{"INVOICE.MODAL.ADD" | translate }}
+            {{"CUSTOMER.MODAL.ADD" | translate }}
         </button>
     </div>
     <div class="col-6 text-end">
         <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
-            {{"INVOICE.MODAL.CLOSE" | translate }}
+            {{"CUSTOMER.MODAL.CLOSE" | translate }}
         </button>
     </div>
 </mat-dialog-actions>
