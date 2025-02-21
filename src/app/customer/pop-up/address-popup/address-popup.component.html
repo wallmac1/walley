@@ -1,10 +1,10 @@
 <h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
     <span *ngIf="idPopup == 1; else deletePopup" style="color: white; font-weight: bold; font-size: x-large;">
-        {{"INVOICE.MODAL.MODIFYADDRESS" | translate }}
+        {{"CUSTOMER.MODAL.MODIFYADDRESS" | translate }}
     </span>
     <ng-template #deletePopup>
         <span style="color: white; font-weight: bold; font-size: x-large;">
-            {{"INVOICE.MODAL.DELETEADDRESS" | translate }}
+            {{"CUSTOMER.MODAL.DELETEADDRESS" | translate }}
         </span>
     </ng-template>
 </h2>
@@ -15,7 +15,7 @@
         <!-- DESCRIPTION -->
         <div class="col-12 col-lg-6">
             <label class="form-label" for="description">
-                {{"INVOICE.CUSTOMER.ADDRESS.DESCRIPTION" | translate}}
+                {{"CUSTOMER.ADDRESS.DESCRIPTION" | translate}}
             </label>
             <textarea class="form-control" type="text" id="description" formControlName="description"
                 [rows]="descriptionRows"></textarea>
@@ -24,7 +24,7 @@
         <!-- COUNTRY -->
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <label class="form-label" for="country2">
-                {{"INVOICE.CUSTOMER.ADDRESS.COUNTRY" | translate}}
+                {{"CUSTOMER.ADDRESS.COUNTRY" | translate}}
             </label>
             <select class="form-select" id="country2" formControlName="country"
                 [class.is-invalid]="addressForm.get('country')?.invalid && submitted">
@@ -40,7 +40,7 @@
         <!-- CITY -->
         <div *ngIf="addressForm.get('country')?.value == 12; else notItalianBlock"
             class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <label class="form-label" for="city_it">{{"INVOICE.CUSTOMER.ADDRESS.MUNICIPALITY" | translate }}</label>
+            <label class="form-label" for="city_it">{{"CUSTOMER.ADDRESS.MUNICIPALITY" | translate }}</label>
             <input type="text" matInput [matAutocomplete]="city" class="form-control" id="city_it"
                 formControlName="city_it" [class.is-invalid]="addressForm.get('city_it')?.invalid && submitted">
             <mat-autocomplete #city="matAutocomplete" [displayWith]="displayCityName">
@@ -54,7 +54,7 @@
         <ng-template #notItalianBlock>
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <label class="form-label" for="city">
-                    {{"INVOICE.CUSTOMER.ADDRESS.CITY" | translate}}
+                    {{"CUSTOMER.ADDRESS.CITY" | translate}}
                 </label>
                 <input class="form-control" type="text" id="city" formControlName="city"
                     [class.is-invalid]="addressForm.get('city')?.invalid && submitted">
@@ -64,7 +64,7 @@
         <!-- PROVINCE -->
         <div class="col-12 col-sm-8 col-md-4 col-lg-3">
             <label class="form-label" for="province">
-                {{"INVOICE.CUSTOMER.ADDRESS.PROVINCE" | translate}}
+                {{"CUSTOMER.ADDRESS.PROVINCE" | translate}}
             </label>
             <input class="form-control" type="text" id="province" formControlName="province"
                 [class.is-invalid]="addressForm.get('province')?.invalid && submitted">
@@ -73,7 +73,7 @@
         <!-- CAP -->
         <div class="col-12 col-sm-4 col-md-3 col-lg-2">
             <label class="form-label" for="postalcode">
-                {{"INVOICE.CUSTOMER.ADDRESS.POSTALCODE" | translate}}
+                {{"CUSTOMER.ADDRESS.POSTALCODE" | translate}}
             </label>
             <input class="form-control" type="text" id="postalcode" formControlName="postalcode"
                 [class.is-invalid]="addressForm.get('postalcode')?.invalid && submitted">
@@ -82,7 +82,7 @@
         <!-- STREET -->
         <div class="col-12 col-sm-9 col-md-7 col-lg-6">
             <label class="form-label" for="street">
-                {{"INVOICE.CUSTOMER.ADDRESS.STREET" | translate}}
+                {{"CUSTOMER.ADDRESS.STREET" | translate}}
             </label>
             <input class="form-control" type="text" id="street" formControlName="street"
                 [class.is-invalid]="addressForm.get('street')?.invalid && submitted">
@@ -91,7 +91,7 @@
         <!-- NUMBER -->
         <div class="col-12 col-sm-3 col-md-2 col-lg-1">
             <label class="form-label" for="street_number">
-                {{"INVOICE.CUSTOMER.ADDRESS.NUMBER" | translate}}
+                {{"CUSTOMER.ADDRESS.NUMBER" | translate}}
             </label>
             <input class="form-control" type="text" id="street_number" formControlName="street_number"
                 [class.is-invalid]="addressForm.get('street_number')?.invalid && submitted">
@@ -100,7 +100,7 @@
         <!-- LEGAL OFFICE -->
         <div class="col-12 col-sm-6 ps-2 form-check">
             <label class="form-check-label ms-2" for="legalOffice">
-                {{"INVOICE.CUSTOMER.ADDRESS.LEGALOFFICE" | translate}}
+                {{"CUSTOMER.ADDRESS.LEGALOFFICE" | translate}}
             </label>
             <input class="form-check-input mt-2 ms-1" type="checkbox" id="legalOffice" formControlName="legalOffice"
                 style="height: 20px; width: 20px;">
@@ -109,7 +109,7 @@
         <!-- MAIN OFFICE -->
         <div class="col-12 col-sm-6 ps-2 form-check">
             <label class="form-check-label ms-2" for="mainOffice">
-                {{"INVOICE.CUSTOMER.ADDRESS.MAINOFFICE" | translate}}
+                {{"CUSTOMER.ADDRESS.MAINOFFICE" | translate}}
             </label>
             <input class="form-check-input mt-2 ms-1" type="checkbox" id="mainOffice" formControlName="mainOffice"
                 style="height: 20px; width: 20px;">
@@ -119,20 +119,27 @@
     <div *ngIf="addressForm.invalid" class="row mt-2">
         <div *ngIf="addressForm.get('country')?.value == null" class="col-12 text-center">
             <span class="errorText">
-                {{"INVOICE.CUSTOMER.ADDRESS.ERRORSELECTCOUNTRY" | translate}}
+                {{"CUSTOMER.ADDRESS.ERRORSELECTCOUNTRY" | translate}}
             </span>
         </div>
 
         <div *ngIf="addressForm.get('country')?.value != null && submitted" class="col-12 text-center">
             <span class="errorText">
-                {{"INVOICE.CUSTOMER.ADDRESS.MANDATORYFIELDS" | translate}}
+                {{"CUSTOMER.ADDRESS.MANDATORYFIELDS" | translate}}
             </span>
         </div>
 
         <div *ngIf="addressForm.get('country')?.value == 12 && submitted && addressForm.get('city_it')?.hasError('invalidCity')"
             class="col-12 text-center">
             <span class="errorText">
-                {{"INVOICE.CUSTOMER.ADDRESS.INVALIDCITY" | translate}}
+                {{"CUSTOMER.ADDRESS.INVALIDCITY" | translate}}
+            </span>
+        </div>
+
+        <div class="col-12 mt-1">
+            <span style="font-size: small; color: gray; font-style: italic;">
+                {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
+                {{'COMPANY.POPUP.NBUPDATE' | translate}}
             </span>
         </div>
     </div>
@@ -142,12 +149,12 @@
         <ng-container *ngIf="addressForm.get('id')?.value != 0; else newAddressBlock">
             <div class="col-4 text-start">
                 <button class="btn btn-outline-success me-2" (click)="update()">
-                    {{"INVOICE.MODAL.UPDATE" | translate }}
+                    {{"CUSTOMER.MODAL.UPDATE" | translate }}
                 </button>
             </div>
             <div class="col-4 text-center">
                 <button class="btn btn-outline-danger me-2" (click)="historicize()">
-                    {{"INVOICE.MODAL.HISTORICIZE" | translate }}
+                    {{"CUSTOMER.MODAL.HISTORICIZE" | translate }}
                 </button>
             </div>
         </ng-container>
@@ -155,7 +162,7 @@
         <ng-template #newAddressBlock>
             <div class="col-8 text-start">
                 <button class="btn btn-outline-success me-2" (click)="add()">
-                    {{"INVOICE.MODAL.ADD" | translate }}
+                    {{"CUSTOMER.MODAL.ADD" | translate }}
                 </button>
             </div>
         </ng-template>
@@ -163,7 +170,7 @@
 
         <div class="col-4 text-end">
             <button class="btn btn-outline-dark me-2" (click)="close()">
-                {{"INVOICE.MODAL.CANCEL" | translate }}
+                {{"CUSTOMER.MODAL.CANCEL" | translate }}
             </button>
         </div>
     </div>
@@ -173,7 +180,7 @@
     <div class="row">
         <div class="col-12 text-center p-2">
             <span>
-                {{"INVOICE.MODAL.DELETEMSG" | translate }}
+                {{"CUSTOMER.MODAL.DELETEMSG" | translate }}
             </span>
         </div>
     </div>
@@ -182,12 +189,12 @@
     <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
         <div class="col-6 text-start">
             <button class="btn btn-outline-danger me-2" (click)="deleteAddress()">
-                {{"INVOICE.MODAL.DELETE" | translate }}
+                {{"CUSTOMER.MODAL.DELETE" | translate }}
             </button>
         </div>
         <div class="col-6 text-end">
             <button class="btn btn-outline-dark me-2" (click)="close()">
-                {{"INVOICE.MODAL.CANCEL" | translate }}
+                {{"CUSTOMER.MODAL.CANCEL" | translate }}
             </button>
         </div>
     </div>

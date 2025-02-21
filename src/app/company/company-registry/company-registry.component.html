@@ -8,10 +8,10 @@
                 <span *ngIf="companyDataForm.get('naturalPerson')?.value == 0" class="title">
                     {{companyDataForm.get('business_name')?.value}}
                 </span>
-                <span (click)="modifyDataPopup()" class="modifyIcon" 
-                    style="position: absolute; right: -10px; top: -10px;">
-                    <i class="bi bi-pencil"></i>
-                </span>
+                <button (click)="modifyDataPopup()" class="btn btn-link"
+                    style="position: absolute; right: -16px; top: -10px; z-index: 100;">
+                    <i class="bi bi-pencil" style="color: black;"></i>
+                </button>
             </div>
 
             <div *ngIf="!isSmallScreen" style="position: absolute; top: 30px; left: 20px;">
@@ -29,23 +29,23 @@
                     <!-- COMPANY DATA -->
                     <mat-tab>
                         <ng-template mat-tab-label>
+                            <i class="bi bi-file-text me-3 iconSize"></i>
                             <span class="tabTitle">
                                 {{"COMPANY.DATA.DATA" | translate}}
                             </span>
-                            <i class="bi bi-file-text ms-3 iconSize"></i>
                         </ng-template>
 
                         <app-company-data #companyData [companyData]="companyDataObj"
                             (modifyName)="modifyData($event)"></app-company-data>
                     </mat-tab>
 
-                    <!-- COMPANY HOUSEHOLDER -->
+                    <!-- COMPANY HEADQUARTER -->
                     <mat-tab>
                         <ng-template mat-tab-label>
+                            <i class="bi bi-buildings me-3 iconSize"></i>
                             <span class="tabTitle">
                                 {{"COMPANY.DATA.HEADQUARTER" | translate}}
                             </span>
-                            <i class="bi bi-buildings ms-3 iconSize"></i>
                         </ng-template>
 
                         <app-company-headquarter [countriesList]="countriesList"
@@ -55,10 +55,10 @@
                     <!-- TAX REPRESENTATIVE -->
                     <mat-tab>
                         <ng-template mat-tab-label>
+                            <i class="bi bi-bank me-3 iconSize"></i>
                             <span class="tabTitle">
                                 {{"COMPANY.DATA.TAXREPRESENTATIVE" | translate}}
                             </span>
-                            <i class="bi bi-bank ms-3 iconSize"></i>
                         </ng-template>
 
                         <app-company-tax-representative></app-company-tax-representative>
@@ -67,10 +67,10 @@
                     <!-- REA -->
                     <mat-tab>
                         <ng-template mat-tab-label>
+                            <i class="bi bi-person me-3 iconSize"></i>
                             <span class="tabTitle">
                                 {{"COMPANY.DATA.BROKER" | translate}}
                             </span>
-                            <i class="bi bi-person ms-3 iconSize"></i>
                         </ng-template>
 
                         <app-company-broker [companyBroker]="companyBrokerObj"

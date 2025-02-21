@@ -54,6 +54,7 @@ export class CompanyRegistryComponent {
   constructor(private connectServerService: ConnectServerService) { }
 
   ngOnInit(): void {
+    this.getCountries();
     this.getCompanyData();
     this.getCompanyBroker();
     this.getCompanyHeadQuarter();
@@ -72,6 +73,14 @@ export class CompanyRegistryComponent {
     else {
       this.isSmallScreen = false;
     }
+  }
+
+  getCountries() {
+    this.connectServerService.getRequestCountry().subscribe((val: any) => {
+      if (val) {
+        this.countriesList = val;
+      }
+    });
   }
 
   getAllInfo() {

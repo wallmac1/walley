@@ -1,0 +1,31 @@
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cardElement {
+    border: 1px solid lightgray;
+    border-radius: 20px;
+    padding: 1.2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.clickableElement {
+    color: #0C6EFD;
+    text-decoration: underline;
+}
+
+.clickableElement:hover {
+    cursor: pointer;
+}
+
+th,
+td {
+    border-right: 1px solid lightgray;
+}
+
+.selectedLetter {
+    background-color: #0C6EFD;
+    color: white;
+}

@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { City } from '../../invoices/interfaces/city';
 import { ModifyCustomerPopupComponent } from '../pop-up/modify-customer-popup/modify-customer-popup.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Country } from '../../invoices/interfaces/country';
@@ -12,7 +10,7 @@ import { ConnectServerService } from '../../services/connect-server.service';
 import { CustomerModifyComponent } from "./components/customer-modify/customer-modify.component";
 import { Customer } from '../interfaces/customer';
 import { CustomerTherapiesComponent } from "./components/customer-therapies/customer-therapies.component";
-import { CustomerTraineesComponent } from "./components/customer-trainees/customer-trainees.component";
+import { CustomerStudentsComponent } from './components/customer-students/customer-students.component';
 
 @Component({
   selector: 'app-customer-container',
@@ -24,7 +22,7 @@ import { CustomerTraineesComponent } from "./components/customer-trainees/custom
     MatTooltipModule,
     CustomerModifyComponent,
     CustomerTherapiesComponent,
-    CustomerTraineesComponent
+    CustomerStudentsComponent
 ],
   templateUrl: './customer-container.component.html',
   styleUrl: './customer-container.component.scss'
@@ -33,7 +31,7 @@ export class CustomerContainerComponent {
 
   @ViewChild(CustomerModifyComponent) customerModify!: CustomerModifyComponent;
   @ViewChild(CustomerTherapiesComponent) therapyComponent!: CustomerTherapiesComponent;
-  @ViewChild(CustomerTraineesComponent) traineeComponent!: CustomerTraineesComponent;
+  @ViewChild(CustomerStudentsComponent) studentComponent!: CustomerStudentsComponent;
 
   chargedTab: boolean[] = [false, false, false];
   countriesList: Country[] = [];
@@ -135,9 +133,9 @@ export class CustomerContainerComponent {
     }, 300);
   }
 
-  addTrainee() {
+  addStudent() {
     setTimeout(() => {
-      this.traineeComponent.openTraineePopup(1, null);
+      this.studentComponent.openStudentPopup(1, null);
     }, 300);
   }
 

@@ -2,38 +2,38 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { Trainee } from '../../../interfaces/trainee';
 import { MatDialog } from '@angular/material/dialog';
-import { TraineePopupComponent } from '../../../pop-up/trainee-popup/trainee-popup.component';
+import { Student } from '../../../interfaces/student';
+import { StudentPopupComponent } from '../../../pop-up/student-popup/student-popup.component';
 
 @Component({
-  selector: 'app-customer-trainees',
+  selector: 'app-customer-students',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     TranslateModule
   ],
-  templateUrl: './customer-trainees.component.html',
-  styleUrl: './customer-trainees.component.scss'
+  templateUrl: './customer-students.component.html',
+  styleUrl: './customer-students.component.scss'
 })
-export class CustomerTraineesComponent {
+export class CustomerStudentsComponent {
 
-  traineesForm!: FormGroup;
-  traineesList: Trainee[] = [];
+  studentsForm!: FormGroup;
+  studentsList: Student[] = [];
 
   constructor(private fb: FormBuilder, private dialog: MatDialog) {
-    this.traineesForm = this.fb.group({
-      trainees: this.fb.array([])
+    this.studentsForm = this.fb.group({
+      students: this.fb.array([])
     })
   }
 
   ngOnInit(): void {
-    this.getTrainees();
+    this.getStudents();
   }
 
-  getTrainees() {
-    this.traineesList = [
+  getStudents() {
+    this.studentsList = [
       {
         id: 1,
         name: "Mario",
@@ -63,37 +63,38 @@ export class CustomerTraineesComponent {
       }
     ];
 
-    if (this.traineesList.length > 0) {
-      this.traineesList.forEach((trainee) => {
-        this.addTrainee(trainee);
+    if (this.studentsList.length > 0) {
+      this.studentsList.forEach((student) => {
+        this.addStudent(student);
       })
     }
   }
 
-  get trainees(): FormArray {
-    return this.traineesForm.get('trainees') as FormArray;
+  get students(): FormArray {
+    return this.studentsForm.get('students') as FormArray;
   }
 
-  addTrainee(trainee: Trainee) {
-    this.trainees.push(this.createTrainee(trainee));
+  addStudent(student: Student) {
+    this.students.push(this.createStudent(student));
   }
+
+  createStudent(student: Student) {
+    console.log(student);
+    return this.fb.group({
+      id: [{ value: student.id, disabled: true }],
+      name: [{ value: student.name, disabled: true }],
+      surname: [{ value: student.surname, disabled: true }],
+      fiscalcode: [{ value: student.fiscalcode, disabled: true }],
+      birthday: [{ value: student.birthday, disabled: true }],
+      email: [{ value: student.email, disabled: true }],
+      phone: [{ value: student.phone, disabled: true }]
+    })
+  }
+
 
   // addTraineeEmpty() {
   //   this.trainees.push(this.createTraineeEmpty());
   // }
-
-  createTrainee(trainee: Trainee) {
-    console.log(trainee);
-    return this.fb.group({
-      id: [{ value: trainee.id, disabled: true }],
-      name: [{ value: trainee.name, disabled: true }],
-      surname: [{ value: trainee.surname, disabled: true }],
-      fiscalcode: [{ value: trainee.fiscalcode, disabled: true }],
-      birthday: [{ value: trainee.birthday, disabled: true }],
-      email: [{ value: trainee.email, disabled: true }],
-      phone: [{ value: trainee.phone, disabled: true }]
-    })
-  }
 
   // createTraineeEmpty() {
   //   return this.fb.group({
@@ -107,26 +108,26 @@ export class CustomerTraineesComponent {
   //   })
   // }
 
-  openTraineePopup(type: number, trainee: Trainee | null) {
-    const dialogRef = this.dialog.open(TraineePopupComponent, {
+  openStudentPopup(type: number, student: Student | null) {
+    const dialogRef = this.dialog.open(StudentPopupComponent, {
       maxWidth: '800px',
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
       data: {
         idPopup: type,
-        traineeInfo: trainee,
+        studentInfo: student,
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         if (result.type == 1) {
-          this.addTrainee(result.trainee);
+          this.addStudent(result.student);
         }
         else {
-          const index = this.trainees.controls.findIndex((trainee) => trainee.get('id')?.value == result.trainee.id);
-          this.trainees.at(index).patchValue(result.trainee);
+          const index = this.students.controls.findIndex((student) => student.get('id')?.value == result.student.id);
+          this.students.at(index).patchValue(result.student);
         }
       }
     });

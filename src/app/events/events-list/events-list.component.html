@@ -82,10 +82,10 @@
                         </div>
                         <div class="col-4 col-md-2 col-xxl-1 p-0">
                             <div class="form-check d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" value="" id="people_isTrainee"
-                                    formControlName="people_isTrainee">
-                                <label class="form-check-label ms-2" for="people_isTrainee">
-                                    {{"EVENT.LIST.TRAINEES" | translate}}
+                                <input class="form-check-input" type="checkbox" value="" id="people_isStudent"
+                                    formControlName="people_isStudent">
+                                <label class="form-check-label ms-2" for="people_isStudent">
+                                    {{"EVENT.LIST.STUDENT" | translate}}
                                 </label>
                             </div>
                         </div>
@@ -110,16 +110,16 @@
                     </mat-autocomplete>
                 </div>
 
-                <!-- TRAINEE AUTOCOMPLETE -->
-                <div *ngIf="filterForm.get('people_isTrainee')?.value == true"
+                <!-- STUDENT AUTOCOMPLETE -->
+                <div *ngIf="filterForm.get('people_isStudent')?.value == true"
                     class="col-12 col-sm-6 mb-md-4 text-start" style="margin-bottom: 0.5rem !important;">
-                    <label class="subtitle form-label" for="trainee" style="margin-bottom: 0.1rem !important;">
-                        {{"EVENT.LIST.TRAINEE" | translate}}
+                    <label class="subtitle form-label" for="student" style="margin-bottom: 0.1rem !important;">
+                        {{"EVENT.LIST.STUDENT" | translate}}
                     </label>
-                    <input type="text" matInput [matAutocomplete]="trainee" class="form-control" id="trainee"
-                        formControlName="trainee" [class.is-invalid]="filterForm.get('trainee')?.invalid && submitted">
-                    <mat-autocomplete #trainee="matAutocomplete" [displayWith]="displayTraineeName">
-                        <mat-option *ngFor="let option of filteredTrainee$ | async;" [value]="option">
+                    <input type="text" matInput [matAutocomplete]="student" class="form-control" id="student"
+                        formControlName="student" [class.is-invalid]="filterForm.get('student')?.invalid && submitted">
+                    <mat-autocomplete #student="matAutocomplete" [displayWith]="displayStudentName">
+                        <mat-option *ngFor="let option of filteredStudent$ | async;" [value]="option">
                             <div>
                                 {{option.denomination}}
                             </div>

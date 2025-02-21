@@ -2,7 +2,7 @@
 
     <div [formGroup]="paymentMethod" class="row justify-content-start align-items-center">
         <div class="col-12 col-md-8 col-lg-6 col-xl-4">
-            <label class="form-label" for="paymentMethod">{{"INVOICE.CUSTOMER.PAYMENTTAB.PAYMENTMETHOD" | translate}}</label>
+            <label class="form-label" for="paymentMethod">{{"CUSTOMER.PAYMENTTAB.PAYMENTMETHOD" | translate}}</label>
             <select class="form-select" name="paymentMethod" id="paymentMethod" formControlName="paymentMethod">
                 <option [ngValue]="null">--</option>
                 <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
@@ -16,13 +16,13 @@
 
         <div class="col-12" style="border-bottom: 1px solid lightgray;">
             <span class="titleLines">
-                {{"INVOICE.CUSTOMER.PAYMENTTAB.COMPANYBANK" | translate}}
+                {{"CUSTOMER.PAYMENTTAB.COMPANYBANK" | translate}}
             </span>
         </div>
         
         <!-- DENOMINATION -->
         <div class="col-10 col-md-8">
-            <label class="form-label" for="company_denomination">{{"INVOICE.CUSTOMER.PAYMENTTAB.DENOMINATION" | translate}}</label>
+            <label class="form-label" for="company_denomination">{{"CUSTOMER.PAYMENTTAB.DENOMINATION" | translate}}</label>
             <input class="form-control" type="text" id="company_denomination" formControlName="company_denomination">
         </div>
 
@@ -35,7 +35,7 @@
 
         <!-- IBAN -->
         <div class="col-12 col-md-8 col-lg-4">
-            <label class="form-label" for="company_iban">{{"INVOICE.CUSTOMER.PAYMENTTAB.IBAN" | translate}}</label>
+            <label class="form-label" for="company_iban">{{"CUSTOMER.PAYMENTTAB.IBAN" | translate}}</label>
             <input class="form-control" type="text" id="company_iban" formControlName="company_iban">
         </div>
 
@@ -43,37 +43,37 @@
 
         <!-- ABI -->
         <div class="col-6 col-md-3 col-lg-2">
-            <label class="form-label" for="company_abi">{{"INVOICE.CUSTOMER.PAYMENTTAB.ABI" | translate}}</label>
+            <label class="form-label" for="company_abi">{{"CUSTOMER.PAYMENTTAB.ABI" | translate}}</label>
             <input class="form-control" type="text" id="company_abi" formControlName="company_abi">
         </div>
 
         <!-- CAB -->
         <div class="col-6 col-md-3 col-lg-2" style="position: relative;">
-            <label class="form-label" for="company_cab">{{"INVOICE.CUSTOMER.PAYMENTTAB.CAB" | translate}}</label>
+            <label class="form-label" for="company_cab">{{"CUSTOMER.PAYMENTTAB.CAB" | translate}}</label>
             <input class="form-control" type="text" id="company_cab" formControlName="company_cab">
         </div>
 
         <!-- CC -->
         <div class="col-6 col-md-3 col-lg-2">
-            <label class="form-label" for="company_cc">{{"INVOICE.CUSTOMER.PAYMENTTAB.CC" | translate}}</label>
+            <label class="form-label" for="company_cc">{{"CUSTOMER.PAYMENTTAB.CC" | translate}}</label>
             <input class="form-control" type="text" id="company_cc" formControlName="company_cc">
         </div>
 
         <!-- BIC -->
         <div class="col-6 col-md-3 col-lg-2">
-            <label class="form-label" for="company_bic">{{"INVOICE.CUSTOMER.PAYMENTTAB.BIC" | translate}}</label>
+            <label class="form-label" for="company_bic">{{"CUSTOMER.PAYMENTTAB.BIC" | translate}}</label>
             <input class="form-control" type="text" id="company_bic" formControlName="company_bic">
         </div>
 
         <div class="col-12 mt-2" style="border-bottom: 1px solid lightgray;">
             <span class="titleLines">
-                {{"INVOICE.CUSTOMER.PAYMENTTAB.CUSTOMERBANK" | translate}}
+                {{"CUSTOMER.PAYMENTTAB.CUSTOMERBANK" | translate}}
             </span>
         </div>
         
         <!-- DENOMINATION -->
         <div class="col-10 col-md-8">
-            <label class="form-label" for="customer_denomination">{{"INVOICE.CUSTOMER.PAYMENTTAB.DENOMINATION" | translate}}</label>
+            <label class="form-label" for="customer_denomination">{{"CUSTOMER.PAYMENTTAB.DENOMINATION" | translate}}</label>
             <input class="form-control" type="text" id="customer_denomination" formControlName="customer_denomination">
         </div>
 
@@ -81,7 +81,7 @@
 
         <!-- IBAN -->
         <div class="col-12 col-md-8 col-lg-4">
-            <label class="form-label" for="customer_iban">{{"INVOICE.CUSTOMER.PAYMENTTAB.IBAN" | translate}}</label>
+            <label class="form-label" for="customer_iban">{{"CUSTOMER.PAYMENTTAB.IBAN" | translate}}</label>
             <input class="form-control" type="text" id="customer_iban" formControlName="customer_iban">
         </div>
 
@@ -89,25 +89,25 @@
 
         <!-- ABI -->
         <div class="col-6 col-md-3 col-lg-2">
-            <label class="form-label" for="customer_abi">{{"INVOICE.CUSTOMER.PAYMENTTAB.ABI" | translate}}</label>
+            <label class="form-label" for="customer_abi">{{"CUSTOMER.PAYMENTTAB.ABI" | translate}}</label>
             <input class="form-control" type="text" id="customer_abi" formControlName="customer_abi">
         </div>
 
         <!-- CAB -->
         <div class="col-6 col-md-3 col-lg-2" style="position: relative;">
-            <label class="form-label" for="customer_cab">{{"INVOICE.CUSTOMER.PAYMENTTAB.CAB" | translate}}</label>
+            <label class="form-label" for="customer_cab">{{"CUSTOMER.PAYMENTTAB.CAB" | translate}}</label>
             <input class="form-control" type="text" id="customer_cab" formControlName="customer_cab">
         </div>
 
         <!-- CC -->
         <div class="col-6 col-md-3 col-lg-2">
-            <label class="form-label" for="customer_cc">{{"INVOICE.CUSTOMER.PAYMENTTAB.CC" | translate}}</label>
+            <label class="form-label" for="customer_cc">{{"CUSTOMER.PAYMENTTAB.CC" | translate}}</label>
             <input class="form-control" type="text" id="customer_cc" formControlName="customer_cc">
         </div>
 
         <!-- BIC -->
         <div class="col-6 col-md-3 col-lg-2">
-            <label class="form-label" for="customer_bic">{{"INVOICE.CUSTOMER.PAYMENTTAB.BIC" | translate}}</label>
+            <label class="form-label" for="customer_bic">{{"CUSTOMER.PAYMENTTAB.BIC" | translate}}</label>
             <input class="form-control" type="text" id="customer_bic" formControlName="customer_bic">
         </div>
     </div>
@@ -115,7 +115,7 @@
     <div class="row justify-content-center align-items-center mt-4 pt-2" style="border-top: 1px solid lightgray;">
         <div class="col-12 text-end">
             <button class="btn btn-outline-dark">
-                {{"INVOICE.CUSTOMER.PAYMENTTAB.SAVE" | translate}}
+                {{"CUSTOMER.PAYMENTTAB.SAVE" | translate}}
             </button>
         </div>
     </div>

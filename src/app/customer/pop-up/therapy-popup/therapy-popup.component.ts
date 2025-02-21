@@ -26,7 +26,7 @@ export class TherapyPopupComponent {
   therapyForm = new FormGroup({
     id: new FormControl<number>(0),
     therapy_date: new FormControl<string>(this.todayDate.toISOString().split('T')[0], Validators.required),
-    sessions: new FormControl<string | null>(null, Validators.required),
+    totalsessions: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null, Validators.required),
   })
 

@@ -2,7 +2,7 @@
     <div class="row justify-content-center align-items-center pt-4">
         <div class="col-auto text-center ps-3 pe-3 pt-1 pb-1 titleColumn">
             <span class="title">
-                {{"INVOICE.CUSTOMER.CUSTOMERLIST.CUSTOMERLIST" | translate}}
+                {{"CUSTOMER.CUSTOMERLIST.CUSTOMERLIST" | translate}}
             </span>
         </div>
     </div>
@@ -12,14 +12,14 @@
             <div class="row">
                 <div class="col-12 pb-1" style="border-bottom: 1px solid lightgrey;">
                     <span class="titleFilters">
-                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.SEARCH" | translate}}
+                        {{"CUSTOMER.CUSTOMERLIST.SEARCH" | translate}}
                     </span>
                 </div>
 
                 <div class="col-12 col-sm-6 mt-2">
                     <!-- AUTOCOMPLETE DENOMINAZIONE -->
                     <label for="denomination" class="form-label">
-                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.DENOMINATION" | translate}}
+                        {{"CUSTOMER.CUSTOMERLIST.DENOMINATION" | translate}}
                     </label>
                     <input type="text" class="form-control" name="denomination" id="denomination"
                         formControlName="denomination">
@@ -28,7 +28,7 @@
                 <div class="col-12 col-sm-6 mt-2">
                     <!-- AUTOCOMPLETE FISCAL CODE -->
                     <label for="denomination" class="form-label">
-                        {{"INVOICE.CUSTOMER.CUSTOMERLIST.FISCALCODEVAT" | translate}}
+                        {{"CUSTOMER.CUSTOMERLIST.FISCALCODEVAT" | translate}}
                     </label>
                     <input type="text" class="form-control" name="denomination" id="denomination"
                         formControlName="denomination">
@@ -48,7 +48,7 @@
                                 (click)="letterFilter(letter.id)">
 
                                 <ng-container *ngIf="letter.id === 27; else noTranslationBlock">
-                                    {{ "INVOICE.CUSTOMER.CUSTOMERLIST.ALL" | translate }}
+                                    {{ "CUSTOMER.CUSTOMERLIST.ALL" | translate }}
                                 </ng-container>
                                 <ng-template #noTranslationBlock>
                                     {{ letter.name }}
@@ -67,20 +67,20 @@
 
                 <div class="row justify-content-center p-3" style="border-radius: 20px;">
                     <div class="d-none d-md-inline col-4 text-start">
-                        <span style="font-size: small;">{{"INVOICE.LIST.TOTALRESULTS" | translate }}:
+                        <span style="font-size: small;">{{"CUSTOMER.LIST.TOTALRESULTS" | translate }}:
                             {{totalResults}}
                         </span>
                     </div>
 
                     <div class="d-none d-md-inline col-4 text-center">
-                        <span style="font-size: small;">{{"INVOICE.LIST.OBJPERPAGE" | translate }}:
+                        <span style="font-size: small;">{{"CUSTOMER.LIST.OBJPERPAGE" | translate }}:
                             {{itemsPerPage}}
                         </span>
                     </div>
 
                     <div class="col-6 d-sm-none text-start">
                         <span style="font-size: small;">
-                            {{"INVOICE.LIST.ORDEREDBYDEFAULT" | translate}}
+                            {{"CUSTOMER.LIST.ORDEREDBYDEFAULT" | translate}}
                         </span>
                     </div>
 
@@ -89,7 +89,7 @@
                             <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
                                 <i class="bi bi-caret-left"></i>
                             </button>
-                            <span style="font-size: small;">{{"INVOICE.LIST.PAGE" | translate }} {{currentPage}} di
+                            <span style="font-size: small;">{{"CUSTOMER.LIST.PAGE" | translate }} {{currentPage}} di
                                 {{totalPages}}
                             </span>
                             <button [disabled]="currentPage == totalPages" class="btn btn-link ms-2 p-0"
@@ -106,7 +106,7 @@
                     <!-- Denominations Column -->
                     <ng-container matColumnDef="denomination">
                         <th mat-header-cell *matHeaderCellDef>
-                            {{"INVOICE.CUSTOMER.CUSTOMERLIST.DENOMINATION" | translate}}
+                            {{"CUSTOMER.CUSTOMERLIST.DENOMINATION" | translate}}
                         </th>
                         <td mat-cell *matCellDef="let element" (click)="goToCustomer(element.id)">
                             <span class="clickableElement" style="text-decoration: underline; color: blue;">
@@ -118,7 +118,7 @@
                     <!-- Fiscal Code Column -->
                     <ng-container matColumnDef="fiscalcode">
                         <th mat-header-cell *matHeaderCellDef class="limitedWidth headerScale">
-                            {{"INVOICE.CUSTOMER.CUSTOMERLIST.FISCALCODE" | translate}}
+                            {{"CUSTOMER.CUSTOMERLIST.FISCALCODE" | translate}}
                         </th>
                         <td mat-cell *matCellDef="let element" class="limitedWidth">
                             {{element.fiscalcode}}
@@ -128,7 +128,7 @@
                     <!-- Vat Column -->
                     <ng-container matColumnDef="vat">
                         <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell limitedWidth">
-                            {{"INVOICE.CUSTOMER.CUSTOMERLIST.VAT" | translate}}
+                            {{"CUSTOMER.CUSTOMERLIST.VAT" | translate}}
                         </th>
                         <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell limitedWidth">
                             {{element.vat}}
@@ -138,7 +138,7 @@
                     <!-- Main Address Column -->
                     <ng-container matColumnDef="mainAddress">
                         <th mat-header-cell *matHeaderCellDef class="d-none d-md-table-cell headerScale">
-                            {{"INVOICE.CUSTOMER.CUSTOMERLIST.MAINADDRESS" | translate}}
+                            {{"CUSTOMER.CUSTOMERLIST.MAINADDRESS" | translate}}
                         </th>
                         <td mat-cell *matCellDef="let element" class="d-none d-md-table-cell text-truncate">
                             {{element.mainAddress}}
@@ -148,7 +148,7 @@
                     <!-- Info Column -->
                     <ng-container matColumnDef="info">
                         <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-lg-table-cell headerScale">
-                            {{"INVOICE.CUSTOMER.CUSTOMERLIST.INFO" | translate}}
+                            {{"CUSTOMER.CUSTOMERLIST.INFO" | translate}}
                         </th>
                         <td mat-cell *matCellDef="let element" class="limitedWidth d-none d-lg-table-cell">
                             {{element.info}}
@@ -167,7 +167,7 @@
                     Small Screen Column
                     <ng-container matColumnDef="smallScreenCol">
                         <th mat-header-cell *matHeaderCellDef class="d-none">
-                            {{"INVOICE.BANK.DENOMINATIONIBAN"}}
+                            {{"BANK.DENOMINATIONIBAN"}}
                         </th>
                         <td mat-cell *matCellDef="let element" class="d-sm-none">
                             {{element.denomination}}

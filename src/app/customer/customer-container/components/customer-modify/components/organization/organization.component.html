@@ -3,7 +3,7 @@
     <div class="row justify-content-center align-items-center">
         <div class="col-12 pb-1 mb-3" style="border-bottom: 1px solid lightgray;">
             <span class="titleLines">
-                {{"INVOICE.CUSTOMER.ORGANIZATION.MODIFYVALUES" | translate}}
+                {{"CUSTOMER.ORGANIZATION.MODIFYVALUES" | translate}}
             </span>
             <span class="ms-4">
                 <i class="bi bi-pencil" style="font-size: 20px;" (click)="organizationModifyPopup()"></i>
@@ -13,7 +13,7 @@
             <div class="row justify-content-center">
                 <div class="col-12" style="border-bottom: 1px solid lightgray; position: relative;">
                     <span class="titleLines">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.ORGANIZATION" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.ORGANIZATION" | translate}}
                     </span>
                 </div>
             </div>
@@ -21,14 +21,14 @@
 
                 <div class="col-12">
                     <span class="smallInfo">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
                     </span>
                 </div>
 
                 <!-- MUNICIPALITY -->
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 formColumn">
                     <label class="form-label" for="municipality">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.MUNICIPALITY" | translate }}
+                        {{"CUSTOMER.ORGANIZATION.MUNICIPALITY" | translate }}
                     </label>
                     <input type="text" class="form-control" id="municipality" formControlName="municipality">
                 </div>
@@ -36,7 +36,7 @@
                 <!-- PROVINCE -->
                 <div class="col-12 col-sm-6 col-md-4 col-lg-2 formColumn">
                     <label class="form-label" for="province">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.PROVINCE" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.PROVINCE" | translate}}
                     </label>
                     <input class="form-control" type="text" id="province" formControlName="province">
                 </div>
@@ -44,7 +44,7 @@
                 <!-- CAP -->
                 <div class="col-10 col-sm-4 col-md-4 col-lg-2 formColumn">
                     <label class="form-label" for="postalcode">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.POSTALCODE" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.POSTALCODE" | translate}}
                     </label>
                     <input class="form-control" type="text" id="postalcode" formControlName="postalcode">
                 </div>
@@ -52,7 +52,7 @@
                 <!-- STREET -->
                 <div class="col-10 col-sm-9 col-md-7 col-lg-4 formColumn">
                     <label class="form-label" for="street">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.STREET" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.STREET" | translate}}
                     </label>
                     <input class="form-control" type="text" id="street" formControlName="street">
                 </div>
@@ -60,7 +60,7 @@
                 <!-- NUMBER -->
                 <div class="col-2 col-sm-3 col-md-2 col-lg-1 ps-0 formColumn">
                     <label class="form-label" for="street_number">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.NUMBER" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.NUMBER" | translate}}
                     </label>
                     <input class="form-control" type="text" id="street_number" formControlName="street_number">
                 </div>
@@ -69,7 +69,7 @@
             <div class="row justify-content-center mt-4">
                 <div class="col-12" style="border-bottom: 1px solid lightgray; position: relative;">
                     <span class="titleLines">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.TAXREPRESENTATIVE" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.TAXREPRESENTATIVE" | translate}}
                     </span>
                 </div>
             </div>
@@ -77,7 +77,7 @@
 
                 <div class="col-12">
                     <span class="smallInfo">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.INFONOTE" | translate}}
                     </span>
                 </div>
 
@@ -85,7 +85,7 @@
                 <div class="form-check col-12 mt-1">
                     <input class="form-check-input" type="checkbox" id="naturalPerson" formControlName="naturalPerson">
                     <label class="form-check-label mt-0" for="naturalPerson">
-                        {{"INVOICE.CUSTOMER.ORGANIZATION.NATURALPERSON" | translate}}
+                        {{"CUSTOMER.ORGANIZATION.NATURALPERSON" | translate}}
                     </label>
                 </div>
 
@@ -93,7 +93,7 @@
                     <!-- NAME -->
                     <div class="col-12 col-sm-6 col-lg-4 formColumn">
                         <label class="form-label" for="name">
-                            {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
+                            {{"CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
                         </label>
                         <input class="form-control" type="text" id="name" formControlName="name">
                     </div>
@@ -101,7 +101,7 @@
                     <!-- SURNAME -->
                     <div class="col-12 col-sm-6 col-lg-4 formColumn">
                         <label class="form-label" for="surname">
-                            {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
+                            {{"CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
                         </label>
                         <input class="form-control" type="text" id="surname" formControlName="surname">
                     </div>
@@ -111,7 +111,7 @@
                 <ng-template #businessBlock>
                     <div class="col-12 col-lg-6 formColumn">
                         <label class="form-label" for="denomination">
-                            {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
+                            {{"CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
                         </label>
                         <input class="form-control" type="text" id="denomination" formControlName="denomination">
                     </div>
@@ -120,7 +120,7 @@
                 <!-- VAT -->
                 <div class="col-12 col-md-6 col-lg-4 formColumn">
                     <label class="form-label" for="vat">
-                        {{"INVOICE.CUSTOMER.TAXREPRESENTATIVE.VAT" | translate}}
+                        {{"CUSTOMER.TAXREPRESENTATIVE.VAT" | translate}}
                     </label>
                     <input class="form-control" type="text" id="vat" formControlName="vat">
                 </div>

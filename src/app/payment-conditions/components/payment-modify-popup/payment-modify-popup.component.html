@@ -1,0 +1,141 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"PAYMENTCONDITIONS.POPUP.PAYMENTCONDITIONS" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-2" style="overflow-y: auto; overflow-x: hidden;">
+    <div class="row justify-content-center">
+        <div [formGroup]="paymentConditionsForm" class="col-12">
+
+            <div class="row justify-content-start align-items-center rowDivider">
+                <!-- CODE -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2">
+                    <label class="form-label" for="code">
+                        {{"PAYMENTCONDITIONS.POPUP.CODE" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="code" formControlName="code">
+                </div>
+
+                <!-- XML CODE -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2">
+                    <label class="form-label" for="xml_code">
+                        {{"PAYMENTCONDITIONS.POPUP.XMLCODE" | translate}}
+                    </label>
+                    <select class="form-select" id="xml_code" formControlName="xml_code">
+                        <option [ngValue]="null">
+                            --
+                        </option>
+                        <option *ngFor="let code of xml_codes" [ngValue]="code.id">
+                            {{code.title}}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="col-12">
+                    <label class="form-label" for="description">
+                        {{"PAYMENTCONDITIONS.POPUP.DESCRIPTION" | translate}}
+                    </label>
+                    <textarea class="form-control" type="text" id="description"
+                        formControlName="description"></textarea>
+                </div>
+            </div>
+
+            <div class="row justify-content-start align-items-center rowDivider">
+                <!-- INSTALLMENT NUMBER -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2">
+                    <label class="form-label" for="installment_number">
+                        {{"PAYMENTCONDITIONS.POPUP.INSTALLMENTNUMBER" | translate}}
+                    </label>
+                    <select class="form-select" id="installment_number" formControlName="installment_number">
+                        <option *ngFor="let installment of installmentList" [ngValue]="installment.id">
+                            {{installment.title}}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- PERIODICITY -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2">
+                    <label class="form-label" for="periodicity">
+                        {{"PAYMENTCONDITIONS.POPUP.PERIODICITY" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="periodicity" formControlName="periodicity">
+                </div>
+
+                <!-- DEADLINE -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2">
+                    <label class="form-label" for="deadline">
+                        {{"PAYMENTCONDITIONS.POPUP.DEADLINE" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="deadline" formControlName="deadline">
+                </div>
+
+                <!-- DEADLINE TYPE -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2">
+                    <label class="form-label" for="deadline_type">
+                        {{"PAYMENTCONDITIONS.POPUP.DEADLINETYPE" | translate}}
+                    </label>
+                    <select class="form-select" id="deadline_type" formControlName="deadline_type">
+                        <option [ngValue]="null">
+                            --
+                        </option>
+                        <option *ngFor="let deadline of deadlineList" [ngValue]="deadline.id">
+                            {{deadline.title}}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- EXACT DAY -->
+                <div *ngIf="paymentConditionsForm.get('deadline_type')?.value == 3"
+                    class="col-12 col-sm-6 col-md-4 col-xxl-2">
+                    <label class="form-label" for="exact_day">
+                        {{"PAYMENTCONDITIONS.POPUP.EXACTDAY" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="exact_day" formControlName="exact_day">
+                </div>
+            </div>
+
+            <div class="row justify-content-start align-items-center">
+                <!-- BANK -->
+                <div class="col-12 col-sm-6 col-md-4 col-xxl-2">
+                    <label class="form-label" for="bank">
+                        {{"PAYMENTCONDITIONS.POPUP.BANK" | translate}}
+                    </label>
+                    <select class="form-select" id="bank" formControlName="bank">
+                        <option [ngValue]="null">
+                            --
+                        </option>
+                        <option *ngFor="let bank of bankList" [ngValue]="bank.id">
+                            {{bank.name}}
+                        </option>
+                    </select>
+                </div>
+
+                <div *ngIf="!isNote; else noteBlock" class="col-4">
+                    <button class="btn btn-link" (click)="addNote()">
+                        {{"PAYMENTCONDITIONS.POPUP.ADDNOTE" | translate}}
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+
+                <ng-template #noteBlock>
+                    <div class="col-12 col-md-8 col-xxl-10">
+                        <label class="form-label" for="note">
+                            {{"PAYMENTCONDITIONS.POPUP.NOTE" | translate}}
+                        </label>
+                        <textarea class="form-control" type="text" id="note" formControlName="note" rows="1"></textarea>
+                    </div>
+                </ng-template>
+            </div>
+
+            <div class="row justify-content-end mt-2 pt-2" style="border-top: 1px solid lightgray;">
+                <div class="col-auto text-end">
+                    <button class="btn btn-outline-dark" (click)="save()">
+                        {{"PAYMENTCONDITIONS.POPUP.SAVE" | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
