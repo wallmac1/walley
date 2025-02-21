@@ -5,4 +5,5 @@ export interface CustomerTable {
     vat: string | null;
     mainAddress: string | null;
     info: string | null;
+    health_fc: {value: number, description: string} | null;
 }

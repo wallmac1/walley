@@ -276,7 +276,8 @@ export class EventsListComponent {
         job: "Ingegnere",
         doctor: "Dr. Bianchi",
         specialist: "Cardiologo",
-        sdi: "ABCDE12345"
+        sdi: "ABCDE12345",
+        health_fc: {value: 1, description: "Descrizione"}
       },
       {
         naturalPerson: 0,
@@ -302,7 +303,8 @@ export class EventsListComponent {
         job: null,
         doctor: null,
         specialist: null,
-        sdi: "FGHIJ67890"
+        sdi: "FGHIJ67890",
+        health_fc: {value: 1, description: "Descrizione"}
       },
       {
         naturalPerson: 1,
@@ -328,7 +330,8 @@ export class EventsListComponent {
         job: "Avvocato",
         doctor: "Dr. Verdi",
         specialist: "Penalista",
-        sdi: "KLMNO11223"
+        sdi: "KLMNO11223",
+        health_fc: {value: 1, description: "Descrizione"}
       }
     ];
 

@@ -18,11 +18,18 @@
     <ng-container [formGroup]="customerRecordsForm">
         <div class="row justify-content-center align-items-end mt-2">
             <!-- FISCALCODE -->
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-3" style="position: relative;">
                 <label class="form-label" for="fiscalcode">
                     {{"CUSTOMER.FISCALCODE" | translate}}
                 </label>
                 <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
+                <div *ngIf="customerRecordsForm.get('health_fc')?.value != null">
+                    <i class="bi bi-exclamation-triangle-fill fiscalcodeIcon ms-2"
+                        [ngClass]="{'text-warning': customerRecordsForm.get('health_fc')?.value!.value == 0, 
+                            'text-success': customerRecordsForm.get('health_fc')?.value!.value == 1, 
+                            'text-danger': customerRecordsForm.get('health_fc')?.value!.value == 2}"
+                            [matTooltip]="customerRecordsForm.get('health_fc')?.value!.description"></i>
+                </div>
             </div>
 
             <!-- VAT -->

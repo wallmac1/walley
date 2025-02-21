@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CustomerTable } from '../interfaces/customer-table';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-customer-list',
@@ -14,7 +15,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     TranslateModule,
     MatTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTooltipModule
   ],
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.scss'
@@ -82,15 +84,17 @@ export class CustomerListComponent {
         fiscalcode: "RSSMRA80A01H501Z",
         vat: "IT12345678901",
         mainAddress: "Via Roma, 10 - 00100 Roma (RM)",
-        info: ""
+        info: "",
+        health_fc: null,
       },
       {
         id: 2,
         denomination: "Acme Corporation",
-        fiscalcode: null,
+        fiscalcode: "IT98765432100",
         vat: "IT98765432100",
         mainAddress: "Viale Milano, 20 - 20100 Milano (MI)",
-        info: ""
+        info: "",
+        health_fc: {value: 1, description: "Descrizione"},
       },
       {
         id: 3,
@@ -98,7 +102,8 @@ export class CustomerListComponent {
         fiscalcode: "VRDGLI90B02L219H",
         vat: null,
         mainAddress: "Piazza Dante, 5 - 50100 Firenze (FI)",
-        info: ""
+        info: "",
+        health_fc: {value: 2, description: "Descrizione"},
       },
       {
         id: 1,
@@ -106,15 +111,17 @@ export class CustomerListComponent {
         fiscalcode: "RSSMRA80A01H501Z",
         vat: "IT12345678901",
         mainAddress: "Via Roma, 10 - 00100 Roma (RM)",
-        info: ""
+        info: "",
+        health_fc: null,
       },
       {
         id: 2,
         denomination: "Acme Corporation",
-        fiscalcode: null,
+        fiscalcode: "IT98765432100",
         vat: "IT98765432100",
         mainAddress: "Viale Milano, 20 - 20100 Milano (MI)",
-        info: ""
+        info: "",
+        health_fc: {value: 0, description: "Descrizione"},
       },
       {
         id: 3,
@@ -122,7 +129,8 @@ export class CustomerListComponent {
         fiscalcode: "VRDGLI90B02L219H",
         vat: null,
         mainAddress: "Piazza Dante, 5 - 50100 Firenze (FI)",
-        info: ""
+        info: "",
+        health_fc: null,
       }
     ];
 

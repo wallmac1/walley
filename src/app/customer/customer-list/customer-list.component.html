@@ -117,11 +117,19 @@
 
                     <!-- Fiscal Code Column -->
                     <ng-container matColumnDef="fiscalcode">
-                        <th mat-header-cell *matHeaderCellDef class="limitedWidth headerScale">
+                        <th mat-header-cell *matHeaderCellDef class="headerScale"
+                            style="width: 200px;">
                             {{"CUSTOMER.CUSTOMERLIST.FISCALCODE" | translate}}
                         </th>
-                        <td mat-cell *matCellDef="let element" class="limitedWidth">
+                        <td mat-cell *matCellDef="let element" style="width: 200px;">
                             {{element.fiscalcode}}
+                            <ng-container *ngIf="element.health_fc">
+                                <i class="bi bi-exclamation-triangle-fill ms-2" style="font-size: 18px;"
+                                    [ngClass]="{'text-warning': element.health_fc.value == 0, 
+                                        'text-success': element.health_fc.value == 1, 
+                                        'text-danger': element.health_fc.value == 2}"
+                                        [matTooltip]="element.health_fc.description"></i>
+                            </ng-container>
                         </td>
                     </ng-container>
 
