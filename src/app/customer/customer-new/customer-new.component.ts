@@ -10,6 +10,7 @@ import { ExistingCustomerPopupComponent } from '../pop-up/existing-customer-popu
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Connect } from '../../classes/connect';
+import { ApiResponse } from '../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-customer-new',
@@ -31,18 +32,18 @@ export class CustomerNewComponent {
   submitted: boolean = false;
 
   customerForm = new FormGroup({
-    naturalPerson: new FormControl<number>(1),
+    naturalPerson: new FormControl<boolean>(true),
     name: new FormControl<string | null>(null, Validators.required),
     surname: new FormControl<string | null>(null, Validators.required),
     businessName: new FormControl<string | null>(null, Validators.required),
     fiscalcode: new FormControl<string | null>(null),
     vat: new FormControl<string | null>(null),
     country: new FormControl<number | null>(null),
-    sameCode: new FormControl<number>(0)
+    sameCode: new FormControl<boolean>(false)
   })
 
   constructor(private connectServerService: ConnectServerService, public dialog: MatDialog,
-      private router: Router) { }
+    private router: Router) { }
 
   ngOnInit(): void {
     this.customerForm.get('naturalPerson')?.valueChanges.subscribe(() => { this.formLogic() });
@@ -65,7 +66,7 @@ export class CustomerNewComponent {
   }
 
   formLogic() {
-    if (this.customerForm.get('naturalPerson')?.value == 1) {
+    if (this.customerForm.get('naturalPerson')?.value == true) {
       this.customerForm.get('businessName')?.setValidators(null);
       this.customerForm.get('businessName')?.reset();
       this.customerForm.get('businessName')?.disable();
@@ -89,22 +90,44 @@ export class CustomerNewComponent {
   addCustomer() {
     this.submitted = true;
     if (this.customerForm.valid) {
+      const naturalPerson = this.customerForm.get('naturalPerson')?.value ? 1 : 0;
+      const sameCode = this.customerForm.get('sameCode')?.value ? 1 : 0;
       //RICHIESTA AL SERVER PER SALVARE IL NUOVO CLIENTE
-      //this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer')
-      //SE ESISTE GIA' POPUP
-      this.existingCustomerPopUp();
-      // IN BASE ALLA RISPOSTA NAVIGA ALLA PAGINA CORRETTA
-      this.router.navigate(['modifyCustomer', 0])
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/customerInsert', {
+        naturalPerson: naturalPerson,
+        name: this.customerForm.get('name')?.value,
+        surname: this.customerForm.get('surname')?.value,
+        businessName: this.customerForm.get('businessName')?.value,
+        fiscalcode: this.customerForm.get('fiscalcode')?.value,
+        vat: this.customerForm.get('vat')?.value,
+        country: this.customerForm.get('country')?.value,
+        sameCode: sameCode
+      })
+        .subscribe((val: ApiResponse<{ id?: number, path: string, customerList?: { id: number, denomination: string, address: string }[] }>) => {
+          if (val.code == 200) {
+            if (val.data && val.data.id) {
+              this.router.navigate([val.data.path, val.data.id])
+            }
+          }
+          else {
+            // CODE 244: WALLNET
+            // if (val.data && val.data.customerList) {
+            //   this.existingCustomerPopUp(val.data.customerList!);
+            // }
+          }
+        })
     }
   }
-
-  existingCustomerPopUp() {
+  
+  existingCustomerPopUp(customerList: { id: number, denomination: string, address: string }[]) {
     const dialogRef = this.dialog.open(ExistingCustomerPopupComponent, {
       maxWidth: '700px',
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
-      data: {}
+      data: {
+        
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -114,7 +137,7 @@ export class CustomerNewComponent {
     });
   }
 
-  getCountries() {
+  private getCountries() {
     this.connectServerService.getRequestCountry().subscribe((val: any) => {
       if (val) {
         this.countriesList = val;

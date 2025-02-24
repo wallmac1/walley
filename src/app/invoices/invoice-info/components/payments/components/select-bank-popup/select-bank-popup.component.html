@@ -1,0 +1,20 @@
+<h2 mat-dialog-title align="center" class="justify-content-top" style="background-color: #002D5D; height: 38px;">
+    <span style="color: white; font-weight: bold; font-size: large; position: absolute; top: 4px; left: 10px;">
+        {{"INVOICE.INFO.PAYMENTCOMPONENT.SELECTBANK" | translate }}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-0 pt-0">
+    <div class="row justify-content-center align-items-center" style="position: relative;">
+        <div *ngFor="let bank of bankList" class="col-12 bankColumn pt-1 pb-1" style="border-bottom: 1px solid lightgray;"
+            (click)="selectedBank(bank)">
+            <span class="text-truncate">
+                {{bank.denomination}}
+            </span>
+        </div>
+    </div>
+
+    <button class="btn btn-danger" (click)="close()" style="position: absolute; top: 0; right: 0;"> 
+        <i class="bi bi-x-lg"></i>
+    </button>
+</mat-dialog-content>

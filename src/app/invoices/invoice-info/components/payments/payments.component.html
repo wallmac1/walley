@@ -1,1 +1,116 @@
-<p>payments works!</p>
+<div [formGroup]="paymentForm" class="container-fluid ps-1 pe-1 pb-2 ps-md-2 pe-md-2 ps-xl-3 pe-xl-3">
+    <div class="row justify-content-start">
+
+        <!-- TYPE -->
+        <div class="col-12 col-sm-6 col-lg-4">
+            <label class="form-label" for="type">
+                {{'INVOICE.INFO.PAYMENTCOMPONENT.TYPE' | translate}}
+            </label>
+            <select class="form-select" formControlName="type" id="type"
+                [class.is-invalid]="paymentForm.get('type')?.invalid && submitted">
+                <option [ngValue]="null">
+                    <span class="optionText">
+                        --
+                    </span>
+                </option>
+                <option *ngFor="let type of typeList" [ngValue]="type.id">
+                    <span class="optionText">
+                        {{type.title}}
+                    </span>
+                </option>
+            </select>
+        </div>
+
+        <!-- CONDITION -->
+        <div class="col-12 col-sm-6 col-lg-8">
+            <label class="form-label" for="condition">
+                {{'INVOICE.INFO.PAYMENTCOMPONENT.CONDITION' | translate}}
+            </label>
+            <select class="form-select" formControlName="condition" id="condition"
+                [class.is-invalid]="paymentForm.get('condition')?.invalid && submitted">
+                <option [ngValue]="null">
+                    <span class="optionText">
+                        --
+                    </span>
+                </option>
+                <option *ngFor="let condition of conditionsList" [ngValue]="condition.id">
+                    <span class="optionText">
+                        {{condition.title}}
+                    </span>
+                </option>
+            </select>
+        </div>
+    </div>
+
+
+    <!-- TABLE -->
+    <div class="row justify-content-end align-items-center mt-4">
+        <div formArrayName="installments" class="col-12">
+            <table mat-table [dataSource]="dataSource" class="mat-table mb-2" style="border: 1px solid lightgray;">
+
+                 <!-- Action Column -->
+                 <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef style="width: 90px;">
+                        {{'INVOICE.INFO.PAYMENTCOMPONENT.ACTIONS' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                        <button class="btn btn-link p-1" (click)="editOrAddPayment(index, 1)">
+                            <i class="bi bi-pencil" style="color: black;"></i>
+                        </button>
+                        <button class="btn btn-link p-1" (click)="deletePayment(index)">
+                            <i class="bi bi-trash" style="color: red;"></i>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Payment Type Column -->
+                <ng-container matColumnDef="paymentType">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{'INVOICE.INFO.PAYMENTCOMPONENT.TYPE' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                        {{ installments.at(index).get('paymentType')?.value.title }}
+                    </td>
+                </ng-container>
+
+                <!-- Deadline Column -->
+                <ng-container matColumnDef="deadline">
+                    <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-sm-table-cell">
+                        {{'INVOICE.INFO.PAYMENTCOMPONENT.DEADLINE' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index" 
+                        class="limitedWidth d-none d-sm-table-cell">
+                        {{ installments.at(index).get('deadline')?.value }}
+                    </td>
+                </ng-container>
+
+                <!-- Amount Column -->
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{'INVOICE.INFO.PAYMENTCOMPONENT.AMOUNT' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                        {{ installments.at(index).get('amount')?.value }}
+                    </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover">
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-auto text-end mt-2">
+            <button class="btn btn-dark btn-circle rounded-circle" (click)="editOrAddPayment(null, 2)">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+        </div>
+
+        <!-- <div class="col-12 text-end mt-2">
+            <button class="btn btn-outline-dark" (click)="saveHeading()">
+                {{'INVOICE.INFO.HEADINGCOMPONENT.SAVE' | translate}}
+            </button>
+        </div> -->
+    </div>
+</div>

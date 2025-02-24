@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -17,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class TotalComponent {
 
   @Input() totalSummary: { taxable: string, tax: string, notTaxable: string } = { taxable: "0,00", tax: "0,00", notTaxable: "0,00" };
+  @Output() totalChanged = new EventEmitter<string>();
 
   totalForm = new FormGroup({
     discount: new FormControl<string>("0,00", [this.numberWithCommaValidatorPlusMinus(), this.maxNegativeValueValidator(() => this.getTotalDocument())]),
@@ -31,6 +32,9 @@ export class TotalComponent {
 
   ngOnInit(): void {
     this.initComponent();
+    this.totalForm.get('documentTotal')?.valueChanges.subscribe((val) => {
+      this.totalChanged.emit(val || '0,00');
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -56,14 +60,14 @@ export class TotalComponent {
     let rounding = 0;
 
     if (this.totalForm.get('rounding')?.valid) {
-      console.log("dentro")
+      //console.log("dentro")
       rounding = parseFloat(this.totalForm.get('rounding')?.value!.replace(',', '.') || '0')
     }
 
     total += rounding;
 
     this.totalForm.get('documentTotal')?.setValue(total.toFixed(2).toString().replace('.', ','))
-    console.log("TOTALE", total)
+    //console.log("TOTALE", total)
   }
 
   getTotalDocument(): number {

@@ -1,0 +1,306 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span *ngIf="idPopup == 1; else deletePopup" style="color: white; font-weight: bold; font-size: x-large;">
+        {{"INVOICE.INFO.PAYMENTCOMPONENT.MODIFYINSTALLMENT" | translate }}
+    </span>
+    <ng-template #deletePopup>
+        <span style="color: white; font-weight: bold; font-size: x-large;">
+            {{"INVOICE.INFO.PAYMENTCOMPONENT.ADDINSTALLMENT" | translate }}
+        </span>
+    </ng-template>
+</h2>
+
+<mat-dialog-content [formGroup]="installmentForm">
+    <div class="row justify-content-center align-items-center mt-2">
+
+        <!-- PAYMENT TYPE -->
+        <div class="col-12 col-lg-6">
+            <label class="form-label" for="paymentType">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.TYPE" | translate }}
+            </label>
+            <select class="form-select" id="paymentType" formControlName="paymentType"
+                [class.is-invalid]="installmentForm.get('paymentType')?.invalid && submitted">
+                <option [ngValue]="null">
+                    --
+                </option>
+                <option *ngFor="let type of paymentTypeList" [ngValue]="type.id">
+                    {{type.title}}
+                </option>
+            </select>
+        </div>
+
+        <!-- DEADLINE -->
+        <div class="col-12 col-sm-8 col-md-4 col-lg-3">
+            <label class="form-label" for="deadline">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.DEADLINE" | translate }}
+            </label>
+            <input class="form-control" type="date" id="deadline" formControlName="deadline"
+                [class.is-invalid]="installmentForm.get('deadline')?.invalid && submitted">
+        </div>
+
+        <!-- AMOUNT -->
+        <div class="col-12 col-sm-8 col-md-4 col-lg-3">
+            <label class="form-label" for="amount">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.AMOUNT" | translate }}
+            </label>
+            <input class="form-control" type="text" id="amount" formControlName="amount"
+                [class.is-invalid]="installmentForm.get('amount')?.invalid && (installmentForm.get('amount')?.dirty || submitted)">
+        </div>
+
+        <!-- ERRORS -->
+        <div *ngIf="installmentForm.invalid" class="col-12 text-center mt-1">
+            <span class="errorTxt" *ngIf="installmentForm.get('amount')?.hasError('invalidNumber')">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.AMOUNTERROR" | translate }}
+            </span>
+            <span class="errorTxt" *ngIf="installmentForm.get('amount')?.invalid && submitted">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.MISSINGFIELDS" | translate }}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center align-items-center mt-2">
+        <mat-accordion class="example-headers-align" multi>
+            <!-- FINANCIARYINSTITUTE -->
+            <mat-expansion-panel [formGroup]="financialForm"
+                [ngStyle]="{'border': (financialForm.invalid && submitted) ? '1px solid red' : 'none'}">
+                <mat-expansion-panel-header style="position: relative;">
+                    <mat-panel-title style="font-size: large; overflow: auto;">
+                        <i class="bi bi-bank me-3"></i>
+                        {{"INVOICE.INFO.PAYMENTCOMPONENT.FINANCIARYINSTITUTE" | translate }}
+                    </mat-panel-title>
+                    <i *ngIf="financialForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                        style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
+                </mat-expansion-panel-header>
+                <div class="row align-items-end">
+                    <!-- DENOMINATION -->
+                    <div class="col-12">
+                        <label class="form-label" for="denomination">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.DENOMINATION" | translate }}
+                        </label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="denomination" formControlName="denomination">
+                            <div class="dropdown-custom">
+                                <button class="dropdown-button" (click)="selectBankPopup()">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IBAN -->
+                    <div class="col-12 col-md-8 col-lg-5">
+                        <label class="form-label" for="iban">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.IBAN" | translate}}
+                        </label>
+                        <input class="form-control" type="text" id="iban" formControlName="iban">
+                    </div>
+
+                    <!-- ABI -->
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label class="form-label" for="abi">{{"INVOICE.INFO.PAYMENTCOMPONENT.ABI" | translate }}</label>
+                        <input class="form-control" type="text" id="abi" formControlName="abi">
+                    </div>
+
+                    <!-- CAB -->
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label class="form-label" for="cab">{{"INVOICE.INFO.PAYMENTCOMPONENT.CAB" | translate }}</label>
+                        <input class="form-control" type="text" id="cab" formControlName="cab">
+                    </div>
+
+                    <!-- BIC -->
+                    <div class="col-6 col-md-3 col-lg-3">
+                        <label class="form-label" for="bic">{{"INVOICE.INFO.PAYMENTCOMPONENT.BIC" | translate }}</label>
+                        <input class="form-control" type="text" id="bic" formControlName="bic">
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <!-- QUIETANZANTE -->
+            <mat-expansion-panel [formGroup]="quietanzanteForm"
+                [ngStyle]="{'border': (quietanzanteForm.invalid && submitted) ? '1px solid red' : 'none'}">
+                <mat-expansion-panel-header>
+                    <mat-panel-title style="font-size: large;">
+                        <i class="bi bi-person me-3"></i>
+                        {{"INVOICE.INFO.PAYMENTCOMPONENT.QUIETANZANTE" | translate }}
+                    </mat-panel-title>
+                    <i *ngIf="quietanzanteForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                        style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <!-- NAME -->
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="name">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.NAME" | translate }}
+                        </label>
+                        <input class="form-control" type="text" id="name" formControlName="name">
+                    </div>
+
+                    <!-- SURNAME -->
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="surname">{{"INVOICE.INFO.PAYMENTCOMPONENT.SURNAME" | translate
+                            }}</label>
+                        <input class="form-control" type="text" id="surname" formControlName="surname">
+                    </div>
+
+                    <!-- FISCALCODE -->
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="fiscalcode">{{"INVOICE.INFO.PAYMENTCOMPONENT.FISCALCODE" |
+                            translate }}</label>
+                        <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
+                    </div>
+
+                    <!-- TITLE -->
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="title">{{"INVOICE.INFO.PAYMENTCOMPONENT.TITLE" | translate
+                            }}</label>
+                        <input class="form-control" type="text" id="title" formControlName="title">
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <!-- ANTICIPATED PAYMENT -->
+            <mat-expansion-panel [formGroup]="anticipatedPaymentForm"
+                [ngStyle]="{'border': (anticipatedPaymentForm.invalid && submitted) ? '1px solid red' : 'none'}">
+                <mat-expansion-panel-header>
+                    <mat-panel-title style="font-size: large;">
+                        <i class="bi bi-hourglass-top me-3"></i>
+                        {{"INVOICE.INFO.PAYMENTCOMPONENT.ANTICIPATEDPAYMENT" | translate }}
+                    </mat-panel-title>
+                    <i *ngIf="anticipatedPaymentForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                        style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="discount">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.DISCOUNT" | translate }}
+                        </label>
+                        <input type="text" class="form-control" id="discount" formControlName="discount"
+                            [class.is-invalid]="anticipatedPaymentForm.get('discount')?.invalid">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="deadline">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.LIMITDATE" | translate }}
+                        </label>
+                        <input type="date" class="form-control" id="deadline" formControlName="deadline">
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <!-- DELAYED PAYMENT -->
+            <mat-expansion-panel [formGroup]="delayedPaymentForm"
+                [ngStyle]="{'border': (delayedPaymentForm.invalid && submitted) ? '1px solid red' : 'none'}">
+                <mat-expansion-panel-header>
+                    <mat-panel-title style="font-size: large;">
+                        <i class="bi bi-hourglass-bottom me-3"></i>
+                        {{"INVOICE.INFO.PAYMENTCOMPONENT.DELAYEDPAYMENT" | translate }}
+                    </mat-panel-title>
+                    <i *ngIf="delayedPaymentForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                        style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="fine">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.FINE" | translate }}
+                        </label>
+                        <input type="text" class="form-control" id="fine" formControlName="fine"
+                            [class.is-invalid]="anticipatedPaymentForm.get('fine')?.invalid">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="deadline">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.LIMITDATE" | translate }}
+                        </label>
+                        <input type="date" class="form-control" id="deadline" formControlName="deadline">
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <!-- OTHER FIELDS -->
+            <mat-expansion-panel [formGroup]="otherFieldsForm"
+                [ngStyle]="{'border': (otherFieldsForm.invalid && submitted) ? '1px solid red' : 'none'}">
+                <mat-expansion-panel-header>
+                    <mat-panel-title style="font-size: large;">
+                        <i class="bi bi-hourglass-bottom me-3"></i>
+                        {{"INVOICE.INFO.PAYMENTCOMPONENT.OTHERFIELDS" | translate }}
+                    </mat-panel-title>
+                    <i *ngIf="otherFieldsForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                        style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label" for="beneficiary">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.BENEFICIARY" | translate }}
+                        </label>
+                        <input type="text" class="form-control" id="beneficiary" formControlName="beneficiary">
+                    </div>
+                    <div class="col-8 col-sm-9 col-md-4">
+                        <label class="form-label" for="startDate">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.STARTDATE" | translate }}
+                            <i class="bi bi-info-circle ms-2"
+                                matTooltip="{{'INVOICE.INFO.PAYMENTCOMPONENT.STARTDATETOOLTIP' | translate}}"></i>
+                        </label>
+                        <input type="date" class="form-control" id="startDate" formControlName="startDate">
+                    </div>
+                    <div class="col-4 col-sm-3 col-md-2">
+                        <label class="form-label" for="days">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.DAYS" | translate }}
+                            <i class="bi bi-info-circle ms-2"
+                                matTooltip="{{'INVOICE.INFO.PAYMENTCOMPONENT.DAYSTOOLTIP' | translate}}"></i>
+                        </label>
+                        <input type="text" class="form-control" id="days" formControlName="days">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="postaloffice">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.POSTALOFFICE" | translate }}
+                        </label>
+                        <input type="text" class="form-control" id="postaloffice" formControlName="postaloffice">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="code">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.CODE" | translate }}
+                            <i class="bi bi-info-circle ms-2"
+                                matTooltip="{{'INVOICE.INFO.PAYMENTCOMPONENT.CODETOOLTIP' | translate}}"></i>
+                        </label>
+                        <input type="date" class="form-control" id="code" formControlName="code">
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+    <div *ngIf="(installmentForm.invalid || financialForm.invalid || quietanzanteForm.invalid || 
+        anticipatedPaymentForm.invalid || delayedPaymentForm.invalid || otherFieldsForm.invalid) && submitted"
+        class="row mt-1">
+        <div *ngIf="financialForm.hasError('allOrNone') || financialForm.hasError('allOrNone') ||
+                quietanzanteForm.hasError('allOrNone') || anticipatedPaymentForm.hasError('allOrNone') ||
+                delayedPaymentForm.hasError('allOrNone') || otherFieldsForm.hasError('allOrNone')"
+            class="col-12 text-center">
+            <span class="errorTxt">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.MISSINGFIELDSPANEL" | translate }}
+            </span>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
+        <div *ngIf="idPopup == 1" class="col-8 text-start">
+            <button class="btn btn-outline-success me-2" (click)="confirm()">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.CONFIRM" | translate }}
+            </button>
+        </div>
+
+        <div *ngIf="idPopup == 2" class="col-8 text-start">
+            <button class="btn btn-outline-success me-2" (click)="add()">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.ADD" | translate }}
+            </button>
+        </div>
+
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-dark me-2" (click)="close()">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.CANCEL" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>
