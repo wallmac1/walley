@@ -87,7 +87,8 @@ export class CustomerModifyComponent {
     vat: new FormControl<string | null>({ value: null, disabled: true }),
     country: new FormControl<number | null>({ value: null, disabled: true }),
     sdi: new FormControl<string | null>({ value: null, disabled: true }),
-    sameCode: new FormControl<number>(0)
+    sameCode: new FormControl<number>(0),
+    health_fc: new FormControl<{value: number, description: string} | null>(null),
   })
 
   constructor(private connectServerService: ConnectServerService, public dialog: MatDialog,

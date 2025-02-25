@@ -25,4 +25,5 @@ export interface Customer {
     doctor: string | null;
     specialist: string | null;
     sdi: string | null;
+    health_fc: {value: number, description: string} | null;
 }

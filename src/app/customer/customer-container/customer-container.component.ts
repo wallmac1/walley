@@ -171,6 +171,7 @@ export class CustomerContainerComponent {
       doctor: "Pippo Poppo",
       specialist: "Pippa Peppa",
       sdi: "ABCDE12345",
+      health_fc: {value: 1, description: "Descrizione"}
     }
 
     this.customer = customer;

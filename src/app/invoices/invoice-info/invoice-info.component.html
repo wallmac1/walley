@@ -98,7 +98,9 @@
                                     {{'INVOICE.INFO.PAYMENTS' | translate}}
                                 </div>
                                 <div class="col-12 ps-0 pe-0">
-                                    <app-payments></app-payments>
+                                    <app-payments [typeList]="paymentType" [conditionsList]="paymentCondition"
+                                        [paymentTotal]="paymentTotal" [paymentTypeList]="paymentTypeList" 
+                                        #paymentsComponent></app-payments>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +131,8 @@
                                     {{'INVOICE.INFO.TOTAL' | translate}}
                                 </div>
                                 <div class="col-12 ps-0 pe-0">
-                                    <app-total [totalSummary]="totalSummary" #totalComponent></app-total>
+                                    <app-total [totalSummary]="totalSummary" (totalChanged)="changedTotal($event)"
+                                        #totalComponent></app-total>
                                 </div>
                             </div>
                         </div>

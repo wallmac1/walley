@@ -44,19 +44,25 @@ export class InvoiceInfoComponent implements OnInit {
 
   @ViewChild(BodyComponent) bodyComponent!: BodyComponent;
   @ViewChild(TotalComponent) totalComponent!: TotalComponent;
+  @ViewChild(PaymentsComponent) paymentsComponent!: PaymentsComponent;
 
   // Info of the invoice
   customer: Customer | null = null;
   heading: InvoiceHeading | null = null;
   vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[] = [];
   totalSummary: {taxable: string, tax: string, notTaxable: string} = {taxable: "0,00", tax: "0,00", notTaxable: "0,00"};
+  paymentTotal: string = "0,00";
 
   // Select options
   typeList: { id: number, code: string, description: string }[] = [];
   formatList: { id: number, code: string, description: string }[] = [];
   currencyList: { id: number, code: string, description: string }[] = [];
+  paymentType: {id: number, title: string}[] = [];
+  paymentCondition: {id: number, title: string}[] = [];
   umList: MeasurementUnit[] = [];
   vatList: { id: number, name: string, value: number }[] = [];
+  paymentTypeList: { id: number, title: string }[] = [];
+  conditionsList: { id: number, title: string }[] = [];
 
   constructor(public dialog: MatDialog, private connectServerService: ConnectServerService,
     private cdr: ChangeDetectorRef, private router: Router) { }
@@ -93,6 +99,13 @@ export class InvoiceInfoComponent implements OnInit {
         this.currencyList = val.data.currenciesList;
       }
     })
+  }
+
+  changedTotal(event: string) {
+    //console.log("COMPONENTE PADRE", event)
+    this.paymentTotal = event;
+    this.cdr.detectChanges();
+    this.paymentsComponent.calculateTotal();
   }
 
   changedVatSummary(event: {vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[]}) {
@@ -229,13 +242,32 @@ export class InvoiceInfoComponent implements OnInit {
       }
     ];
 
-    // this.typeList = [{
-    //   id: 1,
-    //   name: "Fattura"
-    // }, {
-    //   id: 2,
-    //   name: "Nota di credito"
-    // }];
+    this.paymentType = [{
+      id: 1,
+      title: "Fattura"
+    }, {
+      id: 2,
+      title: "Nota di credito"
+    }];
+
+    this.paymentCondition = [{
+      id: 1,
+      title: "Contanti"
+    }, {
+      id: 2,
+      title: "Assegno"
+    }, {
+      id: 3,
+      title: "Bonifico"
+    }];
+
+    this.paymentTypeList = [{
+      id: 1, title: "Bonifico"
+    },
+    {
+      id: 2, title: "Assegno"
+    },
+  ]
 
     // this.currencyList = [{
     //   id: 1,
