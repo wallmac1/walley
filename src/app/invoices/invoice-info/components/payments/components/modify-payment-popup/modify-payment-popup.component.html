@@ -19,10 +19,7 @@
             </label>
             <select class="form-select" id="paymentType" formControlName="paymentType"
                 [class.is-invalid]="installmentForm.get('paymentType')?.invalid && submitted">
-                <option [ngValue]="null">
-                    --
-                </option>
-                <option *ngFor="let type of paymentTypeList" [ngValue]="type.id">
+                <option *ngFor="let type of paymentTypeList" [value]="type.id">
                     {{type.title}}
                 </option>
             </select>
@@ -51,9 +48,17 @@
             <span class="errorTxt" *ngIf="installmentForm.get('amount')?.hasError('invalidNumber')">
                 {{"INVOICE.INFO.PAYMENTCOMPONENT.AMOUNTERROR" | translate }}
             </span>
-            <span class="errorTxt" *ngIf="installmentForm.get('amount')?.invalid && submitted">
+            <span class="errorTxt" *ngIf="(installmentForm.get('amount')?.hasError('required') || 
+                installmentForm.get('deadline')?.hasError('required') || 
+                installmentForm.get('paymentType')?.hasError('required')) && submitted">
                 {{"INVOICE.INFO.PAYMENTCOMPONENT.MISSINGFIELDS" | translate }}
             </span>
+            <span class="errorTxt" *ngIf="installmentForm.get('amount')?.hasError('notAllowedValue')">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.NOTALLOWEDVALUE" | translate }}
+            </span>
+            <!-- <span class="errorTxt" *ngIf="installmentForm.get('amount')?.hasError('maxValue')">
+                {{"INVOICE.INFO.PAYMENTCOMPONENT.MAXVALUE" | translate }}
+            </span> -->
         </div>
     </div>
 
@@ -185,6 +190,14 @@
                         <input type="date" class="form-control" id="deadline" formControlName="deadline">
                     </div>
                 </div>
+
+                <div class="row mt-1">
+                    <div class="col-12 text-center">
+                        <span class="errorTxt" *ngIf="anticipatedPaymentForm.get('discount')?.hasError('invalidNumber')">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.DISCOUNTERROR" | translate }}
+                        </span>
+                    </div>
+                </div>
             </mat-expansion-panel>
 
             <!-- DELAYED PAYMENT -->
@@ -205,13 +218,21 @@
                             {{"INVOICE.INFO.PAYMENTCOMPONENT.FINE" | translate }}
                         </label>
                         <input type="text" class="form-control" id="fine" formControlName="fine"
-                            [class.is-invalid]="anticipatedPaymentForm.get('fine')?.invalid">
+                            [class.is-invalid]="delayedPaymentForm.get('fine')?.invalid">
                     </div>
                     <div class="col-12 col-sm-6">
                         <label class="form-label" for="deadline">
                             {{"INVOICE.INFO.PAYMENTCOMPONENT.LIMITDATE" | translate }}
                         </label>
                         <input type="date" class="form-control" id="deadline" formControlName="deadline">
+                    </div>
+                </div>
+
+                <div class="row mt-1">
+                    <div class="col-12 text-center">
+                        <span class="errorTxt" *ngIf="delayedPaymentForm.get('fine')?.hasError('invalidNumber')">
+                            {{"INVOICE.INFO.PAYMENTCOMPONENT.FINEERROR" | translate }}
+                        </span>
                     </div>
                 </div>
             </mat-expansion-panel>

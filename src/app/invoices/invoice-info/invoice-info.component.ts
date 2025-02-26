@@ -36,7 +36,7 @@ import { StampComponent } from "./components/stamp/stamp.component";
     TotalComponent,
     PaymentsComponent,
     StampComponent
-],
+  ],
   templateUrl: './invoice-info.component.html',
   styleUrl: './invoice-info.component.scss'
 })
@@ -49,16 +49,16 @@ export class InvoiceInfoComponent implements OnInit {
   // Info of the invoice
   customer: Customer | null = null;
   heading: InvoiceHeading | null = null;
-  vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[] = [];
-  totalSummary: {taxable: string, tax: string, notTaxable: string} = {taxable: "0,00", tax: "0,00", notTaxable: "0,00"};
+  vatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] = [];
+  totalSummary: { taxable: string, tax: string, notTaxable: string } = { taxable: "0,00", tax: "0,00", notTaxable: "0,00" };
   paymentTotal: string = "0,00";
 
   // Select options
   typeList: { id: number, code: string, description: string }[] = [];
   formatList: { id: number, code: string, description: string }[] = [];
   currencyList: { id: number, code: string, description: string }[] = [];
-  paymentType: {id: number, title: string}[] = [];
-  paymentCondition: {id: number, title: string}[] = [];
+  paymentType: { id: number, title: string }[] = [];
+  paymentCondition: { id: number, title: string }[] = [];
   umList: MeasurementUnit[] = [];
   vatList: { id: number, name: string, value: number }[] = [];
   paymentTypeList: { id: number, title: string }[] = [];
@@ -75,30 +75,30 @@ export class InvoiceInfoComponent implements OnInit {
     this.getInvoiceInfo();
   }
 
-  private getTipiDocumento(){
+  private getTipiDocumento() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/tipiDocumento', {})
-    .subscribe((val: ApiResponse<{ tipoDocumento: { id: number, code: string, description: string }[] }>) => {
-      if (val.data) {
-        this.typeList = val.data.tipoDocumento;
-      }
-    })
+      .subscribe((val: ApiResponse<{ tipoDocumento: { id: number, code: string, description: string }[] }>) => {
+        if (val.data) {
+          this.typeList = val.data.tipoDocumento;
+        }
+      })
   }
-  private getFormatoTrasmissione(){
+  private getFormatoTrasmissione() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/formatiTrasmissione', {})
-    .subscribe((val: ApiResponse<{ formatoTrasmissione: { id: number, code: string, description: string }[] }>) => {
-      if (val.data) {
-        this.formatList = val.data.formatoTrasmissione;
-      }
-    })
+      .subscribe((val: ApiResponse<{ formatoTrasmissione: { id: number, code: string, description: string }[] }>) => {
+        if (val.data) {
+          this.formatList = val.data.formatoTrasmissione;
+        }
+      })
   }
 
-  private getCurrencies(){
+  private getCurrencies() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/currenciesList', {})
-    .subscribe((val: ApiResponse<{ currenciesList: { id: number, code: string, description: string }[] }>) => {
-      if (val.data) {
-        this.currencyList = val.data.currenciesList;
-      }
-    })
+      .subscribe((val: ApiResponse<{ currenciesList: { id: number, code: string, description: string }[] }>) => {
+        if (val.data) {
+          this.currencyList = val.data.currenciesList;
+        }
+      })
   }
 
   changedTotal(event: string) {
@@ -108,13 +108,13 @@ export class InvoiceInfoComponent implements OnInit {
     this.paymentsComponent.calculateTotal();
   }
 
-  changedVatSummary(event: {vatSummary: {total: {taxable: string, tax: string}, vat: {id: number, value: number}}[]}) {
+  changedVatSummary(event: { vatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] }) {
     //console.log("COMPONENTE PADRE", event)
     this.vatSummary = event.vatSummary;
     this.cdr.detectChanges();
   }
 
-  changedTotalSummary(event: {totalSummary: {taxable: string, tax: string, notTaxable: string}}) {
+  changedTotalSummary(event: { totalSummary: { taxable: string, tax: string, notTaxable: string } }) {
     this.totalSummary = event.totalSummary;
     this.cdr.detectChanges();
   }
@@ -188,11 +188,11 @@ export class InvoiceInfoComponent implements OnInit {
     this.bodyComponent.deleteStampLine()
   }
 
-  addStampLine(event: {total: string, vat: number, description: string}) {
+  addStampLine(event: { total: string, vat: number, description: string }) {
     this.bodyComponent.addStampLine(event.total, event.vat, event.description);
   }
 
-  changeStampLine(event: {total: string, vat: number, description: string}) {
+  changeStampLine(event: { total: string, vat: number, description: string }) {
     this.bodyComponent.changeStampLine(event.total, event.vat, event.description);
   }
 
@@ -265,13 +265,17 @@ export class InvoiceInfoComponent implements OnInit {
       title: "Bonifico"
     }];
 
-    this.paymentTypeList = [{
-      id: 1, title: "Bonifico"
-    },
-    {
-      id: 2, title: "Assegno"
-    },
-  ]
+    this.paymentTypeList = [
+      {
+        id: 0, title: "--"
+      },
+      {
+        id: 1, title: "Bonifico"
+      },
+      {
+        id: 2, title: "Assegno"
+      },
+    ]
 
     // this.currencyList = [{
     //   id: 1,

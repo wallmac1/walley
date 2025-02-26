@@ -787,8 +787,10 @@
           "FISCALCODE": "Codice Fiscale",
           "TITLE": "Titolo",
           "DISCOUNT": "Sconto Pagamento Anticipato",
+          "DISCOUNTERROR": "Sconto Pagamento Anticipato è un campo numerico con al massimo due decimali dopo la virgola",
           "LIMITDATE": "Data Limite",
           "FINE": "Penale Pagamento Ritardato",
+          "FINEERROR": "Penale Pagamento Ritardato è un campo numerico con al massimo due decimali dopo la virgola",
           "OTHERFIELDS": "Altro",
           "POSTALOFFICE": "Ufficio Postale",
           "BENEFICIARY": "Beneficiario (se diverso da cliente)",
@@ -797,7 +799,10 @@
           "CODE": "Codice",
           "CODETOOLTIP": "Codice per la riconciliazione degli incassi da parte del cedente/prestatore",
           "DAYS": "Giorni",
-          "DAYSTOOLTIP": "Termini di pagamento in giorni"
+          "DAYSTOOLTIP": "Termini di pagamento in giorni",
+          "MAXVALUE": "L'importo inserito supera il totale della fattura",
+          "NOTALLOWEDVALUE": "L'importo inserito non può essere nullo",
+          "NOTCORRESPONDINGTOTAL": "Attenzione: L'importo inserito non corrisponde al totale della fattura"
         }
       }
     },

@@ -101,6 +101,12 @@
             </table>
         </div>
 
+        <div class="col-12 mt-1 text-center">
+            <span *ngIf="isNotCorresponding" style="font-size: small; color: red;">
+                {{'INVOICE.INFO.PAYMENTCOMPONENT.NOTCORRESPONDINGTOTAL' | translate}}
+            </span>
+        </div>
+
         <div class="col-auto text-end mt-2">
             <button class="btn btn-dark btn-circle rounded-circle" (click)="editOrAddPayment(null, 2)">
                 <i class="bi bi-plus-lg"></i>

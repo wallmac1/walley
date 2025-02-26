@@ -46,14 +46,14 @@
                             matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.LINENUMBER' | translate}}">
                             {{i+1}}
                         </span>
-                        <i class="bi bi-arrows-move p-0 ms-2" cdkDragHandle
+                        <i class="bi bi-arrows-move p-0 ms-1" cdkDragHandle
                             matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.MOVELINE' | translate}}"></i>
                         <ng-container *ngIf="item.get('stampLine')?.value == false">
                             <i *ngIf="item.get('isAdditionalFieldOpen')?.value == false; else additionalInfoBlock"
-                                class="bi bi-caret-down-fill p-0 ms-2" (click)="toggleAdditionalInfo(i)"
+                                class="bi bi-caret-down-fill p-0 ms-1" (click)="toggleAdditionalInfo(i)"
                                 matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
                             <ng-template #additionalInfoBlock>
-                                <i class="bi bi-caret-up-fill p-0 ms-2" (click)="toggleAdditionalInfo(i)"
+                                <i class="bi bi-caret-up-fill p-0 ms-1" (click)="toggleAdditionalInfo(i)"
                                     matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
                             </ng-template>
                         </ng-container>

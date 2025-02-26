@@ -27,16 +27,18 @@ import { MatIconModule } from '@angular/material/icon';
 export class ModifyPaymentPopupComponent {
 
   submitted: boolean = false;
-  installment: { type: string, deadline: string, amount: string } = { type: '', deadline: '', amount: '' };
+  installment: { paymentType: {id: number, title: string}, deadline: string, amount: string } = 
+    { paymentType: {id: 0, title: '--'}, deadline: '', amount: '' };
   idPopup: number = 0;
   paymentTypeList: { id: number, title: string }[] = [];
   paymentTotal: string = "0,00";
   bankList: { id: number, denomination: string, iban: string, abi: string, cab: string, bic: string }[] = [];
 
   installmentForm = new FormGroup({
-    paymentType: new FormControl<number | null>(null, [Validators.required]),
+    paymentType: new FormControl<number>(0, [Validators.required]),
     deadline: new FormControl<string | null>(null, [Validators.required]),
-    amount: new FormControl<string | null>(null, [Validators.required, this.numberWithCommaValidator()]),
+    amount: new FormControl<string | null>(null, [Validators.required, 
+      this.numberWithCommaValidator(), this.maximumValueValidator()]),
   })
 
   financialForm = new FormGroup({
@@ -86,14 +88,14 @@ export class ModifyPaymentPopupComponent {
     private connectServerService: ConnectServerService, private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     // Inizializza il form con i dati passati al dialog
-    console.log(data)
+    //console.log(data)
     this.idPopup = data.idPopup;
     this.installment = data.installment;
     this.paymentTypeList = data.paymentTypeList;
-    this.paymentTotal = data.paymentTotal
-    this.installmentForm.patchValue(this.installment);
-    console.log(data.installment.paymentType.id)
-    this.installmentForm.get('paymentType')?.setValue(data.installment.paymentType.id);
+    this.paymentTotal = data.paymentTotal;
+    this.installmentForm.get('amount')?.patchValue(this.installment.amount);
+    this.installmentForm.get('deadline')?.patchValue(this.installment.deadline);
+    this.installmentForm.get('paymentType')?.patchValue(this.installment.paymentType.id);
   }
 
   ngOnInit(): void {
@@ -117,7 +119,29 @@ export class ModifyPaymentPopupComponent {
     });
   }
 
-  numberWithCommaValidator(): ValidatorFn {
+  private maximumValueValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if(!control.value || control.value === '') { 
+        return null;
+      }
+      const value = parseFloat(control.value.replace(',', '.'));
+      const total = parseFloat(this.paymentTotal.replace(',', '.'));
+      //console.log("Totale Documento", total)
+
+      if (value === 0) {
+        return { notAllowedValue: true };
+      }
+      // else if (value > total && total > 0) {
+      //   return { maxValue: true };
+      // }
+      else {
+        return null;
+      }
+
+    }
+  }
+
+  private numberWithCommaValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
 
@@ -197,13 +221,49 @@ export class ModifyPaymentPopupComponent {
 
   add() {
     this.submitted = true;
-    if (this.installmentForm.valid) {
-      //this.dialogRef.close({ installment: this.installmentForm.getRawValue() })
+    if (this.installmentForm.valid && this.financialForm.valid && this.quietanzanteForm.valid && 
+      this.anticipatedPaymentForm.valid && this.delayedPaymentForm.valid && this.otherFieldsForm.valid) {
+        // CHIAMATA AL SERVER PER IL SALVATAGGIO DEI DATI PRESENTI
+        // CHIUSURA DEL POPUP CON IL RITORNO DEI DATI
+      this.installmentForm.get('amount')?.setValue(this.formatToTwoDecimals(this.installmentForm.get('amount')?.value || '0'));
+      this.dialogRef.close({ installment: this.installmentForm.getRawValue() });
     }
   }
 
-  confirm() { }
+  confirm() { 
+    this.submitted = true;
+    if (this.installmentForm.valid && this.financialForm.valid && this.quietanzanteForm.valid && 
+      this.anticipatedPaymentForm.valid && this.delayedPaymentForm.valid && this.otherFieldsForm.valid) {
+        // CHIAMATA AL SERVER PER IL SALVATAGGIO DEI DATI PRESENTI
+        // CHIUSURA DEL POPUP CON IL RITORNO DEI DATI
+      this.installmentForm.get('amount')?.setValue(this.formatToTwoDecimals(this.installmentForm.get('amount')?.value || '0'));
+      this.dialogRef.close({ installment: this.installmentForm.getRawValue() });
+    }
+  }
 
-  close() { }
+  close() { 
+    this.dialogRef.close(null)
+  }
+
+  private formatToTwoDecimals(value: string): string {
+  
+    // Se la stringa contiene già una virgola
+    if (value.includes(',')) {
+      let parts = value.split(',');
+      if (parts[1].length === 1) {
+        // Se c'è un solo decimale, aggiunge uno zero
+        return `${parts[0]},${parts[1]}0`;
+      } else if (parts[1].length === 2) {
+        // Se ci sono già due decimali, non fa nulla
+        return value;
+      } else {
+        // Se ci sono più di due decimali, tronca
+        return `${parts[0]},${parts[1].substring(0, 2)}`;
+      }
+    } else {
+      // Se non c'è la virgola, aggiunge ",00"
+      return `${value},00`;
+    }
+  }
 
 }
