@@ -106,7 +106,8 @@ export class CustomerNewComponent {
         .subscribe((val: ApiResponse<{ id?: number, path: string, customerList?: { id: number, denomination: string, address: string }[] }>) => {
           if (val.code == 200) {
             if (val.data && val.data.id) {
-              this.router.navigate([val.data.path, val.data.id])
+              // this.router.navigate([val.data.path, val.data.id])
+              this.router.navigate(['modifyCustomer', 0])
             }
           }
           else {
@@ -118,7 +119,7 @@ export class CustomerNewComponent {
         })
     }
   }
-  
+
   existingCustomerPopUp(customerList: { id: number, denomination: string, address: string }[]) {
     const dialogRef = this.dialog.open(ExistingCustomerPopupComponent, {
       maxWidth: '700px',
@@ -126,7 +127,7 @@ export class CustomerNewComponent {
       maxHeight: '500px',
       width: '90%',
       data: {
-        
+
       }
     });
 

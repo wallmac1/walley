@@ -166,7 +166,7 @@ export class CustomerListComponent {
   }
 
   goToCustomer(id: number) {
-    this.router.navigate(['modifyCustomer', id]);
+    this.router.navigate(['newCustomer']);
   }
 
 }

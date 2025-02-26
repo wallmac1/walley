@@ -1,14 +1,29 @@
 <div class="container-fluid">
-    <div class="row justify-content-center align-items-center p-1 p-sm-2 p-md-3 p-lg-4 p-xl-5">
-        <div class="col-12 col-sm-6 text-center">
-            <button class="btn btn-outline-dark" (click)="goToBank()">
-                Lista Banche
-            </button>
-        </div>
-        <div class="col-12 col-sm-6 text-center" (click)="goToInvoice()">
-            <button class="btn btn-outline-dark">
-                Lista Fatture
-            </button>
-        </div>
+  <div class="row justify-content-center align-items-center p-1 p-sm-2 p-md-3 p-lg-4 p-xl-5">
+    <div class="col-12 col-sm-2 text-center">
+      <button class="btn btn-outline-dark" (click)="goToCompany()">
+        Azienda
+      </button>
     </div>
+    <div class="col-12 col-sm-2 text-center">
+      <button class="btn btn-outline-dark" (click)="goToCustomerList()">
+        Lista clienti
+      </button>
+    </div>
+    <div class="col-12 col-sm-2 text-center">
+      <button class="btn btn-outline-dark" (click)="goToBank()">
+        Lista Banche
+      </button>
+    </div>
+    <div class="col-12 col-sm-2 text-center">
+      <button class="btn btn-outline-dark" (click)="goToPaymentCondition()">
+        Condizioni di pagamento
+      </button>
+    </div>
+    <div class="col-12 col-sm-2 text-center" (click)="goToInvoice()">
+      <button class="btn btn-outline-dark">
+        Lista Fatture
+      </button>
+    </div>
+  </div>
 </div>

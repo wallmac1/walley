@@ -244,10 +244,14 @@ export class InvoiceInfoComponent implements OnInit {
 
     this.paymentType = [{
       id: 1,
-      title: "Fattura"
+      title: "Completo"
     }, {
       id: 2,
-      title: "Nota di credito"
+      title: "A rate"
+    },
+    {
+      id: 3,
+      title: "Anticipo"
     }];
 
     this.paymentCondition = [{

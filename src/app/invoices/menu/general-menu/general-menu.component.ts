@@ -10,14 +10,22 @@ import { Router } from '@angular/router';
 })
 export class GeneralMenuComponent {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   goToBank() {
     this.router.navigate(['bankList']);
   }
-
+  goToCustomerList() {
+    this.router.navigate(['customerList']);
+  }
+  goToCompany() {
+    this.router.navigate(['companyRegistry', 0]);
+  }
   goToInvoice() {
     this.router.navigate(['invoiceList']);
+  }
+  goToPaymentCondition() {
+    this.router.navigate(['paymentConditions']);
   }
 
 }
