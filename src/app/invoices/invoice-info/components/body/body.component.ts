@@ -19,8 +19,7 @@ import { AdditionalInfoComponent } from "./components/additional-info/additional
     MatTooltipModule,
     ReactiveFormsModule,
     DragDropModule,
-    AdditionalInfoComponent,
-    InViewportDirective
+    AdditionalInfoComponent
   ],
   templateUrl: './body.component.html',
   styleUrl: './body.component.scss'

@@ -106,8 +106,8 @@ export class CustomerNewComponent {
         .subscribe((val: ApiResponse<{ id?: number, path: string, customerList?: { id: number, denomination: string, address: string }[] }>) => {
           if (val.code == 200) {
             if (val.data && val.data.id) {
-              // this.router.navigate([val.data.path, val.data.id])
-              this.router.navigate(['modifyCustomer', 0])
+              this.router.navigate([val.data.path, val.data.id])
+              //this.router.navigate(['modifyCustomer', 0])
             }
           }
           else {

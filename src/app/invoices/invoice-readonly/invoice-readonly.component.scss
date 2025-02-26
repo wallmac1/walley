@@ -1,0 +1,55 @@
+.title {
+    font-size: xx-large;
+    font-weight: bold;
+    color: white;
+}
+
+.titleColumn {
+    background-color: #002D5D;
+    border-radius: 18px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.iconField {
+    font-size: 20px;
+    transition: font-size 0.5s ease !important;
+    // position: absolute;
+    // top: 12px;
+}
+
+.btn-outline-dark {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+.iconField:hover {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.selectCustomer {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid lightgray;
+
+    @media screen and (min-width: 768px) {
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
+        font-size: x-large;
+    }
+}
+
+.cardElement {
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 0.50rem;
+    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.4);
+}

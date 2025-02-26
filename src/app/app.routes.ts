@@ -26,6 +26,7 @@ import { CustomerContainerComponent } from './customer/customer-container/custom
 import { CustomerListComponent } from './customer/customer-list/customer-list.component';
 import { EventsListComponent } from './events/events-list/events-list.component';
 import { PaymentConditionsComponent } from './payment-conditions/payment-conditions.component';
+import { InvoiceReadonlyComponent } from './invoices/invoice-readonly/invoice-readonly.component';
 // import { TicketListComponent } from './weco/tickets/ticket-list/ticket-list.component';
 // import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.component';
 // import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modify.component';
@@ -53,12 +54,13 @@ export const routes: Routes = [
     { path: "bankModify/:id", component: BankModifyComponent },
     { path: "bankList", component: BankListComponent },
     { path: "generalMenu", component: GeneralMenuComponent },
-    { path: "newCustomer", component: CustomerNewComponent },
-    { path: "modifyCustomer/:id", component: CustomerContainerComponent },
+    { path: "customer/new", component: CustomerNewComponent },
+    { path: "customer/edit/:id", component: CustomerContainerComponent },
     { path: "customerList", component: CustomerListComponent },
     { path: "companyRegistry/:id", component: CompanyRegistryComponent },
     { path: "eventList", component: EventsListComponent },
     { path: "paymentConditions", component: PaymentConditionsComponent },
+    { path: "invoice/readonly/:id", component: InvoiceReadonlyComponent },
     // { path: "ticketListWeco", component: TicketListComponent },
     // { path: "ticketNewWeco", component: TicketNewComponent },
     // { path: "ticketModifyWeco/:id", component: TicketModifyComponent },

@@ -754,7 +754,8 @@
           "SAVE": "Salva",
           "MISSINGFIELDS": "Compilare i campi obbligatori",
           "ACTIONS": "Azioni",
-          "UNITOFMEASUREMENT": "Unità di Misura"
+          "UNITOFMEASUREMENT": "Unità di Misura",
+          "ROUNDING": "Maggiorazione(%)"
         },
         "PAYMENTCOMPONENT": {
           "TYPE": "Tipo",
@@ -857,6 +858,7 @@
       "CABERROR": "Il codice CAB fornito non risulta corrispondere ad alcuna banca. Controllare la correttezza dell'IBAN prima di procedere con il salvataggio dati."
     },
     "CUSTOMER": {
+      "SAMECODETOOLTIP": "Attenzione: il codice fiscale presenta una omocodia",
       "RECORDS": "Anagrafica",
       "PDF": "PDF",
       "SDI": "SDI",
@@ -904,6 +906,8 @@
         "INFO": "Info"
       },
       "MODAL": {
+      "USERCREATED": "Creato da",
+      "USERUPDATED": "Aggiornato da",
       "ORGANIZATIONANDTAXREPRESENTATIVE": "Organizzazione e Rappresentante Fiscale",
       "STUDENT": "Corsista",
       "NAME": "Nome",

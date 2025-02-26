@@ -1,0 +1,128 @@
+<div style="min-width: 100%; min-height: 100vh; background-color: whitesmoke;">
+    <div class="container-fluid" style="max-width: 1300px; min-width: 350px; padding-bottom: 10rem;">
+        <div class="row justify-content-center align-items-center mt-2 mb-4" style="position: relative;">
+            <div class="col-auto ps-3 pe-3 pt-1 pb-1 text-center titleColumn">
+                <span class="title">
+                    {{'INVOICE.INFO.INVOICE' | translate}}
+                </span>
+            </div>
+            <div style="position: absolute; top: 10px; left: 20px;">
+                <button class="btn btn-outline-dark" (click)="goBack()">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- CUSTOMER INFO -->
+        <div class="row justify-content-start align-items-center mb-4">
+            <div class="col-12">
+                <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                    <div class="row justify-content-center">
+                        <div class="selectCustomer col-12">
+                            {{'INVOICE.INFO.CUSTOMERDATA' | translate}}
+                        </div>
+                        <div class="col-12 ps-3 pe-3">
+                            <app-customer-data-readonly [customer]="customer"></app-customer-data-readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HEADING -->
+        <div class="row justify-content-start align-items-center mb-4">
+            <div class="col-12">
+                <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                    <div class="row">
+                        <div class="selectCustomer col-12">
+                            {{'INVOICE.INFO.HEADING' | translate}}
+                        </div>
+                        <div class="col-12 ps-0 pe-0">
+                            <app-heading-readonly [heading]="heading"></app-heading-readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="row justify-content-start align-items-center mb-4">
+            <div class="col-12">
+                <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                    <div class="row">
+                        <div class="selectCustomer col-12">
+                            {{'INVOICE.INFO.BODY' | translate}}
+                        </div>
+                        <div class="col-12 ps-0 pe-0">
+                            <app-body-readonly></app-body-readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VAT & PAYMENT & TOTAL -->
+        <div class="row justify-content-start align-items-top mb-5">
+            <div class="col-12 col-lg-7 col-xl-8 mb-4">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                            <div class="row">
+                                <div class="selectCustomer col-12">
+                                    {{'INVOICE.INFO.VAT' | translate}}
+                                </div>
+                                <div class="col-12 ps-0 pe-0">
+                                    <app-vat-readonly [vatSummary]="vatSummary"></app-vat-readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                            <div class="row">
+                                <div class="selectCustomer col-12">
+                                    {{'INVOICE.INFO.PAYMENTS' | translate}}
+                                </div>
+                                <div class="col-12 ps-0 pe-0">
+                                    <app-payments-readonly></app-payments-readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 col-xl-4">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                            <div class="row">
+                                <div class="selectCustomer col-12">
+                                    {{'INVOICE.INFO.STAMP' | translate}}
+                                </div>
+                                <div class="col-12 ps-0 pe-0">
+                                    <app-stamp-readonly></app-stamp-readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="cardElement pt-1 pb-2 ps-3 pe-3 ps-md-4 pe-md-4">
+                            <div class="row">
+                                <div class="selectCustomer col-12">
+                                    {{'INVOICE.INFO.TOTAL' | translate}}
+                                </div>
+                                <div class="col-12 ps-0 pe-0">
+                                    <app-total-readonly [totalSummary]="totalSummary"></app-total-readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

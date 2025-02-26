@@ -1,6 +1,7 @@
-import { City } from "../../invoices/interfaces/city";
+import { AutocompleteMunicipality } from "../../invoices/interfaces/autocomplete-municipality";
 
 export interface Customer {
+    idregistry: number;
     naturalPerson: number;
     name: string | null;
     surname: string | null;
@@ -19,7 +20,7 @@ export interface Customer {
     gender: number | null;
     birth_country: number | null;
     birth_city: string | null;
-    birth_city_it: City | null;
+    birth_city_it: AutocompleteMunicipality | null;
     birthday: string | null;
     job: string | null;
     doctor: string | null;

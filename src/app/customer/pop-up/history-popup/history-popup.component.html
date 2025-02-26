@@ -1,0 +1,141 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">{{"ARTICLE.MODAL.HISTORY" | translate }}</span>
+</h2>
+
+<mat-dialog-content>
+    <div *ngIf="customerHistory.length > 0; else emptyBlock" class="row justify-content-center align-items-center p-1">
+        <div *ngFor="let customer of customerHistory; let i = index" class="col-12 mt-2 mb-3">
+            <mat-expansion-panel [expanded]="i == 0" style="width: 100%;">
+                <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
+                    <mat-panel-title class="panel-title">
+                        <span style="font-weight: bold;">
+                            {{customer.datetime}}
+                        </span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="row justify-content-center align-items-center mt-1">
+                    <div class="col-12 text-center mb-1">
+                        <span *ngIf="customer.naturalPerson == 1" class="title">
+                            {{"CUSTOMER.NATURALPERSON" | translate}}
+                        </span>
+                        <span *ngIf="customer.naturalPerson == 0" class="title">
+                            {{"CUSTOMER.COMPANY" | translate}}
+                        </span>
+                    </div>
+
+                    <div *ngIf="customer.naturalPerson == 0; else naturalPersonBlock" class="col-12 col-md-6">
+                        <span class="title">
+                            {{"CUSTOMER.BUSINESSNAME" | translate}}: 
+                        </span>
+                        <span class="content">
+                            {{customer.name}}
+                        </span>
+                    </div>
+
+                    <ng-template #naturalPersonBlock>
+                        <div class="col-6 col-lg-4">
+                            <span class="title">
+                                {{"CUSTOMER.NAME" | translate}}: 
+                            </span>
+                            <span class="content">
+                                {{customer.name}}
+                            </span>
+                        </div>
+    
+                        <div class="col-6 col-lg-4">
+                            <span class="title">
+                                {{"CUSTOMER.SURNAME" | translate}}: 
+                            </span>
+                            <span class="content">
+                                {{customer.surname}}
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <span class="title">
+                            {{"CUSTOMER.PEC" | translate}}
+                        </span>
+                        <span class="content">
+                            {{customer.pec}}
+                        </span>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <span class="title">
+                            {{"CUSTOMER.FISCALCODE" | translate}}: 
+                        </span>
+                        <span class="content">
+                            {{customer.fiscalcode}}
+                            <i *ngIf="customer.sameCode == 1" class="bi bi-exclamation-circle ms-1"
+                                style="color: red;" matTooltip="{{'CUSTOMER.SAMECODETOOLTIP' | translate}}"></i>
+                        </span>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <span class="title">
+                            {{"CUSTOMER.COUNTRY" | translate}}
+                        </span>
+                        <span class="content">
+                            {{customer.country}}
+                        </span>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <span class="title">
+                            {{"CUSTOMER.SDI" | translate}}
+                        </span>
+                        <span class="content">
+                            {{customer.sdi}}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="row d-none d-md-flex justify-content-center align-items-center mt-2">
+                    <div class="col-6 text-start">
+                        <span *ngIf="customer?.user_created" class="userInfo">
+                            {{"CUSTOMER.MODAL.USERCREATED" | translate}}:
+                            {{customer?.user_created?.nickname}} -
+                            {{customer?.user_created?.datetime}}
+                        </span>
+                    </div>
+                    <div class="col-6 text-end">
+                        <span *ngIf="customer?.user_updated != null" class="userInfo">
+                            {{"CUSTOMER.MODAL.USERUPDATED" | translate}}:
+                            {{customer?.user_updated?.nickname}} -
+                            {{customer?.user_updated?.datetime}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row d-md-none justify-content-center mt-1">
+                    <div class="col-12 text-start">
+                        <i class="bi bi-info-circle"
+                            matTooltip="{{'CUSTOMER.MODAL.USERCREATED' | translate}}: {{customer?.user_created?.nickname}} - {{customer?.user_created?.datetime}}, &#10;
+                                {{'CUSTOMER.MODAL.USERUPDATED' | translate}}: {{customer?.user_updated?.nickname}} - {{customer?.user_updated?.datetime}}"></i>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+
+    <ng-template #emptyBlock>
+        <div class="row justify-content-center align-items-center p-3">
+            <div class="col-12 text-center">
+                <span>
+                    Questo cliente non ha subito variazioni di alcun tipo.
+                </span>
+            </div>
+            <div class="col-12 text-center">
+                <i class="bi bi-database-x" style="font-size: xx-large;"></i>
+            </div>
+        </div>
+    </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button class="btn btn-outline-dark me-2" style="width: 80px;" (click)="close()">
+        {{"ARTICLE.MODAL.CLOSE" | translate }}
+    </button>
+</mat-dialog-actions>

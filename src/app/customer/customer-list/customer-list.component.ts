@@ -7,6 +7,9 @@ import { CustomerTable } from '../interfaces/customer-table';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ConnectServerService } from '../../services/connect-server.service';
+import { Connect } from '../../classes/connect';
+import { ApiResponse } from '../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-customer-list',
@@ -28,16 +31,16 @@ export class CustomerListComponent {
     fiscalcode: new FormControl<string | null>(null)
   })
 
-  alphabeth: {id: number, name: string, isSelected: boolean}[] = [
-    { id: 1,  name: 'A', isSelected: false },
-    { id: 2,  name: 'B', isSelected: false },
-    { id: 3,  name: 'C', isSelected: false },
-    { id: 4,  name: 'D', isSelected: false },
-    { id: 5,  name: 'E', isSelected: false },
-    { id: 6,  name: 'F', isSelected: false },
-    { id: 7,  name: 'G', isSelected: false },
-    { id: 8,  name: 'H', isSelected: false },
-    { id: 9,  name: 'I', isSelected: false },
+  alphabeth: { id: number, name: string, isSelected: boolean }[] = [
+    { id: 1, name: 'A', isSelected: false },
+    { id: 2, name: 'B', isSelected: false },
+    { id: 3, name: 'C', isSelected: false },
+    { id: 4, name: 'D', isSelected: false },
+    { id: 5, name: 'E', isSelected: false },
+    { id: 6, name: 'F', isSelected: false },
+    { id: 7, name: 'G', isSelected: false },
+    { id: 8, name: 'H', isSelected: false },
+    { id: 9, name: 'I', isSelected: false },
     { id: 10, name: 'J', isSelected: false },
     { id: 11, name: 'K', isSelected: false },
     { id: 12, name: 'L', isSelected: false },
@@ -55,7 +58,7 @@ export class CustomerListComponent {
     { id: 24, name: 'X', isSelected: false },
     { id: 25, name: 'Y', isSelected: false },
     { id: 26, name: 'Z', isSelected: false },
-    { id: 27, name: 'All', isSelected: true}
+    { id: 27, name: 'All', isSelected: true }
   ];
   customerList: CustomerTable[] = [];
   dataSource = new MatTableDataSource<CustomerTable>([]);
@@ -70,83 +73,35 @@ export class CustomerListComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private connectServerService: ConnectServerService) { }
 
   ngOnInit(): void {
     this.getCustomerList();
   }
 
   getCustomerList() {
-    this.customerList = [
-      {
-        id: 1,
-        denomination: "Mario Rossi",
-        fiscalcode: "RSSMRA80A01H501Z",
-        vat: "IT12345678901",
-        mainAddress: "Via Roma, 10 - 00100 Roma (RM)",
-        info: "",
-        health_fc: null,
-      },
-      {
-        id: 2,
-        denomination: "Acme Corporation",
-        fiscalcode: "IT98765432100",
-        vat: "IT98765432100",
-        mainAddress: "Viale Milano, 20 - 20100 Milano (MI)",
-        info: "",
-        health_fc: {value: 1, description: "Descrizione"},
-      },
-      {
-        id: 3,
-        denomination: null,
-        fiscalcode: "VRDGLI90B02L219H",
-        vat: null,
-        mainAddress: "Piazza Dante, 5 - 50100 Firenze (FI)",
-        info: "",
-        health_fc: {value: 2, description: "Descrizione"},
-      },
-      {
-        id: 1,
-        denomination: "Mario Rossi",
-        fiscalcode: "RSSMRA80A01H501Z",
-        vat: "IT12345678901",
-        mainAddress: "Via Roma, 10 - 00100 Roma (RM)",
-        info: "",
-        health_fc: null,
-      },
-      {
-        id: 2,
-        denomination: "Acme Corporation",
-        fiscalcode: "IT98765432100",
-        vat: "IT98765432100",
-        mainAddress: "Viale Milano, 20 - 20100 Milano (MI)",
-        info: "",
-        health_fc: {value: 0, description: "Descrizione"},
-      },
-      {
-        id: 3,
-        denomination: null,
-        fiscalcode: "VRDGLI90B02L219H",
-        vat: null,
-        mainAddress: "Piazza Dante, 5 - 50100 Firenze (FI)",
-        info: "",
-        health_fc: null,
-      }
-    ];
-
-    this.dataSource.data = this.customerList;
+    const letter = this.alphabeth.find((val) => val.isSelected == true)?.name;
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/customerList', {
+      itemsPerPage: this.itemsPerPage, currentPageIndex: this.currentPage, letter: letter
+    })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.customerList = val.data.customerList.customers;
+          this.dataSource.data = this.customerList;
+        }
+      })
   }
 
   letterFilter(id: number) {
     // CHIAMATA AL SERVER PER OTTENERE TUTTI I CLIENTI CON QUELLA LETTERA
     let index = -1;
     index = this.alphabeth.findIndex((letter) => letter.isSelected == true);
-    if(index >= 0) {
+    if (index >= 0) {
       this.alphabeth[index].isSelected = false;
     }
 
     index = this.alphabeth.findIndex((letter) => letter.id == id);
-    if(index >= 0) {
+    if (index >= 0) {
       this.alphabeth[index].isSelected = true;
     }
   }
@@ -166,7 +121,7 @@ export class CustomerListComponent {
   }
 
   goToCustomer(id: number) {
-    this.router.navigate(['newCustomer']);
+    this.router.navigate(['customer/new']);
   }
 
 }

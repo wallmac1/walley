@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Country } from '../../../invoices/interfaces/country';
+import { Connect } from '../../../classes/connect';
 
 @Component({
   selector: 'app-modify-customer-popup',
@@ -29,6 +30,7 @@ export class ModifyCustomerPopupComponent {
   countriesList: Country[] = [];
 
   customerGeneralForm = new FormGroup({
+    idregistry: new FormControl<number>(0),
     naturalPerson: new FormControl<number>(1),
     name: new FormControl<string | null>(null, Validators.required),
     surname: new FormControl<string | null>(null, Validators.required),
@@ -37,7 +39,7 @@ export class ModifyCustomerPopupComponent {
     vat: new FormControl<string | null>(null),
     country: new FormControl<number | null>(null),
     sdi: new FormControl<string | null>(null),
-    pec: new FormControl<string | null>(null),
+    pec: new FormControl<string | null>(null, Validators.email),
     sameCode: new FormControl<number>(0)
   });
 
@@ -48,7 +50,7 @@ export class ModifyCustomerPopupComponent {
     data_nascita: new FormControl<string | null>(null),
     email: new FormControl<string | null>(null),
     nome: new FormControl<string | null>(null),
-    piva: new FormControl<string | null>(null),
+    vat: new FormControl<string | null>(null),
     telefono: new FormControl<string | null>(null),
     type: new FormControl<number | string | null>(null),
     address: new FormControl<string | null>(null),
@@ -120,7 +122,7 @@ export class ModifyCustomerPopupComponent {
     //IMPOSTARE STORICIZZA
     this.submitted = true;
     if (this.customerGeneralForm.valid) {
-      this.dialogRef.close(this.customerGeneralForm.getRawValue());
+      this.setCustomerData(1);
     }
   }
 
@@ -128,8 +130,28 @@ export class ModifyCustomerPopupComponent {
     //IMPOSTARE AGGIORNA
     this.submitted = true;
     if (this.customerGeneralForm.valid) {
-      this.dialogRef.close(this.customerGeneralForm.getRawValue());
+      this.setCustomerData(2);
     }
+  }
+
+  setCustomerData(typeRequest: number) {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/customerUpdateData', {
+      idregistry: this.customerGeneralForm.get('idregistry')?.value,
+      pec: this.customerGeneralForm.get('pec')?.value,
+      fiscalcode: this.customerGeneralForm.get('fiscalcode')?.value,
+      vat: this.customerGeneralForm.get('vat')?.value,
+      naturalPerson: this.customerGeneralForm.get('naturalPerson')?.value,
+      name: this.customerGeneralForm.get('name')?.value,
+      surname: this.customerGeneralForm.get('surname')?.value,
+      businessName: this.customerGeneralForm.get('businessName')?.value,
+      sdi: this.customerGeneralForm.get('sdi')?.value,
+      sameCode: this.customerGeneralForm.get('sameCode')?.value,
+      country: this.customerGeneralForm.get('country')?.value,
+      type_request: typeRequest
+    })
+      .subscribe(() => {
+        this.dialogRef.close(this.customerGeneralForm.getRawValue());
+      })
   }
 
   close() {

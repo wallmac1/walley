@@ -253,6 +253,7 @@ export class EventsListComponent {
     // Esempio di una lista di tre clienti
     const customers: Customer[] = [
       {
+        idregistry: 1,
         naturalPerson: 1,
         name: "Mario",
         surname: "Rossi",
@@ -271,7 +272,7 @@ export class EventsListComponent {
         gender: 1,
         birth_country: 12,
         birth_city: "Roma",
-        birth_city_it: { id: 1, name: "Roma", province: "RM", region: "Lazio", postalcode: "0000" },
+        birth_city_it: { id: 1, name: "Roma", idprovince: 1, province_acronym: "RM", idregion: 2, region_name: "Lazio", cadastral_code: "0000" },
         birthday: "1980-01-01",
         job: "Ingegnere",
         doctor: "Dr. Bianchi",
@@ -280,6 +281,7 @@ export class EventsListComponent {
         health_fc: {value: 1, description: "Descrizione"}
       },
       {
+        idregistry: 2,
         naturalPerson: 0,
         name: null,
         surname: null,
@@ -307,6 +309,7 @@ export class EventsListComponent {
         health_fc: {value: 1, description: "Descrizione"}
       },
       {
+        idregistry: 3,
         naturalPerson: 1,
         name: "Laura",
         surname: "Bianchi",
@@ -325,7 +328,7 @@ export class EventsListComponent {
         gender: 2,
         birth_country: 12,
         birth_city: "Milano",
-        birth_city_it: { id: 2, name: "Milano", province: "MI", region: "Lombardia", postalcode: "0000" },
+        birth_city_it: { id: 2, name: "Milano",idprovince: 1, province_acronym: "RM", idregion: 2, region_name: "Lombardia", cadastral_code: "0000"},
         birthday: "1985-03-10",
         job: "Avvocato",
         doctor: "Dr. Verdi",

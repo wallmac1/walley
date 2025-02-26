@@ -175,6 +175,8 @@ export class PaymentsComponent {
     }
   }
 
-  deletePayment(index: number) { }
+  deletePayment(index: number) { 
+    this.installments.removeAt(index);
+  }
 
 }

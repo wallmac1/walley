@@ -1,0 +1,144 @@
+<div class="container-fluid ps-1 pe-1 pb-2 ps-md-2 pe-md-2 ps-xl-3 pe-xl-3">
+
+    <!-- COLUMN HEADING -->
+    <div *ngIf="!isSmallScreen" class="row justify-content-center align-items-center"
+        style="border-bottom: 1px solid lightgray;">
+        <div class="col-1 columnTitle">
+            {{'INVOICE.INFO.BODYCOMPONENT.LINE' | translate}}
+        </div>
+        <div class="col-3 descriptionElement columnTitle">
+            {{'INVOICE.INFO.BODYCOMPONENT.DESCRIPTION' | translate}}
+        </div>
+        <div class="col-1 columnElement columnTitle"
+            matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.UNITOFMEASUREMENT' | translate}}">
+            {{'INVOICE.INFO.BODYCOMPONENT.UM' | translate}}
+        </div>
+        <div class="col-1 columnElement columnTitle">
+            {{'INVOICE.INFO.BODYCOMPONENT.QUANTITY' | translate}}
+        </div>
+        <div class="col-2 columnElement columnTitle">
+            {{'INVOICE.INFO.BODYCOMPONENT.PRICE' | translate}}
+        </div>
+        <div class="col-2 columnElement columnTitle">
+            {{'INVOICE.INFO.BODYCOMPONENT.TOTAL' | translate}}
+        </div>
+        <div class="col-1 columnElement columnTitle">
+            {{'INVOICE.INFO.BODYCOMPONENT.VAT' | translate}}
+        </div>
+        <div class="col-1 columnElement columnTitle">
+            {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
+        </div>
+    </div>
+
+    <div *ngFor="let body of body; let i = index" class="row justify-content-center align-items-center pt-2 pb-2"
+        style="border-bottom: 1px solid lightgray;" cdkDrag>
+
+        <!-- ICONS 1 -->
+        <div class="col-sm-2 col-xl-1 mb-2 mb-xl-0 d-none d-sm-inline">
+            <label *ngIf="isSmallScreen" class="form-label" for="actions" style="margin-bottom: 0.5rem;">
+                {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
+            </label>
+            <div id="actions">
+                <span class="ps-1" style="font-size: 20px; font-weight: bold;"
+                    matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.LINENUMBER' | translate}}">
+                </span>
+                <!-- <ng-container *ngIf="item.get('stampLine')?.value == false">
+                    <i *ngIf="item.get('isAdditionalFieldOpen')?.value == false; else additionalInfoBlock"
+                        class="bi bi-caret-down-fill p-0 ms-1" (click)="toggleAdditionalInfo(i)"
+                        matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
+                    <ng-template #additionalInfoBlock>
+                        <i class="bi bi-caret-up-fill p-0 ms-1" (click)="toggleAdditionalInfo(i)"
+                            matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.ADDITIONALINFO' | translate}}"></i>
+                    </ng-template>
+                </ng-container> -->
+
+            </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="col-12 col-sm-10 col-xl-3 mb-2 mb-xl-0 descriptionElement">
+            <span *ngIf="isSmallScreen" class="title">
+                {{'INVOICE.INFO.BODYCOMPONENT.DESCRIPTION' | translate}}
+            </span>
+            <span class="content">
+                {{body.description}}
+            </span>
+        </div>
+
+        <!-- UNIT OF MEASUREMENT -->
+        <div class="col-4 col-sm-3 col-md-2 col-xl-1 umElement">
+            <span *ngIf="isSmallScreen" class="title"
+                matTooltip="{{'INVOICE.INFO.BODYCOMPONENT.UNITOFMEASUREMENT' | translate}}">
+                {{'INVOICE.INFO.BODYCOMPONENT.UM' | translate}}
+            </span>
+            <span class="content">
+                {{body.um}}
+            </span>
+        </div>
+
+        <!-- QUANTITY -->
+        <div class="col-8 col-sm-4 col-md-2 col-xl-1 columnElement">
+            <span *ngIf="isSmallScreen" class="title">
+                {{'INVOICE.INFO.BODYCOMPONENT.QUANTITY' | translate}}
+            </span>
+            <span class="content">
+                {{body.quantity}}
+            </span>
+        </div>
+
+        <!-- PRICE -->
+        <div class="col-6 col-sm-5 col-md-2 col-xl-2 columnElement">
+            <span *ngIf="isSmallScreen" class="title">
+                {{'INVOICE.INFO.BODYCOMPONENT.PRICE' | translate}}
+            </span>
+            <span class="content">
+                {{body.price}}
+            </span>
+        </div>
+
+        <!-- TOTAL -->
+        <div class="col-8 col-sm-5 col-md-2 col-xl-2 columnElement">
+            <span *ngIf="isSmallScreen" class="title">
+                {{'INVOICE.INFO.BODYCOMPONENT.TOTAL' | translate}}
+            </span>
+            <span class="content">
+                {{body.total}}
+            </span>
+        </div>
+
+        <!-- VAT -->
+        <div class="col-4 col-sm-3 col-md-2 col-xl-1 vatElement" style="padding-right: 0.75rem;">
+            <span *ngIf="isSmallScreen" class="title">
+                {{'INVOICE.INFO.BODYCOMPONENT.VAT' | translate}}:
+            </span>
+            <span class="content">
+                {{body.vat}}
+            </span>
+        </div>
+
+        <!-- ICONS 2 -->
+        <!-- <div class="col-sm-2 col-xl-1 mb-2 mb-xl-0 d-none d-sm-inline">
+            <label *ngIf="isSmallScreen" class="form-label" for="actions" style="margin-bottom: 0.5rem;">
+                {{'INVOICE.INFO.BODYCOMPONENT.ACTIONS' | translate}}
+            </label>
+            <span class="content">
+                {{body.total}}
+            </span>
+        </div> -->
+
+        <!-- ADDITIONAL INFO -->
+        <ng-container *ngIf="body.additionalInfo.length > 0">
+            <div *ngFor="let item of body.additionalInfo" class="col-12 col-md-3">
+                <span *ngIf="item.type == 1" class="title">
+                    {{'INVOICE.INFO.BODYCOMPONENT.DISCOUNT' | translate}}:
+                </span>
+                <span *ngIf="item.type == 2" class="title">
+                    {{'INVOICE.INFO.BODYCOMPONENT.ROUNDING' | translate}}:
+                </span>
+                <span class="content">
+                    {{body.additionalInfo}}
+                </span>
+            </div>
+        </ng-container>
+    </div>
+</div>

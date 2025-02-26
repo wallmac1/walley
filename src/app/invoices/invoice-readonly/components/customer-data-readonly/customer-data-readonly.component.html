@@ -1,0 +1,126 @@
+<div class="container-fluid pe-0 ps-0 pb-2">
+    <div *ngIf="customer; else noCustomerBlock" class="row justify-content-center align-items-center">
+        <div class="col-12">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.TYPE' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.type}}
+            </span>
+        </div>
+
+        <div class="col-12">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.NAME' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.denominazione}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-6">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.FISCALCODE' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.codicefiscale}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-6">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.VAT' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.piva}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-8 col-md-6">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.ADDRESS' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.address}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-4 col-md-6">
+            <span *ngIf="!isSmallScreen; else numberBlock" class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.NUMBER' | translate}}:
+            </span>
+            <ng-template #numberBlock>
+                <span class="title me-2">
+                    {{'INVOICE.INFO.CUSTOMERCOMPONENT.NUMBERSHORT' | translate}}:
+                </span>
+            </ng-template>
+            
+            <span class="content">
+                {{customer.codicefiscale}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.POSTALCODE' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.cap}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.CITY' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.city}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.REGION' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.region}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.COUNTRY' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.country}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-6">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.PEC' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.pec}}
+            </span>
+        </div>
+
+        <div class="col-12 col-sm-6">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.SDI' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.sdi}}
+            </span>
+        </div>
+    </div>
+    <ng-template #noCustomerBlock>
+        <div class="row row justify-content-center align-items-center mt-2">
+            <div class="col-12 text-center">
+                <span style="color: gray; font-style: italic; font-weight: 150;">
+                    {{'INVOICE.INFO.NOCUSTOMERDATA' | translate}}
+                </span>
+            </div>
+        </div>
+    </ng-template>
+</div>

@@ -21,14 +21,15 @@
             <div class="col-12 col-sm-6 col-lg-3" style="position: relative;">
                 <label class="form-label" for="fiscalcode">
                     {{"CUSTOMER.FISCALCODE" | translate}}
+                    <i *ngIf="customerGeneralForm.get('sameCode')?.value == 1" class="bi bi-exclamation-circle ms-2"
+                        style="color: red;" matTooltip="{{'CUSTOMER.SAMECODETOOLTIP' | translate}}"></i>
                 </label>
                 <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
                 <div *ngIf="customerRecordsForm.get('health_fc')?.value != null">
-                    <i class="bi bi-exclamation-triangle-fill fiscalcodeIcon ms-2"
-                        [ngClass]="{'text-warning': customerRecordsForm.get('health_fc')?.value!.value == 0, 
+                    <i class="bi bi-exclamation-triangle-fill fiscalcodeIcon ms-2" [ngClass]="{'text-warning': customerRecordsForm.get('health_fc')?.value!.value == 0, 
                             'text-success': customerRecordsForm.get('health_fc')?.value!.value == 1, 
                             'text-danger': customerRecordsForm.get('health_fc')?.value!.value == 2}"
-                            [matTooltip]="customerRecordsForm.get('health_fc')?.value!.description"></i>
+                        [matTooltip]="customerRecordsForm.get('health_fc')?.value!.description"></i>
                 </div>
             </div>
 
@@ -56,18 +57,29 @@
             </div>
 
             <!-- SDI -->
-            <div class="col-8 col-sm-5 col-lg-2">
-                <label class="form-label" for="sdi">
-                    {{"CUSTOMER.SDI" | translate}}
-                </label>
-                <input class="form-control" type="text" id="sdi" formControlName="sdi">
+            <div class="col-12 col-sm-7 col-lg-3">
+                <div class="row align-items-end p-0">
+                    <div class="col-6 p-0">
+                        <label class="form-label" for="sdi">
+                            {{"CUSTOMER.SDI" | translate}}
+                        </label>
+                        <input class="form-control pe-1" type="text" id="sdi" formControlName="sdi">
+                    </div>
+    
+                    <div class="col-3 text-end p-0">
+                        <button class="btn btn-outline-dark" (click)="historyPopup()">
+                            <i class="bi bi-clock-history"></i>
+                        </button>
+                    </div>
+    
+                    <div class="col-3 text-end ps-0">
+                        <button class="btn btn-outline-dark" (click)="modifyPopUp()">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-4 col-sm-2 col-md-1 text-end ps-0">
-                <button class="btn btn-outline-dark ms-2" (click)="modifyPopUp()">
-                    <i class="bi bi-pencil"></i>
-                </button>
-            </div>
 
             <!-- PEC -->
             <div class="col-12 col-sm-6 col-lg-3">
@@ -82,7 +94,8 @@
                 <label class="form-label" for="email">
                     {{"CUSTOMER.EMAIL" | translate}}
                 </label>
-                <input class="form-control" type="text" id="email" formControlName="email">
+                <input class="form-control" type="text" id="email" formControlName="email"
+                    [class.is-invalid]="customerRecordsForm.get('email')?.invalid">
             </div>
 
             <!-- PHONE -->
@@ -128,7 +141,7 @@
                             --
                         </option>
                         <option *ngFor="let gender of genderList" [ngValue]="gender.id">
-                            {{gender.name}}
+                            {{gender.description}}
                         </option>
                     </select>
                 </div>
@@ -233,7 +246,7 @@
                         <span class="tabTitle">
                             {{'CUSTOMER.ADDRESSES' | translate}}
                         </span>
-                        <i class="bi bi-plus-circle ms-4 iconSize addButton" (click)="addAddress()" ></i>
+                        <i class="bi bi-plus-circle ms-4 iconSize addButton" (click)="addAddress()"></i>
                     </ng-template>
                     <ng-template matTabContent>
                         <app-address-list [addressList]="addressList" [countriesList]="countriesList"

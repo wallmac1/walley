@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,6 +11,9 @@ import { CustomerModifyComponent } from "./components/customer-modify/customer-m
 import { Customer } from '../interfaces/customer';
 import { CustomerTherapiesComponent } from "./components/customer-therapies/customer-therapies.component";
 import { CustomerStudentsComponent } from './components/customer-students/customer-students.component';
+import { Connect } from '../../classes/connect';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ApiResponse } from '../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-customer-container',
@@ -23,7 +26,7 @@ import { CustomerStudentsComponent } from './components/customer-students/custom
     CustomerModifyComponent,
     CustomerTherapiesComponent,
     CustomerStudentsComponent
-],
+  ],
   templateUrl: './customer-container.component.html',
   styleUrl: './customer-container.component.scss'
 })
@@ -33,11 +36,21 @@ export class CustomerContainerComponent {
   @ViewChild(CustomerTherapiesComponent) therapyComponent!: CustomerTherapiesComponent;
   @ViewChild(CustomerStudentsComponent) studentComponent!: CustomerStudentsComponent;
 
+  idcustomer: number = 0;
   chargedTab: boolean[] = [false, false, false];
   countriesList: Country[] = [];
   customer: Customer | null = null;
 
-  constructor(private dialog: MatDialog, private connectServerService: ConnectServerService) { }
+  constructor(private dialog: MatDialog, private connectServerService: ConnectServerService,
+    private route: ActivatedRoute, private cdr: ChangeDetectorRef
+  ) {
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      const id = params.get('id');
+      if (id) {
+        this.idcustomer = parseInt(id);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.getCountries();
@@ -81,6 +94,7 @@ export class CustomerContainerComponent {
 
   modifyPopUp() {
     if (this.customer != null) {
+      console.log("MODIFICA CLIENTE", this.customer?.naturalPerson);
       const dialogRef = this.dialog.open(ModifyCustomerPopupComponent, {
         maxWidth: '1000px',
         minWidth: '350px',
@@ -88,6 +102,7 @@ export class CustomerContainerComponent {
         width: '90%',
         data: {
           customerGeneralForm: {
+            idregistry: this.customer.idregistry,
             naturalPerson: this.customer?.naturalPerson,
             name: this.customer?.name,
             surname: this.customer?.surname,
@@ -127,6 +142,10 @@ export class CustomerContainerComponent {
     }
   }
 
+  goBack() {
+    window.history.back();
+  }
+
   addTherapy() {
     setTimeout(() => {
       this.therapyComponent.createTherapy();
@@ -140,40 +159,15 @@ export class CustomerContainerComponent {
   }
 
   getCustomer() {
-    // RICHIEDI IL CUSTOMER AL SERVER
-    const customer = {
-      naturalPerson: 1,
-      name: "Mario",
-      surname: "Rossi",
-      businessName: null,
-      fiscalcode: "RSSMRA80A01H501Z",
-      vat: "IT12345678901",
-      country: 12,
-      sameCode: 0,
-      pec: "mario.rossi@example.com",
-      email: "mario.rossi@example.com",
-      phoneNumber: "+39 328 1234567",
-      fax: "+39 06 9876543",
-      website: "https://www.mariorossi.com",
-      eori: "IT 123456789 12345",
-      gender: 1,
-      birth_country: 12,
-      birth_city: null,
-      birth_city_it: {
-        id: 88,
-        name: 'Borgo San Lorenzo',
-        postalcode: "50032",
-        region: "Toscana",
-        province: "Firenze",
-      },
-      birthday: "1980-01-01",
-      job: "Ingegnere",
-      doctor: "Pippo Poppo",
-      specialist: "Pippa Peppa",
-      sdi: "ABCDE12345",
-      health_fc: {value: 1, description: "Descrizione"}
-    }
-
-    this.customer = customer;
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/customerData', { idregistry: this.idcustomer })
+      .subscribe((val: ApiResponse<{ customerData: Customer }>) => {
+        if (val.data) {
+          this.customer = val.data.customerData;
+          this.customerModify.customer = this.customer;
+          this.customerModify.customerGeneralForm.patchValue(this.customer);
+          this.customerModify.customerRecordsForm.patchValue(this.customer);
+          this.customerModify.customerGeneralForm.get('idregistry')?.setValue(this.idcustomer);
+        }
+      });
   }
 }

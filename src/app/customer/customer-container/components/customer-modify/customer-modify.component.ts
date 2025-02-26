@@ -9,7 +9,6 @@ import { Country } from '../../../../invoices/interfaces/country';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { City } from '../../../../invoices/interfaces/city';
 import { ModifyCustomerPopupComponent } from '../../../pop-up/modify-customer-popup/modify-customer-popup.component';
 import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 import { AddressListComponent } from "./components/address-list/address-list.component";
@@ -18,6 +17,10 @@ import { Address } from '../../../../invoices/interfaces/address';
 import { OrganizationComponent } from "./components/organization/organization.component";
 import { Customer } from '../../../interfaces/customer';
 import { OrganizationTax } from '../../../interfaces/organization-tax';
+import { Connect } from '../../../../classes/connect';
+import { ApiResponse } from '../../../../weco/interfaces/api-response';
+import { AutocompleteMunicipality } from '../../../../invoices/interfaces/autocomplete-municipality';
+import { HistoryPopupComponent } from '../../../pop-up/history-popup/history-popup.component';
 
 @Component({
   selector: 'app-customer-modify',
@@ -46,8 +49,8 @@ export class CustomerModifyComponent {
 
   chargedTab: boolean[] = [false, false, false];
   addressList: Address[] = [];
-  filteredCities$!: Observable<City[]>;
-  genderList: { id: number, name: string }[] = [];
+  filteredCities$!: Observable<AutocompleteMunicipality[]>;
+  genderList: { id: number, acronym: string,  description: string }[] = [];
   isSmall: boolean = false;
   submitted: boolean = false;
   idcustomer: number = 0;
@@ -57,7 +60,7 @@ export class CustomerModifyComponent {
   };
 
   customerGeneralForm = new FormGroup({
-    id: new FormControl<number>(0),
+    idregistry: new FormControl<number>(0),
     naturalPerson: new FormControl<number>(0),
     name: new FormControl<string | null>(null, Validators.required),
     surname: new FormControl<string | null>(null, Validators.required),
@@ -69,8 +72,8 @@ export class CustomerModifyComponent {
   })
 
   customerRecordsForm = new FormGroup({
-    email: new FormControl<string | null>(null),
-    pec: new FormControl<string | null>({ value: null, disabled: true }),
+    email: new FormControl<string | null>(null, Validators.email),
+    pec: new FormControl<string | null>({ value: null, disabled: true }, Validators.email),
     phoneNumber: new FormControl<string | null>(null),
     fax: new FormControl<string | null>(null),
     website: new FormControl<string | null>(null),
@@ -78,7 +81,7 @@ export class CustomerModifyComponent {
     gender: new FormControl<number | null>(null),
     birth_country: new FormControl<number | null>(12),
     birth_city: new FormControl<string | null>(null),
-    birth_city_it: new FormControl<City | null>(null),
+    birth_city_it: new FormControl<AutocompleteMunicipality | null>(null),
     birthday: new FormControl<string | null>(null),
     job: new FormControl<string | null>(null),
     doctor: new FormControl<string | null>(null),
@@ -144,8 +147,24 @@ export class CustomerModifyComponent {
   }
 
   getGenderSelect() {
-    // RICHIESTA AL SERVER CON LA SELECT PER IL GENERE
-    this.genderList = [{ id: 1, name: "Male" }, { id: 2, name: "Female" }]
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/gendersList', {})
+      .subscribe((val: any) => {
+        if(val) {
+          this.genderList = val;
+        }
+      })
+  }
+
+  historyPopup() {
+    const dialogRef = this.dialog.open(HistoryPopupComponent, {
+      maxWidth: '1000px',
+      minWidth: '350px',
+      maxHeight: '500px',
+      width: '90%',
+      data: {
+        idcustomer: this.customerGeneralForm.get('idregistry')?.value
+      }
+    });
   }
 
   modifyPopUp() {
@@ -156,7 +175,7 @@ export class CustomerModifyComponent {
       width: '90%',
       data: {
         customerGeneralForm: {
-          id: this.customerGeneralForm.get('id')?.value,
+          idregistry: this.customerGeneralForm.get('idregistry')?.value,
           naturalPerson: this.customerGeneralForm.get('naturalPerson')?.value,
           name: this.customerGeneralForm.get('name')?.value,
           surname: this.customerGeneralForm.get('surname')?.value,
@@ -186,7 +205,7 @@ export class CustomerModifyComponent {
     });
   }
 
-  displayCityName(city?: City): string {
+  displayCityName(city?: AutocompleteMunicipality): string {
     return city ? city.name! : '';
   }
 
@@ -203,32 +222,19 @@ export class CustomerModifyComponent {
             value ? this.getCity(value) : [])
         );
     }
+    else {
+      this.filteredCities$ = of([]);
+    }
   }
 
-  private getCity(val: string): Observable<City[]> {
+  private getCity(val: string): Observable<AutocompleteMunicipality[]> {
     // CHIAMATA AL SERVER
-    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
-    //   {
-    //     query: val
-    //   }).pipe(
-    //     map(response => response.data.cities)
-    //   );
-    // Esempio di una lista di tre clienti
-    const cities = [
+    return this.connectServerService.getRequest<ApiResponse<{ city: AutocompleteMunicipality[] }>>
+      (Connect.urlServerLaraApi, 'infoworld/searchMunicipalities',
       {
-        id: 88,
-        name: 'Borgo San Lorenzo',
-        postalcode: "50032",
-        region: "Toscana",
-        province: "Firenze",
-      },
-    ];
-
-    // Restituisce la lista come Observable FILTRO DA TOGLIERE QUANDO AVVIENE CHIAMATA AL SERVER
-    const filteredCities = cities.filter(city =>
-      city.name.toLowerCase().includes(val.toLowerCase())
-    );
-    return of(filteredCities);
+        tipo: 1,
+        val: val
+      });
   }
 
   addAddress() {
@@ -237,6 +243,26 @@ export class CustomerModifyComponent {
     }, 300);
   }
 
-  save() { }
+  save() { 
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/customerUpdate', {
+      idregistry: this.idcustomer,
+      email: this.customerRecordsForm.get('email')?.value,
+      phoneNumber: this.customerRecordsForm.get('phoneNumber')?.value,
+      fax: this.customerRecordsForm.get('fax')?.value,
+      website: this.customerRecordsForm.get('website')?.value,
+      eori: this.customerRecordsForm.get('eori')?.value,
+      gender: this.customerRecordsForm.get('gender')?.value,
+      birth_country: this.customerRecordsForm.get('birth_country')?.value,
+      birth_city: this.customerRecordsForm.get('birth_city')?.value,
+      birth_city_it: this.customerRecordsForm.get('birth_city_it')?.value?.id,
+      birthday: this.customerRecordsForm.get('birthday')?.value,
+      job: this.customerRecordsForm.get('job')?.value,
+      doctor: this.customerRecordsForm.get('doctor')?.value,
+      specialist: this.customerRecordsForm.get('specialist')?.value,
+    })
+      .subscribe(() => {
+
+      })
+  }
 
 }
