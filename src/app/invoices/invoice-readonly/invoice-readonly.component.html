@@ -54,7 +54,7 @@
                             {{'INVOICE.INFO.BODY' | translate}}
                         </div>
                         <div class="col-12 ps-0 pe-0">
-                            <app-body-readonly></app-body-readonly>
+                            <app-body-readonly [bodyLines]="bodyLines"></app-body-readonly>
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                                     {{'INVOICE.INFO.STAMP' | translate}}
                                 </div>
                                 <div class="col-12 ps-0 pe-0">
-                                    <app-stamp-readonly></app-stamp-readonly>
+                                    <app-stamp-readonly [stamp]="stamp"></app-stamp-readonly>
                                 </div>
                             </div>
                         </div>

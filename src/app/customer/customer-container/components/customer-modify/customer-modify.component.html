@@ -21,15 +21,15 @@
             <div class="col-12 col-sm-6 col-lg-3" style="position: relative;">
                 <label class="form-label" for="fiscalcode">
                     {{"CUSTOMER.FISCALCODE" | translate}}
-                    <i *ngIf="customerGeneralForm.get('sameCode')?.value == 1" class="bi bi-exclamation-circle ms-2"
+                    <i *ngIf="customerGeneralForm.get('sameCode')?.value == true" class="bi bi-exclamation-circle ms-2"
                         style="color: red;" matTooltip="{{'CUSTOMER.SAMECODETOOLTIP' | translate}}"></i>
                 </label>
                 <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
-                <div *ngIf="customerRecordsForm.get('health_fc')?.value != null">
-                    <i class="bi bi-exclamation-triangle-fill fiscalcodeIcon ms-2" [ngClass]="{'text-warning': customerRecordsForm.get('health_fc')?.value!.value == 0, 
-                            'text-success': customerRecordsForm.get('health_fc')?.value!.value == 1, 
-                            'text-danger': customerRecordsForm.get('health_fc')?.value!.value == 2}"
-                        [matTooltip]="customerRecordsForm.get('health_fc')?.value!.description"></i>
+                <div *ngIf="customerGeneralForm.get('health_cf')?.value != null">
+                    <i class="bi bi-exclamation-triangle-fill fiscalcodeIcon ms-2" [ngClass]="{'text-warning': customerGeneralForm.get('health_cf')?.value!.value == 0, 
+                            'text-success': customerGeneralForm.get('health_cf')?.value!.value == 1, 
+                            'text-danger': customerGeneralForm.get('health_cf')?.value!.value == 2}"
+                        [matTooltip]="customerGeneralForm.get('health_cf')?.value!.description"></i>
                 </div>
             </div>
 
@@ -130,7 +130,7 @@
                 <input class="form-control" type="text" id="eori" formControlName="eori">
             </div>
 
-            <ng-container *ngIf="customerGeneralForm.get('naturalPerson')?.value == 1">
+            <ng-container *ngIf="customerGeneralForm.get('naturalPerson')?.value == true">
                 <!-- GENDER -->
                 <div class="col-12 col-sm-6 col-md-3 col-lg-2">
                     <label class="form-label" for="gender">
@@ -250,7 +250,7 @@
                     </ng-template>
                     <ng-template matTabContent>
                         <app-address-list [addressList]="addressList" [countriesList]="countriesList"
-                            [idcustomer]="idcustomer" #addressComponent></app-address-list>
+                            [idcustomer]="idcustomer" (refreshAddressList)="getTabFiles(0)" #addressComponent></app-address-list>
                     </ng-template>
                 </mat-tab>
                 <mat-tab>

@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, Input } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
+import { InvoiceBodyLine } from '../../../interfaces/invoice-body-line';
+import { InvoiceBodyReadonly } from '../../../interfaces/invoice-body-readonly';
 
 @Component({
   selector: 'app-body-readonly',
@@ -16,7 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class BodyReadonlyComponent {
 
-  @Input() body: any = null;
+  @Input() bodyLines: InvoiceBodyReadonly[] = [];
 
   isSmallScreen: boolean = false;
 
@@ -30,16 +32,12 @@ export class BodyReadonlyComponent {
   }
 
   updateWindowDimensions() {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 992) {
       this.isSmallScreen = true;
     }
     else {
       this.isSmallScreen = false;
     }
-  }
-
-  toggleAdditionalInfo(index: number) {
-    
   }
 
 }

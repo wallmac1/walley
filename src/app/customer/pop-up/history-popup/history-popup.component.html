@@ -3,13 +3,19 @@
 </h2>
 
 <mat-dialog-content>
-    <div *ngIf="customerHistory.length > 0; else emptyBlock" class="row justify-content-center align-items-center p-1">
+    <div *ngIf="customerHistory && customerHistory.length > 0; else emptyBlock"
+        class="row justify-content-center align-items-center p-1">
         <div *ngFor="let customer of customerHistory; let i = index" class="col-12 mt-2 mb-3">
             <mat-expansion-panel [expanded]="i == 0" style="width: 100%;">
                 <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
                     <mat-panel-title class="panel-title">
                         <span style="font-weight: bold;">
-                            {{customer.datetime}}
+                            {{'CUSTOMER.MODAL.HISTORICIZEDATE' | translate}}:  
+                            {{customer.datetime_variation}}
+                            <i class="bi bi-info-circle ms-2 d-md-none"
+                                matTooltip="{{'CUSTOMER.MODAL.USERCREATED' | translate}}: {{customer?.user_created?.nickname}} - {{customer?.user_created?.datetime}}, &#10;
+                                {{'CUSTOMER.MODAL.USERUPDATED' | translate}}: {{customer?.user_updated?.nickname}} - {{customer?.user_created?.datetime}}">
+                            </i>
                         </span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
@@ -24,28 +30,28 @@
                         </span>
                     </div>
 
-                    <div *ngIf="customer.naturalPerson == 0; else naturalPersonBlock" class="col-12 col-md-6">
+                    <div *ngIf="customer.naturalPerson == 0; else naturalPersonBlock" class="col-12 col-md-8">
                         <span class="title">
-                            {{"CUSTOMER.BUSINESSNAME" | translate}}: 
+                            {{"CUSTOMER.BUSINESSNAME" | translate}}:
                         </span>
                         <span class="content">
-                            {{customer.name}}
+                            {{customer.businessName}}
                         </span>
                     </div>
 
                     <ng-template #naturalPersonBlock>
                         <div class="col-6 col-lg-4">
                             <span class="title">
-                                {{"CUSTOMER.NAME" | translate}}: 
+                                {{"CUSTOMER.NAME" | translate}}:
                             </span>
                             <span class="content">
                                 {{customer.name}}
                             </span>
                         </div>
-    
+
                         <div class="col-6 col-lg-4">
                             <span class="title">
-                                {{"CUSTOMER.SURNAME" | translate}}: 
+                                {{"CUSTOMER.SURNAME" | translate}}:
                             </span>
                             <span class="content">
                                 {{customer.surname}}
@@ -55,7 +61,7 @@
 
                     <div class="col-12 col-sm-6 col-lg-4">
                         <span class="title">
-                            {{"CUSTOMER.PEC" | translate}}
+                            {{"CUSTOMER.PEC" | translate}}:
                         </span>
                         <span class="content">
                             {{customer.pec}}
@@ -64,27 +70,27 @@
 
                     <div class="col-12 col-sm-6 col-lg-4">
                         <span class="title">
-                            {{"CUSTOMER.FISCALCODE" | translate}}: 
+                            {{"CUSTOMER.FISCALCODE" | translate}}:
                         </span>
                         <span class="content">
                             {{customer.fiscalcode}}
-                            <i *ngIf="customer.sameCode == 1" class="bi bi-exclamation-circle ms-1"
-                                style="color: red;" matTooltip="{{'CUSTOMER.SAMECODETOOLTIP' | translate}}"></i>
+                            <i *ngIf="customer.sameCode == 1" class="bi bi-exclamation-circle ms-1" style="color: red;"
+                                matTooltip="{{'CUSTOMER.SAMECODETOOLTIP' | translate}}"></i>
                         </span>
                     </div>
 
                     <div class="col-12 col-sm-6 col-lg-4">
                         <span class="title">
-                            {{"CUSTOMER.COUNTRY" | translate}}
+                            {{"CUSTOMER.COUNTRY" | translate}}:
                         </span>
                         <span class="content">
-                            {{customer.country}}
+                            {{customer.country?.common_name}}
                         </span>
                     </div>
 
                     <div class="col-12 col-sm-6 col-lg-4">
                         <span class="title">
-                            {{"CUSTOMER.SDI" | translate}}
+                            {{"CUSTOMER.SDI" | translate}}:
                         </span>
                         <span class="content">
                             {{customer.sdi}}
@@ -105,15 +111,8 @@
                         <span *ngIf="customer?.user_updated != null" class="userInfo">
                             {{"CUSTOMER.MODAL.USERUPDATED" | translate}}:
                             {{customer?.user_updated?.nickname}} -
-                            {{customer?.user_updated?.datetime}}
+                            {{customer?.user_created?.datetime}}
                         </span>
-                    </div>
-                </div>
-                <div class="row d-md-none justify-content-center mt-1">
-                    <div class="col-12 text-start">
-                        <i class="bi bi-info-circle"
-                            matTooltip="{{'CUSTOMER.MODAL.USERCREATED' | translate}}: {{customer?.user_created?.nickname}} - {{customer?.user_created?.datetime}}, &#10;
-                                {{'CUSTOMER.MODAL.USERUPDATED' | translate}}: {{customer?.user_updated?.nickname}} - {{customer?.user_updated?.datetime}}"></i>
                     </div>
                 </div>
             </mat-expansion-panel>

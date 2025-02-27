@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,7 +19,7 @@ import { Customer } from '../../../interfaces/customer';
 import { OrganizationTax } from '../../../interfaces/organization-tax';
 import { Connect } from '../../../../classes/connect';
 import { ApiResponse } from '../../../../weco/interfaces/api-response';
-import { AutocompleteMunicipality } from '../../../../invoices/interfaces/autocomplete-municipality';
+import { AutocompleteMunicipality } from '../../../interfaces/autocomplete-municipality';
 import { HistoryPopupComponent } from '../../../pop-up/history-popup/history-popup.component';
 
 @Component({
@@ -50,25 +50,26 @@ export class CustomerModifyComponent {
   chargedTab: boolean[] = [false, false, false];
   addressList: Address[] = [];
   filteredCities$!: Observable<AutocompleteMunicipality[]>;
-  genderList: { id: number, acronym: string,  description: string }[] = [];
+  genderList: { id: number, acronym: string, description: string }[] = [];
   isSmall: boolean = false;
   submitted: boolean = false;
   idcustomer: number = 0;
-  organizationTax: OrganizationTax = { 
-    municipality: null, province: null, postalcode: null, street: null, number: null, 
-    naturalPerson: 0, name: null, surname: null, denomination: null, vat: null 
+  organizationTax: OrganizationTax = {
+    municipality: null, province: null, postalcode: null, street: null, number: null,
+    naturalPerson: 0, name: null, surname: null, denomination: null, vat: null
   };
 
   customerGeneralForm = new FormGroup({
     idregistry: new FormControl<number>(0),
-    naturalPerson: new FormControl<number>(0),
+    naturalPerson: new FormControl<boolean>(false),
     name: new FormControl<string | null>(null, Validators.required),
     surname: new FormControl<string | null>(null, Validators.required),
     businessName: new FormControl<string | null>(null, Validators.required),
     fiscalcode: new FormControl<string | null>(null),
     vat: new FormControl<string | null>(null),
     country: new FormControl<number | null>(null),
-    sameCode: new FormControl<number>(0)
+    sameCode: new FormControl<boolean>(false),
+    health_cf: new FormControl<{ value: number, description: string } | null>(null),
   })
 
   customerRecordsForm = new FormGroup({
@@ -90,12 +91,11 @@ export class CustomerModifyComponent {
     vat: new FormControl<string | null>({ value: null, disabled: true }),
     country: new FormControl<number | null>({ value: null, disabled: true }),
     sdi: new FormControl<string | null>({ value: null, disabled: true }),
-    sameCode: new FormControl<number>(0),
-    health_fc: new FormControl<{value: number, description: string} | null>(null),
+    sameCode: new FormControl<boolean>(false),
   })
 
   constructor(private connectServerService: ConnectServerService, public dialog: MatDialog,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private cdr: ChangeDetectorRef) {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
@@ -140,16 +140,32 @@ export class CustomerModifyComponent {
 
   getTabFiles(tab: number) {
     // RICHIESTA AL SERVER, NEL SUBSCRIBE AGGIUNGERE chargedTab[tab] = true;
-    if (this.chargedTab[tab] == false) {
-      this.chargedTab[tab] = true;
-      console.log("creato", tab);
+    if (tab == 0) {
+      this.getAddressList();
     }
+    else if (tab == 1) {
+
+    }
+    else if (tab == 2) {
+
+    }
+  }
+
+  getAddressList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/locationsList', { idregistry: this.idcustomer })
+      .subscribe((val) => {
+        if (val.data) {
+          this.addressList = val.data.locationsList;
+          this.addressComponent.addressList = this.addressList;
+          this.chargedTab[0] = true;
+        }
+      })
   }
 
   getGenderSelect() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/gendersList', {})
       .subscribe((val: any) => {
-        if(val) {
+        if (val) {
           this.genderList = val;
         }
       })
@@ -159,10 +175,10 @@ export class CustomerModifyComponent {
     const dialogRef = this.dialog.open(HistoryPopupComponent, {
       maxWidth: '1000px',
       minWidth: '350px',
-      maxHeight: '500px',
+      maxHeight: '600px',
       width: '90%',
       data: {
-        idcustomer: this.customerGeneralForm.get('idregistry')?.value
+        idregistry: this.customerGeneralForm.get('idregistry')?.value
       }
     });
   }
@@ -171,7 +187,7 @@ export class CustomerModifyComponent {
     const dialogRef = this.dialog.open(ModifyCustomerPopupComponent, {
       maxWidth: '1000px',
       minWidth: '350px',
-      maxHeight: '500px',
+      maxHeight: '600px',
       width: '90%',
       data: {
         customerGeneralForm: {
@@ -186,6 +202,7 @@ export class CustomerModifyComponent {
           sameCode: this.customerRecordsForm.get('sameCode')?.value,
           sdi: this.customerRecordsForm.get('sdi')?.value,
           pec: this.customerRecordsForm.get('pec')?.value,
+          health_cf: this.customerRecordsForm.get('health_fc')?.value,
         },
         idPopup: 2,
         countriesList: this.countriesList,
@@ -195,12 +212,9 @@ export class CustomerModifyComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         const customer = result;
-        console.log(customer)
-        // SALVARE IL CLIENTE
         // UPDATE DEL PADRE
         this.modifiedCustomer.emit({ customer: customer });
-        this.customerGeneralForm.patchValue(customer);
-        this.customerRecordsForm.patchValue(customer);
+        // PADRE RICHIAMA I VALORI
       }
     });
   }
@@ -231,10 +245,10 @@ export class CustomerModifyComponent {
     // CHIAMATA AL SERVER
     return this.connectServerService.getRequest<ApiResponse<{ city: AutocompleteMunicipality[] }>>
       (Connect.urlServerLaraApi, 'infoworld/searchMunicipalities',
-      {
-        tipo: 1,
-        val: val
-      });
+        {
+          tipo: 1,
+          val: val
+        });
   }
 
   addAddress() {
@@ -243,7 +257,7 @@ export class CustomerModifyComponent {
     }, 300);
   }
 
-  save() { 
+  save() {
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/customerUpdate', {
       idregistry: this.idcustomer,
       email: this.customerRecordsForm.get('email')?.value,
@@ -260,9 +274,7 @@ export class CustomerModifyComponent {
       doctor: this.customerRecordsForm.get('doctor')?.value,
       specialist: this.customerRecordsForm.get('specialist')?.value,
     })
-      .subscribe(() => {
-
-      })
+      .subscribe(() => { })
   }
 
 }

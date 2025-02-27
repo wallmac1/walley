@@ -1,5 +1,5 @@
 export interface CustomerTable {
-    id: number;
+    idregistry: number;
     denomination: string | null;
     fiscalcode: string | null;
     vat: string | null;

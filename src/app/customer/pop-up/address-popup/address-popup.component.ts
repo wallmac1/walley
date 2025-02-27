@@ -9,6 +9,9 @@ import { Address } from '../../../invoices/interfaces/address';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { City } from '../../../invoices/interfaces/city';
+import { AutocompleteMunicipality } from '../../interfaces/autocomplete-municipality';
+import { ApiResponse } from '../../../weco/interfaces/api-response';
+import { Connect } from '../../../classes/connect';
 
 @Component({
   selector: 'app-address-popup',
@@ -25,22 +28,20 @@ import { City } from '../../../invoices/interfaces/city';
 })
 export class AddressPopupComponent {
 
-  idcustomer: number = 0;
   idPopup: number = 0;
   address: Address | null = null;
   countriesList: Country[] = [];
-  addressid: number = 0;
-  customerid: number = 0;
   descriptionRows: number = 2;
   submitted: boolean = false;
-  filteredCities$!: Observable<City[]>;
+  filteredCities$!: Observable<AutocompleteMunicipality[]>;
 
   addressForm = new FormGroup({
-    id: new FormControl<number>(0),
+    idregistry: new FormControl<number>(0),
+    idlocation: new FormControl<number>(0),
     description: new FormControl<string | null>(''),
     country: new FormControl<number | null>(null, Validators.required),
     street: new FormControl<string | null>(null, Validators.required),
-    city_it: new FormControl<City | null>(null, [Validators.required, this.cityValidator()]),
+    city_it: new FormControl<AutocompleteMunicipality | null>(null, [Validators.required, this.cityValidator()]),
     city: new FormControl<string | null>(null, Validators.required),
     street_number: new FormControl<string | null>(null, Validators.required),
     province: new FormControl<string | null>(null, Validators.required),
@@ -53,13 +54,14 @@ export class AddressPopupComponent {
     private connectServerService: ConnectServerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.idPopup = data.idpopup;
-    this.idcustomer = data.idcustomer;
+    this.addressForm.get('idregistry')?.setValue(data.idregistry)
     if (this.idPopup == 1) {
       this.addressForm.patchValue(data.address);
       this.countriesList = data.countriesList;
     }
     else if (this.idPopup == 2) {
-      this.addressid = data.addressid;
+      this.addressForm.get('idregistry')?.setValue(data.idregistry);
+      this.addressForm.get('idlocation')?.setValue(data.idlocation);
     }
     else {
       this.dialogRef.close(null);
@@ -92,10 +94,7 @@ export class AddressPopupComponent {
     if (this.addressForm.get('city_it')?.valid) {
       const city = this.addressForm.get('city_it')?.value;
       this.addressForm.get('province')?.disable();
-      this.addressForm.get('province')?.setValue(city?.province!);
-    }
-    else {
-      this.addressForm.get('province')?.setValue(null);
+      this.addressForm.get('province')?.setValue(city?.province_name!);
     }
   }
 
@@ -144,7 +143,7 @@ export class AddressPopupComponent {
     }
   }
 
-  displayCityName(city?: City): string {
+  displayCityName(city?: AutocompleteMunicipality): string {
     return city ? city.name! : '';
   }
 
@@ -163,37 +162,21 @@ export class AddressPopupComponent {
     }
   }
 
-  private getCity(val: string): Observable<City[]> {
+  private getCity(val: string): Observable<AutocompleteMunicipality[]> {
     // CHIAMATA AL SERVER
-    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
-    //   {
-    //     query: val
-    //   }).pipe(
-    //     map(response => response.data.cities)
-    //   );
-    // Esempio di una lista di tre clienti
-    const cities = [
+    return this.connectServerService.getRequest<ApiResponse<{ city: AutocompleteMunicipality[] }>>(Connect.urlServerLaraApi,
+      'infoworld/searchMunicipalities',
       {
-        id: 88,
-        name: 'Borgo San Lorenzo',
-        postalcode: "50032",
-        region: "Toscana",
-        province: "Firenze",
-      },
-    ];
-
-    // Restituisce la lista come Observable
-    const filteredCities = cities.filter(city =>
-      city.name.toLowerCase().includes(val.toLowerCase())
-    );
-    return of(filteredCities);
+        tipo: 1,
+        val: val
+      })
   }
 
   historicize() {
     this.submitted = true;
     if (this.addressForm.valid) {
       // Salvare usando gli idcustomer e idarticle, poi nel subscribe chiudere e ritornare valori, oppure null se fallisce
-      this.dialogRef.close({ obj: this.addressForm.getRawValue(), id: this.addressid });
+      this.saveAddress(2);
     }
   }
 
@@ -201,8 +184,8 @@ export class AddressPopupComponent {
     this.submitted = true;
     if (this.addressForm.valid) {
       // Salvare usando gli idcustomer e idarticle, poi nel subscribe chiudere e ritornare valori, oppure null se fallisce
-      this.addressForm.get('id')?.setValue(1);
-      this.dialogRef.close({ obj: this.addressForm.getRawValue(), id: this.addressid });
+      //this.addressForm.get('id')?.setValue(1);
+      this.saveAddress(1);
     }
   }
 
@@ -210,14 +193,43 @@ export class AddressPopupComponent {
     this.submitted = true;
     if (this.addressForm.valid) {
       // Salvare usando gli idcustomer e idarticle, poi nel subscribe chiudere e ritornare valori, oppure null se fallisce
-      this.addressid = 1;
-      this.dialogRef.close({ obj: this.addressForm.getRawValue(), id: this.addressid });
+      //this.addressid = 1;
+      this.saveAddress(1);
     }
+  }
+
+  saveAddress(type_request: number) {
+    const mainOffice = this.addressForm.get('mainOffice')?.value ? 1 : 0;
+    const legalOffice = this.addressForm.get('legalOffice')?.value ? 1 : 0;
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/upsertLocation', {
+      idregistry: this.addressForm.get('idregistry')?.value, idlocation: this.addressForm.get('idlocation')?.value,
+      type_request: type_request, description: this.addressForm.get('description')?.value,
+      country: this.addressForm.get('country')?.value, street: this.addressForm.get('street')?.value,
+      city: this.addressForm.get('city')?.value, city_it: this.addressForm.get('city_it')?.value,
+      street_number: this.addressForm.get('street_number')?.value, province: this.addressForm.get('province')?.value,
+      postalcode: this.addressForm.get('postalcode')?.value, legalOffice: legalOffice,
+      mainOffice: mainOffice
+    })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          let insertion = 0;
+          if (this.addressForm.get('idlocation')?.value == 0) {
+            insertion = 1;
+          }
+          this.addressForm.get('idlocation')?.setValue(val.data.idlocation);
+          this.dialogRef.close({ obj: this.addressForm.getRawValue(), insertion: insertion });
+        }
+      })
   }
 
   deleteAddress() {
     // Eliminare usando gli idcustomer e idarticle, poi nel subscribe chiudere e ritornare valori, oppure null se fallisce
-    this.dialogRef.close({ id: this.addressid });
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/deleteLocation', {
+      idregistry: this.addressForm.get('idregistry')?.value, idlocation: this.addressForm.get('idlocation')?.value
+    })
+      .subscribe(() => {
+        this.dialogRef.close({ idlocation: this.addressForm.get('idlocation')?.value });
+      })
   }
 
   close() {
@@ -234,14 +246,10 @@ export class AddressPopupComponent {
         value !== null &&
         'id' in value &&
         'name' in value &&
-        'cap' in value &&
-        'region' in value &&
-        'province' in value &&
+        'province_acronym' in value &&
         typeof value.id === 'number' &&
         typeof value.name === 'string' &&
-        typeof value.cap === 'string' &&
-        typeof value.region === 'string' &&
-        typeof value.province === 'string';
+        typeof value.province_acronym === 'string';
 
       return isValid ? null : { invalidCity: true };
     };

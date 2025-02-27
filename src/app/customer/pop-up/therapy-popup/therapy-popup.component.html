@@ -2,47 +2,79 @@
     <span style="color: white; font-weight: bold; font-size: x-large;">{{"CUSTOMER.MODAL.THERAPY" | translate }}</span>
 </h2>
 
-<mat-dialog-content>
-    <div [formGroup]="therapyForm" class="row justify-content-center align-items-center mt-1">
-        <div class="col-12 col-sm-6 mt-1 mb-1">
-            <label class="form-label" for="therapy_date">{{"CUSTOMER.MODAL.DATE" | translate }}</label>
-            <input type="date" class="form-control" id="therapy_date" formControlName="therapy_date"
-                [class.is-invalid]="therapyForm.get('therapy_date')?.invalid && submitted">
-        </div>
+<ng-container *ngIf="idPopup != 3">
+    <mat-dialog-content>
+        <div [formGroup]="therapyForm" class="row justify-content-center align-items-center mt-1">
+            <div class="col-12 col-sm-6 mt-1 mb-1">
+                <label class="form-label" for="therapy_date">{{"CUSTOMER.MODAL.DATE" | translate }}</label>
+                <input type="date" class="form-control" id="therapy_date" formControlName="therapy_date"
+                    [class.is-invalid]="therapyForm.get('therapy_date')?.invalid && submitted">
+            </div>
 
-        <div class="col-12 col-sm-6 mt-1 mb-1">
-            <label class="form-label" for="totalsessions">{{"CUSTOMER.MODAL.NUMBER" | translate }}</label>
-            <input type="text" class="form-control" id="totalsessions" formControlName="totalsessions"
-                [class.is-invalid]="therapyForm.get('totalsessions')?.invalid && submitted">
-        </div>
+            <div class="col-12 col-sm-6 mt-1 mb-1">
+                <label class="form-label" for="totalsessions">{{"CUSTOMER.MODAL.NUMBER" | translate }}</label>
+                <input type="text" class="form-control" id="totalsessions" formControlName="totalsessions"
+                    [class.is-invalid]="(therapyForm.get('totalsessions')?.invalid && submitted) ||   
+                    therapyForm.get('totalsessions')?.hasError('invalidNumber')">
+            </div>
 
-        <div class="col-12 mt-1 mb-1">
-            <label class="form-label" for="description">{{"CUSTOMER.MODAL.DESCRIPTION" | translate }}</label>
-            <textarea type="description" class="form-control" id="description" formControlName="description" rows="2"
-                [class.is-invalid]="therapyForm.get('description')?.invalid && submitted"></textarea>
+            <div class="col-12 mt-1 mb-1">
+                <label class="form-label" for="description">{{"CUSTOMER.MODAL.DESCRIPTION" | translate }}</label>
+                <textarea type="description" class="form-control" id="description" formControlName="description"
+                    rows="2" [class.is-invalid]="therapyForm.get('description')?.invalid && submitted"></textarea>
+            </div>
+            <div *ngIf="therapyForm.invalid" class="col-12 mt-1 text-center">
+                <span *ngIf="submitted" style="font-size: small; color: red;">
+                    {{"CUSTOMER.MODAL.THERAPYERROR" | translate }}
+                </span>
+                <span *ngIf="therapyForm.get('totalsessions')?.hasError('invalidNumber')"
+                    style="font-size: small; color: red;">
+                    {{"CUSTOMER.MODAL.SESSIONSERROR" | translate }}
+                </span>
+            </div>
         </div>
-        <div *ngIf="therapyForm.invalid && submitted" class="col-12 mt-1 text-center">
-            <span style="font-size: small; color: red;">
-                {{"CUSTOMER.MODAL.THERAPYERROR" | translate }}
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
+        <div *ngIf="idPopup == 2" class="col-6 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="addOrUpdate()">
+                {{"CUSTOMER.MODAL.UPDATE" | translate }}
+            </button>
+        </div>
+        <div *ngIf="idPopup == 1" class="col-6 text-start">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="addOrUpdate()">
+                {{"CUSTOMER.MODAL.ADD" | translate }}
+            </button>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"CUSTOMER.MODAL.CLOSE" | translate }}
+            </button>
+        </div>
+    </mat-dialog-actions>
+</ng-container>
+
+
+<mat-dialog-content *ngIf="idPopup == 3">
+    <div class="row">
+        <div class="col-12 text-center p-4">
+            <span>
+                {{"CUSTOMER.MODAL.DELETETHERAPY" | translate }}
             </span>
         </div>
     </div>
-</mat-dialog-content>
 
-<mat-dialog-actions class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
-    <div *ngIf="idPopup == 2" class="col-6 text-start">
-        <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="addOrUpdate()">
-            {{"CUSTOMER.MODAL.UPDATE" | translate }}
-        </button>
+    <!-- ACTIONS -->
+    <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-6 text-start">
+            <button class="btn btn-outline-danger me-2" (click)="deleteTherapy()">
+                {{"CUSTOMER.MODAL.DELETE" | translate }}
+            </button>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-outline-dark me-2" (click)="close()">
+                {{"CUSTOMER.MODAL.CANCEL" | translate }}
+            </button>
+        </div>
     </div>
-    <div *ngIf="idPopup == 1" class="col-6 text-start">
-        <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="addOrUpdate()">
-            {{"CUSTOMER.MODAL.ADD" | translate }}
-        </button>
-    </div>
-    <div class="col-6 text-end">
-        <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
-            {{"CUSTOMER.MODAL.CLOSE" | translate }}
-        </button>
-    </div>
-</mat-dialog-actions>
+</mat-dialog-content>

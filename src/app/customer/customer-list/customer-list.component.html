@@ -18,20 +18,52 @@
 
                 <div class="col-12 col-sm-6 mt-2">
                     <!-- AUTOCOMPLETE DENOMINAZIONE -->
-                    <label for="denomination" class="form-label">
-                        {{"CUSTOMER.CUSTOMERLIST.DENOMINATION" | translate}}
-                    </label>
-                    <input type="text" class="form-control" name="denomination" id="denomination"
-                        formControlName="denomination">
+                    <label class="form-label" for="customer">{{"CUSTOMER.CUSTOMERLIST.DENOMINATION" |
+                        translate}}</label>
+                    <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="customer"
+                        formControlName="customer" [class.is-invalid]="filterForm.get('customer')?.invalid">
+                    <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
+                        <mat-option *ngFor="let option of filteredCustomers$ | async" [value]="option">
+                            <div>
+                                {{option.denomination}}
+                                <span *ngIf="option.fiscalcode">
+                                    -
+                                    {{option.fiscalcode}}
+                                </span>
+                                <span *ngIf="option.vat">
+                                    -
+                                    {{option.vat}}
+                                </span>
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
                 </div>
 
                 <div class="col-12 col-sm-6 mt-2">
                     <!-- AUTOCOMPLETE FISCAL CODE -->
-                    <label for="denomination" class="form-label">
-                        {{"CUSTOMER.CUSTOMERLIST.FISCALCODEVAT" | translate}}
-                    </label>
-                    <input type="text" class="form-control" name="denomination" id="denomination"
-                        formControlName="denomination">
+                    <label class="form-label" for="fiscalcode">{{"CUSTOMER.CUSTOMERLIST.FISCALCODEVAT" |
+                        translate}}</label>
+                    <input type="text" matInput [matAutocomplete]="fiscalcode" class="form-control" id="fiscalcode"
+                        formControlName="fiscalcode" [class.is-invalid]="filterForm.get('fiscalcode')?.invalid">
+                    <mat-autocomplete #fiscalcode="matAutocomplete" [displayWith]="displayFiscalcodeName">
+                        <mat-option *ngFor="let option of filteredFiscalcodes$ | async" [value]="option">
+                            <div>
+                                <span *ngIf="option.fiscalcode">
+                                    {{option.fiscalcode}}
+                                </span>
+                                <span *ngIf="option.fiscalcode && option.vat">
+                                    -
+                                </span>
+                                <span *ngIf="option.vat">
+                                    {{option.vat}}
+                                </span>
+                                <span>
+                                    - 
+                                    {{option.denomination}}
+                                </span>
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
                 </div>
             </div>
         </div>
@@ -100,15 +132,16 @@
                     </div>
                 </div>
 
-                <table mat-table [dataSource]="dataSource" class="mat-table mb-5" matSort style="border-top: 1px solid lightgray;"
-                    matSortActive="lastupdate" matSortDirection="desc" matSortDisableClear>
+                <table mat-table [dataSource]="dataSource" class="mat-table mb-5" matSort
+                    style="border-top: 1px solid lightgray;" matSortActive="lastupdate" matSortDirection="desc"
+                    matSortDisableClear>
 
                     <!-- Denominations Column -->
                     <ng-container matColumnDef="denomination">
                         <th mat-header-cell *matHeaderCellDef>
                             {{"CUSTOMER.CUSTOMERLIST.DENOMINATION" | translate}}
                         </th>
-                        <td mat-cell *matCellDef="let element" (click)="goToCustomer(element.id)">
+                        <td mat-cell *matCellDef="let element" (click)="goToCustomer(element.idregistry)">
                             <span class="clickableElement" style="text-decoration: underline; color: blue;">
                                 {{ element.denomination }}
                             </span>
@@ -117,18 +150,16 @@
 
                     <!-- Fiscal Code Column -->
                     <ng-container matColumnDef="fiscalcode">
-                        <th mat-header-cell *matHeaderCellDef class="headerScale"
-                            style="width: 200px;">
+                        <th mat-header-cell *matHeaderCellDef class="headerScale" style="width: 200px;">
                             {{"CUSTOMER.CUSTOMERLIST.FISCALCODE" | translate}}
                         </th>
                         <td mat-cell *matCellDef="let element" style="width: 200px;">
                             {{element.fiscalcode}}
                             <ng-container *ngIf="element.health_fc">
-                                <i class="bi bi-exclamation-triangle-fill ms-2" style="font-size: 18px;"
-                                    [ngClass]="{'text-warning': element.health_fc.value == 0, 
+                                <i class="bi bi-exclamation-triangle-fill ms-2" style="font-size: 18px;" [ngClass]="{'text-warning': element.health_fc.value == 0, 
                                         'text-success': element.health_fc.value == 1, 
                                         'text-danger': element.health_fc.value == 2}"
-                                        [matTooltip]="element.health_fc.description"></i>
+                                    [matTooltip]="element.health_fc.description"></i>
                             </ng-container>
                         </td>
                     </ng-container>
@@ -196,7 +227,7 @@
     </div>
 
 
-    <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer ms-2" (click)="goToCustomer(0)">
+    <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer ms-2" (click)="createCustomer()">
         <i class="bi bi-plus-lg"></i>
     </button>
 </div>

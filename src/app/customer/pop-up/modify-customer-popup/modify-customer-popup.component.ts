@@ -31,7 +31,7 @@ export class ModifyCustomerPopupComponent {
 
   customerGeneralForm = new FormGroup({
     idregistry: new FormControl<number>(0),
-    naturalPerson: new FormControl<number>(1),
+    naturalPerson: new FormControl<boolean>(true),
     name: new FormControl<string | null>(null, Validators.required),
     surname: new FormControl<string | null>(null, Validators.required),
     businessName: new FormControl<string | null>(null, Validators.required),
@@ -40,7 +40,8 @@ export class ModifyCustomerPopupComponent {
     country: new FormControl<number | null>(null),
     sdi: new FormControl<string | null>(null),
     pec: new FormControl<string | null>(null, Validators.email),
-    sameCode: new FormControl<number>(0)
+    sameCode: new FormControl<boolean>(false),
+    health_fc: new FormControl<{value: number, description: string} | null>(null)
   });
 
   modifyCustomerForm = new FormGroup({
@@ -60,7 +61,8 @@ export class ModifyCustomerPopupComponent {
     city: new FormControl<string | null>(null),
     house_number: new FormControl<string | null>(null),
     country: new FormControl<number | null>(null),
-    region: new FormControl<string | null>(null)
+    region: new FormControl<string | null>(null),
+    health_cf: new FormControl<{value: number, description: string} | null>(null)
   })
 
   constructor(public dialogRef: MatDialogRef<ModifyCustomerPopupComponent>,
@@ -97,7 +99,7 @@ export class ModifyCustomerPopupComponent {
   }
 
   formLogic() {
-    if (this.customerGeneralForm.get('naturalPerson')?.value == 1) {
+    if (this.customerGeneralForm.get('naturalPerson')?.value == true) {
       this.customerGeneralForm.get('businessName')?.setValidators(null);
       this.customerGeneralForm.get('businessName')?.reset();
       this.customerGeneralForm.get('businessName')?.disable();
@@ -122,7 +124,7 @@ export class ModifyCustomerPopupComponent {
     //IMPOSTARE STORICIZZA
     this.submitted = true;
     if (this.customerGeneralForm.valid) {
-      this.setCustomerData(1);
+      this.setCustomerData(2);
     }
   }
 
@@ -130,22 +132,24 @@ export class ModifyCustomerPopupComponent {
     //IMPOSTARE AGGIORNA
     this.submitted = true;
     if (this.customerGeneralForm.valid) {
-      this.setCustomerData(2);
+      this.setCustomerData(1);
     }
   }
 
   setCustomerData(typeRequest: number) {
+    const naturalPerson = this.customerGeneralForm.get('naturalPerson')?.value ? 1 : 0;
+    const sameCode = this.customerGeneralForm.get('sameCode')?.value ? 1 : 0;
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/customerUpdateData', {
       idregistry: this.customerGeneralForm.get('idregistry')?.value,
       pec: this.customerGeneralForm.get('pec')?.value,
       fiscalcode: this.customerGeneralForm.get('fiscalcode')?.value,
       vat: this.customerGeneralForm.get('vat')?.value,
-      naturalPerson: this.customerGeneralForm.get('naturalPerson')?.value,
+      naturalPerson: naturalPerson,
       name: this.customerGeneralForm.get('name')?.value,
       surname: this.customerGeneralForm.get('surname')?.value,
       businessName: this.customerGeneralForm.get('businessName')?.value,
       sdi: this.customerGeneralForm.get('sdi')?.value,
-      sameCode: this.customerGeneralForm.get('sameCode')?.value,
+      sameCode: sameCode,
       country: this.customerGeneralForm.get('country')?.value,
       type_request: typeRequest
     })

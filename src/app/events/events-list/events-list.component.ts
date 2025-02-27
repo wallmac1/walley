@@ -254,7 +254,7 @@ export class EventsListComponent {
     const customers: Customer[] = [
       {
         idregistry: 1,
-        naturalPerson: 1,
+        naturalPerson: true,
         name: "Mario",
         surname: "Rossi",
         businessName: null,
@@ -262,7 +262,7 @@ export class EventsListComponent {
         fiscalcode: "RSSMRA80A01H501Z",
         vat: "IT12345678901",
         country: 12,
-        sameCode: 0,
+        sameCode: false,
         email: "mario.rossi@example.com",
         pec: "mario.rossi@pec.it",
         phoneNumber: "+39 328 1234567",
@@ -272,17 +272,17 @@ export class EventsListComponent {
         gender: 1,
         birth_country: 12,
         birth_city: "Roma",
-        birth_city_it: { id: 1, name: "Roma", idprovince: 1, province_acronym: "RM", idregion: 2, region_name: "Lazio", cadastral_code: "0000" },
+        birth_city_it: { id: 1, name: "Roma", idprovince: 1, province_acronym: "RM", province_name: "Roma", idregion: 2, region_name: "Lazio", cadastral_code: "0000" },
         birthday: "1980-01-01",
         job: "Ingegnere",
         doctor: "Dr. Bianchi",
         specialist: "Cardiologo",
         sdi: "ABCDE12345",
-        health_fc: {value: 1, description: "Descrizione"}
+        health_cf: {value: 1, description: "Descrizione"}
       },
       {
         idregistry: 2,
-        naturalPerson: 0,
+        naturalPerson: false,
         name: null,
         surname: null,
         businessName: "Tech Solutions SRL",
@@ -290,7 +290,7 @@ export class EventsListComponent {
         fiscalcode: "TCHSLS80A01H501Z",
         vat: "IT98765432109",
         country: 12,
-        sameCode: 0,
+        sameCode: false,
         email: "info@techsolutions.it",
         pec: "techsolutions@pec.it",
         phoneNumber: "+39 06 12345678",
@@ -306,11 +306,11 @@ export class EventsListComponent {
         doctor: null,
         specialist: null,
         sdi: "FGHIJ67890",
-        health_fc: {value: 1, description: "Descrizione"}
+        health_cf: {value: 1, description: "Descrizione"}
       },
       {
         idregistry: 3,
-        naturalPerson: 1,
+        naturalPerson: true,
         name: "Laura",
         surname: "Bianchi",
         businessName: null,
@@ -318,7 +318,7 @@ export class EventsListComponent {
         fiscalcode: "BNCLRA85C41H501Z",
         vat: "IT56473829106",
         country: 12,
-        sameCode: 0,
+        sameCode: false,
         email: "laura.bianchi@example.com",
         pec: "laura.bianchi@pec.it",
         phoneNumber: "+39 328 7654321",
@@ -328,13 +328,13 @@ export class EventsListComponent {
         gender: 2,
         birth_country: 12,
         birth_city: "Milano",
-        birth_city_it: { id: 2, name: "Milano",idprovince: 1, province_acronym: "RM", idregion: 2, region_name: "Lombardia", cadastral_code: "0000"},
+        birth_city_it: { id: 2, name: "Milano",idprovince: 1, province_acronym: "RM", province_name: "Milano", idregion: 2, region_name: "Lombardia", cadastral_code: "0000"},
         birthday: "1985-03-10",
         job: "Avvocato",
         doctor: "Dr. Verdi",
         specialist: "Penalista",
         sdi: "KLMNO11223",
-        health_fc: {value: 1, description: "Descrizione"}
+        health_cf: {value: 1, description: "Descrizione"}
       }
     ];
 
@@ -381,7 +381,8 @@ export class EventsListComponent {
     // Esempio di una lista di tre clienti
     const students: Student[] = [
       {
-        id: 1,
+        idregistry: 1,
+        idstudent: 1,
         name: "Giulia",
         surname: "Ferrari",
         denomination: "Giulia Ferrari",
@@ -391,7 +392,8 @@ export class EventsListComponent {
         phone: "+39 328 1234567"
       },
       {
-        id: 2,
+        idregistry: 2,
+        idstudent: 2,
         name: "Luca",
         surname: "Rossi",
         denomination: "Luca Rossi",
@@ -401,7 +403,8 @@ export class EventsListComponent {
         phone: "+39 334 9876543"
       },
       {
-        id: 3,
+        idregistry: 3,
+        idstudent: 3,
         name: "Martina",
         surname: "Bianchi",
         denomination: "Martina Bianchi",

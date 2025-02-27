@@ -4,6 +4,7 @@ export interface AutocompleteMunicipality {
     cadastral_code: string;
     idprovince: number;
     province_acronym: string;
+    province_name: string;
     idregion: number;
     region_name: string;
 }

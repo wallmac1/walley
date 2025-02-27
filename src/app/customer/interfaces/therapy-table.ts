@@ -1,5 +1,6 @@
 export interface TherapyTable {
-    id: number;
+    idregistry: number;
+    idtherapy: number;
     therapy_date: string | null;
     totalsessions: string | null;
     description: string | null;

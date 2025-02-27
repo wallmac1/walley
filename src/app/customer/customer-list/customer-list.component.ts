@@ -10,6 +10,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
 import { ApiResponse } from '../../weco/interfaces/api-response';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Customer } from '../interfaces/customer';
+import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { AutocompleteCustomer } from '../interfaces/autocomplete-customer';
 
 @Component({
   selector: 'app-customer-list',
@@ -19,7 +23,8 @@ import { ApiResponse } from '../../weco/interfaces/api-response';
     TranslateModule,
     MatTableModule,
     ReactiveFormsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatAutocompleteModule
   ],
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.scss'
@@ -27,8 +32,8 @@ import { ApiResponse } from '../../weco/interfaces/api-response';
 export class CustomerListComponent {
 
   filterForm = new FormGroup({
-    denomination: new FormControl<string | null>(null),
-    fiscalcode: new FormControl<string | null>(null)
+    customer: new FormControl<AutocompleteCustomer | null>(null),
+    fiscalcode: new FormControl<AutocompleteCustomer | null>(null)
   })
 
   alphabeth: { id: number, name: string, isSelected: boolean }[] = [
@@ -70,6 +75,9 @@ export class CustomerListComponent {
   totalPages: number = 1;
   totalResults: number = 0;
   itemsPerPage: number = 50;
+  path: string = '';
+  filteredCustomers$!: Observable<AutocompleteCustomer[]>;
+  filteredFiscalcodes$!: Observable<AutocompleteCustomer[]>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -77,6 +85,29 @@ export class CustomerListComponent {
 
   ngOnInit(): void {
     this.getCustomerList();
+    this.searchCustomer();
+    this.searchFiscalcode();
+    this.filterForm.get('customer')?.valueChanges.subscribe((obj) => {
+      if (obj &&
+        typeof obj.idregistry === 'number' &&
+        typeof obj.denomination === 'string' &&
+        typeof obj.fiscalcode === 'string' &&
+        typeof obj.vat === 'string') {
+        this.path = obj.path;
+        this.goToCustomer(obj.idregistry)
+      }
+    });
+
+    this.filterForm.get('fiscalcode')?.valueChanges.subscribe((obj) => {
+      if (obj &&
+        typeof obj.idregistry === 'number' &&
+        typeof obj.denomination === 'string' &&
+        typeof obj.fiscalcode === 'string' &&
+        typeof obj.vat === 'string') {
+        this.path = obj.path;
+        this.goToCustomer(obj.idregistry)
+      }
+    });
   }
 
   getCustomerList() {
@@ -88,6 +119,13 @@ export class CustomerListComponent {
         if (val.data) {
           this.customerList = val.data.customerList.customers;
           this.dataSource.data = this.customerList;
+
+          // Pagination info
+          this.currentPage = val.data.customerList.paginator.currentPage;
+          this.totalPages = val.data.customerList.paginator.lastPage;
+          this.totalResults = val.data.customerList.paginator.total;
+
+          this.path = val.data.path;
         }
       })
   }
@@ -104,6 +142,9 @@ export class CustomerListComponent {
     if (index >= 0) {
       this.alphabeth[index].isSelected = true;
     }
+
+    this.getCustomerList();
+
   }
 
   prevPage() {
@@ -121,6 +162,73 @@ export class CustomerListComponent {
   }
 
   goToCustomer(id: number) {
+    this.router.navigate([this.path, id]);
+  }
+
+  displayCustomerName(customer?: AutocompleteCustomer): string {
+    return customer ? customer.denomination! : '';
+  }
+
+  private searchCustomer() {
+    const city_field = this.filterForm.get('customer');
+    if (city_field) {
+      this.filteredCustomers$ = city_field.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value?.denomination || ''),
+          filter(value => value.length > 0),
+          debounceTime(400),
+          switchMap((value: string) =>
+            value ? this.getCustomer(value) : [])
+        );
+    }
+    else {
+      this.filteredCustomers$ = of([]);
+    }
+  }
+
+  private getCustomer(val: string): Observable<AutocompleteCustomer[]> {
+    return this.connectServerService.getRequest<ApiResponse<{ customer: AutocompleteCustomer[] }>>
+      (Connect.urlServerLaraApi, 'customer/searchCustomer',
+        {
+          // 0: Nome Cognome o Ragione Sociale, 1: CF o P. IVA
+          type: 0,
+          query: val
+        });
+  }
+
+  displayFiscalcodeName(fiscalcode?: AutocompleteCustomer): string {
+    return fiscalcode ? fiscalcode.fiscalcode! : '';
+  }
+
+  private searchFiscalcode() {
+    const fiscalcode_field = this.filterForm.get('fiscalcode');
+    if (fiscalcode_field) {
+      this.filteredFiscalcodes$ = fiscalcode_field.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value?.fiscalcode || ''),
+          filter(value => value.length > 0),
+          debounceTime(400),
+          switchMap((value: string) =>
+            value ? this.getFiscalcode(value) : [])
+        );
+    }
+    else {
+      this.filteredCustomers$ = of([]);
+    }
+  }
+
+  private getFiscalcode(val: string): Observable<AutocompleteCustomer[]> {
+    return this.connectServerService.getRequest<ApiResponse<{ fiscalcode: AutocompleteCustomer[] }>>
+      (Connect.urlServerLaraApi, 'customer/searchCustomer',
+        {
+          type: 1,
+          query: val
+        });
+  }
+
+  createCustomer() {
     this.router.navigate(['customer/new']);
   }
 

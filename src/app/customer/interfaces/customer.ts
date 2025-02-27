@@ -1,8 +1,8 @@
-import { AutocompleteMunicipality } from "../../invoices/interfaces/autocomplete-municipality";
+import { AutocompleteMunicipality } from "./autocomplete-municipality";
 
 export interface Customer {
     idregistry: number;
-    naturalPerson: number;
+    naturalPerson: boolean;
     name: string | null;
     surname: string | null;
     businessName: string | null;
@@ -10,7 +10,7 @@ export interface Customer {
     fiscalcode: string | null;
     vat: string | null;
     country: number | null;
-    sameCode: number;
+    sameCode: boolean;
     email: string | null;
     pec: string | null;
     phoneNumber: string | null;
@@ -26,5 +26,5 @@ export interface Customer {
     doctor: string | null;
     specialist: string | null;
     sdi: string | null;
-    health_fc: {value: number, description: string} | null;
+    health_cf: {value: number, description: string} | null;
 }

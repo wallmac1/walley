@@ -1,5 +1,6 @@
 export interface Student {
-    id: number;
+    idregistry: number;
+    idstudent: number;
     name: string | null;
     surname: string | null;
     denomination?: string | null;

@@ -1,73 +1,67 @@
 <div class="container-fluid mt-4 pb-5" style="max-width: 1500px;">
 
-    <form [formGroup]="studentsForm">
-        <ng-container formArrayName="students">
-            <div *ngFor="let student of students.controls; let i = index" [formGroupName]="i"
-                class="row justify-content-center align-items-end mt-2 pb-3"
-                style="border-bottom: 1px solid lightgray; position: relative;">
+    <div *ngFor="let student of studentsList; let i = index"
+        class="row justify-content-center align-items-end mt-2 pb-3"
+        style="border-bottom: 1px solid lightgray; position: relative;">
 
-                <!-- ACTION BUTTONS -->
-                <div class="col-4 col-sm-2 col-xxl-1">
-                    <button class="btn btn-link">
-                        <i class="bi bi-trash" style="color: red;"></i>
-                    </button>
-                    <button class="btn btn-link">
-                        <i class="bi bi-pencil" style="color: black;" (click)="openStudentPopup(2, student.getRawValue())"></i>
-                    </button>
-                </div>
+        <!-- ACTION BUTTONS -->
+        <div class="col-4 col-sm-2 col-xxl-1">
+            <button class="btn btn-link">
+                <i class="bi bi-trash" style="color: red;" (click)="deleteStudent(3, student)"></i>
+            </button>
+            <button class="btn btn-link">
+                <i class="bi bi-pencil" style="color: black;" (click)="openStudentPopup(2, student)"></i>
+            </button>
+        </div>
 
-                <!-- NAME -->
-                <div class="col-8 col-sm-4 col-md-3 col-xxl-2 ps-xxl-1 pe-xxl-1">
-                    <label class="form-label" for="name-{{i}}">
-                        {{"CUSTOMER.STUDENTSLIST.NAME" | translate}}
-                    </label>
-                    <input class="form-control" type="text" id="name-{{i}}"
-                        formControlName="name">
-                </div>
+        <!-- NAME -->
+        <div class="col-8 col-sm-4 col-md-3 col-xxl-2 ps-xxl-1 pe-xxl-1">
+            <label class="form-label" for="name-{{i}}">
+                {{"CUSTOMER.STUDENTSLIST.NAME" | translate}}
+            </label>
+            <input class="form-control" type="text" id="name-{{i}}" [value]="student.name" disabled>
+        </div>
 
-                 <!-- SURNAME -->
-                 <div class="col-12 col-sm-6 col-md-3 col-xxl-2 ps-xxl-1 pe-xxl-1">
-                    <label class="form-label" for="surname-{{i}}">
-                        {{"CUSTOMER.STUDENTSLIST.SURNAME" | translate}}
-                    </label>
-                    <input class="form-control" type="text" id="surname-{{i}}"
-                        formControlName="surname">
-                </div>
+        <!-- SURNAME -->
+        <div class="col-12 col-sm-6 col-md-3 col-xxl-2 ps-xxl-1 pe-xxl-1">
+            <label class="form-label" for="surname-{{i}}">
+                {{"CUSTOMER.STUDENTSLIST.SURNAME" | translate}}
+            </label>
+            <input class="form-control" type="text" id="surname-{{i}}" [value]="student.surname" disabled>
+        </div>
 
-                <!-- FISCALCODE -->
-                <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
-                    <label class="form-label" for="fiscalcode-{{i}}">
-                        {{"CUSTOMER.STUDENTSLIST.FISCALCODE" | translate}}
-                    </label>
-                    <input class="form-control" type="text" id="fiscalcode-{{i}}"
-                        formControlName="fiscalcode">
-                </div>
+        <!-- FISCALCODE -->
+        <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
+            <label class="form-label" for="fiscalcode-{{i}}">
+                {{"CUSTOMER.STUDENTSLIST.FISCALCODE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="fiscalcode-{{i}}" [value]="student.fiscalcode" disabled>
+        </div>
 
-                <!-- BIRTHDAY -->
-                <div class="col-12 col-sm-6 col-md-4 col-xxl-1 ps-xxl-1 pe-xxl-1">
-                    <label class="form-label" for="birthday-{{i}}">
-                        {{"CUSTOMER.STUDENTSLIST.BIRTHDAY" | translate}}
-                    </label>
-                    <input class="form-control ps-xxl-1 pe-xxl-0" [type]="(student.get('birthday')?.value != null) ? 'date' : 'text'" 
-                        id="birthday-{{i}}" formControlName="birthday">
-                </div>
+        <!-- BIRTHDAY -->
+        <div class="col-12 col-sm-6 col-md-4 col-xxl-1 ps-xxl-1 pe-xxl-1">
+            <label class="form-label" for="birthday-{{i}}">
+                {{"CUSTOMER.STUDENTSLIST.BIRTHDAY" | translate}}
+            </label>
+            <input class="form-control ps-xxl-1 pe-xxl-0"
+                [type]="(student.birthday != null) ? 'date' : 'text'" id="birthday-{{i}}"
+                [value]="student.birthday" disabled>
+        </div>
 
-                <!-- EMAIL -->
-                <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
-                    <label class="form-label" for="email-{{i}}">
-                        {{"CUSTOMER.STUDENTSLIST.EMAIL" | translate}}
-                    </label>
-                    <input class="form-control" type="text" id="email-{{i}}" formControlName="email">
-                </div>
+        <!-- EMAIL -->
+        <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
+            <label class="form-label" for="email-{{i}}">
+                {{"CUSTOMER.STUDENTSLIST.EMAIL" | translate}}
+            </label>
+            <input class="form-control" type="text" id="email-{{i}}" [value]="student.email" disabled>
+        </div>
 
-                <!-- PHONE -->
-                <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
-                    <label class="form-label" for="phone-{{i}}">
-                        {{"CUSTOMER.STUDENTSLIST.PHONE" | translate}}
-                    </label>
-                    <input class="form-control" type="text" id="phone-{{i}}" formControlName="phone">
-                </div>
-            </div>
-        </ng-container>
-    </form>
+        <!-- PHONE -->
+        <div class="col-12 col-sm-6 col-md-4 col-xxl-2 ps-xxl-1 pe-xxl-1">
+            <label class="form-label" for="phone-{{i}}">
+                {{"CUSTOMER.STUDENTSLIST.PHONE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="phone-{{i}}" [value]="student.phone" disabled>
+        </div>
+    </div>
 </div>

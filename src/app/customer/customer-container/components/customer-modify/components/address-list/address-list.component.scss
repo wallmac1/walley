@@ -61,6 +61,12 @@ input, textarea, select {
     color: #002D5D;
 }
 
-.bi:hover {
+.iconAnimation {
+    transform: scale(1);
+    transition: transform 1s ease;
+}
+
+.iconAnimation:hover {
+    transform: scale(1.2);
     cursor: pointer;
 }

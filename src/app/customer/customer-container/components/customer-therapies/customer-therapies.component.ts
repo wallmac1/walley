@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { TherapyTable } from '../../../interfaces/therapy-table';
 import { MatDialog } from '@angular/material/dialog';
 import { TherapyPopupComponent } from '../../../pop-up/therapy-popup/therapy-popup.component';
+import { ConnectServerService } from '../../../../services/connect-server.service';
+import { Connect } from '../../../../classes/connect';
+import { ApiResponse } from '../../../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-customer-therapies',
@@ -21,19 +24,19 @@ import { TherapyPopupComponent } from '../../../pop-up/therapy-popup/therapy-pop
 })
 export class CustomerTherapiesComponent {
 
+  @Input() idregistry: number = 0;
   dataSource = new MatTableDataSource<TherapyTable>([]);
   therapies: TherapyTable[] = [];
   displayedColumns: string[] = ['modify', 'therapy_date', 'totalsessions', 'description', 'info'];
   displayedColumnsSmall: string[] = ['smallScreenCol'];
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private connectServerService: ConnectServerService) { }
 
   ngOnInit(): void {
     this.getTherapies();
   }
 
-  modifyTherapy(id: number) {
-    const therapy = this.therapies.find((therapy) => therapy.id == id);
+  modifyTherapy(therapy: TherapyTable) {
     this.openTherapyPopup(2, therapy!)
   }
 
@@ -41,73 +44,55 @@ export class CustomerTherapiesComponent {
     this.openTherapyPopup(1, null)
   }
 
-  deleteTherapy() {
-  }
-
-  openTherapyPopup(type: number, therapy: TherapyTable | null) {
+  deleteTherapy(idPopup: number, therapy: TherapyTable) {
     const dialogRef = this.dialog.open(TherapyPopupComponent, {
       maxWidth: '500px',
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
       data: {
-        idPopup: type,
+        idPopup: idPopup,
         therapyInfo: therapy,
+        idregistry: this.idregistry
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        if (result.type == 1) {
-          this.therapies.push(result.therapy);
-        }
-        else {
-          console.log(result.therapy)
-          const index = this.therapies.findIndex((therapy) => therapy.id == result.therapy.id);
-          this.therapies[index] = result.therapy;
-        }
+        // refresh
+        this.getTherapies();
+      }
+    });
+  }
 
-        this.dataSource.data = this.therapies;
+  openTherapyPopup(idPopup: number, therapy: TherapyTable | null) {
+    const dialogRef = this.dialog.open(TherapyPopupComponent, {
+      maxWidth: '500px',
+      minWidth: '350px',
+      maxHeight: '500px',
+      width: '90%',
+      data: {
+        idPopup: idPopup,
+        therapyInfo: therapy,
+        idregistry: this.idregistry
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        // refresh
+        this.getTherapies();
       }
     });
   }
 
   getTherapies() {
-    this.therapies = [
-      {
-        id: 1,
-        therapy_date: "2023-05-20",
-        totalsessions: "3",
-        description: "Terapia di gruppo iniziale",
-        info: {
-          files: [
-            { id: 101, src: "assets/files/therapy1_notes.pdf" },
-            { id: 102, src: "assets/files/therapy1_photo.jpg" }
-          ]
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/therapiesList', { idregistry: this.idregistry })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.therapies = val.data.therapiesList;
+          this.dataSource.data = this.therapies;
         }
-      },
-      {
-        id: 2,
-        therapy_date: "2023-06-01",
-        totalsessions: "5",
-        description: null,
-        info: {
-          files: [
-            { id: 201, src: "assets/files/therapy2_report.pdf" }
-          ]
-        }
-      },
-      {
-        id: 3,
-        therapy_date: null,
-        totalsessions: null,
-        description: "Terapia individuale di follow-up",
-        info: {
-          files: []
-        }
-      }
-    ]
-
-    this.dataSource.data = this.therapies;
+      })
   }
 }

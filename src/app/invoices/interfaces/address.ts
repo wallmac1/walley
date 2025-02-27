@@ -1,13 +1,16 @@
+import { AutocompleteMunicipality } from "../../customer/interfaces/autocomplete-municipality";
 import { Country } from "./country";
 
 export interface Address {
-    id: number;
-    country: Country | null;
+    idregistry: number;
+    idlocation: number;
+    country: number | null;
     city: string | null;
+    city_it: AutocompleteMunicipality | null;
     street: string | null;
     postalcode: string | null;
     description: string | null,
-    number: string | null,
+    street_number: string | null,
     province: string | null,
     postalCode: string | null,
     legalOffice: number,

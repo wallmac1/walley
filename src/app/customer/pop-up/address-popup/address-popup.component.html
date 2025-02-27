@@ -135,7 +135,9 @@
                 {{"CUSTOMER.ADDRESS.INVALIDCITY" | translate}}
             </span>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col-12 mt-1">
             <span style="font-size: small; color: gray; font-style: italic;">
                 {{'COMPANY.POPUP.NBHISTORICIZE' | translate}}<br>
@@ -146,14 +148,14 @@
 
     <!-- ACTIONS -->
     <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
-        <ng-container *ngIf="addressForm.get('id')?.value != 0; else newAddressBlock">
+        <ng-container *ngIf="addressForm.get('idlocation')?.value != 0; else newAddressBlock">
             <div class="col-4 text-start">
                 <button class="btn btn-outline-success me-2" (click)="update()">
                     {{"CUSTOMER.MODAL.UPDATE" | translate }}
                 </button>
             </div>
             <div class="col-4 text-center">
-                <button class="btn btn-outline-danger me-2" (click)="historicize()">
+                <button class="btn btn-outline-success me-2" (click)="historicize()">
                     {{"CUSTOMER.MODAL.HISTORICIZE" | translate }}
                 </button>
             </div>

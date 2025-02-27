@@ -80,16 +80,18 @@ export class CustomerContainerComponent {
   }
 
   modifyCustomer(event: { customer: any }) {
-    this.customer!.naturalPerson = event.customer.naturalPerson;
-    this.customer!.name = event.customer.name;
-    this.customer!.surname = event.customer.surname;
-    this.customer!.businessName = event.customer.surname;
-    this.customer!.vat = event.customer.vat;
-    this.customer!.fiscalcode = event.customer.fiscalcode;
-    this.customer!.country = event.customer.country;
-    this.customer!.sameCode = event.customer.sameCode;
-    this.customer!.sdi = event.customer.sdi;
-    this.customer!.pec = event.customer.pec;
+    // this.customer!.naturalPerson = event.customer.naturalPerson;
+    // this.customer!.name = event.customer.name;
+    // this.customer!.surname = event.customer.surname;
+    // this.customer!.businessName = event.customer.surname;
+    // this.customer!.vat = event.customer.vat;
+    // this.customer!.fiscalcode = event.customer.fiscalcode;
+    // this.customer!.country = event.customer.country;
+    // this.customer!.sameCode = event.customer.sameCode;
+    // this.customer!.sdi = event.customer.sdi;
+    // this.customer!.pec = event.customer.pec;
+    this.idcustomer = event.customer.idregistry;
+    this.getCustomer();
   }
 
   modifyPopUp() {
@@ -112,7 +114,8 @@ export class CustomerContainerComponent {
             country: this.customer?.country,
             sameCode: this.customer?.sameCode,
             sdi: this.customer?.sdi,
-            pec: this.customer?.pec
+            pec: this.customer?.pec,
+            health_cf: this.customer.health_cf,
           },
           idPopup: 2,
           countriesList: this.countriesList,

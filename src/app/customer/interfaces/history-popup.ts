@@ -1,8 +1,8 @@
 export interface HistoryPopup {
-    datetime: string;
+    datetime_variation: string;
     fiscalcode: string;
     vat: string;
-    country: string;
+    country: {id: number, common_name: string} | null;
     sdi: string;
     pec: string;
     name: string;
@@ -10,6 +10,6 @@ export interface HistoryPopup {
     businessName: string;
     naturalPerson: number;
     sameCode: number;
-    user_created: {nickname: string, datetime: string};
-    user_updated: {nickname: string, datetime: string};
+    user_created: {id: number, nickname: string, datetime: string};
+    user_updated: {id: number, nickname: string, datetime: string};
 }
