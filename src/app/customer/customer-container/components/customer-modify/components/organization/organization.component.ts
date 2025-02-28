@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { City } from '../../../../../../invoices/interfaces/city';
@@ -24,28 +24,13 @@ import { OrganizationTax } from '../../../../../interfaces/organization-tax';
 export class OrganizationComponent {
 
   @Input() organizationTax: OrganizationTax | null = null;
+  @Input() idregistry: number = 0;
+  @Output() changedValues = new EventEmitter<null>;
   submitted: boolean = false;
-
-  organizationTaxForm = new FormGroup({
-    municipality: new FormControl<City | null>({ value: null, disabled: true }),
-    province: new FormControl<string | null>({ value: null, disabled: true }),
-    postalcode: new FormControl<string | null>({ value: null, disabled: true }),
-    street: new FormControl<string | null>({ value: null, disabled: true }),
-    street_number: new FormControl<string | null>({ value: null, disabled: true }),
-    naturalPerson: new FormControl<number>({value: 0, disabled: true}),
-    surname: new FormControl<string | null>({ value: null, disabled: true }),
-    name: new FormControl<string | null>({ value: null, disabled: true }),
-    denomination: new FormControl<string | null>({ value: null, disabled: true }),
-    vat: new FormControl<string | null>({ value: null, disabled: true }),
-  })
 
   constructor(private dialog: MatDialog) { }
 
-  ngOnInit(): void { 
-    if(this.organizationTax) {
-      this.organizationTaxForm.patchValue(this.organizationTax);
-    }
-  }
+  ngOnInit(): void {}
 
   organizationModifyPopup() {
     const dialogRef = this.dialog.open(OrganizationPopupComponent, {
@@ -54,14 +39,15 @@ export class OrganizationComponent {
       maxHeight: '600px',
       width: '90%',
       data: {
-        organizationTax: this.organizationTaxForm.getRawValue(),
+        idregistry: this.idregistry,
+        organizationTax: this.organizationTax,
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         // salva sul server server ed assegna al form
-        this.organizationTaxForm.patchValue(result.obj);
+        this.changedValues.emit();
       }
     })
   }

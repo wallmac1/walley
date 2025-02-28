@@ -4,6 +4,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { BankPopupComponent } from '../../../../../pop-up/bank-popup/bank-popup.component';
+import { PaymentData } from '../../../../../interfaces/payment-data';
+import { ConnectServerService } from '../../../../../../services/connect-server.service';
+import { Connect } from '../../../../../../classes/connect';
 
 @Component({
   selector: 'app-payment-data',
@@ -18,7 +21,7 @@ import { BankPopupComponent } from '../../../../../pop-up/bank-popup/bank-popup.
 })
 export class PaymentDataComponent {
 
-  @Input() paymentData: any = null;
+  @Input() paymentData: PaymentData | null = null;
   @Input() paymentMethods: { id: number, name: string }[] = [
     { id: 1, name: "Metodo 1" }, { id: 2, name: "Metodo 2" }
   ];
@@ -44,14 +47,14 @@ export class PaymentDataComponent {
     customer_bic: new FormControl<string | null>(null),
   })
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private connectServerService: ConnectServerService) {}
 
   ngOnInit(): void {
     this.initForm();
   }
 
   initForm() {
-    this.bankForm.patchValue(this.paymentData);
+    this.bankForm.patchValue(this.paymentData!);
   }
 
   searchBank() {
@@ -70,6 +73,12 @@ export class PaymentDataComponent {
         this.bankForm.patchValue(result);
       }
     });
+  }
+
+  save() {
+    // this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/upsertPaymentFavorite', {
+    //   idregistry: , payment
+    // })
   }
 
 }

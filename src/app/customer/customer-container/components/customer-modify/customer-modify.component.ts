@@ -21,6 +21,7 @@ import { Connect } from '../../../../classes/connect';
 import { ApiResponse } from '../../../../weco/interfaces/api-response';
 import { AutocompleteMunicipality } from '../../../interfaces/autocomplete-municipality';
 import { HistoryPopupComponent } from '../../../pop-up/history-popup/history-popup.component';
+import { PaymentData } from '../../../interfaces/payment-data';
 
 @Component({
   selector: 'app-customer-modify',
@@ -46,6 +47,8 @@ export class CustomerModifyComponent {
   @Output() modifiedCustomer = new EventEmitter<{ customer: Customer }>;
   @ViewChild(AddressListComponent) addressComponent!: AddressListComponent;
   @ViewChild(MatTabGroup) tabComponent!: MatTabGroup;
+  @ViewChild(OrganizationComponent) organizationTaxComponent!: OrganizationComponent;
+  @ViewChild(PaymentDataComponent) paymentDataComponent!: PaymentDataComponent;
 
   chargedTab: boolean[] = [false, false, false];
   addressList: Address[] = [];
@@ -55,9 +58,10 @@ export class CustomerModifyComponent {
   submitted: boolean = false;
   idcustomer: number = 0;
   organizationTax: OrganizationTax = {
-    municipality: null, province: null, postalcode: null, street: null, number: null,
-    naturalPerson: 0, name: null, surname: null, denomination: null, vat: null
+    idregistry: 0, city: null, province: null, organization_postalcode: null, organization_street: null, organization_street_number: null,
+    tax_naturalPerson: 0, tax_name: null, tax_surname: null, tax_denomination: null, tax_vat: null
   };
+  paymentData: PaymentData | null = null;
 
   customerGeneralForm = new FormGroup({
     idregistry: new FormControl<number>(0),
@@ -140,15 +144,39 @@ export class CustomerModifyComponent {
 
   getTabFiles(tab: number) {
     // RICHIESTA AL SERVER, NEL SUBSCRIBE AGGIUNGERE chargedTab[tab] = true;
-    if (tab == 0) {
-      this.getAddressList();
+    if (this.chargedTab[tab] == false) {
+      if (tab == 0) {
+        this.getAddressList();
+      }
+      else if (tab == 1) {
+        this.getOrganizationTax();
+      }
+      else if (tab == 2) {
+        this.getPaymentData();
+      }
     }
-    else if (tab == 1) {
+  }
 
-    }
-    else if (tab == 2) {
+  getPaymentData() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/paymentData', { idregistry: this.idcustomer })
+    .subscribe((val) => {
+      if (val.data) {
+        this.paymentData = val.data.paymentData;
+        this.paymentDataComponent.paymentData = this.paymentData;
+        this.chargedTab[2] = true;
+      }
+    })
+  }
 
-    }
+  getOrganizationTax() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/organizationTax', { idregistry: this.idcustomer })
+    .subscribe((val) => {
+      if (val.data) {
+        this.organizationTax = val.data.organizationTax;
+        this.organizationTaxComponent.organizationTax = this.organizationTax;
+        this.chargedTab[1] = true;
+      }
+    })
   }
 
   getAddressList() {

@@ -6,10 +6,10 @@
                 {{"CUSTOMER.ORGANIZATION.MODIFYVALUES" | translate}}
             </span>
             <span class="ms-4">
-                <i class="bi bi-pencil" style="font-size: 20px;" (click)="organizationModifyPopup()"></i>
+                <i class="bi bi-pencil" style="font-size: 18px;" (click)="organizationModifyPopup()"></i>
             </span>
         </div>
-        <div [formGroup]="organizationTaxForm" class="col-12 ps-2 ps-md-4 pe-2 pe-md-4">
+        <div class="col-12 ps-2 ps-md-4 pe-2 pe-md-4">
             <div class="row justify-content-center">
                 <div class="col-12" style="border-bottom: 1px solid lightgray; position: relative;">
                     <span class="titleLines">
@@ -30,7 +30,7 @@
                     <label class="form-label" for="municipality">
                         {{"CUSTOMER.ORGANIZATION.MUNICIPALITY" | translate }}
                     </label>
-                    <input type="text" class="form-control" id="municipality" formControlName="municipality">
+                    <input type="text" class="form-control" id="municipality" [value]="organizationTax?.city?.name" disabled>
                 </div>
 
                 <!-- PROVINCE -->
@@ -38,7 +38,7 @@
                     <label class="form-label" for="province">
                         {{"CUSTOMER.ORGANIZATION.PROVINCE" | translate}}
                     </label>
-                    <input class="form-control" type="text" id="province" formControlName="province">
+                    <input class="form-control" type="text" id="province" [value]="organizationTax?.city?.province_name" disabled>
                 </div>
 
                 <!-- CAP -->
@@ -46,7 +46,7 @@
                     <label class="form-label" for="postalcode">
                         {{"CUSTOMER.ORGANIZATION.POSTALCODE" | translate}}
                     </label>
-                    <input class="form-control" type="text" id="postalcode" formControlName="postalcode">
+                    <input class="form-control" type="text" id="postalcode" [value]="organizationTax?.organization_postalcode" disabled>
                 </div>
 
                 <!-- STREET -->
@@ -54,7 +54,7 @@
                     <label class="form-label" for="street">
                         {{"CUSTOMER.ORGANIZATION.STREET" | translate}}
                     </label>
-                    <input class="form-control" type="text" id="street" formControlName="street">
+                    <input class="form-control" type="text" id="street" [value]="organizationTax?.organization_street" disabled>
                 </div>
 
                 <!-- NUMBER -->
@@ -62,7 +62,7 @@
                     <label class="form-label" for="street_number">
                         {{"CUSTOMER.ORGANIZATION.NUMBER" | translate}}
                     </label>
-                    <input class="form-control" type="text" id="street_number" formControlName="street_number">
+                    <input class="form-control" type="text" id="street_number" [value]="organizationTax?.organization_street_number" disabled>
                 </div>
             </div>
 
@@ -83,19 +83,20 @@
 
                 <!-- NATURAL PERSON -->
                 <div class="form-check col-12 mt-1">
-                    <input class="form-check-input" type="checkbox" id="naturalPerson" formControlName="naturalPerson">
+                    <input class="form-check-input" type="checkbox" id="naturalPerson" 
+                        [checked]="organizationTax?.tax_naturalPerson == 1" disabled>
                     <label class="form-check-label mt-0" for="naturalPerson">
                         {{"CUSTOMER.ORGANIZATION.NATURALPERSON" | translate}}
                     </label>
                 </div>
 
-                <ng-container *ngIf="organizationTaxForm.get('naturalPerson')?.value == 1; else businessBlock">
+                <ng-container *ngIf="organizationTax?.tax_naturalPerson == 1; else businessBlock">
                     <!-- NAME -->
                     <div class="col-12 col-sm-6 col-lg-4 formColumn">
                         <label class="form-label" for="name">
                             {{"CUSTOMER.TAXREPRESENTATIVE.NAME" | translate}}
                         </label>
-                        <input class="form-control" type="text" id="name" formControlName="name">
+                        <input class="form-control" type="text" id="name" [value]="organizationTax?.tax_name" disabled>
                     </div>
 
                     <!-- SURNAME -->
@@ -103,7 +104,7 @@
                         <label class="form-label" for="surname">
                             {{"CUSTOMER.TAXREPRESENTATIVE.SURNAME" | translate}}
                         </label>
-                        <input class="form-control" type="text" id="surname" formControlName="surname">
+                        <input class="form-control" type="text" id="surname" [value]="organizationTax?.tax_surname" disabled>
                     </div>
                 </ng-container>
 
@@ -113,7 +114,7 @@
                         <label class="form-label" for="denomination">
                             {{"CUSTOMER.TAXREPRESENTATIVE.DENOMINATION" | translate}}
                         </label>
-                        <input class="form-control" type="text" id="denomination" formControlName="denomination">
+                        <input class="form-control" type="text" id="denomination" [value]="organizationTax?.tax_denomination" disabled>
                     </div>
                 </ng-template>
 
@@ -122,7 +123,7 @@
                     <label class="form-label" for="vat">
                         {{"CUSTOMER.TAXREPRESENTATIVE.VAT" | translate}}
                     </label>
-                    <input class="form-control" type="text" id="vat" formControlName="vat">
+                    <input class="form-control" type="text" id="vat" [value]="organizationTax?.tax_vat" disabled>
                 </div>
             </div>
         </div>

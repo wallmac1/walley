@@ -26,7 +26,8 @@
                 </label>
                 <input class="form-control" type="text" id="fiscalcode" formControlName="fiscalcode">
                 <div *ngIf="customerGeneralForm.get('health_cf')?.value != null">
-                    <i class="bi bi-exclamation-triangle-fill fiscalcodeIcon ms-2" [ngClass]="{'text-warning': customerGeneralForm.get('health_cf')?.value!.value == 0, 
+                    <i class="bi bi-exclamation-triangle-fill fiscalcodeIcon ms-2" 
+                        [ngClass]="{'text-warning': customerGeneralForm.get('health_cf')?.value!.value == 0, 
                             'text-success': customerGeneralForm.get('health_cf')?.value!.value == 1, 
                             'text-danger': customerGeneralForm.get('health_cf')?.value!.value == 2}"
                         [matTooltip]="customerGeneralForm.get('health_cf')?.value!.description"></i>
@@ -250,7 +251,7 @@
                     </ng-template>
                     <ng-template matTabContent>
                         <app-address-list [addressList]="addressList" [countriesList]="countriesList"
-                            [idcustomer]="idcustomer" (refreshAddressList)="getTabFiles(0)" #addressComponent></app-address-list>
+                            [idcustomer]="idcustomer" (refreshAddressList)="getAddressList()" #addressComponent></app-address-list>
                     </ng-template>
                 </mat-tab>
                 <mat-tab>
@@ -261,7 +262,8 @@
                         </span>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-organization [organizationTax]="organizationTax"></app-organization>
+                        <app-organization [organizationTax]="organizationTax" [idregistry]="idcustomer"
+                            (changedValues)="getOrganizationTax()" #organizationTaxComponent></app-organization>
                     </ng-template>
                 </mat-tab>
                 <mat-tab>
@@ -272,7 +274,7 @@
                         </span>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-payment-data></app-payment-data>
+                        <app-payment-data [paymentData]="paymentData" #paymentDataComponent></app-payment-data>
                     </ng-template>
                 </mat-tab>
             </mat-tab-group>
