@@ -21,31 +21,33 @@
         </div>
 
         <!-- SYSTEM INFO -->
-        <div *ngIf="newTicketForm.get('idsystem')?.value != 0 && newTicketForm.get('idsystem')?.value != null"
-            class="col-4 col-sm-8 col-lg-10 mt-2">
-            <span style="font-weight: bold;">
-                {{"SYSTEM.TICKETNEW.SYSTEMINFO" | translate}}
-            </span>
-            <button class="btn btn-sm btn-outline-dark ms-2" id="systeminfo" (click)="systemInfoPopup()">
-                <i class="bi bi-card-text"></i>
-            </button>
+        <div class="col-4 col-sm-8 col-lg-10 mt-2">
+            <ng-container
+                *ngIf="newTicketForm.get('idsystem')?.value != 0 && newTicketForm.get('idsystem')?.value != null">
+                <span style="font-weight: bold;">
+                    {{"SYSTEM.TICKETNEW.SYSTEMINFO" | translate}}
+                </span>
+                <button class="btn btn-sm btn-outline-dark ms-2" id="systeminfo" (click)="systemInfoPopup()">
+                    <i class="bi bi-card-text"></i>
+                </button>
+            </ng-container>
         </div>
 
         <!-- ID TICKET -->
-        <div class="col-4 col-sm-3 col-md-2">
+        <!-- <div class="col-4 col-sm-3 col-md-2">
             <label for="idticket" class="form-label">
                 {{"SYSTEM.TICKETNEW.ID" | translate}}
             </label>
             <input type="text" class="form-control" id="idticket" formControlName="idticket">
-        </div>
+        </div> -->
 
         <!-- NUM DATE -->
-        <div class="col-8 col-sm-9 col-md-10">
+        <!-- <div class="col-8 col-sm-9 col-md-10">
             <label for="num_date" class="form-label">
                 {{"SYSTEM.TICKETNEW.NUMDATE" | translate}}
             </label>
             <input type="text" class="form-control" id="num_date" formControlName="num_date" style="max-width: 200px;">
-        </div>
+        </div> -->
 
         <!-- SYSTEM LIST -->
         <div class="col-12 col-md-6">
