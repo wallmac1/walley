@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { TicketNewComponent } from './tickets/ticket-new/ticket-new.component';
+//import { TicketNewComponent } from './tickets/ticket-new/ticket-new.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
-import { TicketModifyComponent } from './tickets/ticket-modify/ticket-modify.component';
+//import { TicketModifyComponent } from './tickets/ticket-modify/ticket-modify.component';
 import { DeleteComponent } from './settings/menu/delete/delete.component';
 import { AuthorizationsComponent } from './weco/authorizations/authorizations.component';
 import { SystemsListComponent } from './weco/system/systems-list/systems-list.component';
@@ -11,7 +11,7 @@ import { AssistanceComponent } from './weco/assistance/assistance.component';
 import { SystemReviewComponent } from './weco/system/system-review/system-review.component';
 import { VoucherInfoComponent } from './voucher/voucher-info/voucher-info.component';
 import { VoucherListComponent } from './voucher/voucher-list/voucher-list.component';
-import { TicketListComponent } from './tickets/ticket-list/ticket-list.component';
+//import { TicketListComponent } from './tickets/ticket-list/ticket-list.component';
 import { AccessPageComponent } from './tickets/access-page/access-page.component';
 import { ArticleNewComponent } from './articles/article-new/article-new.component';
 import { ArticleModifyComponent } from './articles/article-modify/article-modify.component';
@@ -27,9 +27,12 @@ import { CustomerListComponent } from './customer/customer-list/customer-list.co
 import { EventsListComponent } from './events/events-list/events-list.component';
 import { PaymentConditionsComponent } from './payment-conditions/payment-conditions.component';
 import { InvoiceReadonlyComponent } from './invoices/invoice-readonly/invoice-readonly.component';
+import { SystemTicketsListComponent } from './weco/system/system-tickets-list/system-tickets-list.component';
+import { TicketListComponent } from './weco/tickets/ticket-list/ticket-list.component';
+import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.component';
 // import { TicketListComponent } from './weco/tickets/ticket-list/ticket-list.component';
 // import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.component';
-// import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modify.component';
+import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modify.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -61,6 +64,8 @@ export const routes: Routes = [
     { path: "eventList", component: EventsListComponent },
     { path: "paymentConditions", component: PaymentConditionsComponent },
     { path: "invoice/readonly/:id", component: InvoiceReadonlyComponent },
+    { path: "systemTicketList/:id", component: SystemTicketsListComponent },
+    // { path: "ticketWecoList", component: SystemReviewComponent },
     // { path: "ticketListWeco", component: TicketListComponent },
     // { path: "ticketNewWeco", component: TicketNewComponent },
     // { path: "ticketModifyWeco/:id", component: TicketModifyComponent },

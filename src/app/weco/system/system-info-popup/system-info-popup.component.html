@@ -1,0 +1,239 @@
+<h2 mat-dialog-title align="center" class="justify-content-center"
+    style="background-color: black; position: relative;">
+    <span class="tuncate-text" style="color: white; font-size: x-large;">
+        {{systemInfo.stepOne.system_name}}
+    </span>
+    <button class="btn btn-danger" (click)="close()" style="position: absolute; top: 10px; right: 10px;">
+        <i class="bi bi-x"></i>
+    </button>
+</h2>
+
+<mat-dialog-content>
+
+
+    <div class="col-12 fst-italic text-center p-1 p-md-2 p-lg-3">
+        {{systemInfo.stepOne!.system_description}}
+    </div>
+
+    <div class="col-12 text-center mt-2">
+        <span class="fw-bold">
+            {{"SYSTEM.SYSTEMMANAGEMENT.STATUS" | translate}}:
+        </span>
+        <span *ngIf="systemStatusList.length > 0" class="ms-1">
+            <i class="bi bi-circle-fill" style="font-size: large;"
+                [ngStyle]="{'color':  '#'+systemStatusList[0].color}">
+            </i>
+        </span>
+        <span *ngIf="systemStatusList.length > 0" class="ms-1">
+            {{systemStatusList[0].name}}
+        </span>
+    </div>
+
+    <div class="col-12 p-0">
+        <mat-stepper *ngIf="stepStatusList.length > 0" orientation="vertical" [linear]="false" #stepper>
+
+            <mat-step errorMessage="Incomplete">
+                <ng-template matStepLabel>
+                    <span style="font-weight: bold;">{{"SYSTEM.SYSTEMMANAGEMENT.SYSANDCUSTINFO" | translate}}</span>
+                    <span class="ms-4">
+                        <i *ngIf="stepStatusList[0].listStepStatus[0].idstepstatus == 10"
+                            class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[0].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[0].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[0].listStepStatus[0].idstepstatus == 15"
+                            class="bi bi-check-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[0].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[0].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[0].listStepStatus[0].idstepstatus == 5"
+                            class="bi bi-question-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color': '#'+stepStatusList[0].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[0].listStepStatus[0].name}}">
+                        </i>
+                    </span>
+                </ng-template>
+                <app-error-message *ngIf="stepStatusList[0].listStepStatus[0].idstepstatus == 10"
+                    [error]="stepStatusList[0].listStepStatus">
+                </app-error-message>
+                <app-step-one-readonly *ngIf="!(stepStatusList[0].listStepStatus[0].idstepstatus == 10
+                        && systemStatusList[0]?.id == 7)" #stepOne (nextStep)="stepper.next()"
+                    [idsystem]="idsystem" [countriesList]="countriesList" [stepOne]="systemInfo.stepOne">
+                </app-step-one-readonly>
+            </mat-step>
+
+            <mat-step errorMessage="Incomplete">
+                <ng-template matStepLabel>
+                    <span style="font-weight: bold;">
+                        {{"SYSTEM.SYSTEMMANAGEMENT.INSTALLATIONSITE" | translate}}
+                    </span>
+                    <span class="ms-4">
+                        <i *ngIf="stepStatusList[1].listStepStatus[0].idstepstatus == 10"
+                            class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[1].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[1].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[1].listStepStatus[0].idstepstatus == 15"
+                            class="bi bi-check-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[1].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[1].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[1].listStepStatus[0].idstepstatus == 5"
+                            class="bi bi-question-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[1].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[1].listStepStatus[0].name}}">
+                        </i>
+                    </span>
+                </ng-template>
+                <ng-template matStepContent>
+                    <app-error-message *ngIf="stepStatusList[1].listStepStatus[0].idstepstatus == 10"
+                        [error]="stepStatusList[1].listStepStatus">
+                    </app-error-message>
+                    <app-step-two-readonly *ngIf="!(stepStatusList[1].listStepStatus[0].idstepstatus == 10
+                            && systemStatusList[0]?.id == 7)" #stepTwo (nextStep)="stepper.next()"
+                        [countriesList]="countriesList" [idsystem]="idsystem" [stepTwo]="systemInfo.stepTwo">
+                    </app-step-two-readonly>
+                </ng-template>
+
+            </mat-step>
+
+            <mat-step errorMessage="Incomplete">
+                <ng-template matStepLabel>
+                    <span style="font-weight: bold;">
+                        {{"SYSTEM.SYSTEMMANAGEMENT.TECHNICIANINFO" | translate}}
+                    </span>
+                    <span class="ms-4">
+                        <i *ngIf="stepStatusList[2].listStepStatus[0].idstepstatus == 10"
+                            class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[2].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[2].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[2].listStepStatus[0].idstepstatus == 15"
+                            class="bi bi-check-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[2].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[2].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[2].listStepStatus[0].idstepstatus == 5"
+                            class="bi bi-question-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[2].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[2].listStepStatus[0].name}}">
+                        </i>
+                    </span>
+                </ng-template>
+                <ng-template matStepContent>
+                    <app-error-message *ngIf="stepStatusList[2].listStepStatus[0].idstepstatus == 10"
+                        [error]="stepStatusList[2].listStepStatus">
+                    </app-error-message>
+                    <app-step-three-readonly *ngIf="!(stepStatusList[2].listStepStatus[0].idstepstatus == 10
+                            && systemStatusList[0]?.id == 7)" #stepThree
+                        (nextStep)="stepper.next()" [stepThree]="systemInfo.stepThree" [countriesList]="countriesList"
+                        [idsystem]="idsystem">
+                    </app-step-three-readonly>
+                </ng-template>
+            </mat-step>
+
+            <mat-step errorMessage="Incomplete">
+                <ng-template matStepLabel>
+                    <span style="font-weight: bold;">
+                        {{"SYSTEM.SYSTEMMANAGEMENT.DEVICESINFO" | translate}}
+                    </span>
+                    <span class="ms-4">
+                        <i *ngIf="stepStatusList[3].listStepStatus[0].idstepstatus == 10"
+                            class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[3].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[3].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[3].listStepStatus[0].idstepstatus == 15"
+                            class="bi bi-check-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[3].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[3].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[3].listStepStatus[0].idstepstatus == 5"
+                            class="bi bi-question-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[3].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[3].listStepStatus[0].name}}">
+                        </i>
+                    </span>
+                </ng-template>
+                <ng-template matStepContent>
+                    <app-error-message *ngIf="stepStatusList[3].listStepStatus[0].idstepstatus == 10"
+                        [error]="stepStatusList[3].listStepStatus">
+                    </app-error-message>
+                    <app-step-four-readonly *ngIf="!(stepStatusList[3].listStepStatus[0].idstepstatus == 10
+                            && systemStatusList[0]?.id == 7 )" #stepFour
+                        (nextStep)="stepper.next()" [stepFour]="systemInfo.stepFour" [idsystem]="idsystem">
+                    </app-step-four-readonly>
+                </ng-template>
+            </mat-step>
+
+            <mat-step errorMessage="Incomplete">
+                <ng-template matStepLabel>
+                    <span style="font-weight: bold;">
+                        {{"SYSTEM.SYSTEMMANAGEMENT.INVERTER" | translate}}
+                    </span>
+                    <span class="ms-4">
+                        <i *ngIf="stepStatusList[4].listStepStatus[0].idstepstatus == 10"
+                            class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[4].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[4].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[4].listStepStatus[0].idstepstatus == 15"
+                            class="bi bi-check-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[4].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[4].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[4].listStepStatus[0].idstepstatus == 5"
+                            class="bi bi-question-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[4].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[4].listStepStatus[0].name}}">
+                        </i>
+                    </span>
+                </ng-template>
+                <ng-template matStepContent>
+                    <app-error-message *ngIf="stepStatusList[4].listStepStatus[0].idstepstatus == 10"
+                        [error]="stepStatusList[4].listStepStatus">
+                    </app-error-message>
+                    <app-step-five-readonly *ngIf="!(stepStatusList[4].listStepStatus[0].idstepstatus == 10
+                            && systemStatusList[0]?.id == 7)" #stepFive
+                        (nextStep)="stepper.next()" [stepFive]="systemInfo.stepFive" [idsystem]="idsystem">
+                    </app-step-five-readonly>
+                </ng-template>
+            </mat-step>
+
+            <mat-step *ngIf="systemInfo.stepFour.product_systemcomposition == 3 && stepStatusList.length > 4
+            && stepStatusList[5].listStepStatus.length > 0" errorMessage="Incomplete">
+                <ng-template matStepLabel>
+                    <span style="font-weight: bold;">
+                        {{"SYSTEM.SYSTEMMANAGEMENT.BATTERIES" | translate}}
+                    </span>
+                    <span class="ms-4">
+                        <i *ngIf="stepStatusList[5].listStepStatus[0].idstepstatus == 10"
+                            class="bi bi-exclamation-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[5].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[5].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[5] && stepStatusList[5].listStepStatus[0].idstepstatus == 15"
+                            class="bi bi-check-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[5].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[5].listStepStatus[0].name}}">
+                        </i>
+                        <i *ngIf="stepStatusList[5] && stepStatusList[5].listStepStatus[0].idstepstatus == 5"
+                            class="bi bi-question-circle-fill" style="font-size: large;"
+                            [ngStyle]="{'color':  '#'+stepStatusList[5].listStepStatus[0].color}"
+                            matTooltip="{{stepStatusList[5].listStepStatus[0].name}}">
+                        </i>
+                    </span>
+                </ng-template>
+                <ng-template matStepContent>
+                    <app-error-message *ngIf="stepStatusList[5].listStepStatus[0].idstepstatus == 10"
+                        [error]="stepStatusList[5].listStepStatus">
+                    </app-error-message>
+                    <app-step-six-readonly *ngIf="!(stepStatusList[5].listStepStatus[0].idstepstatus == 10
+                            && systemStatusList[0]?.id == 7)" #stepSix (nextStep)="stepper.next()"
+                        [stepSix]="systemInfo.stepSix" [idsystem]="idsystem">
+                    </app-step-six-readonly>
+                </ng-template>
+            </mat-step>
+        </mat-stepper>
+    </div>
+</mat-dialog-content>

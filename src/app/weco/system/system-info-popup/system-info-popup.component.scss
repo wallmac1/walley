@@ -1,0 +1,19 @@
+.mat-mdc-form-field {
+    margin-top: 16px;
+}
+
+.inline-bordered {
+    display: inline;
+    font-weight: bold;
+    border-bottom: 1px solid #ca2314;
+}
+
+.truncate-text {
+    max-width: 300px;
+    /* Larghezza massima */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    /* Assicura che funzioni bene negli span */
+}

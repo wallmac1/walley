@@ -86,3 +86,9 @@ mat-expansion-panel.mat-expanded mat-expansion-panel-header {
     transform: translateY(0);
     opacity: 1;
 }
+
+.cardElement {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}

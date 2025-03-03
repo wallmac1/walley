@@ -1,110 +1,163 @@
-<div class="container-fluid p-1 p-md-2 p-lg-3 p-xl-4" style="background-color: whitesmoke; min-height: 90vh;">
-    <div class="row justify-content-center">
-        <div class="col-12 mt-4" style="max-width: 1200px;">
-            <mat-expansion-panel class="customPanel ticketPanel" expanded appInViewport>
-                <mat-expansion-panel-header class="cutomPanelHeader">
-                    <mat-panel-title>
-                        <span class="panelTitle">
-                            <i class="bi bi-file-earmark-text me-2"></i>
-                            {{"TICKET.NEW.NEWTICKETSMALL" | translate}}
-                        </span>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
+<div class="container-fluid" style="min-width: 350px; max-width: 1000px; min-height: 94vh;">
+    <div class="row justify-content-center mt-2">
+        <div class="col-12 text-center">
+            <span style="font-weight: bold; font-size: xx-large;">
+                {{"SYSTEM.TICKETNEW.NEWTICKET" | translate}}
+            </span>
+        </div>
+    </div>
 
-                <div [formGroup]="newTicketForm" class="row justify-content-center mt-2 p-1 p-md-2 p-lg-3">
-                    <!-- EMAIL -->
-                    <div class="col-12 col-md-6">
-                        <label class="form-label" for="email">
-                            Email per la risposta
+    <div [formGroup]="newTicketForm"
+        class="row justify-content-start align-items-end mb-2 ps-0 ps-sm-3 ps-md-1 ps-lg-4 pe-0 pe-sm-3 pe-md-1 pe-lg-4">
+
+        <!-- PUBLIC -->
+        <div class="col-8 col-sm-4 col-lg-2 mt-2" style="height: 28px;">
+            <div class="form-check form-switch">
+                <label for="public" class="form-check-label" style="font-weight: bold;">
+                    {{"SYSTEM.TICKETNEW.PUBLIC" | translate}}
+                </label>
+                <input type="checkbox" class="form-check-input" role="switch" id="public" formControlName="public">
+            </div>
+        </div>
+
+        <!-- SYSTEM INFO -->
+        <div *ngIf="newTicketForm.get('idsystem')?.value != 0 && newTicketForm.get('idsystem')?.value != null"
+            class="col-4 col-sm-8 col-lg-10 mt-2">
+            <span style="font-weight: bold;">
+                {{"SYSTEM.TICKETNEW.SYSTEMINFO" | translate}}
+            </span>
+            <button class="btn btn-sm btn-outline-dark ms-2" id="systeminfo" (click)="systemInfoPopup()">
+                <i class="bi bi-card-text"></i>
+            </button>
+        </div>
+
+        <!-- ID TICKET -->
+        <div class="col-4 col-sm-3 col-md-2">
+            <label for="idticket" class="form-label">
+                {{"SYSTEM.TICKETNEW.ID" | translate}}
+            </label>
+            <input type="text" class="form-control" id="idticket" formControlName="idticket">
+        </div>
+
+        <!-- NUM DATE -->
+        <div class="col-8 col-sm-9 col-md-10">
+            <label for="num_date" class="form-label">
+                {{"SYSTEM.TICKETNEW.NUMDATE" | translate}}
+            </label>
+            <input type="text" class="form-control" id="num_date" formControlName="num_date" style="max-width: 200px;">
+        </div>
+
+        <!-- SYSTEM LIST -->
+        <div class="col-12 col-md-6">
+            <label class="form-label" for="idsystem">
+                {{"SYSTEM.TICKETNEW.SYSTEM" | translate}}
+            </label>
+            <select class="form-select" id="idsystem" formControlName="idsystem">
+                <option [ngValue]="null">--</option>
+                <option *ngFor="let system of systemList" [ngValue]="system.id">
+                    {{system.title}}
+                </option>
+            </select>
+        </div>
+
+        <!-- REQUEST -->
+        <div class="col-12 col-md-6">
+            <label class="form-label" for="request">
+                {{"SYSTEM.TICKETNEW.REQUEST" | translate}}
+            </label>
+            <select class="form-select" id="request" formControlName="request">
+                <option [ngValue]="null">
+                    --
+                </option>
+                <option *ngFor="let request of requestList" [ngValue]="request.id">
+                    {{request.title}}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-12 mt-3">
+            <span style="font-weight: bold; font-size: large; border-bottom: 1px solid lightgray;">
+                {{"SYSTEM.TICKETNEW.ANOMALYFOUNDED" | translate}}
+            </span>
+        </div>
+
+        <!-- INVERTER LIST -->
+        <div class="col-12 mt-2 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5 text-start" formArrayName="inverterList">
+            <span class="listTitle">
+                {{"SYSTEM.TICKETNEW.INVERTERLIST" | translate}}
+            </span>
+            <div class="row align-items-group mt-2" style="border-bottom: 1px solid lightgray;">
+                <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-start"
+                    *ngFor="let inverter of inverterList.controls; let i = index" [formGroupName]="i">
+                    <div class="form-check">
+                        <label class="form-check-label ms-2" for="selected_inverter-{{i}}">
+                            {{inverter.get('sn')?.value}}
                         </label>
-                        <input class="form-control" type="text" id="email" formControlName="email">
-                    </div>
-
-                    <!-- REQUEST -->
-                    <div class="col-12 col-md-6">
-                        <label class="form-label" for="request">
-                            Richiesta
-                        </label>
-                        <select class="form-select" id="request" formControlName="request">
-                            <option [ngValue]="null">
-                                --
-                            </option>
-                            <option *ngFor="let request of requestList" [ngValue]="request.id">
-                                {{request.title}}
-                            </option>
-                        </select>
-                    </div>
-
-                    <ng-container>
-                        <!-- INVERTER LIST -->
-                        <div class="col-12 col-md-6 mt-3 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5" 
-                            [ngStyle]="{'border-right': isSmallScreen ? 'none' : '1px solid lightgray'}"
-                            formArrayName="inverterList">
-                            <span class="listTitle">
-                                Lista Inverter
-                            </span>
-                            <div *ngFor="let inverter of inverterList.controls; let i = index" [formGroupName]="i"
-                                class="row justify-content-center align-items-group mt-2"
-                                style="border-bottom: 1px solid lightgray;">
-
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <label class="form-check-label ms-2">
-                                            {{inverter.get('sn')?.value}}
-                                        </label>
-                                        <input class="form-check-input" type="checkbox" name="selected" id="selected">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- BATTERY LIST -->
-                        <div class="col-12 col-md-6 mt-3 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5" 
-                            [ngStyle]="{'border-left': isSmallScreen ? 'none' : '1px solid lightgray'}"
-                            formArrayName="batteryList">
-                            <span class="listTitle">
-                                Lista Batterie
-                            </span>
-                            <div *ngFor="let battery of batteryList.controls; let i = index" [formGroupName]="i"
-                                class="row justify-content-center align-items-group mt-2"
-                                style="border-bottom: 1px solid lightgray;">
-
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <label class="form-check-label ms-2">
-                                            {{battery.get('sn')?.value}}
-                                        </label>
-                                        <input class="form-check-input" type="checkbox" name="selected" id="selected">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-
-                    <div class="col-12 mt-2">
-                        <label class="form-label" for="description">
-                            Descrizione del Problema
-                        </label>
-                        <textarea class="form-control" type="text" id="description" formControlName="description"
-                            rows="3">
-                        </textarea>
-                    </div>
-
-                    <div class="col-12 mt-2">
-                        <button class="btn btn-outline-dark">
-                            <i class="bi bi-paperclip"></i>
-                        </button>
+                        <input class="form-check-input" type="checkbox" id="selected_inverter-{{i}}">
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="row justify-content-end pt-1 ps-1 pe-1 pt-md-2 ps-md-2 pe-md-2 pt-lg-3 ps-lg-3 pe-lg-3" style="border-top: 1px solid lightgray;">
-                    <div class="col-auto">
-                        <button class="btn btn-outline-success" (click)="createTicket()">
-                            Crea
-                        </button>
+        <!-- BATTERY LIST -->
+        <div class="col-12 mt-2 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5 text-start" formArrayName="batteryList">
+            <span class="listTitle">
+                {{"SYSTEM.TICKETNEW.BATTERYLIST" | translate}}
+            </span>
+            <div class="row align-items-group mt-2" style="border-bottom: 1px solid lightgray;">
+
+                <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-start"
+                    *ngFor="let battery of batteryList.controls; let i = index" [formGroupName]="i">
+                    <div class="form-check">
+                        <label class="form-check-label ms-2" for="selected_battery-{{i}}">
+                            {{battery.get('sn')?.value}}
+                        </label>
+                        <input class="form-check-input" type="checkbox" id="selected_battery-{{i}}">
                     </div>
                 </div>
-            </mat-expansion-panel>
+            </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="col-12 mt-2">
+            <label for="description" class="form-label">
+                {{"SYSTEM.TICKETNEW.DESCRIPTION" | translate}}
+            </label>
+            <textarea type="text" class="form-control" id="description" formControlName="description"
+                rows="3"></textarea>
+        </div>
+
+        <!-- INTERNAL NOTES -->
+        <div class="col-12 mt-2">
+            <label for="internal_notes" class="form-label">
+                {{"SYSTEM.TICKETNEW.INTERNALNOTES" | translate}}
+            </label>
+            <textarea type="text" class="form-control" id="internal_notes" formControlName="internal_notes"
+                rows="2"></textarea>
+        </div>
+
+
+        <!-- ATTACHMENTS -->
+        <div class="col-12 mt-2 text-end">
+            <label *ngIf="fileList.length < maxImages" for="fileUpload2" class="btn btn-outline-dark mt-1">
+                <i class="bi bi-paperclip"></i>
+                <input type="file" id="fileUpload2" style="display: none;" (change)="onFileSelected($event)" multiple>
+            </label>
+
+            <div class="row justify-content-center mt-2">
+                <div *ngFor="let img of imagesList" class="col-auto">
+                    <img style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
+                        [src]="'assets/img/'+img.src" [title]="img.src">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-12 text-end">
+            <button class="btn btn-success me-2" style="width: 100px;" (click)="create()">
+                {{"SYSTEM.TICKETNEW.CREATE" | translate}}
+            </button>
         </div>
     </div>
 </div>

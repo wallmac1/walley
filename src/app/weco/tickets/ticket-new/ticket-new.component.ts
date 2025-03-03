@@ -5,7 +5,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { InViewportDirective } from '../../../directives/in-viewport.directive';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
-import { Route, Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Connect } from '../../../classes/connect';
+import { SystemInfoPopupComponent } from '../../system/system-info-popup/system-info-popup.component';
+import { ConnectServerService } from '../../../services/connect-server.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Image } from '../../interfaces/image';
 
 @Component({
   selector: 'app-ticket-new',
@@ -13,10 +18,7 @@ import { Route, Router } from '@angular/router';
   imports: [
     CommonModule,
     TranslateModule,
-    MatExpansionModule,
-    InViewportDirective,
     ReactiveFormsModule,
-    QuillModule
   ],
   templateUrl: './ticket-new.component.html',
   styleUrl: './ticket-new.component.scss'
@@ -24,40 +26,92 @@ import { Route, Router } from '@angular/router';
 export class TicketNewComponent {
 
   newTicketForm!: FormGroup;
+  idsystem: number = 0;
+  idpopup: number = 0;
+  systemList: { id: number, title: string }[] = [];
   requestList: { id: number, title: string }[] = [];
-  isSmallScreen: boolean = false;
+  imageSpaceLeft: boolean = true;
+  imagesList: Image[] = [];
+  maxImages: number = 10;
+  fileList: File[] = [];
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor( private connectServerService: ConnectServerService, private fb: FormBuilder,
+    private dialog: MatDialog, private route: ActivatedRoute, private router: Router) {
+
+      this.route.queryParamMap.subscribe(params => {
+         this.idsystem = parseInt(params.get('idsystem') || '0')
+       });
+    
     this.newTicketForm = this.fb.group({
-      email: [null],
+      public: [false],
+      idticket: [{ value: 0, disabled: true }],
+      num_date: [{ value: null, disabled: true }],
+      idsystem: [this.idsystem],
       request: [null],
       description: [null],
-      inverterList: this.fb.array([this.createInverterEmpty()]),
-      batteryList: this.fb.array([this.createBatteryEmpty()])
+      internal_notes: [null],
+      inverterList: this.fb.array([]),
+      batteryList: this.fb.array([])
     })
   }
 
   ngOnInit(): void {
-    this.getData();
+    this.getSystemInfo();
+    this.getSystemsSelect();
+    this.getRequestSelect();
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event): void {
-    this.updateWindowDimensions();
+  get inverterList(): FormArray {
+    return this.newTicketForm.get('inverterList') as FormArray;
   }
 
-  updateWindowDimensions() {
-    if (window.innerWidth < 768) {
-      this.isSmallScreen = true;
-    }
-    else {
-      this.isSmallScreen = false;
-    }
+  get batteryList(): FormArray {
+    return this.newTicketForm.get('batteryList') as FormArray;
   }
 
-  getData() {
-    // CHIAMATA AL SERVER. SE PRESENTI INVERTER O BATTERIE CREA LISTE
+  createInverter(inverter: any) {
+    return this.fb.group({
+      id: [inverter.id],
+      sn: [inverter.sn],
+      selected_inverter: [inverter.selected],
+    })
+  }
+
+  createBattery(battery: any) {
+    return this.fb.group({
+      id: [battery.id],
+      sn: [battery.sn],
+      selected_battery: [battery.sn],
+    })
+  }
+
+  createInverterList(inverterList: any[]) {
+    this.inverterList.reset();
+    inverterList.forEach((inverter) => {
+      this.inverterList.push(this.createInverter(inverter));
+    })
+  }
+
+  createBatteryList(batteryList: any[]) {
+    this.batteryList.reset();
+    batteryList.forEach((battery) => {
+      this.batteryList.push(this.createBattery(battery));
+    })
+  }
+
+  getSystemsSelect() {
+
+  }
+
+  getRequestSelect() {
+
+  }
+
+  getSystemInfo() {
     const sampleInverters = [
+      { id: 1, sn: 'INV-001', selected: 1 },
+      { id: 2, sn: 'INV-002', selected: 0 },
+      { id: 3, sn: 'INV-003', selected: 0 },
       { id: 1, sn: 'INV-001', selected: 1 },
       { id: 2, sn: 'INV-002', selected: 0 },
       { id: 3, sn: 'INV-003', selected: 0 }
@@ -72,68 +126,61 @@ export class TicketNewComponent {
     this.createBatteryList(sampleBatteries);
   }
 
-  get inverterList(): FormArray {
-    return this.newTicketForm.get('inverterList') as FormArray;
+  systemInfoPopup() {
+    //console.log("IDSYSTEM", this.idsystem)
+    const dialogRef = this.dialog.open(SystemInfoPopupComponent, {
+      maxWidth: '900px',
+      minWidth: '350px',
+      maxHeight: '800px',
+      width: '90%',
+      data: { idsystem: this.idsystem }
+    });
   }
 
-  get batteryList(): FormArray {
-    return this.newTicketForm.get('batteryList') as FormArray;
-  }
-
-  createInverterEmpty() {
-    return this.fb.group({
-      id: [0],
-      sn: [null],
-      selected: [0],
-    })
-  }
-
-  createBatteryEmpty() {
-    return this.fb.group({
-      id: [0],
-      sn: [null],
-      selected: [0],
-    })
-  }
-
-  createInverter(inverter: any) {
-    return this.fb.group({
-      id: [inverter.id],
-      sn: [inverter.sn],
-      selected: [inverter.selected],
-    })
-  }
-
-  createBattery(battery: any) {
-    return this.fb.group({
-      id: [battery.id],
-      sn: [battery.sn],
-      selected: [battery.sn],
-    })
-  }
-
-  createInverterList(inverterList: any[]) {
-    if (this.inverterList.length > 0) {
-      this.inverterList.controls.splice(0, 1);
+  /**
+* Quando si seleziona i file
+* @param event
+*/
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.fileList = Array.from(input.files);
+      this.uploadFilesServer();
     }
-    inverterList.forEach((inverter) => {
-      this.inverterList.push(this.createInverter(inverter));
-    })
+  }
+  /**
+   * Reset la selezione dei file quando importato
+   */
+  private resetFileInput() {
+    const fileInput = document.getElementById('fileUpload2') as HTMLInputElement;
+    fileInput.value = '';
+    this.fileList = [];
   }
 
-  createBatteryList(batteryList: any[]) {
-    if (this.batteryList.length > 0) {
-      this.batteryList.controls.splice(0, 1);
+  private uploadFilesServer() {
+    // this.imagesStep2 = this.uploadImageService.getImagesStep2();
+    const formData = new FormData();
+    formData.append("folder", Connect.FOLDER_STEP_TWO);
+    formData.append("size", Connect.FILE_SIZE.toString());
+    formData.append("size_string", Connect.FILE_SIZE_STRING);
+    //formData.append("idsystem", this.idsystem.toString());
+    formData.append("step_position", "2");
+    if (this.fileList && this.fileList.length + this.imagesList.length <= this.maxImages) {
+      this.fileList.forEach((file, index) => {
+        formData.append(`files[]`, file);
+      });
+      //this.setImages(formData);
+      this.imageSpaceLeft = true;
     }
-    batteryList.forEach((battery) => {
-      this.batteryList.push(this.createBattery(battery));
-    })
+    else {
+      this.imageSpaceLeft = false;
+    }
   }
 
-  createTicket() {
-    // CHIAMATA AL SERVER E POI NAVIGA CON L'ID RESTITUITO
-    const id = 0
-    this.router.navigate(['ticketModifyWeco', id])
+  create() { 
+    // CHIAMATA AL SERVER E POI SI NAVIGA ALLA PAGINA CON L'ID DEL TICKET RESTITUITO
+    const idticket = 0;
+    this.router.navigate(['ticket', idticket])
   }
 
 }
