@@ -64,6 +64,17 @@
         </div>
     </div>
 
+    <div class="row justify-content-center mt-4">
+        <div class="col-auto">
+            {{"SYSTEM.TICKETLIST.ACTIVEFILTERS" | translate}}:
+        </div>
+        <div class="col-auto">
+            <span *ngIf="filterForm.get('status')?.value != null">
+
+            </span>
+        </div>
+    </div>
+
     <div class="row justify-content-center">
         <app-ticket-table></app-ticket-table>
     </div>
