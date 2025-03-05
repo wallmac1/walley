@@ -427,12 +427,18 @@
     },
     "TICKETLIST": {
       "TICKETLIST": "Lista Ticket",
+      "FILTERS": "Filtri",
       "ID": "ID",
       "DATE": "Data",
       "STATUS": "Stato",
       "MESSAGE": "Messaggio",
       "USERCREATED": "Aperto da",
-      "INCHARGE": "In Carico"
+      "INCHARGE": "In Carico",
+      "OWNERNAME": "Proprietario Impianto",
+      "TECHNICIANNAME": "Tecnico Impianto",
+      "SYSTEMNAME": "Nome dell'Impianto",
+      "FILTER": "Filtra",
+      "ACTIVEFILTERS": "Filtri Attivi"
     },
     "TICKETNEW": {
       "NEWTICKET": "Nuovo Ticket",

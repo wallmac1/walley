@@ -8,12 +8,63 @@
     </div>
 
     <div class="row justify-content-center mt-4">
-        <div class="col-12 cardElement p-1 p-sm-2 p-md-3 p-lg-4" style="max-width: 1000px;">
-            <span style="font-weight: bold;">
-                <span style="font-weight: bold; ">
+        <div class="col-12 cardElement p-1 p-sm-2 p-lg-3" style="max-width: 1000px;">
+            <div class="row">
+                <!-- <div class="col-12 text-center">
+                    <span style="font-weight: bold;">
+                        <span style="font-weight: bold; font-size: x-large;">
+                            {{"SYSTEM.TICKETLIST.FILTERS" | translate}}
+                        </span>
+                    </span>
+                </div> -->
 
-                </span>
-            </span>
+                <div class="col-12 col-sm-6">
+                    <label class="form-label" for="status">
+                        {{"SYSTEM.TICKETLIST.STATUS" | translate}}
+                    </label>
+                    <select class="form-select" id="status" formControlName="status">
+                        <option [value]="null">
+                            --
+                        </option>
+                        <option *ngFor="let status of statusList" [ngValue]="status.id">
+                            {{status.name}}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                    <label class="form-label" for="owner">
+                        {{"SYSTEM.TICKETLIST.OWNERNAME" | translate}}
+                    </label>
+                    <input class="form-control" id="owner" formControlName="owner">
+                </div>
+
+                <div class="col-12 col-sm-6 mt-2">
+                    <label class="form-label" for="technician">
+                        {{"SYSTEM.TICKETLIST.TECHNICIANNAME" | translate}}
+                    </label>
+                    <input class="form-control" id="technician" formControlName="technician">
+                </div>
+
+                <div class="col-12 col-sm-6 mt-2">
+                    <label class="form-label" for="system">
+                        {{"SYSTEM.TICKETLIST.SYSTEMNAME" | translate}}
+                    </label>
+                    <input class="form-control" id="system" formControlName="system">
+                </div>
+            </div>
+
+            <div class="row mt-4 justify-content-end" style="border-top: 1px solid lightgray;">
+                <div class="col-auto mt-2">
+                    <button class="btn btn-outline-dark">
+                        {{"SYSTEM.TICKETLIST.FILTER" | translate}}
+                    </button>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <app-ticket-table></app-ticket-table>
     </div>
 </div>
