@@ -429,7 +429,7 @@
       "TICKETLIST": "Lista Ticket",
       "FILTERS": "Filtri",
       "ID": "ID",
-      "DATE": "Data",
+      "DATE": "Progressivo/Data",
       "STATUS": "Stato",
       "MESSAGE": "Messaggio",
       "USERCREATED": "Aperto da",
@@ -479,7 +479,9 @@
       "UPDATE": "Aggiorna",
       "CREATEDFROM": "Creato da",
       "UPDATEDFROM": "Aggiornato da",
-      "DELETE": "Elimina"
+      "DELETE": "Elimina",
+      "SAVE": "Salva",
+      "CHANGESTATUS": "Cambia Stato"
     }
   },
   "VOUCHER": {

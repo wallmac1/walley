@@ -1,0 +1,36 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #fcf3cf;">
+    <span style="font-weight: bold; font-size: x-large;">
+        {{"SYSTEM.TICKETMODIFY.CHANGESTATUS" | translate }}
+    </span>
+</h2>
+
+<mat-dialog-content>
+    <div [formGroup]="changeStatusForm" class="row justify-content-center align-items-center p-3">
+        <div class="col-12">
+            <label class="form-label" for="idstatus">
+                {{"SYSTEM.TICKETMODIFY.STATUS" | translate }}
+            </label>
+            <select class="form-select" id="idstatus">
+                <option [value]="null">
+                    --
+                </option>
+                <option *ngFor="let status of statusList" [ngValue]="status.idstatus">
+                    {{status.name}}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-6 text-start">
+            <button class="btn btn-outline-success" style="width: 80px;" (click)="close()">
+                {{"SYSTEM.TICKETMODIFY.SAVE" | translate }}
+            </button>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-outline-dark" style="width: 80px;" (click)="close()">
+                {{"SYSTEM.TICKETMODIFY.CLOSE" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>

@@ -4,13 +4,13 @@
     </a>
 </div>
 
-<div class="container-fluid ps-1 pe-1 ps-md-2 pe-md-2 ps-lg-3 pe-lg-3 ps-xl-4 pe-xl-4 ps-xxl-5 pe-xxl-5"
+<div class="container-fluid ps-1 pe-1 ps-md-2 pe-md-2 ps-lg-3 pe-lg-3 ps-xl-4 pe-xl-4 ps-xxl-5 pe-xxl-5 pb-5"
     style="background-color: white; min-height: 90vh; min-width: 350px; max-width: 1600px;">
 
     <!-- FIRST CARD -->
-    <div [formGroup]="ticketInfoForm" class="row justify-content-center mb-5"
-        style="position: sticky; top: 70px; z-index: 100;">
-        <div class="col-10" style="max-width: 1424px; width: 100%;">
+    <div [formGroup]="ticketInfoForm" class="row justify-content-center card-width mb-2"
+        style="position: sticky; top: 0px; z-index: 100;">
+        <div class="col-12 col-md-11 mt-2">
             <mat-expansion-panel style="z-index: 101;" class="customPanel ticketPanel" #panel expanded appInViewport>
                 <mat-expansion-panel-header class="cutomPanelHeader" style="background-color:#fcf3cf ">
                     <mat-panel-title style="justify-content: start;">
@@ -43,7 +43,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row justify-content-center mt-2">
-                    <div class="col-12 col-md-4 mt-1">
+                    <div class="col-6 text-start mt-1">
                         <span class="ticketInfoTitle">
                             {{"SYSTEM.TICKETMODIFY.SYSTEMINFO" | translate}}
                         </span>
@@ -51,7 +51,7 @@
                             <i class="bi bi-card-text"></i>
                         </button>
                     </div>
-                    <div class="col-12 col-md-4 mt-1">
+                    <div class="col-6 text-end mt-1">
                         <span class="ticketInfoTitle">
                             {{"SYSTEM.TICKETMODIFY.OPENEDFROM" | translate}}:
                         </span><br *ngIf="isSmallScreen">
@@ -60,17 +60,7 @@
                         </span>
                     </div>
 
-                    <div class="col-12 col-md-4 mt-1">
-                        <span class="ticketInfoTitle">
-                            {{"SYSTEM.TICKETMODIFY.PROGRESSIVE" | translate}}:
-                        </span><br *ngIf="isSmallScreen">
-                        <span class="ticketInfoContent">
-                            {{ticketInfo?.progressive}}/
-                            {{ticketInfo?.openingDate}}
-                        </span>
-                    </div>
-
-                    <div class="col-12 col-md-6 mt-1">
+                    <div class="col-12 col-sm-6 text-start mt-1">
                         <label class="form-label" for="email">
                             {{"SYSTEM.TICKETMODIFY.ANSWEREMAIL" | translate}}
                         </label><br *ngIf="isSmallScreen">
@@ -78,18 +68,14 @@
                             style="max-width: 350px;">
                     </div>
 
-                    <div class="col-12 col-md-6 mt-1">
-                        <label class="form-label" for="request">
-                            {{"SYSTEM.TICKETMODIFY.REQUESTTYPE" | translate}}:
-                        </label>
-                        <select class="form-select" id="request" formControlName="request" style="max-width: 350px;">
-                            <option [value]="null">
-                                --
-                            </option>
-                            <option *ngFor="let request of requestList" [ngValue]="request.id">
-                                {{request.title}}
-                            </option>
-                        </select>
+                    <div class="col-12 col-sm-6 text-start text-sm-end mt-1">
+                        <span class="ticketInfoTitle">
+                            {{"SYSTEM.TICKETMODIFY.PROGRESSIVE" | translate}}:
+                        </span><br *ngIf="isSmallScreen">
+                        <span class="ticketInfoContent">
+                            {{ticketInfo?.progressive}}/
+                            {{ticketInfo?.openingDate}}
+                        </span>
                     </div>
                 </div>
 
@@ -142,13 +128,58 @@
 
                 <div class="row justify-content-center mt-2">
                     <!-- DESCRIPTION -->
-                    <div class="col-12">
-                        <label class="form-label" for="description">
-                            {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
-                        </label>
-                        <textarea class="form-control" type="text" id="description" formControlName="description"
-                            rows="3">
-                        </textarea>
+                    <div class="col-12 mt-2 mb-2 quillContainer"
+                        [ngClass]="{ 'is-invalid': newMessageForm.get('description')?.invalid && submitted }">
+                        <quill-editor formControlName="description" id="description"
+                            [class.is-invalid]="newMessageForm.get('description')?.invalid && submitted">
+                            <div above-quill-editor-toolbar>
+                                <span class="form-label" for="description">
+                                    {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
+                                </span>
+                            </div>
+                            <div quill-editor-toolbar style="background-color: white;">
+                                <span class="ql-formats">
+                                    <button class="ql-bold" title="Bold"></button>
+                                    <button class="ql-italic" title="Italic"></button>
+                                    <button class="ql-underline" title="Underline"></button>
+                                    <button class="ql-strike" title="Strikethrough"></button>
+                                </span>
+
+                                <span class="ql-formats">
+                                    <select class="ql-font" title="Font Style">
+                                        <option selected></option>
+                                        <option value="serif"></option>
+                                        <option value="monospace"></option>
+                                    </select>
+                                    <select class="ql-size" title="Font Size">
+                                        <option value="small"></option>
+                                        <option selected></option>
+                                        <option value="large"></option>
+                                        <option value="huge"></option>
+                                    </select>
+                                </span>
+
+                                <span class="ql-formats">
+                                    <button class="ql-list" value="ordered" title="Ordered List"></button>
+                                    <button class="ql-list" value="bullet" title="Bullet List"></button>
+                                    <button class="ql-indent" value="-1" title="Decrease Indent"></button>
+                                    <button class="ql-indent" value="+1" title="Increase Indent"></button>
+                                </span>
+
+                                <span class="ql-formats">
+                                    <select class="ql-align" title="Align">
+                                        <option selected></option>
+                                        <option value="center"></option>
+                                        <option value="right"></option>
+                                        <option value="justify"></option>
+                                    </select>
+                                </span>
+
+                                <span class="ql-formats">
+                                    <select class="ql-color" title="Text Color"></select>
+                                </span>
+                            </div>
+                        </quill-editor>
                     </div>
 
                     <!-- INTERNAL NOTES -->
@@ -202,8 +233,8 @@
     </div>
 
     <div class="row justify-content-center ps-3 pe-3 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5">
-        <div class="col-12 text-end p-0 mt-5">
-            <button class="btn btn-dark" (click)="changeVisualization()">
+        <div class="col-12 text-end p-0 mt-5 me-lg-5">
+            <button class="btn btn-dark btnHover" (click)="changeVisualization()" style="border-radius: 20px;">
                 <span *ngIf="visualizeAll; else visualizePublicBlock">
                     Visualizzazione Cliente
                 </span>
@@ -265,7 +296,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row justify-content-center mt-2">
+                                <div class="row justify-content-center mt-2 mb-1">
                                     <div *ngFor="let file of message.get('attached_files')?.value" class="col-auto">
                                         <img class="imgThumb" [src]="'assets/img/'+file.src" [title]="file.src"
                                             (click)="viewImage(file)">
@@ -294,12 +325,61 @@
                                 </div>
 
                                 <div class="row justify-content-center">
-                                    <div *ngIf="visualizeAll; else textBlock" class="col-12 mt-2">
-                                        <label class="form-label" for="description-{{i}}">
-                                            {{"SYSTEM.TICKETMODIFY.MESSAGE" | translate}}
-                                        </label>
-                                        <textarea class="form-control" type="text" rows="3" id="description-{{i}}"
-                                            formControlName="description"></textarea>
+                                    <div *ngIf="visualizeAll; else textBlock" class="col-12 mt-2 quillContainer"
+                                        [ngClass]="{ 'is-invalid': newMessageForm.get('description')?.invalid && submitted }">
+                                        <quill-editor formControlName="description" id="description"
+                                            [class.is-invalid]="newMessageForm.get('description')?.invalid && submitted">
+                                            <div above-quill-editor-toolbar>
+                                                <span class="form-label" for="description">
+                                                    {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
+                                                </span>
+                                            </div>
+                                            <div quill-editor-toolbar style="background-color: white;">
+                                                <span class="ql-formats">
+                                                    <button class="ql-bold" title="Bold"></button>
+                                                    <button class="ql-italic" title="Italic"></button>
+                                                    <button class="ql-underline" title="Underline"></button>
+                                                    <button class="ql-strike" title="Strikethrough"></button>
+                                                </span>
+
+                                                <span class="ql-formats">
+                                                    <select class="ql-font" title="Font Style">
+                                                        <option selected></option>
+                                                        <option value="serif"></option>
+                                                        <option value="monospace"></option>
+                                                    </select>
+                                                    <select class="ql-size" title="Font Size">
+                                                        <option value="small"></option>
+                                                        <option selected></option>
+                                                        <option value="large"></option>
+                                                        <option value="huge"></option>
+                                                    </select>
+                                                </span>
+
+                                                <span class="ql-formats">
+                                                    <button class="ql-list" value="ordered"
+                                                        title="Ordered List"></button>
+                                                    <button class="ql-list" value="bullet" title="Bullet List"></button>
+                                                    <button class="ql-indent" value="-1"
+                                                        title="Decrease Indent"></button>
+                                                    <button class="ql-indent" value="+1"
+                                                        title="Increase Indent"></button>
+                                                </span>
+
+                                                <span class="ql-formats">
+                                                    <select class="ql-align" title="Align">
+                                                        <option selected></option>
+                                                        <option value="center"></option>
+                                                        <option value="right"></option>
+                                                        <option value="justify"></option>
+                                                    </select>
+                                                </span>
+
+                                                <span class="ql-formats">
+                                                    <select class="ql-color" title="Text Color"></select>
+                                                </span>
+                                            </div>
+                                        </quill-editor>
                                     </div>
                                     <ng-template #textBlock>
                                         <div class="col-12 mt-2">
@@ -318,7 +398,8 @@
                                         style="position: relative;">
                                         <img class="imgThumb" (click)="viewImage(file)" [src]="'assets/img/'+file.src"
                                             [title]="file.src">
-                                        <button *ngIf="visualizeAll" class="btn btn-danger btn-zoom p-0" style=" position: absolute; top: -4px; right: 8px;">
+                                        <button *ngIf="visualizeAll" class="btn btn-danger btn-zoom p-0"
+                                            style=" position: absolute; top: -4px; right: 8px;">
                                             <i class="bi bi-x"></i>
                                         </button>
                                     </div>
@@ -415,12 +496,58 @@
                         </div>
 
                         <div class="row justify-content-center">
-                            <div class="col-12 mt-2">
-                                <label class="form-label">
-                                    {{"SYSTEM.TICKETMODIFY.MESSAGE" | translate}}
-                                </label>
-                                <textarea class="form-control" type="text" rows="3"
-                                    formControlName="description"></textarea>
+                            <div class="col-12 mt-2 quillContainer"
+                                [ngClass]="{ 'is-invalid': newMessageForm.get('description')?.invalid && submitted }">
+                                <quill-editor formControlName="description" id="description"
+                                    [class.is-invalid]="newMessageForm.get('description')?.invalid && submitted">
+                                    <div above-quill-editor-toolbar>
+                                        <span class="form-label" for="description">
+                                            {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
+                                        </span>
+                                    </div>
+                                    <div quill-editor-toolbar style="background-color: white;">
+                                        <span class="ql-formats">
+                                            <button class="ql-bold" title="Bold"></button>
+                                            <button class="ql-italic" title="Italic"></button>
+                                            <button class="ql-underline" title="Underline"></button>
+                                            <button class="ql-strike" title="Strikethrough"></button>
+                                        </span>
+
+                                        <span class="ql-formats">
+                                            <select class="ql-font" title="Font Style">
+                                                <option selected></option>
+                                                <option value="serif"></option>
+                                                <option value="monospace"></option>
+                                            </select>
+                                            <select class="ql-size" title="Font Size">
+                                                <option value="small"></option>
+                                                <option selected></option>
+                                                <option value="large"></option>
+                                                <option value="huge"></option>
+                                            </select>
+                                        </span>
+
+                                        <span class="ql-formats">
+                                            <button class="ql-list" value="ordered" title="Ordered List"></button>
+                                            <button class="ql-list" value="bullet" title="Bullet List"></button>
+                                            <button class="ql-indent" value="-1" title="Decrease Indent"></button>
+                                            <button class="ql-indent" value="+1" title="Increase Indent"></button>
+                                        </span>
+
+                                        <span class="ql-formats">
+                                            <select class="ql-align" title="Align">
+                                                <option selected></option>
+                                                <option value="center"></option>
+                                                <option value="right"></option>
+                                                <option value="justify"></option>
+                                            </select>
+                                        </span>
+
+                                        <span class="ql-formats">
+                                            <select class="ql-color" title="Text Color"></select>
+                                        </span>
+                                    </div>
+                                </quill-editor>
                             </div>
 
                             <div class="col-12 mt-2">
@@ -446,31 +573,29 @@
         </div>
     </form>
 
-    <div class="btn-bottom" style="position: sticky; bottom: 10px; right: 20px; float: right; z-index: 1000;">
-        <button class="btn btn-dark" [matMenuTriggerFor]="menu">
-            <i class="bi bi-three-dots-vertical"></i>
+    <button class="btn btn-dark btnSticky" [matMenuTriggerFor]="menu">
+        <i class="bi bi-three-dots-vertical"></i>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button *ngIf="true; else releaseBlock" mat-menu-item (click)="takeOnCharge()">
+            <i class="bi bi-person-raised-hand me-2"></i>
+            <span>{{"TICKET.MODIFY.TAKEONCHARGE" | translate }}</span>
         </button>
-        <mat-menu #menu="matMenu">
-            <button *ngIf="true; else releaseBlock" mat-menu-item (click)="takeOnCharge()">
-                <i class="bi bi-person-raised-hand me-2"></i>
-                <span>{{"TICKET.MODIFY.TAKEONCHARGE" | translate }}</span>
+        <ng-template #releaseBlock>
+            <button mat-menu-item (click)="release()">
+                <i class="bi bi-person-standing me-2"></i>
+                <span>{{"TICKET.MODIFY.RELEASE" | translate }}</span>
             </button>
-            <ng-template #releaseBlock>
-                <button mat-menu-item (click)="release()">
-                    <i class="bi bi-person-standing me-2"></i>
-                    <span>{{"TICKET.MODIFY.RELEASE" | translate }}</span>
-                </button>
-            </ng-template>
-            <button mat-menu-item (click)="newMessage()">
-                <i class="bi bi-chat-right-text me-2"></i>
-                <span>{{"TICKET.MODIFY.ADDMESSAGE" | translate }}</span>
-            </button>
-            <button mat-menu-item (click)="changeStatus()">
-                <i class="bi bi-arrow-clockwise me-2"></i>
-                <span>{{"TICKET.MODIFY.CHANGESTATUS" | translate }}</span>
-            </button>
-        </mat-menu>
-    </div>
+        </ng-template>
+        <button mat-menu-item (click)="newMessage()">
+            <i class="bi bi-chat-right-text me-2"></i>
+            <span>{{"TICKET.MODIFY.ADDMESSAGE" | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="changeStatus()">
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            <span>{{"TICKET.MODIFY.CHANGESTATUS" | translate }}</span>
+        </button>
+    </mat-menu>
 </div>
 
 <div #bottomAnchor></div>

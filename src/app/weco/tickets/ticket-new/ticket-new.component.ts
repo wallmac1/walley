@@ -46,7 +46,7 @@ export class TicketNewComponent {
       public: [false],
       idticket: [{ value: 0, disabled: true }],
       num_date: [{ value: null, disabled: true }],
-      idsystem: [this.idsystem],
+      idsystem: [{value: this.idsystem, disabled: true}],
       request: [null],
       description: [null],
       internal_notes: [null],

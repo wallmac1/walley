@@ -1,7 +1,7 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component, ElementRef, HostListener, SecurityContext, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
 import { InViewportDirective } from '../../../directives/in-viewport.directive';
 import { TicketInfo } from '../interfaces/ticket-info';
@@ -17,6 +17,8 @@ import { ImageViewerComponent } from '../../../voucher/image-viewer/image-viewer
 import { SystemInfoPopupComponent } from '../../system/system-info-popup/system-info-popup.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { Message } from '../interfaces/message';
+import { QuillModule } from 'ngx-quill';
+import { ChangeStatusPopupComponent } from './components/change-status-popup/change-status-popup.component';
 
 @Component({
   selector: 'app-ticket-modify',
@@ -27,13 +29,15 @@ import { Message } from '../interfaces/message';
     MatExpansionModule,
     TranslateModule,
     InViewportDirective,
-    MatMenuModule
+    MatMenuModule,
+    QuillModule
   ],
   templateUrl: './ticket-modify.component.html',
   styleUrl: './ticket-modify.component.scss'
 })
 export class TicketModifyComponent {
 
+  @ViewChild('panel') panelComponent!: MatExpansionPanel;
   @ViewChild('bottomAnchor') bottomAnchor!: ElementRef;
   isNewMessage: boolean = false;
   ticketInfo: TicketInfo | null = null;
@@ -49,6 +53,7 @@ export class TicketModifyComponent {
   // isAtBottom: boolean = false;
   // isAtBottomSm: boolean = false;
   visualizeAll = true;
+  submitted: boolean = false;
 
   newAttachedFiles: any[] = [];
   newMessageForm = new FormGroup({
@@ -193,6 +198,7 @@ export class TicketModifyComponent {
       date: dateStr,
       time: timeStr,
     });
+    this.panelComponent.close();
     setTimeout(() => {
       this.bottomAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
     }, 100);
@@ -259,7 +265,7 @@ export class TicketModifyComponent {
     if (this.ticketInfo?.batteryList) {
       this.createBatteryList(this.ticketInfo?.batteryList);
     }
-    if(this.ticketInfo?.inverterList) {
+    if (this.ticketInfo?.inverterList) {
       this.createInverterList(this.ticketInfo?.inverterList);
     }
   }
@@ -293,15 +299,15 @@ export class TicketModifyComponent {
         description: "Messaggio di benvenuto",
         public: 1,
         attached_files: [
-            { id: 101, src: "trial.jpeg", ext: "jpeg", title: "Immagine 1" }
+          { id: 101, src: "trial.jpeg", ext: "jpeg", title: "Immagine 1" }
         ],
         portal: 0,
         user_created: {
-            id: 1,
-            nickname: "admin",
-            datetime: "2023-01-15T10:30:00",
-            date_only: "2023-01-15",
-            time_only: "10:30:00"
+          id: 1,
+          nickname: "admin",
+          datetime: "2023-01-15T10:30:00",
+          date_only: "2023-01-15",
+          time_only: "10:30:00"
         },
         user_updated: {
           id: 1,
@@ -309,22 +315,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 2,
         description: "Documentazione aggiornata",
         public: 0,
         attached_files: [
-            { id: 102, src: "pic1.jpg", ext: "jpg", title: "Manuale" }
+          { id: 102, src: "pic1.jpg", ext: "jpg", title: "Manuale" }
         ],
         portal: 1,
         user_created: {
-            id: 2,
-            nickname: "user123",
-            datetime: "2023-02-10T14:45:00",
-            date_only: "2023-02-10",
-            time_only: "14:45:00"
+          id: 2,
+          nickname: "user123",
+          datetime: "2023-02-10T14:45:00",
+          date_only: "2023-02-10",
+          time_only: "14:45:00"
         },
         user_updated: {
           id: 1,
@@ -332,20 +338,20 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 3,
         description: "Nota interna",
         public: null,
         attached_files: [],
         portal: 0,
         user_created: {
-            id: 3,
-            nickname: "supervisor",
-            datetime: "2023-03-05T09:15:00",
-            date_only: "2023-03-05",
-            time_only: "09:15:00"
+          id: 3,
+          nickname: "supervisor",
+          datetime: "2023-03-05T09:15:00",
+          date_only: "2023-03-05",
+          time_only: "09:15:00"
         },
         user_updated: {
           id: 1,
@@ -353,22 +359,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 4,
         description: "Aggiornamento sistema",
         public: 1,
         attached_files: [
-            { id: 103, src: "office.png", ext: "png", title: "Schermata" }
+          { id: 103, src: "office.png", ext: "png", title: "Schermata" }
         ],
         portal: 1,
         user_created: {
-            id: 4,
-            nickname: "devteam",
-            datetime: "2023-04-12T16:30:00",
-            date_only: "2023-04-12",
-            time_only: "16:30:00"
+          id: 4,
+          nickname: "devteam",
+          datetime: "2023-04-12T16:30:00",
+          date_only: "2023-04-12",
+          time_only: "16:30:00"
         },
         user_updated: {
           id: 1,
@@ -376,22 +382,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 5,
         description: "Messaggio pubblico",
         public: 1,
         attached_files: [
-            { id: 104, src: "pic2.jpg", ext: "jpg", title: "Annuncio" }
+          { id: 104, src: "pic2.jpg", ext: "jpg", title: "Annuncio" }
         ],
         portal: 0,
         user_created: {
-            id: 5,
-            nickname: "public_user",
-            datetime: "2023-05-22T11:50:00",
-            date_only: "2023-05-22",
-            time_only: "11:50:00"
+          id: 5,
+          nickname: "public_user",
+          datetime: "2023-05-22T11:50:00",
+          date_only: "2023-05-22",
+          time_only: "11:50:00"
         },
         user_updated: {
           id: 1,
@@ -399,20 +405,20 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 6,
         description: "Messaggio riservato",
         public: 0,
         attached_files: [],
         portal: 1,
         user_created: {
-            id: 6,
-            nickname: "manager",
-            datetime: "2023-06-15T13:10:00",
-            date_only: "2023-06-15",
-            time_only: "13:10:00"
+          id: 6,
+          nickname: "manager",
+          datetime: "2023-06-15T13:10:00",
+          date_only: "2023-06-15",
+          time_only: "13:10:00"
         },
         user_updated: {
           id: 1,
@@ -420,22 +426,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 7,
         description: null,
         public: 1,
         attached_files: [
-            { id: 105, src: "pic3.jpg", ext: "jpg", title: "Diagramma" }
+          { id: 105, src: "pic3.jpg", ext: "jpg", title: "Diagramma" }
         ],
         portal: 0,
         user_created: {
-            id: 7,
-            nickname: "analyst",
-            datetime: "2023-07-01T08:25:00",
-            date_only: "2023-07-01",
-            time_only: "08:25:00"
+          id: 7,
+          nickname: "analyst",
+          datetime: "2023-07-01T08:25:00",
+          date_only: "2023-07-01",
+          time_only: "08:25:00"
         },
         user_updated: {
           id: 1,
@@ -443,20 +449,20 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 8,
         description: "Comunicazione importante",
         public: 1,
         attached_files: [],
         portal: 1,
         user_created: {
-            id: 8,
-            nickname: "support",
-            datetime: "2023-08-18T17:40:00",
-            date_only: "2023-08-18",
-            time_only: "17:40:00"
+          id: 8,
+          nickname: "support",
+          datetime: "2023-08-18T17:40:00",
+          date_only: "2023-08-18",
+          time_only: "17:40:00"
         },
         user_updated: {
           id: 1,
@@ -464,22 +470,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 9,
         description: "Nota tecnica",
         public: null,
         attached_files: [
-            { id: 106, src: "logo.png", ext: "png", title: "Documento tecnico" }
+          { id: 106, src: "logo.png", ext: "png", title: "Documento tecnico" }
         ],
         portal: 0,
         user_created: {
-            id: 9,
-            nickname: "technician",
-            datetime: "2023-09-10T15:20:00",
-            date_only: "2023-09-10",
-            time_only: "15:20:00"
+          id: 9,
+          nickname: "technician",
+          datetime: "2023-09-10T15:20:00",
+          date_only: "2023-09-10",
+          time_only: "15:20:00"
         },
         user_updated: {
           id: 1,
@@ -487,20 +493,20 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 10,
         description: "Promemoria evento",
         public: 1,
         attached_files: [],
         portal: 1,
         user_created: {
-            id: 10,
-            nickname: "event_manager",
-            datetime: "2023-10-05T10:00:00",
-            date_only: "2023-10-05",
-            time_only: "10:00:00"
+          id: 10,
+          nickname: "event_manager",
+          datetime: "2023-10-05T10:00:00",
+          date_only: "2023-10-05",
+          time_only: "10:00:00"
         },
         user_updated: {
           id: 1,
@@ -508,8 +514,8 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
+        }
       }
-    }
     ]
 
     this.createMessageList(this.messagesList);
@@ -576,18 +582,30 @@ export class TicketModifyComponent {
       })
   }
 
-  takeOnCharge() {}
+  takeOnCharge() { }
 
-  release() {}
+  release() { }
 
-  changeStatus() {}
+  changeStatus() {
+    const dialogRef = this.dialog.open(ChangeStatusPopupComponent, {
+      maxWidth: '600px',
+      minWidth: '350px',
+      maxHeight: '400px',
+      width: '90%',
+      data: { idticket: this.ticketInfo?.id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+  }
 
   updateMessage(message: Message) {
 
   }
 
   deleteMessage(id: number) {
-    
+
   }
 
   // setImages(formData: FormData) {

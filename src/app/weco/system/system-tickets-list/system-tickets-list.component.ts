@@ -44,7 +44,7 @@ export class SystemTicketsListComponent {
         id: 1,
         num_date: "4/2023-06-15",
         status: { id: 1, name: "Open", color: "28a745" },
-        message: "Il sistema è in funzione correttamente.",
+        message: "Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. v Il sistema è in funzione correttamente. Il sistema è in funzione correttamente. ",
         user_created: { id: 101, nickname: "MarioRossi" },
         incharge: { id: 201, nickname: "AnnaBianchi" }
       },
