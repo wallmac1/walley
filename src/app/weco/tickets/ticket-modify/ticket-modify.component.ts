@@ -54,6 +54,8 @@ export class TicketModifyComponent {
   // isAtBottomSm: boolean = false;
   visualizeAll = true;
   submitted: boolean = false;
+  maxFileSize = 5 * 1024 * 1024;
+  maxFiles = 3;
 
   newAttachedFiles: any[] = [];
   newMessageForm = new FormGroup({
@@ -158,7 +160,7 @@ export class TicketModifyComponent {
     return this.fb.group({
       id: [inverter.id],
       sn: [inverter.sn],
-      selected_inverter: [inverter.selected],
+      selected: [inverter.selected],
     })
   }
 
@@ -166,7 +168,7 @@ export class TicketModifyComponent {
     return this.fb.group({
       id: [battery.id],
       sn: [battery.sn],
-      selected_battery: [battery.sn],
+      selected: [battery.sn],
     })
   }
 
@@ -225,10 +227,10 @@ export class TicketModifyComponent {
     console.log(img)
     if (img.ext != 'pdf' && this.acceptedExt.includes(img.ext || '')) {
       const dialogRef = this.dialog.open(ImageViewerComponent, {
-        maxWidth: '90%',
+        maxWidth: '800px',
+        width: '90%',
         minWidth: '350px',
-        maxHeight: '90%',
-        data: { image: img }
+        data: { file: img }
       });
     }
     // else if (img.ext == 'pdf') {
@@ -521,44 +523,86 @@ export class TicketModifyComponent {
     this.createMessageList(this.messagesList);
   }
 
-  /**
-   * Quando si seleziona i file
-   * @param event
-   */
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
+
     if (input.files) {
-      this.fileList = Array.from(input.files);
-      this.uploadFilesServer();
+      const files = Array.from(input.files);
+
+      // Verifica il numero massimo di file
+      if (this.fileList.length + files.length > this.maxFiles) {
+        alert(`Puoi caricare al massimo ${this.maxFiles} file.`);
+        return;
+      }
+
+      files.forEach((file) => {
+        // Verifica la dimensione massima del file
+        if (file.size > this.maxFileSize) {
+          alert(`Il file ${file.name} supera il limite di 5 MB.`);
+        } else {
+          this.fileList.push(file);
+
+          // Creare un'anteprima dell'immagine
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            const fileExtension = file.name.split('.').pop() || '';
+            const image: Image = {
+              id: 0, // Puoi aggiornare l'id successivamente se necessario
+              ext: fileExtension,
+              src: e.target.result,
+              title: file.name,
+            };
+            this.imagesList.push(image);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
     }
-  }
-  /**
-   * Reset la selezione dei file quando importato
-   */
-  private resetFileInput() {
-    const fileInput = document.getElementById('fileUpload2') as HTMLInputElement;
-    fileInput.value = '';
-    this.fileList = [];
   }
 
-  private uploadFilesServer() {
-    // this.imagesStep2 = this.uploadImageService.getImagesStep2();
-    const formData = new FormData();
-    formData.append("folder", Connect.FOLDER_STEP_TWO);
-    formData.append("size", Connect.FILE_SIZE.toString());
-    formData.append("size_string", Connect.FILE_SIZE_STRING);
-    //formData.append("idsystem", this.idsystem.toString());
-    formData.append("step_position", "2");
-    if (this.fileList && this.fileList.length + this.imagesList.length <= this.maxImages) {
-      this.fileList.forEach((file, index) => {
-        formData.append(`files[]`, file);
+  onFileSelectedOnMessage(event: Event, msgIndex: number): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files) {
+      const files = Array.from(input.files);
+
+      // Verifica il numero massimo di file
+      if (this.messages.controls[msgIndex].get('attached_files')?.value.length + files.length > this.maxFiles) {
+        alert(`Puoi caricare al massimo ${this.maxFiles} file.`);
+        return;
+      }
+
+      files.forEach((file) => {
+        // Verifica la dimensione massima del file
+        if (file.size > this.maxFileSize) {
+          alert(`Il file ${file.name} supera il limite di 5 MB.`);
+        } else {
+          // Creare un'anteprima dell'immagine
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            const fileExtension = file.name.split('.').pop() || '';
+            const image: Image = {
+              id: 0, // Puoi aggiornare l'id successivamente se necessario
+              ext: fileExtension,
+              src: e.target.result,
+              title: file.name,
+            };
+            this.messages.controls[msgIndex].get('attached_files')?.value.push(image);
+            console.log(this.messages.controls[msgIndex].get('attached_files')?.value)
+          };
+          reader.readAsDataURL(file);
+        }
       });
-      //this.setImages(formData);
-      this.imageSpaceLeft = true;
     }
-    else {
-      this.imageSpaceLeft = false;
-    }
+  }
+
+  deleteFile(index: number): void {
+    this.imagesList.splice(index, 1);
+    this.fileList.splice(index, 1);
+  }
+
+  deleteFileOnMessage(index: number, msgIndex: number): void {
+    this.messages.controls[msgIndex].get('attached_files')?.value.splice(index, 1);
   }
 
   getImages() {
@@ -608,24 +652,55 @@ export class TicketModifyComponent {
 
   }
 
-  // setImages(formData: FormData) {
-  //   this.connectServerService.postRequest<ApiResponse<null>>(Connect.urlServerLaraApi, 'system/uploadFiles',
-  //     formData)
-  //     .subscribe((val: ApiResponse<null>) => {
-  //       this.popupDialogService.alertElement(val);
-  //       this.resetFileInput();
-  //       this.getImages();
-  //     })
-  // }
+  convertBooleanToNumber() {
+    this.inverterList.controls.forEach(inverter => {
+      inverter.get('selected')?.setValue(inverter.get('selected')?.value ? 1 : 0);
+    });
 
-  // deleteImg(idimage: number) {
-  //   this.connectServerService.postRequest<ApiResponse<null>>(Connect.urlServerLaraApi, 'system/deleteFile',
-  //     { idsystem: this.idsystem, idimage: idimage })
-  //     .subscribe((val: ApiResponse<null>) => {
-  //       this.popupDialogService.alertElement(val);
-  //       this.getImages();
-  //     })
-  // }
+    this.batteryList.controls.forEach(battery => {
+      battery.get('selected')?.setValue(battery.get('selected')?.value ? 1 : 0);
+    });
+  }
 
+  create() {
+    // CHIAMATA AL SERVER E POI SI NAVIGA ALLA PAGINA CON L'ID DEL TICKET RESTITUITO
+    const formData = new FormData();
+    this.submitted = true;
+    console.log(this.newMessageForm.getRawValue())
+    if (this.newMessageForm.valid) {
+
+      this.convertBooleanToNumber();
+      // Aggiungi i file al formData
+      this.fileList.forEach((file, index) => {
+        formData.append('attachments[]', file);
+      });
+
+      // Aggiungi i valori del form al formData
+      Object.keys(this.newMessageForm.controls).forEach(key => {
+        const control = this.newMessageForm.get(key);
+
+        if (control instanceof FormArray) {
+          // Se il controllo è un FormArray, aggiungi ciascun valore come array JSON
+          formData.append(key, JSON.stringify(control.value));
+        } else {
+          formData.append(key, control?.value);
+        }
+      });
+
+      // Aggiungi ID del sistema e del ticket
+      formData.append('idsystem', this.idsystem.toString());
+
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
+        .subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            //this.popupDialogService.alertElement(val);
+            this.router.navigate(['ticketModify', val.data.idticket]);
+          }
+        })
+
+      const idticket = 0;
+      this.router.navigate(['ticket', idticket])
+    }
+  }
 
 }

@@ -97,3 +97,12 @@ th, td {
     border: 1px solid lightgrey;
     white-space: nowrap;
 }
+
+.clickableElement {
+    color: blue;
+    text-decoration: underline;
+}
+
+.clickableElement:hover {
+    cursor: pointer;
+}
