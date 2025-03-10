@@ -7,9 +7,11 @@
         </div>
     </div>
 
-    <app-payment-table (modifyPayment)="modifyPopup($event)"></app-payment-table>
+    <app-payment-table (modifyPayment)="duplicatePopup($event)" (deletePayment)="deletePopup($event)"
+        [dataSource]="dataSource" (overviewPayment)="overviewPopup($event)"></app-payment-table>
 
-    <!-- <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer ms-2" >
+    <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer"
+        (click)="duplicatePopup()">
         <i class="bi bi-plus-lg"></i>
-    </button> -->
+    </button>
 </div>

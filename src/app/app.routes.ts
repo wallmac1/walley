@@ -40,7 +40,7 @@ export const routes: Routes = [
     { path: "newTicket", component: TicketNewComponent },
     { path: "recoverPassword", component: RecoverPasswordComponent },
     { path: "ticket/:id", component: TicketModifyComponent },
-    { path: "ticketsList", component: TicketListComponent },
+    { path: "ticketList", component: TicketListComponent },
     { path: "access", component: AccessPageComponent },
     { path: "newPassword", component: NewPasswordComponent },
     { path: "menu/delete", component: DeleteComponent },

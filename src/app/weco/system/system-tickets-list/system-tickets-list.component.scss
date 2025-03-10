@@ -3,7 +3,8 @@
     font-weight: bold;
 }
 
-th, td {
+th,
+td {
     border: 1px solid lightgrey;
 }
 
@@ -22,4 +23,86 @@ tr {
 .bi-plus-circle:hover {
     transform: scale(1.4);
     color: green;
+}
+
+.truncate-text {
+    display: -webkit-box;
+    word-break: break-word;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-height: 4.5em;
+    line-height: 1.5em;
+    padding-top: 0.3rem;
+
+    /* Rimuove il bordo indesiderato */
+    outline: none;
+    border: none;
+    background-color: transparent;
+    /* Assicura che lo sfondo sia trasparente */
+
+    /* Evita eventuali stili di focus indesiderati */
+    &:focus,
+    &:active {
+        outline: none;
+        border: none;
+    }
+}
+
+/* Contenitore scrollabile */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    position: relative;
+}
+
+/* Imposta la larghezza minima della tabella per attivare lo scroll */
+.mat-table {
+    min-width: 1200px;
+    table-layout: fixed; /* Impedisce il ridimensionamento dinamico delle colonne */
+}
+
+/* Colonne Sticky a sinistra */
+.sticky-column-left {
+    position: sticky;
+    left: 0;
+    width: 50px;
+    background-color: white;
+    z-index: 100;
+}
+
+.sticky-column-left-2 {
+    position: sticky;
+    left: 40px;
+    width: 130px;
+    background-color: white;
+    z-index: 90;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Colonna Sticky a destra */
+.sticky-column-right {
+    position: sticky;
+    right: 0;
+    background-color: white;
+    z-index: 100;
+    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Stili generali della tabella */
+th, td {
+    border: 1px solid lightgrey;
+    white-space: nowrap;
+}
+
+.clickableElement {
+    color: blue;
+    text-decoration: underline;
+}
+
+.clickableElement:hover {
+    cursor: pointer;
 }

@@ -1,0 +1,191 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"PAYMENTCONDITIONS.POPUP.ADDPAYMENTCONDITIONS" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-2" style="overflow-y: auto; overflow-x: hidden;">
+    <div class="row justify-content-center">
+        <div [formGroup]="paymentConditionsForm" class="col-12">
+
+            <div class="row justify-content-start align-items-center rowDivider">
+                <!-- CODE -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <label class="form-label" for="code">
+                        {{"PAYMENTCONDITIONS.POPUP.CODE" | translate}}
+                    </label>
+                    <input class="form-control" type="text" id="code" formControlName="code"
+                        [class.is-invalid]="paymentConditionsForm.get('code')?.invalid && submitted">
+                </div>
+
+                <!-- XML CODE -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <label class="form-label" for="xml_code">
+                        {{"PAYMENTCONDITIONS.POPUP.XMLCODE" | translate}}
+                    </label>
+                    <select class="form-select" id="xml_code" formControlName="xml_code"
+                        [class.is-invalid]="paymentConditionsForm.get('xml_code')?.invalid && submitted">
+                        <option [ngValue]="null">
+                            --
+                        </option>
+                        <option *ngFor="let code of xml_codes" [ngValue]="code.id">
+                            {{code.description}}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="col-12">
+                    <label class="form-label" for="description">
+                        {{"PAYMENTCONDITIONS.POPUP.DESCRIPTION" | translate}}
+                    </label>
+                    <textarea class="form-control" type="text" id="description"
+                        formControlName="description"
+                        [class.is-invalid]="paymentConditionsForm.get('description')?.invalid && submitted"></textarea>
+                </div>
+            </div>
+
+            <div class="row justify-content-start align-items-center rowDivider">
+                <!-- INSTALLMENT NUMBER -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xxl-2">
+                    <label class="form-label" for="installments_number">
+                        {{"PAYMENTCONDITIONS.POPUP.INSTALLMENTNUMBER" | translate}}
+                    </label>
+                    <select class="form-select" id="installments_number" formControlName="installments_number">
+                        <option *ngFor="let installment of installmentList" [ngValue]="installment.id">
+                            {{installment.title}}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- PERIODICITY -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xxl-2">
+                    <label class="form-label" for="periodicity">
+                        {{"PAYMENTCONDITIONS.POPUP.PERIODICITY" | translate}}
+                        <i class="bi bi-info-circle ms-1" matTooltip="
+                            {{'PAYMENTCONDITIONS.POPUP.PERIODICITYTOOLTIP' | translate}}"></i>
+                    </label>
+                    <input class="form-control" type="text" id="periodicity" formControlName="periodicity"
+                        [class.is-invalid]="(paymentConditionsForm.get('periodicity')?.invalid && submitted) ||
+                            paymentConditionsForm.get('periodicity')?.hasError('maxInteger')">
+                </div>
+
+                <!-- DEADLINE -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xxl-2">
+                    <label class="form-label" for="deadline">
+                        {{"PAYMENTCONDITIONS.POPUP.DEADLINE" | translate}}
+                        <i class="bi bi-info-circle ms-1" matTooltip="
+                            {{'PAYMENTCONDITIONS.POPUP.DEADLINETOOLTIP' | translate}}"></i>
+                    </label>
+                    <input class="form-control" type="text" id="deadline" formControlName="deadline"
+                        [class.is-invalid]="(paymentConditionsForm.get('deadline')?.invalid && submitted) ||
+                            paymentConditionsForm.get('deadline')?.hasError('maxInteger')">
+                </div>
+
+                <!-- DEADLINE TYPE -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
+                    <label class="form-label" for="deadline_type">
+                        {{"PAYMENTCONDITIONS.POPUP.DEADLINETYPE" | translate}}
+                    </label>
+                    <select class="form-select" id="deadline_type" formControlName="deadline_type"
+                        [class.is-invalid]="paymentConditionsForm.get('deadline_type')?.invalid && submitted">
+                        <option [ngValue]="null">
+                            --
+                        </option>
+                        <option *ngFor="let deadline of deadlineList" [ngValue]="deadline.id">
+                            {{deadline.name}}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- EXACT DAY -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xxl-2">
+                    <label class="form-label" for="exact_day">
+                        {{"PAYMENTCONDITIONS.POPUP.EXACTDAY" | translate}}
+                        <i class="bi bi-info-circle ms-1" matTooltip="
+                        {{'PAYMENTCONDITIONS.POPUP.EXACTDAYTOOLTIP' | translate}}"></i>
+                    </label>
+                    <input class="form-control" type="text" id="exact_day" formControlName="exact_day"
+                        [class.is-invalid]="(paymentConditionsForm.get('exact_day')?.invalid && submitted) ||
+                            paymentConditionsForm.get('exact_day')?.hasError('maxInteger')">
+                </div>
+            </div>
+
+            <div class="row justify-content-start align-items-end">
+                <!-- BANK -->
+                <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
+                    <label class="form-label" for="bank_type">
+                        {{"PAYMENTCONDITIONS.POPUP.BANK" | translate}}
+                    </label>
+                    <select class="form-select" id="bank_type" formControlName="bank_type">
+                        <option [ngValue]="null">
+                            --
+                        </option>
+                        <option *ngFor="let bank of bankList" [ngValue]="bank.id">
+                            {{bank.type}}
+                        </option>
+                    </select>
+                </div>
+
+                <div *ngIf="!isNote; else noteBlock" class="col-4">
+                    <button class="btn btn-link" (click)="addNote()">
+                        {{"PAYMENTCONDITIONS.POPUP.ADDNOTE" | translate}}
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+
+                <ng-template #noteBlock>
+                    <div class="col-12 col-lg-8 col-xxl-9">
+                        <label class="form-label" for="note">
+                            {{"PAYMENTCONDITIONS.POPUP.NOTE" | translate}}
+                        </label>
+                        <textarea class="form-control" type="text" id="note" formControlName="note" rows="1"></textarea>
+                    </div>
+                </ng-template>
+            </div>
+
+            <div *ngIf="paymentConditionsForm.invalid" class="row justify-content-end mt-2">
+                <div *ngIf="(paymentConditionsForm.get('deadline')?.hasError('required') ||  paymentConditionsForm.get('exact_date')?.hasError('required') ||
+                    paymentConditionsForm.get('code')?.hasError('required') || paymentConditionsForm.get('description')?.hasError('required') || 
+                    paymentConditionsForm.get('xml_code')?.hasError('required') || paymentConditionsForm.get('periodicity')?.hasError('required') ||
+                    paymentConditionsForm.get('deadline_type')?.hasError('required')) 
+                    && submitted" class="col-12 text-center">
+                    <span style="color: red; font-size: small;">
+                        {{"PAYMENTCONDITIONS.POPUP.MANDATORYFIELDS" | translate}}
+                    </span>
+                </div>
+                <div *ngIf="paymentConditionsForm.get('periodicity')?.hasError('maxInteger')" class="col-12 text-center">
+                    <span style="color: red; font-size: small;">
+                        {{"PAYMENTCONDITIONS.POPUP.PERIODICITY" | translate}} 
+                        {{"PAYMENTCONDITIONS.POPUP.MAX120DAYS" | translate}}
+                    </span>
+                </div>
+                <div *ngIf="paymentConditionsForm.get('deadline')?.hasError('maxInteger')"  class="col-12 text-center">
+                    <span style="color: red; font-size: small;">
+                        {{"PAYMENTCONDITIONS.POPUP.DEADLINE" | translate}} 
+                        {{"PAYMENTCONDITIONS.POPUP.MAX120DAYS" | translate}}
+                    </span>
+                </div>
+                <div *ngIf="paymentConditionsForm.get('exact_day')?.hasError('maxInteger')"  class="col-12 text-center">
+                    <span style="color: red; font-size: small;">
+                        {{"PAYMENTCONDITIONS.POPUP.MAX31DAYS" | translate}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row justify-content-end mt-2 pt-2" style="border-top: 1px solid lightgray;">
+                <div class="col-6 text-start">
+                    <button class="btn btn-outline-dark" (click)="close()">
+                        {{"PAYMENTCONDITIONS.POPUP.CLOSE" | translate}}
+                    </button>
+                </div>
+                 
+                <div class="col-6 text-end">
+                    <button class="btn btn-outline-success" (click)="addPaymentCondition()">
+                        {{"PAYMENTCONDITIONS.POPUP.ADD" | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>

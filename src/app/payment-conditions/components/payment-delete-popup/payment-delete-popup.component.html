@@ -1,0 +1,30 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"PAYMENTCONDITIONS.POPUP.DELETECONDITION" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-2" style="overflow-y: auto; overflow-x: hidden;">
+    <div class="row justify-content-center mt-4">
+        <div class="col-12 text-center">
+            <span style="color: gray; font-style: italic;">
+                {{"PAYMENTCONDITIONS.POPUP.WANTTODELETE" | translate}}
+            </span>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-center mt-4 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-6 text-start">
+            <button class="btn btn-outline-dark" (click)="close()">
+                {{"PAYMENTCONDITIONS.POPUP.CLOSE" | translate}}
+            </button>
+        </div>
+
+        <div class="col-6 text-end">
+            <button class="btn btn-outline-danger" (click)="deleteCondition()">
+                {{"PAYMENTCONDITIONS.POPUP.DELETE" | translate}}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>

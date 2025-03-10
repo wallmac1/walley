@@ -1,46 +1,7 @@
 <!-- TABLE -->
-<div class="row justify-content-center">
-    <div class="col-12 mt-4" style="max-width: 1800px;">
+<div class="row justify-content-center mt-4">
+    <div class="col-12 mt-4" style="max-width: 1500px;">
         <div class="mat-elevation-z8 mb-2">
-
-            <!-- PAGINATOR -->
-            <div class="row justify-content-center p-3" style="border-radius: 20px;">
-                <div class="d-none d-md-inline col-4 text-start">
-                    <span style="font-size: small;">
-                        {{"PAYMENTCONDITIONS.TABLE.TOTALRESULTS" | translate}}:
-                        {{totalResults}}
-                    </span>
-                </div>
-
-                <div class="d-none d-md-inline col-4 text-center">
-                    <span style="font-size: small;">
-                        {{"PAYMENTCONDITIONS.TABLE.ITEMSPERPAGE" | translate}}:
-                        {{itemsPerPage}}
-                    </span>
-                </div>
-
-                <div class="col-6 d-sm-none text-start">
-                    <span style="font-size: small;">
-                        {{"PAYMENTCONDITIONS.TABLE.ORDEREDBYDEFAULT" | translate}}
-                    </span>
-                </div>
-
-                <div class="col-6 col-sm-12 col-md-4 text-end">
-                    <span>
-                        <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
-                            <i class="bi bi-caret-left"></i>
-                        </button>
-                        <span style="font-size: small;">
-                            {{"PAYMENTCONDITIONS.TABLE.PAGE" | translate}} {{currentPage}} di
-                            {{totalPages}}
-                        </span>
-                        <button [disabled]="currentPage == totalPages" class="btn btn-link ms-2 p-0"
-                            (click)="nextPage()">
-                            <i class="bi bi-caret-right"></i>
-                        </button>
-                    </span>
-                </div>
-            </div>
 
             <table mat-table [dataSource]="dataSource" class="mat-table mb-5" matSort *ngIf="!isSmallScreen; else smallTableBlock"
                 style="border-top: 1px solid lightgray;" matSortActive="lastupdate" matSortDirection="desc"
@@ -48,24 +9,24 @@
 
                 <!-- Icons Column -->
                 <ng-container matColumnDef="icons">
-                    <th mat-header-cell *matHeaderCellDef style="width: 80px;">
+                    <th mat-header-cell *matHeaderCellDef style="width: 80px; text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.ACTIONS" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element" style="width: 80px;">
-                        <i class="bi bi-pencil" (click)="modifyPopup(element.id)"
-                            matTooltip="{{'PAYMENTCONDITIONS.TABLE.MODIFY' | translate}}"></i>
-                        <i class="bi bi-copy ms-3" (click)="modifyPopup(element.id)"
+                    <td mat-cell *matCellDef="let element" style="width: 80px; text-align: center;">
+                        <i *ngIf="element.default != 1" class="bi bi-trash me-3" (click)="deletePopup(element.id)" style="color: red;"
+                            matTooltip="{{'PAYMENTCONDITIONS.TABLE.DELETE' | translate}}"></i>
+                        <i class="bi bi-copy" (click)="duplicatePopup(element)"
                             matTooltip="{{'PAYMENTCONDITIONS.TABLE.DUPLICATE' | translate}}"></i>
                     </td>
                 </ng-container>
 
                 <!-- Code Column -->
                 <ng-container matColumnDef="code">
-                    <th mat-header-cell *matHeaderCellDef style="width: 120px;">
+                    <th mat-header-cell *matHeaderCellDef style="width: 120px; text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.CODE" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element">
-                        <span class="clickableElement" style="width: 120px;">
+                    <td mat-cell *matCellDef="let element" style="width: 120px; text-align: center;">
+                        <span class="clickableElement" (click)="overviewPopup(element)">
                             {{ element.code }}
                         </span>
                     </td>
@@ -83,71 +44,71 @@
 
                 <!-- Xml Code Column -->
                 <ng-container matColumnDef="xml_code">
-                    <th mat-header-cell *matHeaderCellDef class="d-none d-md-table-cell" style="width: 120px;">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-md-table-cell" style="width: 120px; text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.XMLCODE" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element" class="d-none d-md-table-cell" style="width: 120px;">
-                        {{element.xml_code}}
+                    <td mat-cell *matCellDef="let element" class="d-none d-md-table-cell" style="width: 120px; text-align: center;">
+                        {{element.xml_code?.description || ''}}
                     </td>
                 </ng-container>
 
                 <!-- Installment Number Column -->
-                <ng-container matColumnDef="installment_number">
-                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 120px;">
+                <ng-container matColumnDef="installments_number">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 100px; text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.INSTALLMENTNUMBER" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell" style="width: 120px;">
-                        {{element.installment_number}}
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell" style="width: 100px; text-align: center;">
+                        {{element.installments_number}}
                     </td>
                 </ng-container>
 
                 <!-- Periodicity Column -->
                 <ng-container matColumnDef="periodicity">
-                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 120px;">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 120px; text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.PERIODICITY" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell" style="width: 120px;">
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell" style="width: 120px; text-align: center;">
                         {{element.periodicity}}
                     </td>
                 </ng-container>
 
                 <!-- Deadline Column -->
                 <ng-container matColumnDef="deadline">
-                    <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell" style="width: 150px;">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell" style="width: 100px; text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.DEADLINE" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell" style="width: 150px;">
+                    <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell" style="width: 100px; text-align: center;">
                         {{element.deadline}}
                     </td>
                 </ng-container>
 
                 <!-- Deadline Type Column -->
                 <ng-container matColumnDef="deadline_type">
-                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 150px;">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell" style="width: 150px; text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.DEADLINETYPE" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell" style="width: 150px;">
-                        {{element.deadline_type}}
+                    <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell" style="width: 150px; text-align: center;">
+                        {{element.deadline_type?.name || ''}}
                     </td>
                 </ng-container>
 
-                <!-- Exact Date Column -->
+                <!-- Exact Day Column -->
                 <ng-container matColumnDef="exact_day">
-                    <th mat-header-cell *matHeaderCellDef class="d-none d-xxl-table-cell" style="width: 120px;">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-xxl-table-cell" style="width: 110px; text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.EXACTDATE" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element" class="d-none d-xxl-table-cell" style="width: 120px;">
-                        {{element.exact_date}}
+                    <td mat-cell *matCellDef="let element" class="d-none d-xxl-table-cell" style="width: 110px; text-align: center;">
+                        {{element.exact_day}}
                     </td>
                 </ng-container>
 
                 <!-- Bank Column -->
-                <ng-container matColumnDef="bank">
-                    <th mat-header-cell *matHeaderCellDef class="d-none d-xxl-table-cell">
+                <ng-container matColumnDef="bank_type">
+                    <th mat-header-cell *matHeaderCellDef class="d-none d-xxl-table-cell" style="text-align: center;">
                         {{"PAYMENTCONDITIONS.TABLE.BANK" | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element" class="d-none d-xxl-table-cell">
-                        {{element.bank}}
+                    <td mat-cell *matCellDef="let element" class="d-none d-xxl-table-cell" style="text-align: center;">
+                        {{element.bank_type?.type || ''}}
                     </td>
                 </ng-container>
 
@@ -178,7 +139,6 @@
                     </tr>
                 </table>
             </ng-template>
-
         </div>
     </div>
 </div>

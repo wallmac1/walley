@@ -1,0 +1,59 @@
+.card-title {
+    background-color: #002D5D;
+    color: white;
+}
+
+.btn-outline-dark {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-dark:focus {
+    border-color: #002D5D;
+    color: #002D5D;
+    background-color: white;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}
+
+.fontStyle {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.innerInput:focus {
+    box-shadow: none;
+}
+
+.title {
+    font-size: large;
+    font-weight: bold;
+    color: white;
+}
+
+.titleFilters {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.form-label,
+.form-check-label {
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 0.3rem;
+    margin-bottom: 0rem;
+}
+
+.rowDivider {
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 0.4rem;
+}
+
+.cardElement {
+    padding: 1rem;
+    border: 1px solid lightgray;
+    border-radius: 20px;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4);
+}

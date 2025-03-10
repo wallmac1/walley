@@ -426,13 +426,24 @@
       "BATTERY": "Batteria"
     },
     "TICKETLIST": {
+      "OPEN": "Aperto",
+      "CLOSED": "Chiuso",
+      "YES": "Si",
+      "NO": "No",
+      "PUBLIC": "Pubblico",
       "TICKETLIST": "Lista Ticket",
+      "FILTERS": "Filtri",
       "ID": "ID",
-      "DATE": "Data",
+      "DATE": "Progressivo/Data",
       "STATUS": "Stato",
       "MESSAGE": "Messaggio",
       "USERCREATED": "Aperto da",
-      "INCHARGE": "In Carico"
+      "INCHARGE": "In Carico",
+      "OWNERNAME": "Proprietario Impianto",
+      "TECHNICIANNAME": "Tecnico Impianto",
+      "SYSTEMNAME": "Nome dell'Impianto",
+      "FILTER": "Filtra",
+      "ACTIVEFILTERS": "Filtri Attivi"
     },
     "TICKETNEW": {
       "NEWTICKET": "Nuovo Ticket",
@@ -448,7 +459,9 @@
       "DESCRIPTION": "Descrizione",
       "INTERNALNOTES": "Note Interne",
       "CREATE": "Crea",
-      "CLOSE": "Chiudi"
+      "CLOSE": "Chiudi",
+      "MAXTHREE": "Massimo tre allegati (max 5MB ciascuno)",
+      "MANDATORYFIELDS": "Compilare tutti i campi obbligatori"
     },
     "TICKETMODIFY": {
       "ID": "ID",
@@ -473,7 +486,9 @@
       "UPDATE": "Aggiorna",
       "CREATEDFROM": "Creato da",
       "UPDATEDFROM": "Aggiornato da",
-      "DELETE": "Elimina"
+      "DELETE": "Elimina",
+      "SAVE": "Salva",
+      "CHANGESTATUS": "Cambia Stato"
     }
   },
   "VOUCHER": {
@@ -1095,7 +1110,15 @@
   "PAYMENTCONDITIONS": {
     "PAYMENTCONDITIONS": "Condizioni di Pagamento",
     "POPUP": {
+      "VIEWPAYMENTCONDITION": "Visualizza Condizione di Pagamento",
+      "MAX31DAYS": "Giorno Esatto deve essere un intero con valore compreso tra 1 e 31",
+      "MAX120DAYS": "deve essere un intero con valore compreso tra 1 e 120",
+      "MANDATORYFIELDS": "Compilare tutti i campi obbligatori",
       "PAYMENTCONDITIONS": "Condizioni di Pagamento",
+      "ADDPAYMENTCONDITIONS": "Inserisci Condizione di Pagamento",
+      "DEADLINETOOLTIP": "Campo obbligatorio se il numero di rate è pari ad 1. Valore numerico intero",
+      "PERIODICITYTOOLTIP": "Campo obbligatorio se il numero di rate è maggiore di 1. Valore numerico intero",
+      "EXACTDAYTOOLTIP": "Campo obbligatorio se il tipo di scadenza è 'giorno esatto'. Valore numerico compreso tra 1 e 31",
       "SEARCH": "Ricerca",
       "CODE": "Codice",
       "XMLCODE": "Codice XML",
@@ -1108,7 +1131,12 @@
       "BANK": "Banca",
       "ADDNOTE": "Aggiungi Nota",
       "NOTE": "Nota",
-      "SAVE": "Salva"
+      "SAVE": "Salva",
+      "CLOSE": "Chiudi",
+      "DELETE": "Elimina",
+      "ADD": "Aggiungi",
+      "DELETECONDITION": "Elimina Condizione",
+      "WANTTODELETE": "Sei sicuro di voler eliminare questa condizione di pagamento?"
     },
     "TABLE": {
       "TOTALRESULTS": "Risultati Totali",
@@ -1127,7 +1155,8 @@
       "CODEDESCRIPTION": "Codice / Descrizione",
       "ACTIONS": "Azioni",
       "MODIFY": "Modifica Condizione di Pagamento",
-      "DUPLICATE": "Duplica Riga"
+      "DUPLICATE": "Duplica Riga",
+      "DELETE": "Elimina"
     }
   },
   "EVENT": {

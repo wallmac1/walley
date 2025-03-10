@@ -61,8 +61,4 @@ export class TicketTableComponent {
     this.router.navigate(['ticket', id]);
   }
 
-  newTicket() {
-    this.router.navigate(['ticketNewWeco'])
-  }
-
 }

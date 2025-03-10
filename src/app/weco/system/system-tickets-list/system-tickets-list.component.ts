@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TicketTable } from '../interfaces/ticket-table';
 import { Router } from '@angular/router';
+import { ConnectServerService } from '../../../services/connect-server.service';
+import { Connect } from '../../../classes/connect';
+import { ApiResponse } from '../../interfaces/api-response';
 
 @Component({
   selector: 'app-system-tickets-list',
@@ -23,66 +26,49 @@ import { Router } from '@angular/router';
 })
 export class SystemTicketsListComponent {
 
-  idsystem: number = 20;
-  displayedColumns: string[] = ['id', 'num_date', 'status', 'message', 'user_created', 'incharge'];
+  idsystem: number = 97;
+  displayedColumns: string[] = ['id', 'num_date', 'status', 'message', 'user_created', 'incharge', 'public'];
   dataSource = new MatTableDataSource<TicketTable>([]);
   ticketList: TicketTable[] = [];
 
-  constructor(private dialog: MatDialog, private router: Router) {}
+  constructor(private dialog: MatDialog, private router: Router, private connectServerService: ConnectServerService) { }
 
   ngOnInit(): void {
     this.getTicketList();
   }
 
   createTicket() {
-    this.router.navigate(['newTicket'], {queryParams: {idsystem: this.idsystem}});
+    this.router.navigate(['newTicket'], { queryParams: { idsystem: this.idsystem } });
   }
 
   getTicketList() {
-    this.ticketList = [
-      {
-        id: 1,
-        num_date: "4/2023-06-15",
-        status: { id: 1, name: "Open", color: "28a745" },
-        message: "Il sistema è in funzione correttamente.",
-        user_created: { id: 101, nickname: "MarioRossi" },
-        incharge: { id: 201, nickname: "AnnaBianchi" }
-      },
-      {
-        id: 2,
-        num_date: "2/2023-06-16",
-        status: { id: 2, name: "In Progress", color: "ffc107" },
-        message: "Sto verificando il problema segnalato.",
-        user_created: { id: 102, nickname: "LucaVerdi" },
-        incharge: { id: 202, nickname: "GiovanniNeri" }
-      },
-      {
-        id: 3,
-        num_date: "17/2023-06-17",
-        status: { id: 3, name: "Closed", color: "dc3545" },
-        message: "Il problema è stato risolto con successo.",
-        user_created: { id: 103, nickname: "FrancescaBlu" },
-        incharge: { id: 203, nickname: "MartaViola" }
-      },
-      {
-        id: 4,
-        num_date: "39/2023-06-18",
-        status: { id: 1, name: "Open", color: "28a745" },
-        message: "Nuova richiesta di assistenza ricevuta.",
-        user_created: { id: 104, nickname: "CarloGiallo" },
-        incharge: { id: 204, nickname: "PaolaRosa" }
-      },
-      {
-        id: 5,
-        num_date: "99/2023-06-19",
-        status: { id: 2, name: "In Progress", color: "ffc107" },
-        message: "Il tecnico è stato assegnato al ticket.",
-        user_created: { id: 105, nickname: "SilviaArancio" },
-        incharge: { id: 205, nickname: "LeonardoBianco" }
-      }
-    ];
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/listTicketsForSystem', { idsystem: this.idsystem })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.ticketList = val.data.tickets;
+          this.dataSource.data = this.ticketList;
+        }
+      })
+  }
 
-    this.dataSource.data = this.ticketList;
+  sortData(sort: Sort) {
+    if (sort.active === 'status') {
+      const isAsc = sort.direction === 'asc';
+      this.dataSource.data = [...this.ticketList].sort((a, b) => {
+        return this.compare(a.ticketStatus.name, b.ticketStatus.name, isAsc);
+      });
+    } else {
+      // Reimposta i dati originali se non è ordinamento per "status"
+      this.dataSource.data = [...this.ticketList];
+    }
+  }
+
+  compare(a: string, b: string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  goToTicket(id: number) {
+    this.router.navigate(['ticket', id])
   }
 
 }

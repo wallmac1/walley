@@ -1,7 +1,7 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component, ElementRef, HostListener, SecurityContext, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
 import { InViewportDirective } from '../../../directives/in-viewport.directive';
 import { TicketInfo } from '../interfaces/ticket-info';
@@ -17,6 +17,8 @@ import { ImageViewerComponent } from '../../../voucher/image-viewer/image-viewer
 import { SystemInfoPopupComponent } from '../../system/system-info-popup/system-info-popup.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { Message } from '../interfaces/message';
+import { QuillModule } from 'ngx-quill';
+import { ChangeStatusPopupComponent } from './components/change-status-popup/change-status-popup.component';
 
 @Component({
   selector: 'app-ticket-modify',
@@ -27,13 +29,15 @@ import { Message } from '../interfaces/message';
     MatExpansionModule,
     TranslateModule,
     InViewportDirective,
-    MatMenuModule
+    MatMenuModule,
+    QuillModule
   ],
   templateUrl: './ticket-modify.component.html',
   styleUrl: './ticket-modify.component.scss'
 })
 export class TicketModifyComponent {
 
+  @ViewChild('panel') panelComponent!: MatExpansionPanel;
   @ViewChild('bottomAnchor') bottomAnchor!: ElementRef;
   isNewMessage: boolean = false;
   ticketInfo: TicketInfo | null = null;
@@ -49,6 +53,9 @@ export class TicketModifyComponent {
   // isAtBottom: boolean = false;
   // isAtBottomSm: boolean = false;
   visualizeAll = true;
+  submitted: boolean = false;
+  maxFileSize = 5 * 1024 * 1024;
+  maxFiles = 3;
 
   newAttachedFiles: any[] = [];
   newMessageForm = new FormGroup({
@@ -153,7 +160,7 @@ export class TicketModifyComponent {
     return this.fb.group({
       id: [inverter.id],
       sn: [inverter.sn],
-      selected_inverter: [inverter.selected],
+      selected: [inverter.selected],
     })
   }
 
@@ -161,7 +168,7 @@ export class TicketModifyComponent {
     return this.fb.group({
       id: [battery.id],
       sn: [battery.sn],
-      selected_battery: [battery.sn],
+      selected: [battery.sn],
     })
   }
 
@@ -193,6 +200,7 @@ export class TicketModifyComponent {
       date: dateStr,
       time: timeStr,
     });
+    this.panelComponent.close();
     setTimeout(() => {
       this.bottomAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
     }, 100);
@@ -219,10 +227,10 @@ export class TicketModifyComponent {
     console.log(img)
     if (img.ext != 'pdf' && this.acceptedExt.includes(img.ext || '')) {
       const dialogRef = this.dialog.open(ImageViewerComponent, {
-        maxWidth: '90%',
+        maxWidth: '800px',
+        width: '90%',
         minWidth: '350px',
-        maxHeight: '90%',
-        data: { image: img }
+        data: { file: img }
       });
     }
     // else if (img.ext == 'pdf') {
@@ -259,7 +267,7 @@ export class TicketModifyComponent {
     if (this.ticketInfo?.batteryList) {
       this.createBatteryList(this.ticketInfo?.batteryList);
     }
-    if(this.ticketInfo?.inverterList) {
+    if (this.ticketInfo?.inverterList) {
       this.createInverterList(this.ticketInfo?.inverterList);
     }
   }
@@ -293,15 +301,15 @@ export class TicketModifyComponent {
         description: "Messaggio di benvenuto",
         public: 1,
         attached_files: [
-            { id: 101, src: "trial.jpeg", ext: "jpeg", title: "Immagine 1" }
+          { id: 101, src: "trial.jpeg", ext: "jpeg", title: "Immagine 1" }
         ],
         portal: 0,
         user_created: {
-            id: 1,
-            nickname: "admin",
-            datetime: "2023-01-15T10:30:00",
-            date_only: "2023-01-15",
-            time_only: "10:30:00"
+          id: 1,
+          nickname: "admin",
+          datetime: "2023-01-15T10:30:00",
+          date_only: "2023-01-15",
+          time_only: "10:30:00"
         },
         user_updated: {
           id: 1,
@@ -309,22 +317,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 2,
         description: "Documentazione aggiornata",
         public: 0,
         attached_files: [
-            { id: 102, src: "pic1.jpg", ext: "jpg", title: "Manuale" }
+          { id: 102, src: "pic1.jpg", ext: "jpg", title: "Manuale" }
         ],
         portal: 1,
         user_created: {
-            id: 2,
-            nickname: "user123",
-            datetime: "2023-02-10T14:45:00",
-            date_only: "2023-02-10",
-            time_only: "14:45:00"
+          id: 2,
+          nickname: "user123",
+          datetime: "2023-02-10T14:45:00",
+          date_only: "2023-02-10",
+          time_only: "14:45:00"
         },
         user_updated: {
           id: 1,
@@ -332,20 +340,20 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 3,
         description: "Nota interna",
         public: null,
         attached_files: [],
         portal: 0,
         user_created: {
-            id: 3,
-            nickname: "supervisor",
-            datetime: "2023-03-05T09:15:00",
-            date_only: "2023-03-05",
-            time_only: "09:15:00"
+          id: 3,
+          nickname: "supervisor",
+          datetime: "2023-03-05T09:15:00",
+          date_only: "2023-03-05",
+          time_only: "09:15:00"
         },
         user_updated: {
           id: 1,
@@ -353,22 +361,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 4,
         description: "Aggiornamento sistema",
         public: 1,
         attached_files: [
-            { id: 103, src: "office.png", ext: "png", title: "Schermata" }
+          { id: 103, src: "office.png", ext: "png", title: "Schermata" }
         ],
         portal: 1,
         user_created: {
-            id: 4,
-            nickname: "devteam",
-            datetime: "2023-04-12T16:30:00",
-            date_only: "2023-04-12",
-            time_only: "16:30:00"
+          id: 4,
+          nickname: "devteam",
+          datetime: "2023-04-12T16:30:00",
+          date_only: "2023-04-12",
+          time_only: "16:30:00"
         },
         user_updated: {
           id: 1,
@@ -376,22 +384,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 5,
         description: "Messaggio pubblico",
         public: 1,
         attached_files: [
-            { id: 104, src: "pic2.jpg", ext: "jpg", title: "Annuncio" }
+          { id: 104, src: "pic2.jpg", ext: "jpg", title: "Annuncio" }
         ],
         portal: 0,
         user_created: {
-            id: 5,
-            nickname: "public_user",
-            datetime: "2023-05-22T11:50:00",
-            date_only: "2023-05-22",
-            time_only: "11:50:00"
+          id: 5,
+          nickname: "public_user",
+          datetime: "2023-05-22T11:50:00",
+          date_only: "2023-05-22",
+          time_only: "11:50:00"
         },
         user_updated: {
           id: 1,
@@ -399,20 +407,20 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 6,
         description: "Messaggio riservato",
         public: 0,
         attached_files: [],
         portal: 1,
         user_created: {
-            id: 6,
-            nickname: "manager",
-            datetime: "2023-06-15T13:10:00",
-            date_only: "2023-06-15",
-            time_only: "13:10:00"
+          id: 6,
+          nickname: "manager",
+          datetime: "2023-06-15T13:10:00",
+          date_only: "2023-06-15",
+          time_only: "13:10:00"
         },
         user_updated: {
           id: 1,
@@ -420,22 +428,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 7,
         description: null,
         public: 1,
         attached_files: [
-            { id: 105, src: "pic3.jpg", ext: "jpg", title: "Diagramma" }
+          { id: 105, src: "pic3.jpg", ext: "jpg", title: "Diagramma" }
         ],
         portal: 0,
         user_created: {
-            id: 7,
-            nickname: "analyst",
-            datetime: "2023-07-01T08:25:00",
-            date_only: "2023-07-01",
-            time_only: "08:25:00"
+          id: 7,
+          nickname: "analyst",
+          datetime: "2023-07-01T08:25:00",
+          date_only: "2023-07-01",
+          time_only: "08:25:00"
         },
         user_updated: {
           id: 1,
@@ -443,20 +451,20 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 8,
         description: "Comunicazione importante",
         public: 1,
         attached_files: [],
         portal: 1,
         user_created: {
-            id: 8,
-            nickname: "support",
-            datetime: "2023-08-18T17:40:00",
-            date_only: "2023-08-18",
-            time_only: "17:40:00"
+          id: 8,
+          nickname: "support",
+          datetime: "2023-08-18T17:40:00",
+          date_only: "2023-08-18",
+          time_only: "17:40:00"
         },
         user_updated: {
           id: 1,
@@ -464,22 +472,22 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 9,
         description: "Nota tecnica",
         public: null,
         attached_files: [
-            { id: 106, src: "logo.png", ext: "png", title: "Documento tecnico" }
+          { id: 106, src: "logo.png", ext: "png", title: "Documento tecnico" }
         ],
         portal: 0,
         user_created: {
-            id: 9,
-            nickname: "technician",
-            datetime: "2023-09-10T15:20:00",
-            date_only: "2023-09-10",
-            time_only: "15:20:00"
+          id: 9,
+          nickname: "technician",
+          datetime: "2023-09-10T15:20:00",
+          date_only: "2023-09-10",
+          time_only: "15:20:00"
         },
         user_updated: {
           id: 1,
@@ -487,20 +495,20 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
-      }
-    },
-    {
+        }
+      },
+      {
         id: 10,
         description: "Promemoria evento",
         public: 1,
         attached_files: [],
         portal: 1,
         user_created: {
-            id: 10,
-            nickname: "event_manager",
-            datetime: "2023-10-05T10:00:00",
-            date_only: "2023-10-05",
-            time_only: "10:00:00"
+          id: 10,
+          nickname: "event_manager",
+          datetime: "2023-10-05T10:00:00",
+          date_only: "2023-10-05",
+          time_only: "10:00:00"
         },
         user_updated: {
           id: 1,
@@ -508,51 +516,93 @@ export class TicketModifyComponent {
           datetime: "2023-01-15T10:30:00",
           date_only: "2023-01-15",
           time_only: "10:30:00"
+        }
       }
-    }
     ]
 
     this.createMessageList(this.messagesList);
   }
 
-  /**
-   * Quando si seleziona i file
-   * @param event
-   */
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
+
     if (input.files) {
-      this.fileList = Array.from(input.files);
-      this.uploadFilesServer();
+      const files = Array.from(input.files);
+
+      // Verifica il numero massimo di file
+      if (this.fileList.length + files.length > this.maxFiles) {
+        alert(`Puoi caricare al massimo ${this.maxFiles} file.`);
+        return;
+      }
+
+      files.forEach((file) => {
+        // Verifica la dimensione massima del file
+        if (file.size > this.maxFileSize) {
+          alert(`Il file ${file.name} supera il limite di 5 MB.`);
+        } else {
+          this.fileList.push(file);
+
+          // Creare un'anteprima dell'immagine
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            const fileExtension = file.name.split('.').pop() || '';
+            const image: Image = {
+              id: 0, // Puoi aggiornare l'id successivamente se necessario
+              ext: fileExtension,
+              src: e.target.result,
+              title: file.name,
+            };
+            this.imagesList.push(image);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
     }
-  }
-  /**
-   * Reset la selezione dei file quando importato
-   */
-  private resetFileInput() {
-    const fileInput = document.getElementById('fileUpload2') as HTMLInputElement;
-    fileInput.value = '';
-    this.fileList = [];
   }
 
-  private uploadFilesServer() {
-    // this.imagesStep2 = this.uploadImageService.getImagesStep2();
-    const formData = new FormData();
-    formData.append("folder", Connect.FOLDER_STEP_TWO);
-    formData.append("size", Connect.FILE_SIZE.toString());
-    formData.append("size_string", Connect.FILE_SIZE_STRING);
-    //formData.append("idsystem", this.idsystem.toString());
-    formData.append("step_position", "2");
-    if (this.fileList && this.fileList.length + this.imagesList.length <= this.maxImages) {
-      this.fileList.forEach((file, index) => {
-        formData.append(`files[]`, file);
+  onFileSelectedOnMessage(event: Event, msgIndex: number): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files) {
+      const files = Array.from(input.files);
+
+      // Verifica il numero massimo di file
+      if (this.messages.controls[msgIndex].get('attached_files')?.value.length + files.length > this.maxFiles) {
+        alert(`Puoi caricare al massimo ${this.maxFiles} file.`);
+        return;
+      }
+
+      files.forEach((file) => {
+        // Verifica la dimensione massima del file
+        if (file.size > this.maxFileSize) {
+          alert(`Il file ${file.name} supera il limite di 5 MB.`);
+        } else {
+          // Creare un'anteprima dell'immagine
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            const fileExtension = file.name.split('.').pop() || '';
+            const image: Image = {
+              id: 0, // Puoi aggiornare l'id successivamente se necessario
+              ext: fileExtension,
+              src: e.target.result,
+              title: file.name,
+            };
+            this.messages.controls[msgIndex].get('attached_files')?.value.push(image);
+            console.log(this.messages.controls[msgIndex].get('attached_files')?.value)
+          };
+          reader.readAsDataURL(file);
+        }
       });
-      //this.setImages(formData);
-      this.imageSpaceLeft = true;
     }
-    else {
-      this.imageSpaceLeft = false;
-    }
+  }
+
+  deleteFile(index: number): void {
+    this.imagesList.splice(index, 1);
+    this.fileList.splice(index, 1);
+  }
+
+  deleteFileOnMessage(index: number, msgIndex: number): void {
+    this.messages.controls[msgIndex].get('attached_files')?.value.splice(index, 1);
   }
 
   getImages() {
@@ -576,38 +626,81 @@ export class TicketModifyComponent {
       })
   }
 
-  takeOnCharge() {}
+  takeOnCharge() { }
 
-  release() {}
+  release() { }
 
-  changeStatus() {}
+  changeStatus() {
+    const dialogRef = this.dialog.open(ChangeStatusPopupComponent, {
+      maxWidth: '600px',
+      minWidth: '350px',
+      maxHeight: '400px',
+      width: '90%',
+      data: { idticket: this.ticketInfo?.id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+  }
 
   updateMessage(message: Message) {
 
   }
 
   deleteMessage(id: number) {
-    
+
   }
 
-  // setImages(formData: FormData) {
-  //   this.connectServerService.postRequest<ApiResponse<null>>(Connect.urlServerLaraApi, 'system/uploadFiles',
-  //     formData)
-  //     .subscribe((val: ApiResponse<null>) => {
-  //       this.popupDialogService.alertElement(val);
-  //       this.resetFileInput();
-  //       this.getImages();
-  //     })
-  // }
+  convertBooleanToNumber() {
+    this.inverterList.controls.forEach(inverter => {
+      inverter.get('selected')?.setValue(inverter.get('selected')?.value ? 1 : 0);
+    });
 
-  // deleteImg(idimage: number) {
-  //   this.connectServerService.postRequest<ApiResponse<null>>(Connect.urlServerLaraApi, 'system/deleteFile',
-  //     { idsystem: this.idsystem, idimage: idimage })
-  //     .subscribe((val: ApiResponse<null>) => {
-  //       this.popupDialogService.alertElement(val);
-  //       this.getImages();
-  //     })
-  // }
+    this.batteryList.controls.forEach(battery => {
+      battery.get('selected')?.setValue(battery.get('selected')?.value ? 1 : 0);
+    });
+  }
 
+  create() {
+    // CHIAMATA AL SERVER E POI SI NAVIGA ALLA PAGINA CON L'ID DEL TICKET RESTITUITO
+    const formData = new FormData();
+    this.submitted = true;
+    console.log(this.newMessageForm.getRawValue())
+    if (this.newMessageForm.valid) {
+
+      this.convertBooleanToNumber();
+      // Aggiungi i file al formData
+      this.fileList.forEach((file, index) => {
+        formData.append('attachments[]', file);
+      });
+
+      // Aggiungi i valori del form al formData
+      Object.keys(this.newMessageForm.controls).forEach(key => {
+        const control = this.newMessageForm.get(key);
+
+        if (control instanceof FormArray) {
+          // Se il controllo è un FormArray, aggiungi ciascun valore come array JSON
+          formData.append(key, JSON.stringify(control.value));
+        } else {
+          formData.append(key, control?.value);
+        }
+      });
+
+      // Aggiungi ID del sistema e del ticket
+      formData.append('idsystem', this.idsystem.toString());
+
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
+        .subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            //this.popupDialogService.alertElement(val);
+            this.router.navigate(['ticketModify', val.data.idticket]);
+          }
+        })
+
+      const idticket = 0;
+      this.router.navigate(['ticket', idticket])
+    }
+  }
 
 }

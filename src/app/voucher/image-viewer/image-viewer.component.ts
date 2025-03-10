@@ -17,7 +17,9 @@ export class ImageViewerComponent {
   urlServerLaraFile = Connect.urlServerLaraFile;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { file: LineFile },
-    public dialogRef: MatDialogRef<ImageViewerComponent>) {}
+    public dialogRef: MatDialogRef<ImageViewerComponent>) {
+      console.log(data)
+    }
 
   closeModal() {
     this.dialogRef.close();
