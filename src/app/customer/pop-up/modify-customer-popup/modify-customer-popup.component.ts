@@ -69,6 +69,7 @@ export class ModifyCustomerPopupComponent {
     private connectServerService: ConnectServerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.idPopup = data.idPopup;
+    // WALLNET: 1 non viene mai passato. A cosa serve? io l'ho tolto quando ho fatto la copia. GIUSTO?
     if (this.idPopup == 1) {
       this.customer = data.customer;
     }
