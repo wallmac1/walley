@@ -4,3 +4,17 @@
     margin-top: 0.3rem;
     margin-bottom: 0rem;
 }
+
+.btn-outline-dark {
+    border-color: #002D5D;
+    color: #002D5D;
+}
+
+.btn-outline-dark:focus {
+    background-color: white;
+}
+
+.btn-outline-dark:hover {
+    background-color: #002D5D;
+    color: white;
+}

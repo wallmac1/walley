@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TicketStatus } from '../../../interfaces/ticket-status';
+import { Connect } from '../../../../../classes/connect';
+import { ApiResponse } from '../../../../interfaces/api-response';
 
 @Component({
   selector: 'app-change-status-popup',
@@ -34,7 +36,20 @@ export class ChangeStatusPopupComponent {
   }
 
   ngOnInit(): void {
+    this.getStatusList();
+  }
 
+  getStatusList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketStatusList', {})
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.statusList = val.data.statuses;
+        }
+      })
+  }
+
+  save() {
+    
   }
 
   close() {

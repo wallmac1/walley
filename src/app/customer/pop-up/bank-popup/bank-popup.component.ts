@@ -6,6 +6,9 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Bank } from '../../../bank/interfaces/bank';
+import { ConnectServerService } from '../../../services/connect-server.service';
+import { ApiResponse } from '../../../weco/interfaces/api-response';
+import { Connect } from '../../../classes/connect';
 
 @Component({
   selector: 'app-bank-popup',
@@ -23,68 +26,35 @@ import { Bank } from '../../../bank/interfaces/bank';
 export class BankPopupComponent {
 
   submitted = false;
-  filteredBanks$!: Observable<Bank[]>
+  bankList: Bank[] = [];
 
-  bankForm!: FormGroup;
+  bankForm = new FormGroup({
+    bank_obj: new FormControl<Bank | null>(null)
+  })
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { bankName: string },
-    public dialogRef: MatDialogRef<BankPopupComponent>) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { bank: Bank },
+    public dialogRef: MatDialogRef<BankPopupComponent>, private connectServerService: ConnectServerService) {}
 
   ngOnInit(): void {
-    this.bankForm = new FormGroup({
-      denomination: new FormControl<string>(this.data.bankName)
-    })
-    this.searchBank();
+    this.getBankList();
   }
 
   closeModal() {
     this.dialogRef.close();
   }
 
-  displayBankName(bank?: any): string {
-    return bank;
-  }
-
-  private searchBank() {
-    this.filteredBanks$ = this.bankForm.get('denomination')!.valueChanges.pipe(
-      startWith(this.bankForm.get('denomination')?.value || ''),
-      filter(value => value!.length > 0),
-      debounceTime(300),
-      switchMap((value: string) => this.getArticles(value))
-    );
-  }
-
-  private getArticles(val: string): Observable<Bank[]> {
+  private getBankList() {
     // CHIAMATA AL SERVER
-    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
-    //   {
-    //     query: val
-    //   }).pipe(
-    //     map(response => response.data.cities)
-    //   );
-    // Esempio di una lista di tre clienti
-    const banks: Bank[] = [
-      {
-        id: 6,
-        denomination: "Intesa San Paolo",
-        iban: "IT05678249820000003252",
-        abi: "42845",
-        cab: "928745",
-        cc: "983403690",
-        bic: "983475"
-      }
-    ];
-
-    // Restituisce la lista come Observable
-    return of(banks).pipe(
-      map(items => items.filter(banks =>
-        banks.denomination?.toLowerCase().includes(val.toLowerCase())
-      ))
-    );
+    this.connectServerService.getRequest<ApiResponse<{ bank: Bank[] }>>(Connect.urlServerLaraApi, 'bank/activeBanksList',
+      {}).subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.bankList = val.data.bankList
+        }
+      })
   }
 
-  save(option: any) {
-    this.dialogRef.close(option);
+  selectBank() {
+    this.dialogRef.close({bank: this.bankForm.get('bank_obj')?.value});
   }
 
   close() {

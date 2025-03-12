@@ -3,15 +3,6 @@
     font-weight: bold;
 }
 
-th,
-td {
-    border: 1px solid lightgrey;
-}
-
-tr {
-    border-bottom: 1px solid lightgray;
-}
-
 .bi-plus-circle {
     font-size: 20px;
     transform: scale(1);
@@ -54,48 +45,28 @@ tr {
 
 /* Contenitore scrollabile */
 .table-container {
-    width: 100%;
+    width: 1500px;
+    height: 600px;
+    max-width: 100%;
     overflow-x: auto;
     position: relative;
 }
 
 /* Imposta la larghezza minima della tabella per attivare lo scroll */
 .mat-table {
-    min-width: 1200px;
-    table-layout: fixed; /* Impedisce il ridimensionamento dinamico delle colonne */
+    width: 1500px;
+    table-layout: fixed;
+    /* Impedisce il ridimensionamento dinamico delle colonne */
 }
 
-/* Colonne Sticky a sinistra */
-.sticky-column-left {
-    position: sticky;
-    left: 0;
-    width: 50px;
-    background-color: white;
-    z-index: 100;
-}
-
-.sticky-column-left-2 {
-    position: sticky;
-    left: 40px;
-    width: 130px;
-    background-color: white;
-    z-index: 90;
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Colonna Sticky a destra */
-.sticky-column-right {
-    position: sticky;
-    right: 0;
-    background-color: white;
-    z-index: 100;
-    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Stili generali della tabella */
-th, td {
+th,
+td {
     border: 1px solid lightgrey;
     white-space: nowrap;
+}
+
+tr {
+    border-bottom: 1px solid lightgray;
 }
 
 .clickableElement {

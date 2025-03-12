@@ -443,9 +443,12 @@
       "TECHNICIANNAME": "Tecnico Impianto",
       "SYSTEMNAME": "Nome dell'Impianto",
       "FILTER": "Filtra",
-      "ACTIVEFILTERS": "Filtri Attivi"
+      "ACTIVEFILTERS": "Filtri Attivi",
+      "NOTICKETS": "Nessun Ticket è stato ancora aperto per questo sistema, premi sul + per aggiungerne uno"
     },
     "TICKETNEW": {
+      "NOINVERTER": "Nessun Inverter presente nell'impianto",
+      "NOBATTERIES": "Nessuna Batteria presente nell'impianto",
       "NEWTICKET": "Nuovo Ticket",
       "SYSTEMINFO": "Info Impianto",
       "PUBLIC": "Pubblico",
@@ -881,6 +884,8 @@
   },
   "BANK": {
     "MODAL": {
+      "SELECTBANK": "Seleziona Banca",
+      "SELECT": "Seleziona",
       "ORGANIZATIONANDTAXREPRESENTATIVE": "Organizzazione e Rappresentante Fiscale",
       "DATE": "Data",
       "ADD": "Aggiungi",
@@ -1104,7 +1109,8 @@
       "IBAN": "IBAN",
       "COMPANYBANK": "Banca Azienda",
       "CUSTOMERBANK": "Banca Cliente",
-      "SAVE": "Salva"
+      "SAVE": "Salva",
+      "INFO": "Per salvare i dati relativi alla banca del cliente e dell'azienda selezionare un metodo di pagamento preferito"
     }
   },
   "PAYMENTCONDITIONS": {

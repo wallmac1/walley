@@ -127,7 +127,7 @@
                     </select>
                 </div>
 
-                <div *ngIf="!isNote; else noteBlock" class="col-4">
+                <!-- <div *ngIf="!isNote; else noteBlock" class="col-4">
                     <button class="btn btn-link" (click)="addNote()">
                         {{"PAYMENTCONDITIONS.POPUP.ADDNOTE" | translate}}
                         <i class="bi bi-plus"></i>
@@ -141,7 +141,7 @@
                         </label>
                         <textarea class="form-control" type="text" id="note" formControlName="note" rows="1"></textarea>
                     </div>
-                </ng-template>
+                </ng-template> -->
             </div>
 
             <div *ngIf="paymentConditionsForm.invalid" class="row justify-content-end mt-2">

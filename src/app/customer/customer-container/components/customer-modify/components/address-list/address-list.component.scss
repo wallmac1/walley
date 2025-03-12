@@ -63,11 +63,11 @@ input, textarea, select {
 
 .iconAnimation {
     font-size: 18px;
-    transform: scale(1);
-    transition: transform 1s ease;
+    transform: scale(1) !important;
+    transition: transform 1s ease !important;
 }
 
 .iconAnimation:hover {
-    transform: scale(1.2);
+    transform: scale(1.4) !important;
     cursor: pointer;
 }

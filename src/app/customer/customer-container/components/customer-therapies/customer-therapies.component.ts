@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
@@ -9,6 +9,7 @@ import { TherapyPopupComponent } from '../../../pop-up/therapy-popup/therapy-pop
 import { ConnectServerService } from '../../../../services/connect-server.service';
 import { Connect } from '../../../../classes/connect';
 import { ApiResponse } from '../../../../weco/interfaces/api-response';
+import { MatSortModule, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-customer-therapies',
@@ -17,13 +18,15 @@ import { ApiResponse } from '../../../../weco/interfaces/api-response';
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
-    MatTableModule
+    MatTableModule,
+    MatSortModule
   ],
   templateUrl: './customer-therapies.component.html',
   styleUrl: './customer-therapies.component.scss'
 })
 export class CustomerTherapiesComponent {
 
+  @ViewChild('sort') sort!: Sort;
   @Input() idregistry: number = 0;
   dataSource = new MatTableDataSource<TherapyTable>([]);
   therapies: TherapyTable[] = [];
@@ -87,7 +90,8 @@ export class CustomerTherapiesComponent {
   }
 
   getTherapies() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/therapiesList', { idregistry: this.idregistry })
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/therapiesList', { idregistry: this.idregistry, 
+      orderby_creation: this.sort?.direction || 'desc' })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
           this.therapies = val.data.therapiesList;

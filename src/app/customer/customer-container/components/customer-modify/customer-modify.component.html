@@ -274,7 +274,8 @@
                         </span>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-payment-data [paymentData]="paymentData" #paymentDataComponent></app-payment-data>
+                        <app-payment-data [paymentData]="paymentData" [paymentMethodList]="paymentMethodsList" 
+                            [idregistry]="idcustomer" (refreshPaymentData)="getPaymentData()" #paymentDataComponent></app-payment-data>
                     </ng-template>
                 </mat-tab>
             </mat-tab-group>

@@ -15,7 +15,7 @@
                 <mat-expansion-panel-header class="cutomPanelHeader" style="background-color:#fcf3cf ">
                     <mat-panel-title style="justify-content: start;">
                         <span style="font-size: x-large; font-weight: bold;">
-                            {{"SYSTEM.TICKETMODIFY.ID" | translate}}: {{ticketInfo?.id}}
+                            {{"SYSTEM.TICKETMODIFY.ID" | translate}}: {{ticketInfo?.idsystem}}
                         </span>
                     </mat-panel-title>
                     <span class="me-4" style="display: flex; align-items: center;">
@@ -31,8 +31,8 @@
                     <span *ngIf="!isSmallScreen; else screenStatusBlock" class="me-4"
                         style="display: flex; align-items: center;">
                         {{"SYSTEM.TICKETMODIFY.STATUS" | translate}}:
-                        <i class="bi bi-circle-fill ms-2 me-1" [ngStyle]="{'color': '#'+systemStatus.color}"></i>
-                        {{systemStatus.name}}
+                        <i class="bi bi-circle-fill ms-2 me-1" [ngStyle]="{'color': ticketInfo?.ticketStatus?.color}"></i>
+                        {{ticketInfo?.ticketStatus?.name}}
                     </span>
                     <ng-template #screenStatusBlock>
                         <span class="me-3" style="display: flex; align-items: center;">
@@ -43,7 +43,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row justify-content-center mt-2">
-                    <div class="col-6 text-start mt-1">
+                    <div class="col-6 col-lg-4 text-start mt-1">
                         <span class="ticketInfoTitle">
                             {{"SYSTEM.TICKETMODIFY.SYSTEMINFO" | translate}}
                         </span>
@@ -51,49 +51,42 @@
                             <i class="bi bi-card-text"></i>
                         </button>
                     </div>
-                    <div class="col-6 text-end mt-1">
+                    <div class="col-6 col-lg-4 text-end text-lg-center mt-1">
                         <span class="ticketInfoTitle">
                             {{"SYSTEM.TICKETMODIFY.OPENEDFROM" | translate}}:
-                        </span><br *ngIf="isSmallScreen">
+                        </span>
                         <span class="ticketInfoContent">
-                            {{ticketInfo?.id}}
+                            {{ticketInfo?.user_created?.nickname}}
                         </span>
                     </div>
 
-                    <div class="col-12 col-sm-6 text-start mt-1">
-                        <label class="form-label" for="email">
-                            {{"SYSTEM.TICKETMODIFY.ANSWEREMAIL" | translate}}
-                        </label><br *ngIf="isSmallScreen">
-                        <input class="form-control" type="text" id="email" formControlName="email"
-                            style="max-width: 350px;">
-                    </div>
-
-                    <div class="col-12 col-sm-6 text-start text-sm-end mt-1">
+                    <div class="col-12 col-lg-4 text-center text-lg-end mt-1">
                         <span class="ticketInfoTitle">
                             {{"SYSTEM.TICKETMODIFY.PROGRESSIVE" | translate}}:
-                        </span><br *ngIf="isSmallScreen">
+                        </span>
                         <span class="ticketInfoContent">
-                            {{ticketInfo?.progressive}}/
-                            {{ticketInfo?.openingDate}}
+                            {{ticketInfo?.progressive}} /
+                            {{ticketInfo?.user_created?.datetime}}
                         </span>
                     </div>
                 </div>
 
                 <div class="row justify-content-center mt-1">
-                    <div class="col-12 mt-3">
+                    <div class="col-12 text-center">
                         <span style="font-weight: bold; font-size: large; border-bottom: 1px solid lightgray;">
                             {{"SYSTEM.TICKETNEW.ANOMALYFOUNDED" | translate}}
                         </span>
                     </div>
 
                     <!-- INVERTER LIST -->
-                    <div class="col-12 mt-2 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5 text-start"
+                    <div class="col-12 mt-1 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5 text-start"
                         formArrayName="inverterList">
                         <span class="listTitle">
                             {{"SYSTEM.TICKETNEW.INVERTERLIST" | translate}}
                         </span>
-                        <div class="row align-items-group mt-2" style="border-bottom: 1px solid lightgray;">
-                            <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-start"
+                        <div *ngIf="ticketInfoForm.get('inverterList')?.value.length > 0; else noInverterBlock" 
+                            class="row align-items-group mt-2" style="border-bottom: 1px solid lightgray;">
+                            <div class="col-auto text-start"
                                 *ngFor="let inverter of inverterList.controls; let i = index" [formGroupName]="i">
                                 <div class="form-check">
                                     <label class="form-check-label ms-2" for="selected_inverter-{{i}}">
@@ -103,17 +96,27 @@
                                 </div>
                             </div>
                         </div>
+                        <ng-template #noInverterBlock>
+                            <div class="row">
+                                <div class="col-12">
+                                    <span style="font-style: italic; color: gray;">
+                                        {{"SYSTEM.TICKETNEW.NOINVERTER" | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
+                    
 
                     <!-- BATTERY LIST -->
-                    <div class="col-12 mt-2 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5 text-start"
+                    <div class="col-12 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5 text-start"
                         formArrayName="batteryList">
                         <span class="listTitle">
                             {{"SYSTEM.TICKETNEW.BATTERYLIST" | translate}}
                         </span>
-                        <div class="row align-items-group mt-2" style="border-bottom: 1px solid lightgray;">
-
-                            <div class="col-12 col-sm-6 col-md-4 col-xl-3 text-start"
+                        <div *ngIf="ticketInfoForm.get('batteryList')?.value.length > 0; else noBatteriesBlock"
+                            class="row align-items-group mt-2" style="border-bottom: 1px solid lightgray;">
+                            <div class="col-auto text-start"
                                 *ngFor="let battery of batteryList.controls; let i = index" [formGroupName]="i">
                                 <div class="form-check">
                                     <label class="form-check-label ms-2" for="selected_battery-{{i}}">
@@ -123,12 +126,21 @@
                                 </div>
                             </div>
                         </div>
+                        <ng-template #noBatteriesBlock>
+                            <div class="row">
+                                <div class="col-12">
+                                    <span style="font-style: italic; color: gray;">
+                                        {{"SYSTEM.TICKETNEW.NOBATTERIES" | translate}}
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
 
-                <div class="row justify-content-center mt-2">
+                <div class="row justify-content-center mt-1">
                     <!-- DESCRIPTION -->
-                    <div class="col-12 mt-2 mb-2 quillContainer"
+                    <div class="col-12 mt-1 mb-2 quillContainer"
                         [ngClass]="{ 'is-invalid': newMessageForm.get('description')?.invalid && submitted }">
                         <quill-editor formControlName="description" id="description"
                             [class.is-invalid]="newMessageForm.get('description')?.invalid && submitted">
@@ -183,13 +195,21 @@
                     </div>
 
                     <!-- INTERNAL NOTES -->
-                    <div class="col-12">
+                    <div class="col-12 col-md-6 col-lg-8 mt-1">
                         <label class="form-label" for="internalNotes">
                             {{"SYSTEM.TICKETMODIFY.INTERNALNOTES" | translate}}
                         </label>
                         <textarea class="form-control" type="text" id="internalNotes" formControlName="internalNotes"
-                            rows="2">
+                            rows="1">
                         </textarea>
+                    </div>
+
+
+                    <div class="col-12 col-md-6 col-lg-4 mt-1">
+                        <label class="form-label" for="email">
+                            {{"SYSTEM.TICKETMODIFY.ANSWEREMAIL" | translate}}
+                        </label><br *ngIf="isSmallScreen">
+                        <input class="form-control" type="text" id="email" formControlName="email">
                     </div>
 
                     <!-- ATTACHED FILES -->
@@ -205,7 +225,7 @@
                             </div>
     
                             <div class="col-auto">
-                                <label *ngIf="fileList.length < maxImages" for="fileUpload2"
+                                <label *ngIf="ticketInfo?.attachments?.length! < maxImages" for="fileUpload2"
                                     class="btn btn-outline-dark mt-1">
                                     <i class="bi bi-paperclip"></i>
                                     <input type="file" id="fileUpload2" style="display: none;"
@@ -230,7 +250,7 @@
 
                     <!-- SAVE -->
                     <div class="col-auto text-end">
-                        <button class="btn btn-outline-success">
+                        <button class="btn btn-outline-success" (click)="saveTicketInfo()">
                             Save
                         </button>
                     </div>
@@ -240,7 +260,7 @@
     </div>
 
     <div class="row justify-content-center ps-3 pe-3 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5">
-        <div class="col-12 text-end p-0 mt-5 me-lg-5">
+        <div class="col-12 text-end p-0 mt-2 me-lg-5">
             <button class="btn btn-dark btnHover" (click)="changeVisualization()" style="border-radius: 20px;">
                 <span *ngIf="visualizeAll; else visualizePublicBlock">
                     Visualizzazione Cliente

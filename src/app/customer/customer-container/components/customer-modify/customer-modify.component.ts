@@ -22,6 +22,7 @@ import { ApiResponse } from '../../../../weco/interfaces/api-response';
 import { AutocompleteMunicipality } from '../../../interfaces/autocomplete-municipality';
 import { HistoryPopupComponent } from '../../../pop-up/history-popup/history-popup.component';
 import { PaymentData } from '../../../interfaces/payment-data';
+import { PaymentTable } from '../../../../payment-conditions/interfaces/payment-table';
 
 @Component({
   selector: 'app-customer-modify',
@@ -62,6 +63,7 @@ export class CustomerModifyComponent {
     tax_naturalPerson: 0, tax_name: null, tax_surname: null, tax_denomination: null, tax_vat: null
   };
   paymentData: PaymentData | null = null;
+  paymentMethodsList: PaymentTable[] = [];
 
   customerGeneralForm = new FormGroup({
     idregistry: new FormControl<number>(0),
@@ -157,26 +159,37 @@ export class CustomerModifyComponent {
     }
   }
 
+  getPaymentMethodsList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/condizioniPagamento', {})
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.paymentMethodsList = val.data.conditions;
+        }
+      })
+  }
+
   getPaymentData() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/paymentData', { idregistry: this.idcustomer })
-    .subscribe((val) => {
-      if (val.data) {
-        this.paymentData = val.data.paymentData;
-        this.paymentDataComponent.paymentData = this.paymentData;
-        this.chargedTab[2] = true;
-      }
-    })
+    this.getPaymentMethodsList();
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/paymentFavorite', { idregistry: this.idcustomer })
+      .subscribe((val) => {
+        if (val.data) {
+          this.paymentData = val.data.paymentData;
+          this.paymentDataComponent.paymentData = this.paymentData;
+          this.paymentDataComponent.initForm();
+          this.chargedTab[2] = true;
+        }
+      })
   }
 
   getOrganizationTax() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/organizationTax', { idregistry: this.idcustomer })
-    .subscribe((val) => {
-      if (val.data) {
-        this.organizationTax = val.data.organizationTax;
-        this.organizationTaxComponent.organizationTax = this.organizationTax;
-        this.chargedTab[1] = true;
-      }
-    })
+      .subscribe((val) => {
+        if (val.data) {
+          this.organizationTax = val.data.organizationTax;
+          this.organizationTaxComponent.organizationTax = this.organizationTax;
+          this.chargedTab[1] = true;
+        }
+      })
   }
 
   getAddressList() {

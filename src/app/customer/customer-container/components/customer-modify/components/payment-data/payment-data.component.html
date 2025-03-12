@@ -1,19 +1,18 @@
 <div class="container-fluid mt-4 pb-5" style="max-width: 1400px;">
 
-    <div [formGroup]="paymentMethod" class="row justify-content-start align-items-center">
-        <div class="col-12 col-md-8 col-lg-6 col-xl-4">
-            <label class="form-label" for="paymentMethod">{{"CUSTOMER.PAYMENTTAB.PAYMENTMETHOD" | translate}}</label>
-            <select class="form-select" name="paymentMethod" id="paymentMethod" formControlName="paymentMethod">
+    <div [formGroup]="paymentMethodForm" class="row justify-content-start align-items-center">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+            <label class="form-label" for="payment_method">{{"CUSTOMER.PAYMENTTAB.PAYMENTMETHOD" | translate}}</label>
+            <select class="form-select" id="payment_method" formControlName="payment_method">
                 <option [ngValue]="null">--</option>
-                <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
-                    {{method.name}}
+                <option *ngFor="let method of paymentMethodList" [ngValue]="method.id">
+                    {{method.code}} - {{method.description}}
                 </option>
             </select>
         </div>
     </div>
 
-    <div [formGroup]="bankForm"  class="row justify-content-start align-items-end mt-4">
-
+    <div [formGroup]="bankForm" class="row justify-content-start align-items-end mt-4">
         <div class="col-12" style="border-bottom: 1px solid lightgray;">
             <span class="titleLines">
                 {{"CUSTOMER.PAYMENTTAB.COMPANYBANK" | translate}}
@@ -113,6 +112,10 @@
     </div>
 
     <div class="row justify-content-center align-items-center mt-4 pt-2" style="border-top: 1px solid lightgray;">
+        <div *ngIf="paymentMethodForm.get('payment_method')?.value == null" class="col-12 text-center"
+            style="color: gray; font-style: italic; font-size: small;">
+            {{"CUSTOMER.PAYMENTTAB.INFO" | translate}}
+        </div>
         <div class="col-12 text-end">
             <button class="btn btn-outline-dark" (click)="save()">
                 {{"CUSTOMER.PAYMENTTAB.SAVE" | translate}}

@@ -29,7 +29,7 @@ export class PaymentNewPopupComponent {
 
   installmentList: { id: number, title: string }[] = [];
   submitted: boolean = false;
-  isNote: boolean = false;
+  //isNote: boolean = false;
 
   paymentConditionsForm = new FormGroup({
     code: new FormControl<string | null>(null, Validators.required),
@@ -41,7 +41,6 @@ export class PaymentNewPopupComponent {
     deadline_type: new FormControl<number | null>(null, [Validators.required, this.exactDaySelectedValidator()]),
     exact_day: new FormControl<string | null>(null, this.maxIntegerValidator(31)),
     bank_type: new FormControl<number | null>(null),
-    note: new FormControl<string | null>(null),
   })
 
   constructor(public dialogRef: MatDialogRef<PaymentNewPopupComponent>,
@@ -52,6 +51,7 @@ export class PaymentNewPopupComponent {
     this.paymentConditionsForm.get('bank_type')?.setValue(data.element.bank_type?.id || null);
     this.paymentConditionsForm.get('deadline_type')?.setValue(data.element.deadline_type?.id || null);
     this.paymentConditionsForm.get('xml_code')?.setValue(data.element.xml_code?.id || null);
+    this.paymentConditionsForm.get('exact_day')?.setValue(data.element.exact_day.toString() || null);
     this.xml_codes = data.xml_codes;
     this.bankList = data.bankList;
     this.deadlineList = data.deadlineList;
@@ -66,10 +66,6 @@ export class PaymentNewPopupComponent {
       const installment = { id: i, title: (i).toString() }
       this.installmentList.push(installment);
     }
-  }
-
-  addNote() {
-    this.isNote = true;
   }
 
   filter() { }

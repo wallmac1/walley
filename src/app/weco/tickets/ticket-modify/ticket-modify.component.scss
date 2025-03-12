@@ -205,6 +205,10 @@ quill-editor-toolbar {
     }
 }
 
+::ng-deep .ql-toolbar.ql-snow + .ql-container.ql-snow {
+    height: 80px;
+}
+
 .btnHover {
     transform: translateY(0);
     transition: transform 0.5s ease;

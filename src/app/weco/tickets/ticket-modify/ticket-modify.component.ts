@@ -9,7 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { Image } from '../../interfaces/image';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ApiResponse } from '../../interfaces/api-response';
 import { Connect } from '../../../classes/connect';
@@ -40,6 +40,7 @@ export class TicketModifyComponent {
   @ViewChild('panel') panelComponent!: MatExpansionPanel;
   @ViewChild('bottomAnchor') bottomAnchor!: ElementRef;
   isNewMessage: boolean = false;
+  idticket: number = 0;
   ticketInfo: TicketInfo | null = null;
   isSmallScreen: boolean = false;
   maxImages: number = 10;
@@ -63,6 +64,7 @@ export class TicketModifyComponent {
     description: new FormControl<string | null>(null),
     date: new FormControl<string | null>(null),
     time: new FormControl<string | null>(null),
+    //attachments: new FormControl<Image[]>([]),
   });
   oldMessagesForm!: FormGroup;
   ticketInfoForm!: FormGroup;
@@ -73,6 +75,13 @@ export class TicketModifyComponent {
   constructor(private fb: FormBuilder, private viewportScroller: ViewportScroller,
     private connectServerService: ConnectServerService, private dialog: MatDialog,
     private sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router) {
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      const id = params.get('id');
+      if (id) {
+        this.idticket = parseInt(id);
+      }
+    });
+
     this.ticketInfoForm = this.fb.group({
       email: [null],
       request: [null],
@@ -92,8 +101,7 @@ export class TicketModifyComponent {
     this.route.queryParams.subscribe(params => {
       this.idsystem = params['idsystem'];
     });
-    this.getStatus();
-    this.getData();
+    this.getTicketInfo();
     this.updateWindowDimensions();
   }
 
@@ -143,7 +151,7 @@ export class TicketModifyComponent {
       description: [message.description],
       public: [message.public],
       portal: [message.portal],
-      attached_files: [message.attached_files],
+      attachments: [message.attachments],
       user_created: [message.user_created]
     })
   }
@@ -206,23 +214,6 @@ export class TicketModifyComponent {
     }, 100);
   }
 
-  getStatus() {
-    // console.log("Received 1")
-    if (this.idsystem > 0) {
-      this.connectServerService.getRequest<ApiResponse<{ status: { id: number, name: string, color: string } }>>
-        (Connect.urlServerLaraApi, 'system/systemStatus', { idsystem: this.idsystem })
-        .subscribe((val: ApiResponse<{ status: { id: number, name: string, color: string } }>) => {
-          if (val.data) {
-            this.systemStatus = val.data.status;
-          }
-        })
-    }
-  }
-
-  sendMessage() {
-
-  }
-
   viewImage(img: Image) {
     console.log(img)
     if (img.ext != 'pdf' && this.acceptedExt.includes(img.ext || '')) {
@@ -272,255 +263,62 @@ export class TicketModifyComponent {
     }
   }
 
-  getData() {
-    this.ticketInfo = {
-      id: 123,
-      public: 1,
-      progressive: "001",
-      openingDate: "2023-04-10T12:00:00Z",
-      description: "Richiesta di assistenza",
-      requestType: 1,
-      email: "example@example.com",
-      internalNotes: "Note interne per i tecnici",
-      attachedFiles: [{ id: 1, src: 'wecoW.jpg', ext: 'jpg', folder: '', title: '' }],
-      inverterList: [
-        { id: 1, sn: "INV-001", selected_inverter: 0 },
-        { id: 2, sn: "INV-002", selected_inverter: 1 }
-      ],
-      batteryList: [
-        { id: 10, sn: "BAT-001", selected_battery: 1 },
-        { id: 11, sn: "BAT-002", selected_battery: 1 }
-      ]
-    };
+  getTicketInfo() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketDetail', { idticket: this.idticket })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.ticketInfo = val.data.ticketInfo;
+          if (this.ticketInfo) {
+            this.initTicketInfoForm();
+          }
+          if (val.data.ticketMessages) {
+            this.createMessageList(val.data.ticketMessages);
+          }
+        }
+      })
+  }
 
-    this.initTicketInfoForm()
+  getTicketLines() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketLines', { idticket: this.idticket })
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data.ticketLines) {
+          this.createMessageList(val.data.ticketLines);
+        }
+      })
+  }
 
-    this.messagesList = [
-      {
-        id: 1,
-        description: "Messaggio di benvenuto",
-        public: 1,
-        attached_files: [
-          { id: 101, src: "trial.jpeg", ext: "jpeg", title: "Immagine 1" }
-        ],
-        portal: 0,
-        user_created: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 2,
-        description: "Documentazione aggiornata",
-        public: 0,
-        attached_files: [
-          { id: 102, src: "pic1.jpg", ext: "jpg", title: "Manuale" }
-        ],
-        portal: 1,
-        user_created: {
-          id: 2,
-          nickname: "user123",
-          datetime: "2023-02-10T14:45:00",
-          date_only: "2023-02-10",
-          time_only: "14:45:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 3,
-        description: "Nota interna",
-        public: null,
-        attached_files: [],
-        portal: 0,
-        user_created: {
-          id: 3,
-          nickname: "supervisor",
-          datetime: "2023-03-05T09:15:00",
-          date_only: "2023-03-05",
-          time_only: "09:15:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 4,
-        description: "Aggiornamento sistema",
-        public: 1,
-        attached_files: [
-          { id: 103, src: "office.png", ext: "png", title: "Schermata" }
-        ],
-        portal: 1,
-        user_created: {
-          id: 4,
-          nickname: "devteam",
-          datetime: "2023-04-12T16:30:00",
-          date_only: "2023-04-12",
-          time_only: "16:30:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 5,
-        description: "Messaggio pubblico",
-        public: 1,
-        attached_files: [
-          { id: 104, src: "pic2.jpg", ext: "jpg", title: "Annuncio" }
-        ],
-        portal: 0,
-        user_created: {
-          id: 5,
-          nickname: "public_user",
-          datetime: "2023-05-22T11:50:00",
-          date_only: "2023-05-22",
-          time_only: "11:50:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 6,
-        description: "Messaggio riservato",
-        public: 0,
-        attached_files: [],
-        portal: 1,
-        user_created: {
-          id: 6,
-          nickname: "manager",
-          datetime: "2023-06-15T13:10:00",
-          date_only: "2023-06-15",
-          time_only: "13:10:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 7,
-        description: null,
-        public: 1,
-        attached_files: [
-          { id: 105, src: "pic3.jpg", ext: "jpg", title: "Diagramma" }
-        ],
-        portal: 0,
-        user_created: {
-          id: 7,
-          nickname: "analyst",
-          datetime: "2023-07-01T08:25:00",
-          date_only: "2023-07-01",
-          time_only: "08:25:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 8,
-        description: "Comunicazione importante",
-        public: 1,
-        attached_files: [],
-        portal: 1,
-        user_created: {
-          id: 8,
-          nickname: "support",
-          datetime: "2023-08-18T17:40:00",
-          date_only: "2023-08-18",
-          time_only: "17:40:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 9,
-        description: "Nota tecnica",
-        public: null,
-        attached_files: [
-          { id: 106, src: "logo.png", ext: "png", title: "Documento tecnico" }
-        ],
-        portal: 0,
-        user_created: {
-          id: 9,
-          nickname: "technician",
-          datetime: "2023-09-10T15:20:00",
-          date_only: "2023-09-10",
-          time_only: "15:20:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      },
-      {
-        id: 10,
-        description: "Promemoria evento",
-        public: 1,
-        attached_files: [],
-        portal: 1,
-        user_created: {
-          id: 10,
-          nickname: "event_manager",
-          datetime: "2023-10-05T10:00:00",
-          date_only: "2023-10-05",
-          time_only: "10:00:00"
-        },
-        user_updated: {
-          id: 1,
-          nickname: "admin",
-          datetime: "2023-01-15T10:30:00",
-          date_only: "2023-01-15",
-          time_only: "10:30:00"
-        }
-      }
-    ]
+  saveTicketInfo() {
+    const formData = new FormData();
+    this.submitted = true;
+    //console.log(this.newTicketForm.getRawValue())
+    if (this.ticketInfoForm.valid) {
+      this.convertBooleanToNumber();
+      // Aggiungi i file al formData
+     
+      // TODO AGGIUNGERE LE FOTO AL FORMDATA
 
-    this.createMessageList(this.messagesList);
+      // Aggiungi i valori del form al formData
+      Object.keys(this.ticketInfoForm.controls).forEach(key => {
+        const control = this.ticketInfoForm.get(key);
+
+        if (control instanceof FormArray) {
+          // Se il controllo è un FormArray, aggiungi ciascun valore come array JSON
+          formData.append(key, JSON.stringify(control.value));
+        } else {
+          formData.append(key, control?.value);
+        }
+      });
+
+      // Aggiungi ID del sistema e del ticket
+      formData.append('idticket', this.idticket.toString());
+
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
+        .subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            
+          }
+        })
+    }
   }
 
   onFileSelected(event: Event): void {
@@ -605,27 +403,6 @@ export class TicketModifyComponent {
     this.messages.controls[msgIndex].get('attached_files')?.value.splice(index, 1);
   }
 
-  getImages() {
-    this.connectServerService.getRequest<ApiResponse<{ listFiles: Image[] }>>(Connect.urlServerLaraApi, 'ticket/filesList',
-      {
-        //idsystem: this.idsystem,
-        //step_position: 2
-      })
-      .subscribe((val: ApiResponse<{ listFiles: Image[] }>) => {
-        if (val.data.listFiles) {
-          this.imagesList = val.data.listFiles.map(image => {
-            // Chiama ImageLoaderService solo una volta per immagine
-            // this.imageLoaderService.getImageWithToken(Connect.urlServerLaraFile + image.src).subscribe(
-            //   (safeUrl) => {
-            //     image.src = safeUrl; // Assegna l'URL sicuro all'immagine
-            //   }
-            // );
-            return image;
-          });
-        }
-      })
-  }
-
   takeOnCharge() { }
 
   release() { }
@@ -636,12 +413,47 @@ export class TicketModifyComponent {
       minWidth: '350px',
       maxHeight: '400px',
       width: '90%',
-      data: { idticket: this.ticketInfo?.id }
+      data: { idticket: this.ticketInfo?.idsystem }
     });
 
     dialogRef.afterClosed().subscribe(result => {
 
     });
+  }
+
+  sendMessage() {
+    // CHIAMATA AL SERVER E POI SI NAVIGA ALLA PAGINA CON L'ID DEL TICKET RESTITUITO
+    const formData = new FormData();
+    //this.submitted = true;
+    //console.log(this.newTicketForm.getRawValue())
+    if (this.newMessageForm.valid) {
+      // Aggiungi i file al formData
+
+      // TODO AGGIUNGERE ALLEGATI AL FORMDATA
+
+      // Aggiungi i valori del form al formData
+      Object.keys(this.newMessageForm.controls).forEach(key => {
+        const control = this.newMessageForm.get(key);
+
+        if (control instanceof FormArray) {
+          // Se il controllo è un FormArray, aggiungi ciascun valore come array JSON
+          formData.append(key, JSON.stringify(control.value));
+        } else {
+          formData.append(key, control?.value);
+        }
+      });
+
+      // Aggiungi ID del sistema e del ticket
+      formData.append('idticket', this.idticket.toString());
+      formData.append('idticketline', "0");
+
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
+        .subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            this.getTicketLines();
+          }
+        })
+    }
   }
 
   updateMessage(message: Message) {

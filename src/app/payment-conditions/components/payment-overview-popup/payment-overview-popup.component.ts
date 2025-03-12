@@ -38,7 +38,6 @@ export class PaymentOverviewPopupComponent {
     deadline_type: new FormControl<number | null>(null),
     exact_day: new FormControl<string | null>(null),
     bank_type: new FormControl<number | null>(null),
-    note: new FormControl<string | null>(null),
   })
 
   constructor(public dialogRef: MatDialogRef<PaymentOverviewPopupComponent>,

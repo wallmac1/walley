@@ -1,29 +1,32 @@
 <h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
     <span style="color: white; font-weight: bold; font-size: x-large;">
-        {{"BANK.MODAL.SEARCHBANK" | translate}}
+        {{"BANK.MODAL.SELECTBANK" | translate}}
     </span>
 </h2>
 
 <mat-dialog-content>
     <div class="row justify-content-center align-items-center">
-        <div class="col-12">
-            <mat-dialog-content [formGroup]="bankForm">
-                <label class="form-label" for="denomination">{{"BANK.MODAL.DENOMINATION" | translate}}</label>
-                <input type="text" matInput [matAutocomplete]="denomination" class="form-control" id="denomination"
-                    formControlName="denomination" [class.is-invalid]="denomination && submitted">
-                <mat-autocomplete #denomination="matAutocomplete" [displayWith]="displayBankName">
-                    <mat-option *ngFor="let option of filteredBanks$ | async" [value]="option"
-                        (onSelectionChange)="save(option)">
-                        <div>
-                            {{option.denomination}}
-                        </div>
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-dialog-content>
+        <div class="col-12 mt-2 mb-4">
+            <form [formGroup]="bankForm">
+                <label class="form-label" for="bank">{{"BANK.MODAL.DENOMINATION" | translate}}</label>
+                <select class="form-select" id="bank" formControlName="bank_obj">
+                    <option [value]="null">
+                        --
+                    </option>
+                    <option *ngFor="let bank of bankList" [ngValue]="bank">
+                        {{bank.denomination}}
+                    </option>
+                </select>
+            </form>
         </div>
+    </div>
 
-        <div class="col-12 text-end mb-2">
-            <button class="btn btn-outline-danger" (click)="close()">{{"BANK.MODAL.CLOSE" | translate}}</button>
+    <div class="row justify-content-center" style="border-top: 1px solid lightgray;">
+        <div class="col-6 text-start pt-2">
+            <button class="btn btn-outline-dark" (click)="close()">{{"BANK.MODAL.CLOSE" | translate}}</button>
+        </div>
+        <div class="col-6 text-end pt-2">
+            <button class="btn btn-outline-success" (click)="selectBank()">{{"BANK.MODAL.SELECT" | translate}}</button>
         </div>
     </div>
 </mat-dialog-content>

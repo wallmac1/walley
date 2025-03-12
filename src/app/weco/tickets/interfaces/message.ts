@@ -4,7 +4,7 @@ export interface Message {
     id: number;
     description: string | null;
     public: number | null;
-    attached_files: Image[];
+    attachments: Image[];
     portal: number; //0: walley, 1: wecare
     user_created: {
         id: number; 

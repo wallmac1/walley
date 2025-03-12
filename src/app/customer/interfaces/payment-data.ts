@@ -1,6 +1,6 @@
 export interface PaymentData {
     idregistry: number;
-    paymentMethod: number | null;
+    payment_method: number | null;
     company_denomination: string | null;
     company_iban: string | null;
     company_abi: string | null;

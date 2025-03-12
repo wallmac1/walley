@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,6 +7,8 @@ import { BankPopupComponent } from '../../../../../pop-up/bank-popup/bank-popup.
 import { PaymentData } from '../../../../../interfaces/payment-data';
 import { ConnectServerService } from '../../../../../../services/connect-server.service';
 import { Connect } from '../../../../../../classes/connect';
+import { PaymentTable } from '../../../../../../payment-conditions/interfaces/payment-table';
+import { ApiResponse } from '../../../../../../weco/interfaces/api-response';
 
 @Component({
   selector: 'app-payment-data',
@@ -21,18 +23,19 @@ import { Connect } from '../../../../../../classes/connect';
 })
 export class PaymentDataComponent {
 
+  @Input() idregistry: number = 0;
   @Input() paymentData: PaymentData | null = null;
-  @Input() paymentMethods: { id: number, name: string }[] = [
-    { id: 1, name: "Metodo 1" }, { id: 2, name: "Metodo 2" }
-  ];
+  @Input() paymentMethodList: PaymentTable[] = [];
+  @Output() refreshPaymentData = new EventEmitter<null>;
 
   submitted: boolean = false;
 
-  paymentMethod = new FormGroup({
-    paymentMethod: new FormControl<number | null>(null)
+  paymentMethodForm = new FormGroup({
+    payment_method: new FormControl<number | null>(null)
   })
 
   bankForm = new FormGroup({
+    idregistry: new FormControl<number>(0),
     company_denomination: new FormControl<string | null>(null),
     company_iban: new FormControl<string | null>(null),
     company_abi: new FormControl<string | null>(null),
@@ -47,38 +50,64 @@ export class PaymentDataComponent {
     customer_bic: new FormControl<string | null>(null),
   })
 
-  constructor(private dialog: MatDialog, private connectServerService: ConnectServerService) {}
-
-  ngOnInit(): void {
-    this.initForm();
-  }
+  constructor(private dialog: MatDialog, private connectServerService: ConnectServerService) { }
 
   initForm() {
-    this.bankForm.patchValue(this.paymentData!);
+    if(this.paymentData) {
+      this.bankForm.patchValue(this.paymentData);
+      this.paymentMethodForm.get('payment_method')?.setValue(this.paymentData?.payment_method || null);
+    }
+    else {
+      this.bankForm.reset();
+    }
   }
 
   searchBank() {
     const dialogRef = this.dialog.open(BankPopupComponent, {
-      maxWidth: '800px',
+      maxWidth: '600px',
       minWidth: '350px',
       maxHeight: '600px',
       width: '90%',
-      data: {
-        bankName: this.bankForm.get('denomination')?.getRawValue(),
-      }
+      data: {}
     });
 
     dialogRef.afterClosed().subscribe((result: any | null) => {
       if (result) {
-        this.bankForm.patchValue(result);
+        if (result.bank) {
+          this.bankForm.get('company_denomination')?.setValue(result.bank.denomination);
+          this.bankForm.get('company_iban')?.setValue(result.bank.iban);
+          this.bankForm.get('company_abi')?.setValue(result.bank.abi.code);
+          this.bankForm.get('company_cab')?.setValue(result.bank.cab.code);
+          this.bankForm.get('company_bic')?.setValue(result.bank.bic);
+          this.bankForm.get('company_cc')?.setValue(result.bank.cc);
+        }
+        else {
+          this.bankForm.get('company_denomination')?.setValue(null);
+          this.bankForm.get('company_iban')?.setValue(null);
+          this.bankForm.get('company_abi')?.setValue(null);
+          this.bankForm.get('company_cab')?.setValue(null);
+          this.bankForm.get('company_bic')?.setValue(null);
+          this.bankForm.get('company_cc')?.setValue(null);
+        }
       }
     });
   }
 
   save() {
-    // this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/upsertPaymentFavorite', {
-    //   idregistry: , payment
-    // })
+    const paymentDataObj = this.bankForm.getRawValue();
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'customer/upsertPaymentFavorite', {
+      idregistry: this.idregistry, company_denomination: paymentDataObj.company_denomination,
+      company_iban: paymentDataObj.company_iban, company_abi: paymentDataObj.company_abi,
+      company_cab: paymentDataObj.company_cab, company_cc: paymentDataObj.company_cc,
+      company_bic: paymentDataObj.company_bic, customer_denomination: paymentDataObj.customer_denomination,
+      customer_iban: paymentDataObj.customer_iban, customer_abi: paymentDataObj.customer_abi,
+      customer_cab: paymentDataObj.customer_cab, customer_cc: paymentDataObj.customer_cc,
+      customer_bic: paymentDataObj.customer_bic, payment_method: this.paymentMethodForm.getRawValue().payment_method
+    }).subscribe((val: ApiResponse<any>) => {
+      if (val) {
+        this.refreshPaymentData.emit();
+      }
+    })
   }
 
 }
