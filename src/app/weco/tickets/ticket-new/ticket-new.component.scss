@@ -7,3 +7,9 @@
 .listTitle {
     font-weight: bold;
 }
+
+::ng-deep .quillContainer .is-invalid {
+    .ql-editor {
+        border: 1px solid red !important;
+    }
+}

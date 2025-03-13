@@ -1,5 +1,5 @@
 export interface TicketStatus {
-    idstatus: number;
+    id: number;
     type_status: number;
     color: string;
     name: string;

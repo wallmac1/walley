@@ -1,13 +1,16 @@
+import { SafeUrl } from "@angular/platform-browser";
+
 export interface TicketInfo {
     idsystem: number;
     public: number;
+    incharge: {id: number; nickname: string; isInCharge: number};
     progressive: string | null;
     openingDate: string | null;
     description: string | null;
     requestType: number | null;
     email: string | null;
-    internalNotes: string;
-    attachments: {id: number, src: string, ext: string, folder: string, title: string}[];
+    note: string;
+    attachments: {id: number, src: string | SafeUrl, ext: string, title: string}[];
     inverterList: {id: number, sn: string, selected_inverter: number}[];
     batteryList: {id: number, sn: string, selected_battery: number}[];
     user_created: {id: number; nickname: string; datetime: string};

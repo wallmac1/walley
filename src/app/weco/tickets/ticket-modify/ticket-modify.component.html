@@ -15,9 +15,40 @@
                 <mat-expansion-panel-header class="cutomPanelHeader" style="background-color:#fcf3cf ">
                     <mat-panel-title style="justify-content: start;">
                         <span style="font-size: x-large; font-weight: bold;">
-                            {{"SYSTEM.TICKETMODIFY.ID" | translate}}: {{ticketInfo?.idsystem}}
+                            {{"SYSTEM.TICKETMODIFY.ID" | translate}}: {{idticket}}
                         </span>
                     </mat-panel-title>
+                    <!-- IN CHARGE -->
+                    <span class="me-4" style="display: flex; align-items: center;">
+                        {{"SYSTEM.TICKETMODIFY.INCHARGE" | translate}}: 
+                        <span *ngIf="ticketInfo?.incharge?.nickname; else notInChargeBlock" class="ms-1">
+                            {{ticketInfo?.incharge?.nickname}}
+                        </span>
+                        <ng-template #notInChargeBlock>
+                            <span class="ms-1">
+                                --
+                            </span>
+                        </ng-template>
+                    </span>
+
+                    <!-- STATUS -->
+                    <span *ngIf="!isSmallScreen; else screenStatusBlock" class="me-4"
+                        style="display: flex; align-items: center;">
+                        {{"SYSTEM.TICKETMODIFY.STATUS" | translate}}:
+                        {{ticketInfo?.ticketStatus?.name}} -
+                        <span class="ms-1" *ngIf="ticketInfo?.ticketStatus?.type_status == 1; else closedBlock">
+                            {{"SYSTEM.TICKETMODIFY.OPENED" | translate}}
+                        </span>
+                        <ng-template #closedBlock>
+                            <span class="ms-1">
+                                {{"SYSTEM.TICKETMODIFY.CLOSED" | translate}}
+                            </span>
+                        </ng-template>
+                        <i class="bi bi-circle-fill ms-2 me-1"
+                            [ngStyle]="{'color': ticketInfo?.ticketStatus?.color}"></i>
+                    </span>
+
+                    <!-- PUBLIC STATUS -->
                     <span class="me-4" style="display: flex; align-items: center;">
                         <span *ngIf="ticketInfo?.public == 1">
                             {{"SYSTEM.TICKETMODIFY.PUBLIC" | translate}}
@@ -27,12 +58,6 @@
                         </span>
                         <i class="bi bi-circle-fill ms-2"
                             [ngStyle]="{'color': ticketInfo?.public == 1 ? 'green' : 'blue'}"></i>
-                    </span>
-                    <span *ngIf="!isSmallScreen; else screenStatusBlock" class="me-4"
-                        style="display: flex; align-items: center;">
-                        {{"SYSTEM.TICKETMODIFY.STATUS" | translate}}:
-                        <i class="bi bi-circle-fill ms-2 me-1" [ngStyle]="{'color': ticketInfo?.ticketStatus?.color}"></i>
-                        {{ticketInfo?.ticketStatus?.name}}
                     </span>
                     <ng-template #screenStatusBlock>
                         <span class="me-3" style="display: flex; align-items: center;">
@@ -84,7 +109,7 @@
                         <span class="listTitle">
                             {{"SYSTEM.TICKETNEW.INVERTERLIST" | translate}}
                         </span>
-                        <div *ngIf="ticketInfoForm.get('inverterList')?.value.length > 0; else noInverterBlock" 
+                        <div *ngIf="ticketInfoForm.get('inverterList')?.value.length > 0; else noInverterBlock"
                             class="row align-items-group mt-2" style="border-bottom: 1px solid lightgray;">
                             <div class="col-auto text-start"
                                 *ngFor="let inverter of inverterList.controls; let i = index" [formGroupName]="i">
@@ -92,7 +117,8 @@
                                     <label class="form-check-label ms-2" for="selected_inverter-{{i}}">
                                         {{inverter.get('sn')?.value}}
                                     </label>
-                                    <input class="form-check-input" type="checkbox" id="selected_inverter-{{i}}" formControlName="selected">
+                                    <input class="form-check-input" type="checkbox" id="selected_inverter-{{i}}"
+                                        formControlName="selected">
                                 </div>
                             </div>
                         </div>
@@ -106,23 +132,22 @@
                             </div>
                         </ng-template>
                     </div>
-                    
 
                     <!-- BATTERY LIST -->
-                    <div class="col-12 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5 text-start"
-                        formArrayName="batteryList">
+                    <div class="col-12 mb-2 ps-md-3 ps-lg-5 pe-md-3 pe-lg-5 text-start" formArrayName="batteryList">
                         <span class="listTitle">
                             {{"SYSTEM.TICKETNEW.BATTERYLIST" | translate}}
                         </span>
                         <div *ngIf="ticketInfoForm.get('batteryList')?.value.length > 0; else noBatteriesBlock"
                             class="row align-items-group mt-2" style="border-bottom: 1px solid lightgray;">
-                            <div class="col-auto text-start"
-                                *ngFor="let battery of batteryList.controls; let i = index" [formGroupName]="i">
+                            <div class="col-auto text-start" *ngFor="let battery of batteryList.controls; let i = index"
+                                [formGroupName]="i">
                                 <div class="form-check">
                                     <label class="form-check-label ms-2" for="selected_battery-{{i}}">
                                         {{battery.get('sn')?.value}}
                                     </label>
-                                    <input class="form-check-input" type="checkbox" id="selected_battery-{{i}}" formControlName="selected">
+                                    <input class="form-check-input" type="checkbox" id="selected_battery-{{i}}"
+                                        formControlName="selected">
                                 </div>
                             </div>
                         </div>
@@ -140,10 +165,9 @@
 
                 <div class="row justify-content-center mt-1">
                     <!-- DESCRIPTION -->
-                    <div class="col-12 mt-1 mb-2 quillContainer"
-                        [ngClass]="{ 'is-invalid': newMessageForm.get('description')?.invalid && submitted }">
+                    <div class="col-12 mt-1 mb-2 quillContainer">
                         <quill-editor formControlName="description" id="description"
-                            [class.is-invalid]="newMessageForm.get('description')?.invalid && submitted">
+                            [class.is-invalid]="ticketInfoForm.get('description')?.invalid && submittedInfo">
                             <div above-quill-editor-toolbar>
                                 <span class="form-label" for="description">
                                     {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
@@ -196,62 +220,80 @@
 
                     <!-- INTERNAL NOTES -->
                     <div class="col-12 col-md-6 col-lg-8 mt-1">
-                        <label class="form-label" for="internalNotes">
+                        <label class="form-label" for="note">
                             {{"SYSTEM.TICKETMODIFY.INTERNALNOTES" | translate}}
                         </label>
-                        <textarea class="form-control" type="text" id="internalNotes" formControlName="internalNotes"
-                            rows="1">
+                        <textarea class="form-control" type="text" id="note" formControlName="note" rows="1">
                         </textarea>
                     </div>
-
 
                     <div class="col-12 col-md-6 col-lg-4 mt-1">
                         <label class="form-label" for="email">
                             {{"SYSTEM.TICKETMODIFY.ANSWEREMAIL" | translate}}
                         </label><br *ngIf="isSmallScreen">
-                        <input class="form-control" type="text" id="email" formControlName="email">
+                        <input class="form-control" type="text" id="email" formControlName="email"
+                            [class.is-invalid]="ticketInfoForm.get('email')?.invalid && submittedInfo">
                     </div>
 
                     <!-- ATTACHED FILES -->
-                    <div class="col-12 mt-2 text-end">
+                    <div class="col-12 mt-2 text-center">
                         <div class="row justify-content-center">
-                            <div *ngFor="let img of imagesList; let i = index" class="col-auto" style="position: relative;">
-                                <img style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
+                            <div *ngFor="let img of ticketInfo?.attachments; let i = index" class="col-auto"
+                                style="position: relative;">
+                                <img *ngIf="img.id == 0; else serverImg"
+                                    style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
                                     [src]="img.src" [title]="img.src" class="imgThumb">
-                                <button class="btn btn-danger btn-zoom p-0" style="position: absolute; right: 8px; top: -4px"
-                                    (click)="deleteFile(i)">
+                                <ng-template #serverImg>
+                                    <img style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
+                                        [src]="urlMultimedia+img.src" [title]="img.src" class="imgThumb">
+                                </ng-template>
+
+                                <button class="btn btn-danger btn-zoom p-0"
+                                    style="position: absolute; right: 8px; top: -4px" (click)="deleteFileInfo(i)">
                                     <i class="bi bi-x"></i>
                                 </button>
                             </div>
-    
+
                             <div class="col-auto">
-                                <label *ngIf="ticketInfo?.attachments?.length! < maxImages" for="fileUpload2"
+                                <label *ngIf="ticketInfo?.attachments?.length! < maxImages" for="fileUploadInfo"
                                     class="btn btn-outline-dark mt-1">
                                     <i class="bi bi-paperclip"></i>
-                                    <input type="file" id="fileUpload2" style="display: none;"
-                                        (change)="onFileSelected($event)" multiple>
+                                    <input type="file" id="fileUploadInfo" style="display: none;"
+                                        (change)="onFileSelectedInfo($event)" multiple>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row justify-content-end mt-2 pt-2" style="border-top: 1px solid lightgray;">
+                <div *ngIf="ticketInfoForm.invalid && submittedInfo" class="row mt-1 justify-content-center">
+                    <div class="col-12 text-center">
+                        <span class="errorTxt">
+                            {{"SYSTEM.TICKETMODIFY.MANDATORYFIELDS" | translate}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row justify-content-start mt-2 pt-2" style="border-top: 1px solid lightgray;">
                     <!-- PUBLIC -->
-                    <div class="col-auto" style="max-width: 150px;">
-                        <div class="form-check form-switch" style="height: 38px; align-content: center; width: 150px;">
-                            <label for="public" class="form-check-label" style="font-weight: bold;">
-                                {{"SYSTEM.TICKETNEW.PUBLIC" | translate}}
-                            </label>
-                            <input type="checkbox" class="form-check-input" role="switch" id="public"
-                                formControlName="public">
-                        </div>
+                    <div class="col-6">
+                        <button class="btn btn-outline-danger" (click)="deleteTicket()">
+                            {{"SYSTEM.TICKETMODIFY.DELETE" | translate}}
+                        </button>
                     </div>
 
                     <!-- SAVE -->
-                    <div class="col-auto text-end">
+                    <div class="col-6 text-end" style="position: relative;">
+                        <div class="form-check form-switch" style="height: 38px; align-content: center; position: absolute;
+                            right: 100px;">
+                            <label for="publicInfo" class="form-check-label">
+                                {{"SYSTEM.TICKETMODIFY.PUBLIC" | translate}}
+                            </label>
+                            <input type="checkbox" class="form-check-input" role="switch" id="publicInfo"
+                                formControlName="public">
+                        </div>
                         <button class="btn btn-outline-success" (click)="saveTicketInfo()">
-                            Save
+                            {{"SYSTEM.TICKETMODIFY.SAVE" | translate}}
                         </button>
                     </div>
                 </div>
@@ -276,22 +318,22 @@
         <ng-container formArrayName="messages">
             <ng-container *ngFor="let message of messages.controls; let i = index" [formGroupName]="i">
                 <div *ngIf="visualizeAll || message.get('public')?.value == 1"
-                    class="row ps-3 pe-3 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5">
+                    class="row ps-2 pe-2 ps-xl-3 pe-xl-3 ps-xxl-5 pe-xxl-5">
 
                     <!-- TIMELINE -->
                     <div class="col-1 d-none d-lg-inline ps-0 pe-0"
-                        style="border-right: 4px solid #002D5D; position: relative; max-width: 94px;">
-                        <span class="text-center"
-                            style="position: absolute; top: 48%; right: 20px; font-size: small; font-weight: 700; color: #002D5D;">
-                            {{message.get('user_created')?.value.date_only}} <br>
-                            {{message.get('user_created')?.value.time_only}}
+                        style="border-right: 4px solid #002D5D; position: relative; max-width: 110px;">
+                        <span class="text-center" [ngStyle]="{'font-size': isLargeScreen ? 'small' : 'x-small'}"
+                            style="position: absolute; top: 48%; right: 20px; font-weight: 700; color: #002D5D;">
+                            {{message.get('date_only')?.value}}<br>
+                            {{message.get('time_only')?.value}}
                         </span>
                         <span style="position: absolute; top: 50%; right: -10px;">
                             <i class="bi bi-circle-fill" style="color: #002D5D;"></i>
                         </span>
                     </div>
 
-                    <div class="col-12 col-lg-11">
+                    <div class="col-12 col-lg-11 pb-2">
 
                         <!-- CUSTOMER -->
                         <div *ngIf="message.get('portal')?.value == 1" class="row ps-lg-3 justify-content-start">
@@ -324,8 +366,8 @@
                                 </div>
 
                                 <div class="row justify-content-center mt-2 mb-1">
-                                    <div *ngFor="let file of message.get('attached_files')?.value" class="col-auto">
-                                        <img class="imgThumb" [src]="'assets/img/'+file.src" [title]="file.src"
+                                    <div *ngFor="let file of message.get('attachments')?.value" class="col-auto">
+                                        <img class="imgThumb" [src]="urlMultimedia+file.src" [title]="file.src"
                                             (click)="viewImage(file)">
                                     </div>
                                 </div>
@@ -352,10 +394,9 @@
                                 </div>
 
                                 <div class="row justify-content-center">
-                                    <div *ngIf="visualizeAll; else textBlock" class="col-12 mt-2 quillContainer"
-                                        [ngClass]="{ 'is-invalid': newMessageForm.get('description')?.invalid && submitted }">
-                                        <quill-editor formControlName="description" id="description"
-                                            [class.is-invalid]="newMessageForm.get('description')?.invalid && submitted">
+                                    <div *ngIf="visualizeAll; else textBlock" class="col-12 mt-2 quillContainer">
+                                        <quill-editor formControlName="description" id="description-{{i}}"
+                                            [class.is-invalid]="message.get('description')?.invalid && submittedOldMessage[i]">
                                             <div above-quill-editor-toolbar>
                                                 <span class="form-label" for="description">
                                                     {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
@@ -409,35 +450,48 @@
                                         </quill-editor>
                                     </div>
                                     <ng-template #textBlock>
-                                        <div class="col-12 mt-2">
+                                        <div class="col-12 mt-2 mb-2">
                                             <span class="form-label">
                                                 {{"SYSTEM.TICKETMODIFY.MESSAGE" | translate}}
-                                            </span><br>
-                                            <span>
-                                                {{message.get('description')?.value}}
                                             </span>
+                                            <div [innerHTML]="message.get('description')?.value">
+                                            </div>
                                         </div>
                                     </ng-template>
                                 </div>
 
                                 <!-- ATTACHMENTS -->
                                 <div class="row justify-content-center">
-                                    <div *ngFor="let img of message.get('attached_files')?.value; let j = index" class="col-auto" style="position: relative;">
-                                        <img style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                            [src]="'assets/img/'+img.src" [title]="img.src">
-                                        <button class="btn btn-danger p-0" style="position: absolute; right: 8px; top: -4px"
-                                            (click)="deleteFileOnMessage(j, i)">
+                                    <div *ngFor="let img of message.get('attachments')?.value; let j = index"
+                                        class="col-auto" style="position: relative;">
+                                        <img *ngIf="img.id == 0" class="imgThumb"
+                                            style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
+                                            [src]="img.src" [title]="img.src">
+                                        <img *ngIf="img.id > 0" class="imgThumb"
+                                            style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
+                                            [src]="urlMultimedia+img.src" [title]="img.src">
+                                        <button *ngIf="visualizeAll == true" class="btn btn-danger btn-zoom p-0"
+                                            style="position: absolute; right: 8px; top: -4px"
+                                            (click)="deleteFileOldMessage(j, i)">
                                             <i class="bi bi-x"></i>
                                         </button>
                                     </div>
-                    
-                                    <div class="col-auto">
-                                        <label *ngIf="fileList.length < maxImages" for="fileUploadWeco"
-                                            class="btn btn-outline-dark mt-1">
+
+                                    <div *ngIf="visualizeAll == true && fileListOldMessages" class="col-auto">
+                                        <label *ngIf="fileListOldMessages[i] && fileListOldMessages[i].files.length < maxImages"
+                                            for="fileUpload-{{i}}" class="btn btn-outline-dark mt-1">
                                             <i class="bi bi-paperclip"></i>
-                                            <input type="file" id="fileUploadWeco" style="display: none;"
-                                                (change)="onFileSelectedOnMessage($event, i)" multiple>
+                                            <input type="file" id="fileUpload-{{i}}" style="display: none;"
+                                                (change)="onFileSelectedOldMessage($event, i)" multiple>
                                         </label>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="message.invalid && submittedOldMessage[i] && visualizeAll" class="row mt-1 justify-content-center">
+                                    <div class="col-12 text-center">
+                                        <span class="errorTxt">
+                                            {{"SYSTEM.TICKETMODIFY.MANDATORYFIELDS" | translate}}
+                                        </span>
                                     </div>
                                 </div>
 
@@ -445,13 +499,21 @@
                                     style="border-top: 1px solid lightgray;">
                                     <div class="col-6 text-start">
                                         <button class="btn btn-outline-danger"
-                                            (click)="deleteMessage(message.getRawValue().id)">
+                                            (click)="deleteMessage(message.get('idticketline')?.value)">
                                             {{"SYSTEM.TICKETMODIFY.DELETE" | translate}}
                                         </button>
                                     </div>
-                                    <div class="col-6 text-end">
-                                        <button class="btn btn-outline-dark"
-                                            (click)="updateMessage(message.getRawValue())">
+                                    <div class="col-6 text-end" style="position: relative;">
+                                        <div class="form-check form-switch"
+                                            style="height: 38px; align-content: center; position: absolute; right: 120px;">
+                                            <label for="public-{{i}}" class="form-check-label"
+                                                style="font-weight: bold;">
+                                                {{"SYSTEM.TICKETNEW.PUBLIC" | translate}}
+                                            </label>
+                                            <input type="checkbox" class="form-check-input" role="switch"
+                                                id="public-{{i}}" formControlName="public">
+                                        </div>
+                                        <button class="btn btn-outline-dark" (click)="saveTicketOldMessage(i)">
                                             {{"SYSTEM.TICKETMODIFY.UPDATE" | translate}}
                                         </button>
                                     </div>
@@ -482,10 +544,10 @@
 
         <!-- NUOVO MESSAGGIO -->
         <div [formGroup]="newMessageForm" *ngIf="isNewMessage"
-            class="row ps-3 pe-3 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5 pb-5">
+            class="row ps-3 pe-3 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5 pb-5 mb-4">
             <!-- TIMELINE -->
             <div class="col-1 d-none d-lg-inline ps-0 pe-0"
-                style="border-right: 4px solid #002D5D; position: relative; max-width: 94px;">
+                style="border-right: 4px solid #002D5D; position: relative; max-width: 110px;">
                 <span class="text-center"
                     style="position: absolute; top: 48%; right: 20px; font-size: small; font-weight: 700; color: #002D5D;">
                     {{newMessageForm.get('date')?.value}} <br> {{newMessageForm.get('time')?.value}}
@@ -496,7 +558,6 @@
             </div>
 
             <div class="col-12 col-lg-11">
-                <!-- NUOVO MESSAGGIO -->
                 <div class="row justify-content-end">
                     <div class="col-11 col-md-10 mt-4 cardElement customPanel ticketPanel"
                         style="max-width: 1200px; background-color: #edf5fe;" appInViewport>
@@ -517,9 +578,9 @@
 
                         <div class="row justify-content-center">
                             <div class="col-12 mt-2 quillContainer"
-                                [ngClass]="{ 'is-invalid': newMessageForm.get('description')?.invalid && submitted }">
+                                [ngClass]="{ 'is-invalid': newMessageForm.get('description')?.invalid && submittedNewMessage }">
                                 <quill-editor formControlName="description" id="description"
-                                    [class.is-invalid]="newMessageForm.get('description')?.invalid && submitted">
+                                    [class.is-invalid]="newMessageForm.get('description')?.invalid && submittedNewMessage">
                                     <div above-quill-editor-toolbar>
                                         <span class="form-label" for="description">
                                             {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
@@ -570,19 +631,57 @@
                                 </quill-editor>
                             </div>
 
-                            <div class="col-12 mt-2">
-                                <label *ngIf="fileList.length < maxImages" for="fileUpload2"
-                                    class="btn btn-outline-dark mt-1">
-                                    <i class="bi bi-paperclip"></i>
-                                    <input type="file" id="fileUpload2" style="display: none;"
-                                        (change)="onFileSelected($event)" multiple>
-                                </label>
+                            <div class="col-12 text-center mt-2">
+                                <div class="row justify-content-center">
+                                    <ng-container formArrayName="attachments">
+                                        <div *ngFor="let item of newAttachments.controls; let i = index"
+                                            class="col-auto" [formGroupName]="i" style="position: relative;">
+                                            <img class="imgThumb" [src]="item.get('src')?.value"
+                                                (click)="viewImage(item.getRawValue())">
+                                            <button class="btn btn-danger btn-zoom p-0"
+                                                style="position: absolute; right: 8px; top: -4px"
+                                                (click)="deleteFileNewMessage(i)">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                    </ng-container>
+
+                                    <div class="col-auto">
+                                        <label *ngIf="fileListNewMessage.length < maxImages" for="fileUploadNew"
+                                            class="btn btn-outline-dark mt-1">
+                                            <i class="bi bi-paperclip"></i>
+                                            <input type="file" id="fileUploadNew" style="display: none;"
+                                                (change)="onFileSelectedNewMessage($event)" multiple>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="newMessageForm.invalid && submittedNewMessage" class="row mt-1 justify-content-center">
+                            <div class="col-12 text-center">
+                                <span class="errorTxt">
+                                    {{"SYSTEM.TICKETMODIFY.MANDATORYFIELDS" | translate}}
+                                </span>
                             </div>
                         </div>
 
                         <div class="row justify-content-end pt-2 mt-2" style="border-top: 1px solid lightgray;">
+                            <!-- PUBLIC -->
+                            <div class="col-auto" style="max-width: 150px;">
+                                <div class="form-check form-switch"
+                                    style="height: 38px; align-content: center; width: 150px;">
+                                    <label for="public" class="form-check-label" style="font-weight: bold;">
+                                        {{"SYSTEM.TICKETNEW.PUBLIC" | translate}}
+                                    </label>
+                                    <input type="checkbox" class="form-check-input" role="switch" id="public"
+                                        formControlName="public">
+                                </div>
+                            </div>
+
+                            <!-- SAVE -->
                             <div class="col-auto">
-                                <button class="btn btn-outline-dark" (click)="sendMessage()">
+                                <button class="btn btn-outline-dark" (click)="saveTicketNewMessage()">
                                     {{"SYSTEM.TICKETMODIFY.SEND" | translate}}
                                 </button>
                             </div>
@@ -597,17 +696,17 @@
         <i class="bi bi-three-dots-vertical"></i>
     </button>
     <mat-menu #menu="matMenu">
-        <button *ngIf="true; else releaseBlock" mat-menu-item (click)="takeOnCharge()">
-            <i class="bi bi-person-raised-hand me-2"></i>
-            <span>{{"TICKET.MODIFY.TAKEONCHARGE" | translate }}</span>
+        <button *ngIf="ticketInfo?.incharge?.id && ticketInfo?.incharge?.isInCharge == 1; else releaseBlock" mat-menu-item (click)="takeOnChargeOrRelease(0)">
+            <i class="bi bi-person-standing me-2"></i>
+            <span>{{"TICKET.MODIFY.RELEASE" | translate }}</span>
         </button>
         <ng-template #releaseBlock>
-            <button mat-menu-item (click)="release()">
-                <i class="bi bi-person-standing me-2"></i>
-                <span>{{"TICKET.MODIFY.RELEASE" | translate }}</span>
+            <button mat-menu-item (click)="takeOnChargeOrRelease(1)">
+                <i class="bi bi-person-raised-hand me-2"></i>
+            <span>{{"TICKET.MODIFY.TAKEONCHARGE" | translate }}</span>
             </button>
         </ng-template>
-        <button mat-menu-item (click)="newMessage()">
+        <button *ngIf="!isNewMessage" mat-menu-item (click)="newMessage()">
             <i class="bi bi-chat-right-text me-2"></i>
             <span>{{"TICKET.MODIFY.ADDMESSAGE" | translate }}</span>
         </button>

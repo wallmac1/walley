@@ -1,6 +1,6 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component, ElementRef, HostListener, SecurityContext, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
 import { InViewportDirective } from '../../../directives/in-viewport.directive';
@@ -19,6 +19,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Message } from '../interfaces/message';
 import { QuillModule } from 'ngx-quill';
 import { ChangeStatusPopupComponent } from './components/change-status-popup/change-status-popup.component';
+import { DeleteMessagePopupComponent } from './components/delete-message-popup/delete-message-popup.component';
+import { InchargeReleasePopupComponent } from './components/incharge-release-popup/incharge-release-popup.component';
+import { DeleteTicketPopupComponent } from './components/delete-ticket-popup/delete-ticket-popup.component';
 
 @Component({
   selector: 'app-ticket-modify',
@@ -39,33 +42,37 @@ export class TicketModifyComponent {
 
   @ViewChild('panel') panelComponent!: MatExpansionPanel;
   @ViewChild('bottomAnchor') bottomAnchor!: ElementRef;
+
+  // Ticket & Status Variables
   isNewMessage: boolean = false;
   idticket: number = 0;
   ticketInfo: TicketInfo | null = null;
-  isSmallScreen: boolean = false;
-  maxImages: number = 10;
-  requestList: { id: number, title: string }[] = [];
-  fileList: File[] = [];
-  imagesList: Image[] = [];
-  acceptedExt: string[] = ['jpg', 'png', 'jpeg'];
-  imageSpaceLeft: boolean = true;
   idsystem: number = 0;
   systemStatus: { id: number, name: string, color: string } = { id: 0, name: '', color: '' };
-  // isAtBottom: boolean = false;
-  // isAtBottomSm: boolean = false;
+  requestList: { id: number, title: string }[] = [];
+  submittedInfo: boolean = false;
+  submittedNewMessage: boolean = false;
+  submittedOldMessage: boolean[] = [];
+
+  isSmallScreen: boolean = false;
+  isLargeScreen: boolean = false;
   visualizeAll = true;
-  submitted: boolean = false;
+
+  // Attachments Variables
+  maxImages: number = 10;
   maxFileSize = 5 * 1024 * 1024;
   maxFiles = 3;
-
+  acceptedExt: string[] = ['jpg', 'png', 'jpeg'];
+  fileListInfo: File[] = [];
+  removedFilesInfo: number[] = [];
+  imageSpaceLeftInfo: boolean = true;
+  fileListOldMessages: { files: File[] }[] = [];
+  removedFilesOldMessages: { index: number, id: number[] }[] = [];
+  fileListNewMessage: File[] = [];
   newAttachedFiles: any[] = [];
-  newMessageForm = new FormGroup({
-    id: new FormControl<number>(0),
-    description: new FormControl<string | null>(null),
-    date: new FormControl<string | null>(null),
-    time: new FormControl<string | null>(null),
-    //attachments: new FormControl<Image[]>([]),
-  });
+  urlMultimedia: string = Connect.urlServerLaraFile;
+
+  newMessageForm!: FormGroup;
   oldMessagesForm!: FormGroup;
   ticketInfoForm!: FormGroup;
 
@@ -82,13 +89,20 @@ export class TicketModifyComponent {
       }
     });
 
+    this.newMessageForm = this.fb.group({
+      description: ['', Validators.required],
+      date: [''],
+      time: [''],
+      public: [0],
+      attachments: this.fb.array([])
+    });
+
     this.ticketInfoForm = this.fb.group({
-      email: [null],
-      request: [null],
+      email: [null, Validators.required],
       inverterList: this.fb.array([]),
       batteryList: this.fb.array([]),
-      description: [null],
-      internalNotes: [null],
+      description: [null, Validators.required],
+      note: [null],
       public: [null]
     });
 
@@ -121,6 +135,13 @@ export class TicketModifyComponent {
     else {
       this.isSmallScreen = false;
     }
+
+    if (window.innerWidth < 1400) {
+      this.isLargeScreen = false;
+    }
+    else {
+      this.isLargeScreen = true;
+    }
   }
 
   private scrollToTop(): void {
@@ -131,6 +152,10 @@ export class TicketModifyComponent {
 
   goBack() {
     this.router.navigate(['systemOverview', this.idsystem]);
+  }
+
+  get newAttachments(): FormArray {
+    return this.newMessageForm.get('attachments') as FormArray;
   }
 
   get inverterList(): FormArray {
@@ -145,24 +170,52 @@ export class TicketModifyComponent {
     return this.oldMessagesForm.get('messages') as FormArray;
   }
 
+  addNewMessageAttachment(img: Image) {
+    this.newAttachments.push(this.fb.group({
+      id: 0,
+      src: [img.src],
+      ext: [img.ext],
+      title: [img.title]
+    }));
+  }
+
   createMessage(message: Message) {
     return this.fb.group({
-      id: [message.id],
-      description: [message.description],
+      idticketline: [message.idticketline],
+      description: [message.description, Validators.required],
       public: [message.public],
       portal: [message.portal],
       attachments: [message.attachments],
+      date_only: [message.date_only],
+      time_only: [message.time_only],
       user_created: [message.user_created]
     })
   }
 
   createMessageList(messages: Message[]) {
-    this.messages.reset();
+    this.messages.controls.splice(0, this.messages.length);
+    this.fileListOldMessages = [];
+    this.removedFilesOldMessages = [];
+    this.submittedOldMessage = [];
+    let i = 0;
     messages.forEach((message) => {
       this.messages.push(this.createMessage(message));
+      this.fileListOldMessages.push({ files: [] });
+      this.removedFilesOldMessages.push({ index: i, id: [] });
+      this.submittedOldMessage.push(false);
+      i += 1;
     })
     console.log(this.messages.getRawValue())
   }
+
+  // createAttachmentsList(attachments: Image[]) {
+  //   attachments.forEach((file) => {
+  //     formArrayEl.push(this.fb.group({
+  //       id: [file.id]
+  //     }))
+  //   })
+  //   return this.fb.array(formArrayEl);
+  // }
 
   createInverter(inverter: any) {
     return this.fb.group({
@@ -253,8 +306,10 @@ export class TicketModifyComponent {
     this.ticketInfoForm.get('request')?.setValue(this.ticketInfo?.requestType);
     this.ticketInfoForm.get('email')?.setValue(this.ticketInfo?.email);
     this.ticketInfoForm.get('description')?.setValue(this.ticketInfo?.description);
-    this.ticketInfoForm.get('internalNotes')?.setValue(this.ticketInfo?.internalNotes);
+    this.ticketInfoForm.get('note')?.setValue(this.ticketInfo?.note);
     this.ticketInfoForm.get('public')?.setValue(this.ticketInfo?.public);
+    this.inverterList.controls.splice(0, this.inverterList.length);
+    this.batteryList.controls.splice(0, this.batteryList.length);
     if (this.ticketInfo?.batteryList) {
       this.createBatteryList(this.ticketInfo?.batteryList);
     }
@@ -268,6 +323,7 @@ export class TicketModifyComponent {
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
           this.ticketInfo = val.data.ticketInfo;
+          this.idsystem = val.data.ticketInfo.idsystem;
           if (this.ticketInfo) {
             this.initTicketInfoForm();
           }
@@ -281,21 +337,23 @@ export class TicketModifyComponent {
   getTicketLines() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketLines', { idticket: this.idticket })
       .subscribe((val: ApiResponse<any>) => {
-        if (val.data.ticketLines) {
-          this.createMessageList(val.data.ticketLines);
+        if (val.data.lines) {
+          this.createMessageList(val.data.lines);
         }
       })
   }
 
+  // SALVATAGGIO INFO
   saveTicketInfo() {
     const formData = new FormData();
-    this.submitted = true;
-    //console.log(this.newTicketForm.getRawValue())
+    this.submittedInfo = true;
+
     if (this.ticketInfoForm.valid) {
       this.convertBooleanToNumber();
       // Aggiungi i file al formData
-     
-      // TODO AGGIUNGERE LE FOTO AL FORMDATA
+      this.fileListInfo.forEach((file) => {
+        formData.append('attachments[]', file);
+      })
 
       // Aggiungi i valori del form al formData
       Object.keys(this.ticketInfoForm.controls).forEach(key => {
@@ -309,26 +367,121 @@ export class TicketModifyComponent {
         }
       });
 
+      // Aggiungi array ID rimossi
+      formData.append('removeAttachments', JSON.stringify(this.removedFilesInfo));
+
       // Aggiungi ID del sistema e del ticket
       formData.append('idticket', this.idticket.toString());
+      formData.append('idsystem', this.idsystem.toString());
 
       this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
         .subscribe((val: ApiResponse<any>) => {
           if (val.data) {
-            
+            this.getTicketInfo();
+            this.removedFilesInfo = [];
           }
         })
     }
   }
 
-  onFileSelected(event: Event): void {
+  // SALVATAGGIO NUOVO MESSAGGIO
+  saveTicketNewMessage() {
+    const formData = new FormData();
+    this.submittedNewMessage = true;
+    //console.log(this.newTicketForm.getRawValue())
+    if (this.newMessageForm.valid) {
+      // Aggiungi i file al formData
+      this.fileListNewMessage.forEach((file) => {
+        formData.append('attachments[]', file);
+      })
+
+      // Aggiungi i valori del form al formData
+      this.newMessageForm.get('public')?.setValue(this.newMessageForm.get('public')?.value ? 1 : 0);
+      Object.keys(this.newMessageForm.controls).forEach(key => {
+        const control = this.newMessageForm.get(key);
+        if (key != 'attachments') {
+          if (control instanceof FormArray) {
+            // Se il controllo è un FormArray, aggiungi ciascun valore come array JSON
+            formData.append(key, JSON.stringify(control.value));
+          } else {
+            formData.append(key, control?.value);
+          }
+        }
+      });
+
+      // Aggiungi ID del sistema e del ticket
+      formData.append('idticket', this.idticket.toString());
+      formData.append('idticketline', "0");
+      formData.append('idsystem', this.idsystem.toString());
+
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicketLine', formData)
+        .subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            this.getTicketLines();
+            this.newMessageForm.reset();
+            this.fileListNewMessage = [];
+            this.isNewMessage = false;
+            this.submittedNewMessage = false;
+          }
+        })
+    }
+  }
+
+  // SALVATAGGIO OLD MESSAGGIO
+  saveTicketOldMessage(index: number) {
+    const formData = new FormData();
+    this.submittedOldMessage[index] = true;
+
+    if (this.messages.at(index).valid) {
+      this.messages.at(index).get('public')?.setValue(this.messages.at(index).get('public')?.value ? 1 : 0);
+      // Aggiungi i file al formData
+      this.fileListOldMessages[index].files.forEach((file) => {
+        formData.append('attachments[]', file);
+      })
+      console.log("QUI", formData.getAll)
+
+      // Aggiungi i valori del form al formData
+      Object.keys(this.oldMessagesForm.get('messages')?.value.at(index)).forEach(key => {
+        const control = this.messages.at(index).get(key);
+
+        if (key != 'attachments' && key != 'user_created') {
+          if (control instanceof FormArray) {
+            // Se il controllo è un FormArray, aggiungi ciascun valore come array JSON
+            formData.append(key, JSON.stringify(control.value));
+          } else {
+            formData.append(key, control?.value);
+          }
+        }
+      });
+
+      // Array dei files rimossi
+      formData.append('removeAttachments', JSON.stringify(this.removedFilesOldMessages[index].id))
+
+      // Aggiungi ID del sistema e del ticket
+      formData.append('idticket', this.idticket.toString());
+      formData.append('idsystem', this.idsystem.toString());
+
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicketLine', formData)
+        .subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            this.fileListOldMessages = [];
+            this.getTicketLines();
+            this.submittedOldMessage[index] = false;
+          }
+        })
+    }
+  }
+
+  // AGGIUNTA FILE
+  onFileSelectedInfo(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     if (input.files) {
       const files = Array.from(input.files);
 
       // Verifica il numero massimo di file
-      if (this.fileList.length + files.length > this.maxFiles) {
+      //console.log("Files:", files.length, "FileListInfo:", this.fileListInfo.length, "TicketInfoAttachments:", this.ticketInfo?.attachments.length);
+      if (files.length + this.ticketInfo?.attachments.length! > this.maxFiles) {
         alert(`Puoi caricare al massimo ${this.maxFiles} file.`);
         return;
       }
@@ -338,7 +491,7 @@ export class TicketModifyComponent {
         if (file.size > this.maxFileSize) {
           alert(`Il file ${file.name} supera il limite di 5 MB.`);
         } else {
-          this.fileList.push(file);
+          this.fileListInfo.push(file);
 
           // Creare un'anteprima dell'immagine
           const reader = new FileReader();
@@ -350,22 +503,25 @@ export class TicketModifyComponent {
               src: e.target.result,
               title: file.name,
             };
-            this.imagesList.push(image);
+            this.ticketInfo?.attachments.push(image);
           };
           reader.readAsDataURL(file);
         }
       });
+      // Reset Input
+      console.log("files", input.value);
+      input.value = '';
     }
   }
 
-  onFileSelectedOnMessage(event: Event, msgIndex: number): void {
+  onFileSelectedOldMessage(event: Event, msgIndex: number): void {
     const input = event.target as HTMLInputElement;
 
     if (input.files) {
       const files = Array.from(input.files);
 
       // Verifica il numero massimo di file
-      if (this.messages.controls[msgIndex].get('attached_files')?.value.length + files.length > this.maxFiles) {
+      if (this.messages.at(msgIndex).get('attachments')?.value.length + files.length > this.maxFiles) {
         alert(`Puoi caricare al massimo ${this.maxFiles} file.`);
         return;
       }
@@ -374,7 +530,10 @@ export class TicketModifyComponent {
         // Verifica la dimensione massima del file
         if (file.size > this.maxFileSize) {
           alert(`Il file ${file.name} supera il limite di 5 MB.`);
-        } else {
+        }
+        else {
+          this.fileListOldMessages[msgIndex].files.push(file);
+
           // Creare un'anteprima dell'immagine
           const reader = new FileReader();
           reader.onload = (e: any) => {
@@ -385,8 +544,8 @@ export class TicketModifyComponent {
               src: e.target.result,
               title: file.name,
             };
-            this.messages.controls[msgIndex].get('attached_files')?.value.push(image);
-            console.log(this.messages.controls[msgIndex].get('attached_files')?.value)
+            this.messages.at(msgIndex).get('attachments')?.value.push(image);
+            //console.log(this.fileListOldMessages[msgIndex])
           };
           reader.readAsDataURL(file);
         }
@@ -394,18 +553,89 @@ export class TicketModifyComponent {
     }
   }
 
-  deleteFile(index: number): void {
-    this.imagesList.splice(index, 1);
-    this.fileList.splice(index, 1);
+  onFileSelectedNewMessage(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files) {
+      const files = Array.from(input.files);
+
+      // Verifica il numero massimo di file
+      console.log("Files:", files.length, "FilesNewMessagesImg:", this.fileListNewMessage.length);
+      if (files.length + this.fileListNewMessage.length > this.maxFiles) {
+        alert(`Puoi caricare al massimo ${this.maxFiles} file.`);
+        return;
+      }
+
+      files.forEach((file) => {
+        // Verifica la dimensione massima del file
+        if (file.size > this.maxFileSize) {
+          alert(`Il file ${file.name} supera il limite di 5 MB.`);
+        } else {
+          this.fileListNewMessage.push(file);
+
+          // Creare un'anteprima dell'immagine
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            const fileExtension = file.name.split('.').pop() || '';
+            const image: Image = {
+              id: 0,
+              ext: fileExtension,
+              src: e.target.result,
+              title: file.name,
+            };
+            this.addNewMessageAttachment(image);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      // Reset Input
+      console.log("files", input.value);
+      input.value = '';
+    }
   }
 
-  deleteFileOnMessage(index: number, msgIndex: number): void {
-    this.messages.controls[msgIndex].get('attached_files')?.value.splice(index, 1);
+  // ELIMINAZIONE FILES 
+  deleteFileInfo(index: number): void {
+    const fileId = this.ticketInfo?.attachments[index].id
+    if (fileId && fileId > 0) {
+      this.removedFilesInfo.push(fileId);
+    }
+    this.fileListInfo.splice(index, 1);
+    this.ticketInfo?.attachments.splice(index, 1);
   }
 
-  takeOnCharge() { }
+  deleteFileOldMessage(index: number, msgIndex: number): void {
+    const fileId = this.messages.controls[msgIndex].get('attachments')?.value[index].id;
+    if (fileId > 0) {
+      this.removedFilesOldMessages[msgIndex].id.push(fileId);
+    }
+    this.fileListOldMessages[msgIndex].files.splice(index, 1);
+    this.messages.controls[msgIndex].get('attachments')?.value.splice(index, 1);
+  }
 
-  release() { }
+  deleteFileNewMessage(index: number) {
+    this.fileListNewMessage.splice(index, 1);
+    this.newAttachments.removeAt(index);
+  }
+
+  takeOnChargeOrRelease(request_type: number) { 
+    const dialogRef = this.dialog.open(InchargeReleasePopupComponent, {
+      maxWidth: '600px',
+      minWidth: '350px',
+      maxHeight: '400px',
+      width: '90%',
+      data: { 
+        idticket: this.idticket,
+        request_type: request_type
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != null && result.incharge) {
+        this.ticketInfo!.incharge = result.incharge;
+      }
+    });
+  }
 
   changeStatus() {
     const dialogRef = this.dialog.open(ChangeStatusPopupComponent, {
@@ -413,55 +643,50 @@ export class TicketModifyComponent {
       minWidth: '350px',
       maxHeight: '400px',
       width: '90%',
-      data: { idticket: this.ticketInfo?.idsystem }
+      data: { 
+        idticket: this.idticket 
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      if(result != null && result.ticketStatus) {
+        this.ticketInfo!.ticketStatus = result.ticketStatus;
+      }
     });
   }
 
-  sendMessage() {
-    // CHIAMATA AL SERVER E POI SI NAVIGA ALLA PAGINA CON L'ID DEL TICKET RESTITUITO
-    const formData = new FormData();
-    //this.submitted = true;
-    //console.log(this.newTicketForm.getRawValue())
-    if (this.newMessageForm.valid) {
-      // Aggiungi i file al formData
+  deleteMessage(idticketline: number) {
+    const dialogRef = this.dialog.open(DeleteMessagePopupComponent, {
+      maxWidth: '600px',
+      minWidth: '350px',
+      maxHeight: '400px',
+      width: '90%',
+      data: {
+        idticket: this.idticket,
+        idticketline: idticketline
+      }
+    });
 
-      // TODO AGGIUNGERE ALLEGATI AL FORMDATA
-
-      // Aggiungi i valori del form al formData
-      Object.keys(this.newMessageForm.controls).forEach(key => {
-        const control = this.newMessageForm.get(key);
-
-        if (control instanceof FormArray) {
-          // Se il controllo è un FormArray, aggiungi ciascun valore come array JSON
-          formData.append(key, JSON.stringify(control.value));
-        } else {
-          formData.append(key, control?.value);
-        }
-      });
-
-      // Aggiungi ID del sistema e del ticket
-      formData.append('idticket', this.idticket.toString());
-      formData.append('idticketline', "0");
-
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
-        .subscribe((val: ApiResponse<any>) => {
-          if (val.data) {
-            this.getTicketLines();
-          }
-        })
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.fileListOldMessages = [];
+        this.getTicketLines();
+        this.submittedOldMessage = [];
+      }
+    });
   }
 
-  updateMessage(message: Message) {
-
-  }
-
-  deleteMessage(id: number) {
-
+  deleteTicket() {
+    const dialogRef = this.dialog.open(DeleteTicketPopupComponent, {
+      maxWidth: '600px',
+      minWidth: '350px',
+      maxHeight: '400px',
+      width: '90%',
+      data: {
+        idticket: this.idticket,
+        idsystem: this.idsystem
+      }
+    });
   }
 
   convertBooleanToNumber() {
@@ -472,47 +697,6 @@ export class TicketModifyComponent {
     this.batteryList.controls.forEach(battery => {
       battery.get('selected')?.setValue(battery.get('selected')?.value ? 1 : 0);
     });
-  }
-
-  create() {
-    // CHIAMATA AL SERVER E POI SI NAVIGA ALLA PAGINA CON L'ID DEL TICKET RESTITUITO
-    const formData = new FormData();
-    this.submitted = true;
-    console.log(this.newMessageForm.getRawValue())
-    if (this.newMessageForm.valid) {
-
-      this.convertBooleanToNumber();
-      // Aggiungi i file al formData
-      this.fileList.forEach((file, index) => {
-        formData.append('attachments[]', file);
-      });
-
-      // Aggiungi i valori del form al formData
-      Object.keys(this.newMessageForm.controls).forEach(key => {
-        const control = this.newMessageForm.get(key);
-
-        if (control instanceof FormArray) {
-          // Se il controllo è un FormArray, aggiungi ciascun valore come array JSON
-          formData.append(key, JSON.stringify(control.value));
-        } else {
-          formData.append(key, control?.value);
-        }
-      });
-
-      // Aggiungi ID del sistema e del ticket
-      formData.append('idsystem', this.idsystem.toString());
-
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
-        .subscribe((val: ApiResponse<any>) => {
-          if (val.data) {
-            //this.popupDialogService.alertElement(val);
-            this.router.navigate(['ticketModify', val.data.idticket]);
-          }
-        })
-
-      const idticket = 0;
-      this.router.navigate(['ticket', idticket])
-    }
   }
 
 }

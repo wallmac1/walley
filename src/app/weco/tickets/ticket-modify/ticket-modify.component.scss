@@ -220,7 +220,7 @@ quill-editor-toolbar {
 
 .btnSticky {
     position: sticky;
-    bottom: 80px;
+    bottom: 70px;
     right: 0px;
     margin-left: auto;
     z-index: 1000;
@@ -238,4 +238,10 @@ quill-editor-toolbar {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
+}
+
+.errorTxt {
+    color: red;
+    font-size: small;
+    font-style: italic;
 }

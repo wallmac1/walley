@@ -10,14 +10,23 @@
             <label class="form-label" for="idstatus">
                 {{"SYSTEM.TICKETMODIFY.STATUS" | translate }}
             </label>
-            <select class="form-select" id="idstatus">
+            <select class="form-select" id="idstatus" formControlName="idstatus"
+                [class.is-invalid]="changeStatusForm.invalid && submitted">
                 <option [value]="null">
                     --
                 </option>
-                <option *ngFor="let status of statusList" [ngValue]="status.idstatus">
+                <option *ngFor="let status of statusList" [ngValue]="status.id">
                     {{status.name}}
                 </option>
             </select>
+        </div>
+    </div>
+
+    <div *ngIf="changeStatusForm.invalid && submitted" class="row justify-content-center mt-2 pt-2">
+        <div class="col-12 text-center">
+            <span style="color: red; font-size: small;">
+                {{"SYSTEM.TICKETMODIFY.MANDATORYFIELDS" | translate }}
+            </span>
         </div>
     </div>
 

@@ -22,6 +22,7 @@ import { ApiResponse } from '../../../../interfaces/api-response';
 })
 export class ChangeStatusPopupComponent {
 
+  submitted: boolean = false;
   idticket: number | null = null;
   statusList: TicketStatus[] = [];
   changeStatusForm = new FormGroup({
@@ -49,10 +50,19 @@ export class ChangeStatusPopupComponent {
   }
 
   save() {
-    
+    this.submitted = true;
+    if (this.changeStatusForm.valid) {
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/changeTicketStatus',
+        { idticket: this.idticket, idstatus: this.changeStatusForm.get('idstatus')?.value })
+        .subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            this.dialogRef.close(val.data);
+          }
+        })
+    }
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(null);
   }
 }

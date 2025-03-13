@@ -1,0 +1,50 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #fcf3cf;">
+    <span *ngIf="request_type == 1; else releaseBlockTitle" style="font-weight: bold; font-size: x-large;">
+        {{"SYSTEM.TICKETMODIFY.TAKEINCHARGE" | translate }}
+    </span>
+    <ng-template #releaseBlockTitle>
+        <span style="font-weight: bold; font-size: x-large;">
+            {{"SYSTEM.TICKETMODIFY.RELEASE" | translate }}
+        </span>
+    </ng-template>
+
+</h2>
+
+<mat-dialog-content>
+
+    <div class="row justify-content-center mt-2 pt-2">
+        <div class="col-12 text-center p-2">
+            <span *ngIf="request_type == 1; else releaseBlockTxt">
+                {{"SYSTEM.TICKETMODIFY.TAKEINCHARGETXT" | translate }}
+            </span>
+            <ng-template #releaseBlockTxt>
+                <span>
+                    {{"SYSTEM.TICKETMODIFY.RELEASETXT" | translate }}
+                </span>
+            </ng-template>
+
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-6 text-start">
+            <button class="btn btn-outline-dark" style="width: 80px;" (click)="close()">
+                {{"SYSTEM.TICKETMODIFY.CANCEL" | translate }}
+            </button>
+        </div>
+
+        <div class="col-6 text-end">
+            <button *ngIf="request_type == 1; else releaseBlockBtn" class="btn btn-outline-success"
+                (click)="takeInChargeOrRelease()">
+                {{"SYSTEM.TICKETMODIFY.TAKEINCHARGE" | translate }}
+            </button>
+            <ng-template #releaseBlockBtn>
+                <button class="btn btn-outline-danger"
+                    style="width: 80px;" (click)="takeInChargeOrRelease()">
+                    {{"SYSTEM.TICKETMODIFY.RELEASE" | translate }}
+                </button>
+            </ng-template>
+
+        </div>
+    </div>
+</mat-dialog-content>
