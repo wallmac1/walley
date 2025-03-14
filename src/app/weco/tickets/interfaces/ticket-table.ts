@@ -1,7 +1,9 @@
 export interface TicketTable {
-    id: number;
+    idticket: number;
     progressive: string;
-    openingDate: string;
+    ticket_date: string;
     description: string;
-    requestType: string;
+    ticketStatus: {idstatus: number; type_status: number; color: string; name: string;};
+    incharge: {id: number; nickname: string; datetime: string};
+    public: string;
 }

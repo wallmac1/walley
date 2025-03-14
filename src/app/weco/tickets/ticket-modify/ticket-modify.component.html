@@ -20,12 +20,12 @@
                     </mat-panel-title>
                     <!-- IN CHARGE -->
                     <span class="me-4" style="display: flex; align-items: center;">
-                        {{"SYSTEM.TICKETMODIFY.INCHARGE" | translate}}: 
-                        <span *ngIf="ticketInfo?.incharge?.nickname; else notInChargeBlock" class="ms-1">
+                        {{"SYSTEM.TICKETMODIFY.INCHARGE" | translate}}:
+                        <span *ngIf="ticketInfo?.incharge?.nickname; else notInChargeBlock" class="ms-1 lightTxt">
                             {{ticketInfo?.incharge?.nickname}}
                         </span>
                         <ng-template #notInChargeBlock>
-                            <span class="ms-1">
+                            <span class="ms-1 lightTxt">
                                 --
                             </span>
                         </ng-template>
@@ -35,12 +35,14 @@
                     <span *ngIf="!isSmallScreen; else screenStatusBlock" class="me-4"
                         style="display: flex; align-items: center;">
                         {{"SYSTEM.TICKETMODIFY.STATUS" | translate}}:
-                        {{ticketInfo?.ticketStatus?.name}} -
-                        <span class="ms-1" *ngIf="ticketInfo?.ticketStatus?.type_status == 1; else closedBlock">
+                        <span class="lightTxt ms-1">
+                            {{ticketInfo?.ticketStatus?.name}} -
+                        </span>
+                        <span class="ms-1 lightTxt" *ngIf="ticketInfo?.ticketStatus?.type_status == 1; else closedBlock">
                             {{"SYSTEM.TICKETMODIFY.OPENED" | translate}}
                         </span>
                         <ng-template #closedBlock>
-                            <span class="ms-1">
+                            <span class="ms-1 lightTxt">
                                 {{"SYSTEM.TICKETMODIFY.CLOSED" | translate}}
                             </span>
                         </ng-template>
@@ -50,10 +52,10 @@
 
                     <!-- PUBLIC STATUS -->
                     <span class="me-4" style="display: flex; align-items: center;">
-                        <span *ngIf="ticketInfo?.public == 1">
+                        <span class="lightTxt" *ngIf="ticketInfo?.public == 1">
                             {{"SYSTEM.TICKETMODIFY.PUBLIC" | translate}}
                         </span>
-                        <span *ngIf="ticketInfo?.public == 0">
+                        <span class="lightTxt" *ngIf="ticketInfo?.public == 0">
                             {{"SYSTEM.TICKETMODIFY.PRIVATE" | translate}}
                         </span>
                         <i class="bi bi-circle-fill ms-2"
@@ -80,7 +82,7 @@
                         <span class="ticketInfoTitle">
                             {{"SYSTEM.TICKETMODIFY.OPENEDFROM" | translate}}:
                         </span>
-                        <span class="ticketInfoContent">
+                        <span class="ticketInfoContent lightTxt">
                             {{ticketInfo?.user_created?.nickname}}
                         </span>
                     </div>
@@ -89,7 +91,7 @@
                         <span class="ticketInfoTitle">
                             {{"SYSTEM.TICKETMODIFY.PROGRESSIVE" | translate}}:
                         </span>
-                        <span class="ticketInfoContent">
+                        <span class="ticketInfoContent lightTxt">
                             {{ticketInfo?.progressive}} /
                             {{ticketInfo?.user_created?.datetime}}
                         </span>
@@ -114,7 +116,7 @@
                             <div class="col-auto text-start"
                                 *ngFor="let inverter of inverterList.controls; let i = index" [formGroupName]="i">
                                 <div class="form-check">
-                                    <label class="form-check-label ms-2" for="selected_inverter-{{i}}">
+                                    <label class="form-check-label ms-2 lightTxt" for="selected_inverter-{{i}}">
                                         {{inverter.get('sn')?.value}}
                                     </label>
                                     <input class="form-check-input" type="checkbox" id="selected_inverter-{{i}}"
@@ -143,7 +145,7 @@
                             <div class="col-auto text-start" *ngFor="let battery of batteryList.controls; let i = index"
                                 [formGroupName]="i">
                                 <div class="form-check">
-                                    <label class="form-check-label ms-2" for="selected_battery-{{i}}">
+                                    <label class="form-check-label ms-2 lightTxt" for="selected_battery-{{i}}">
                                         {{battery.get('sn')?.value}}
                                     </label>
                                     <input class="form-check-input" type="checkbox" id="selected_battery-{{i}}"
@@ -314,233 +316,238 @@
         </div>
     </div>
 
-    <form [formGroup]="oldMessagesForm">
-        <ng-container formArrayName="messages">
-            <ng-container *ngFor="let message of messages.controls; let i = index" [formGroupName]="i">
-                <div *ngIf="visualizeAll || message.get('public')?.value == 1"
-                    class="row ps-2 pe-2 ps-xl-3 pe-xl-3 ps-xxl-5 pe-xxl-5">
+    <ng-container *ngIf="messages.controls.length > 0 || isNewMessage; else noMessageBlock">
+        <form [formGroup]="oldMessagesForm">
+            <ng-container formArrayName="messages">
+                <ng-container *ngFor="let message of messages.controls; let i = index" [formGroupName]="i">
+                    <div *ngIf="visualizeAll || message.get('public')?.value == 1"
+                        class="row ps-2 pe-2 ps-xl-3 pe-xl-3 ps-xxl-5 pe-xxl-5">
 
-                    <!-- TIMELINE -->
-                    <div class="col-1 d-none d-lg-inline ps-0 pe-0"
-                        style="border-right: 4px solid #002D5D; position: relative; max-width: 110px;">
-                        <span class="text-center" [ngStyle]="{'font-size': isLargeScreen ? 'small' : 'x-small'}"
-                            style="position: absolute; top: 48%; right: 20px; font-weight: 700; color: #002D5D;">
-                            {{message.get('date_only')?.value}}<br>
-                            {{message.get('time_only')?.value}}
-                        </span>
-                        <span style="position: absolute; top: 50%; right: -10px;">
-                            <i class="bi bi-circle-fill" style="color: #002D5D;"></i>
-                        </span>
-                    </div>
-
-                    <div class="col-12 col-lg-11 pb-2">
-
-                        <!-- CUSTOMER -->
-                        <div *ngIf="message.get('portal')?.value == 1" class="row ps-lg-3 justify-content-start">
-                            <div class="col-11 col-md-10 mt-4 cardElement customPanel ticketPanel"
-                                style="max-width: 1200px; background-color: #fcf3cf;" appInViewport>
-                                <div class="row justify-content-center">
-                                    <div class="col-6 text-start">
-                                        <img src="assets/img/profileThumb.jpg" class="profile-image">
-                                        <span *ngIf="!isSmallScreen" class="ms-2 panelTitle">
-                                            {{message.get('user_created')?.value.nickname}}
-                                        </span>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <span style="color: gray; font-style: italic;"
-                                            [ngStyle]="{'font-size': isSmallScreen ? 'x-small' : 'small' }">
-                                            {{message.get('user_created')?.value.datetime}}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="row justify-content-center">
-                                    <div class="col-12 mt-2">
-                                        <span class="form-label">
-                                            {{"SYSTEM.TICKETMODIFY.MESSAGE" | translate}}
-                                        </span><br>
-                                        <span>
-                                            {{message.get('description')?.value}}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="row justify-content-center mt-2 mb-1">
-                                    <div *ngFor="let file of message.get('attachments')?.value" class="col-auto">
-                                        <img class="imgThumb" [src]="urlMultimedia+file.src" [title]="file.src"
-                                            (click)="viewImage(file)">
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- TIMELINE -->
+                        <div class="col-1 d-none d-lg-inline ps-0 pe-0"
+                            style="border-right: 4px solid #002D5D; position: relative; max-width: 110px;">
+                            <span class="text-center" [ngStyle]="{'font-size': isLargeScreen ? 'small' : 'x-small'}"
+                                style="position: absolute; top: 48%; right: 20px; font-weight: 700; color: #002D5D;">
+                                {{message.get('date_only')?.value}}<br>
+                                {{message.get('time_only')?.value}}
+                            </span>
+                            <span style="position: absolute; top: 50%; right: -10px;">
+                                <i class="bi bi-circle-fill" style="color: #002D5D;"></i>
+                            </span>
                         </div>
 
-                        <!-- WECO TECHNICIAN -->
-                        <div *ngIf="message.get('portal')?.value == 0" class="row justify-content-end">
-                            <div class="col-11 col-md-10 mt-4 cardElement customPanel ticketPanel"
-                                style="max-width: 1200px; background-color: #edf5fe" appInViewport>
-                                <div class="row justify-content-center">
-                                    <div class="col-6 text-start">
-                                        <img src="assets/img/wecoW.jpg" class="profile-image">
-                                        <span *ngIf="!isSmallScreen" class="panelTitle">
-                                            {{"SYSTEM.TICKETMODIFY.WECOTECHNICIAN" | translate}}
-                                        </span>
+                        <div class="col-12 col-lg-11 pb-2">
+
+                            <!-- CUSTOMER -->
+                            <div *ngIf="message.get('portal')?.value == 1" class="row ps-lg-3 justify-content-start">
+                                <div class="col-11 col-md-10 mt-4 cardElement customPanel ticketPanel"
+                                    style="max-width: 1200px; background-color: #fcf3cf;" appInViewport>
+                                    <div class="row justify-content-center">
+                                        <div class="col-6 text-start">
+                                            <img src="assets/img/profileThumb.jpg" class="profile-image">
+                                            <span *ngIf="!isSmallScreen" class="ms-2 panelTitle">
+                                                {{message.get('user_created')?.value.nickname}}
+                                            </span>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <span style="color: gray; font-style: italic;"
+                                                [ngStyle]="{'font-size': isSmallScreen ? 'x-small' : 'small' }">
+                                                {{message.get('user_created')?.value.datetime}}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="col-6 text-end">
-                                        <span style="color: gray; font-style: italic;"
-                                            [ngStyle]="{'font-size': isSmallScreen ? 'x-small' : 'small' }">
-                                            {{message.get('user_created')?.value.datetime}}
-                                        </span>
-                                    </div>
-                                </div>
 
-                                <div class="row justify-content-center">
-                                    <div *ngIf="visualizeAll; else textBlock" class="col-12 mt-2 quillContainer">
-                                        <quill-editor formControlName="description" id="description-{{i}}"
-                                            [class.is-invalid]="message.get('description')?.invalid && submittedOldMessage[i]">
-                                            <div above-quill-editor-toolbar>
-                                                <span class="form-label" for="description">
-                                                    {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
-                                                </span>
-                                            </div>
-                                            <div quill-editor-toolbar style="background-color: white;">
-                                                <span class="ql-formats">
-                                                    <button class="ql-bold" title="Bold"></button>
-                                                    <button class="ql-italic" title="Italic"></button>
-                                                    <button class="ql-underline" title="Underline"></button>
-                                                    <button class="ql-strike" title="Strikethrough"></button>
-                                                </span>
-
-                                                <span class="ql-formats">
-                                                    <select class="ql-font" title="Font Style">
-                                                        <option selected></option>
-                                                        <option value="serif"></option>
-                                                        <option value="monospace"></option>
-                                                    </select>
-                                                    <select class="ql-size" title="Font Size">
-                                                        <option value="small"></option>
-                                                        <option selected></option>
-                                                        <option value="large"></option>
-                                                        <option value="huge"></option>
-                                                    </select>
-                                                </span>
-
-                                                <span class="ql-formats">
-                                                    <button class="ql-list" value="ordered"
-                                                        title="Ordered List"></button>
-                                                    <button class="ql-list" value="bullet" title="Bullet List"></button>
-                                                    <button class="ql-indent" value="-1"
-                                                        title="Decrease Indent"></button>
-                                                    <button class="ql-indent" value="+1"
-                                                        title="Increase Indent"></button>
-                                                </span>
-
-                                                <span class="ql-formats">
-                                                    <select class="ql-align" title="Align">
-                                                        <option selected></option>
-                                                        <option value="center"></option>
-                                                        <option value="right"></option>
-                                                        <option value="justify"></option>
-                                                    </select>
-                                                </span>
-
-                                                <span class="ql-formats">
-                                                    <select class="ql-color" title="Text Color"></select>
-                                                </span>
-                                            </div>
-                                        </quill-editor>
-                                    </div>
-                                    <ng-template #textBlock>
-                                        <div class="col-12 mt-2 mb-2">
+                                    <div class="row justify-content-center">
+                                        <div class="col-12 mt-2">
                                             <span class="form-label">
                                                 {{"SYSTEM.TICKETMODIFY.MESSAGE" | translate}}
+                                            </span><br>
+                                            <span>
+                                                {{message.get('description')?.value}}
                                             </span>
-                                            <div [innerHTML]="message.get('description')?.value">
+                                        </div>
+                                    </div>
+
+                                    <div class="row justify-content-center mt-2 mb-1">
+                                        <div *ngFor="let file of message.get('attachments')?.value" class="col-auto">
+                                            <img class="imgThumb" [src]="urlMultimedia+file.src" [title]="file.src"
+                                                (click)="viewImage(file)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- WECO TECHNICIAN -->
+                            <div *ngIf="message.get('portal')?.value == 0" class="row justify-content-end">
+                                <div class="col-11 col-md-10 mt-4 cardElement customPanel ticketPanel"
+                                    style="max-width: 1200px; background-color: #edf5fe" appInViewport>
+                                    <div class="row justify-content-center">
+                                        <div class="col-6 text-start">
+                                            <img src="assets/img/wecoW.jpg" class="profile-image">
+                                            <span *ngIf="!isSmallScreen" class="panelTitle">
+                                                {{"SYSTEM.TICKETMODIFY.WECOTECHNICIAN" | translate}}
+                                            </span>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <span style="color: gray; font-style: italic;"
+                                                [ngStyle]="{'font-size': isSmallScreen ? 'x-small' : 'small' }">
+                                                {{message.get('user_created')?.value.datetime}}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row justify-content-center">
+                                        <div *ngIf="visualizeAll; else textBlock" class="col-12 mt-2 quillContainer">
+                                            <quill-editor formControlName="description" id="description-{{i}}"
+                                                [class.is-invalid]="message.get('description')?.invalid && submittedOldMessage[i]">
+                                                <div above-quill-editor-toolbar>
+                                                    <span class="form-label" for="description">
+                                                        {{"SYSTEM.TICKETMODIFY.DESCRIPTION" | translate}}
+                                                    </span>
+                                                </div>
+                                                <div quill-editor-toolbar style="background-color: white;">
+                                                    <span class="ql-formats">
+                                                        <button class="ql-bold" title="Bold"></button>
+                                                        <button class="ql-italic" title="Italic"></button>
+                                                        <button class="ql-underline" title="Underline"></button>
+                                                        <button class="ql-strike" title="Strikethrough"></button>
+                                                    </span>
+
+                                                    <span class="ql-formats">
+                                                        <select class="ql-font" title="Font Style">
+                                                            <option selected></option>
+                                                            <option value="serif"></option>
+                                                            <option value="monospace"></option>
+                                                        </select>
+                                                        <select class="ql-size" title="Font Size">
+                                                            <option value="small"></option>
+                                                            <option selected></option>
+                                                            <option value="large"></option>
+                                                            <option value="huge"></option>
+                                                        </select>
+                                                    </span>
+
+                                                    <span class="ql-formats">
+                                                        <button class="ql-list" value="ordered"
+                                                            title="Ordered List"></button>
+                                                        <button class="ql-list" value="bullet"
+                                                            title="Bullet List"></button>
+                                                        <button class="ql-indent" value="-1"
+                                                            title="Decrease Indent"></button>
+                                                        <button class="ql-indent" value="+1"
+                                                            title="Increase Indent"></button>
+                                                    </span>
+
+                                                    <span class="ql-formats">
+                                                        <select class="ql-align" title="Align">
+                                                            <option selected></option>
+                                                            <option value="center"></option>
+                                                            <option value="right"></option>
+                                                            <option value="justify"></option>
+                                                        </select>
+                                                    </span>
+
+                                                    <span class="ql-formats">
+                                                        <select class="ql-color" title="Text Color"></select>
+                                                    </span>
+                                                </div>
+                                            </quill-editor>
+                                        </div>
+                                        <ng-template #textBlock>
+                                            <div class="col-12 mt-2 mb-2">
+                                                <span class="form-label">
+                                                    {{"SYSTEM.TICKETMODIFY.MESSAGE" | translate}}
+                                                </span>
+                                                <div [innerHTML]="message.get('description')?.value">
+                                                </div>
                                             </div>
+                                        </ng-template>
+                                    </div>
+
+                                    <!-- ATTACHMENTS -->
+                                    <div class="row justify-content-center">
+                                        <div *ngFor="let img of message.get('attachments')?.value; let j = index"
+                                            class="col-auto" style="position: relative;">
+                                            <img *ngIf="img.id == 0" class="imgThumb"
+                                                style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
+                                                [src]="img.src" [title]="img.src">
+                                            <img *ngIf="img.id > 0" class="imgThumb"
+                                                style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
+                                                [src]="urlMultimedia+img.src" [title]="img.src">
+                                            <button *ngIf="visualizeAll == true" class="btn btn-danger btn-zoom p-0"
+                                                style="position: absolute; right: 8px; top: -4px"
+                                                (click)="deleteFileOldMessage(j, i)">
+                                                <i class="bi bi-x"></i>
+                                            </button>
                                         </div>
-                                    </ng-template>
-                                </div>
 
-                                <!-- ATTACHMENTS -->
-                                <div class="row justify-content-center">
-                                    <div *ngFor="let img of message.get('attachments')?.value; let j = index"
-                                        class="col-auto" style="position: relative;">
-                                        <img *ngIf="img.id == 0" class="imgThumb"
-                                            style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                            [src]="img.src" [title]="img.src">
-                                        <img *ngIf="img.id > 0" class="imgThumb"
-                                            style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                            [src]="urlMultimedia+img.src" [title]="img.src">
-                                        <button *ngIf="visualizeAll == true" class="btn btn-danger btn-zoom p-0"
-                                            style="position: absolute; right: 8px; top: -4px"
-                                            (click)="deleteFileOldMessage(j, i)">
-                                            <i class="bi bi-x"></i>
-                                        </button>
-                                    </div>
-
-                                    <div *ngIf="visualizeAll == true && fileListOldMessages" class="col-auto">
-                                        <label *ngIf="fileListOldMessages[i] && fileListOldMessages[i].files.length < maxImages"
-                                            for="fileUpload-{{i}}" class="btn btn-outline-dark mt-1">
-                                            <i class="bi bi-paperclip"></i>
-                                            <input type="file" id="fileUpload-{{i}}" style="display: none;"
-                                                (change)="onFileSelectedOldMessage($event, i)" multiple>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div *ngIf="message.invalid && submittedOldMessage[i] && visualizeAll" class="row mt-1 justify-content-center">
-                                    <div class="col-12 text-center">
-                                        <span class="errorTxt">
-                                            {{"SYSTEM.TICKETMODIFY.MANDATORYFIELDS" | translate}}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div *ngIf="visualizeAll" class="row justify-content-end mt-2 pt-2"
-                                    style="border-top: 1px solid lightgray;">
-                                    <div class="col-6 text-start">
-                                        <button class="btn btn-outline-danger"
-                                            (click)="deleteMessage(message.get('idticketline')?.value)">
-                                            {{"SYSTEM.TICKETMODIFY.DELETE" | translate}}
-                                        </button>
-                                    </div>
-                                    <div class="col-6 text-end" style="position: relative;">
-                                        <div class="form-check form-switch"
-                                            style="height: 38px; align-content: center; position: absolute; right: 120px;">
-                                            <label for="public-{{i}}" class="form-check-label"
-                                                style="font-weight: bold;">
-                                                {{"SYSTEM.TICKETNEW.PUBLIC" | translate}}
+                                        <div *ngIf="visualizeAll == true && fileListOldMessages" class="col-auto">
+                                            <label
+                                                *ngIf="fileListOldMessages[i] && fileListOldMessages[i].files.length < maxImages"
+                                                for="fileUpload-{{i}}" class="btn btn-outline-dark mt-1">
+                                                <i class="bi bi-paperclip"></i>
+                                                <input type="file" id="fileUpload-{{i}}" style="display: none;"
+                                                    (change)="onFileSelectedOldMessage($event, i)" multiple>
                                             </label>
-                                            <input type="checkbox" class="form-check-input" role="switch"
-                                                id="public-{{i}}" formControlName="public">
                                         </div>
-                                        <button class="btn btn-outline-dark" (click)="saveTicketOldMessage(i)">
-                                            {{"SYSTEM.TICKETMODIFY.UPDATE" | translate}}
-                                        </button>
                                     </div>
-                                </div>
 
-                                <div class="row justify-content-center mt-1">
-                                    <div class="col-12 col-md-6 text-start">
-                                        <span style="font-size: small; font-style: italic; color: gray;">
-                                            {{"SYSTEM.TICKETMODIFY.CREATEDFROM" | translate}}:
-                                            {{message.get('user_created')?.value.nickname}} -
-                                            {{message.get('user_created')?.value.datetime}}
-                                        </span>
+                                    <div *ngIf="message.invalid && submittedOldMessage[i] && visualizeAll"
+                                        class="row mt-1 justify-content-center">
+                                        <div class="col-12 text-center">
+                                            <span class="errorTxt">
+                                                {{"SYSTEM.TICKETMODIFY.MANDATORYFIELDS" | translate}}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="col-12 col-md-6 text-end">
-                                        <span style="font-size: small; font-style: italic; color: gray;">
-                                            {{"SYSTEM.TICKETMODIFY.UPDATEDFROM" | translate}}:
-                                            {{message.get('user_created')?.value.nickname}} -
-                                            {{message.get('user_created')?.value.datetime}}
-                                        </span>
+
+                                    <div *ngIf="visualizeAll" class="row justify-content-end mt-2 pt-2"
+                                        style="border-top: 1px solid lightgray;">
+                                        <div class="col-6 text-start">
+                                            <button class="btn btn-outline-danger"
+                                                (click)="deleteMessage(message.get('idticketline')?.value)">
+                                                {{"SYSTEM.TICKETMODIFY.DELETE" | translate}}
+                                            </button>
+                                        </div>
+                                        <div class="col-6 text-end" style="position: relative;">
+                                            <div class="form-check form-switch"
+                                                style="height: 38px; align-content: center; position: absolute; right: 120px;">
+                                                <label for="public-{{i}}" class="form-check-label"
+                                                    style="font-weight: bold;">
+                                                    {{"SYSTEM.TICKETNEW.PUBLIC" | translate}}
+                                                </label>
+                                                <input type="checkbox" class="form-check-input" role="switch"
+                                                    id="public-{{i}}" formControlName="public">
+                                            </div>
+                                            <button class="btn btn-outline-dark" (click)="saveTicketOldMessage(i)">
+                                                {{"SYSTEM.TICKETMODIFY.UPDATE" | translate}}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row justify-content-center mt-1">
+                                        <div class="col-12 col-md-6 text-start">
+                                            <span style="font-size: small; font-style: italic; color: gray;">
+                                                {{"SYSTEM.TICKETMODIFY.CREATEDFROM" | translate}}:
+                                                {{message.get('user_created')?.value.nickname}} -
+                                                {{message.get('user_created')?.value.datetime}}
+                                            </span>
+                                        </div>
+                                        <div class="col-12 col-md-6 text-end">
+                                            <span style="font-size: small; font-style: italic; color: gray;">
+                                                {{"SYSTEM.TICKETMODIFY.UPDATEDFROM" | translate}}:
+                                                {{message.get('user_created')?.value.nickname}} -
+                                                {{message.get('user_created')?.value.datetime}}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </ng-container>
             </ng-container>
-        </ng-container>
+        </form>
 
         <!-- NUOVO MESSAGGIO -->
         <div [formGroup]="newMessageForm" *ngIf="isNewMessage"
@@ -548,7 +555,7 @@
             <!-- TIMELINE -->
             <div class="col-1 d-none d-lg-inline ps-0 pe-0"
                 style="border-right: 4px solid #002D5D; position: relative; max-width: 110px;">
-                <span class="text-center"
+                <span class="text-center" [ngStyle]="{'font-size': isLargeScreen ? 'small' : 'x-small'}"
                     style="position: absolute; top: 48%; right: 20px; font-size: small; font-weight: 700; color: #002D5D;">
                     {{newMessageForm.get('date')?.value}} <br> {{newMessageForm.get('time')?.value}}
                 </span>
@@ -658,7 +665,8 @@
                             </div>
                         </div>
 
-                        <div *ngIf="newMessageForm.invalid && submittedNewMessage" class="row mt-1 justify-content-center">
+                        <div *ngIf="newMessageForm.invalid && submittedNewMessage"
+                            class="row mt-1 justify-content-center">
                             <div class="col-12 text-center">
                                 <span class="errorTxt">
                                     {{"SYSTEM.TICKETMODIFY.MANDATORYFIELDS" | translate}}
@@ -690,20 +698,30 @@
                 </div>
             </div>
         </div>
-    </form>
+    </ng-container>
+    <ng-template #noMessageBlock>
+        <div class="row align-items-center mt-2 p-4">
+            <div class="col-12 text-center">
+                <span style="color: gray; font-style: italic;">
+                    {{"SYSTEM.TICKETMODIFY.NOMESSAGES" | translate}}
+                </span>
+            </div>
+        </div>
+    </ng-template>
 
     <button class="btn btn-dark btnSticky" [matMenuTriggerFor]="menu">
         <i class="bi bi-three-dots-vertical"></i>
     </button>
     <mat-menu #menu="matMenu">
-        <button *ngIf="ticketInfo?.incharge?.id && ticketInfo?.incharge?.isInCharge == 1; else releaseBlock" mat-menu-item (click)="takeOnChargeOrRelease(0)">
+        <button *ngIf="ticketInfo?.incharge?.id && ticketInfo?.incharge?.isInCharge == 1; else releaseBlock"
+            mat-menu-item (click)="takeOnChargeOrRelease(0)">
             <i class="bi bi-person-standing me-2"></i>
             <span>{{"TICKET.MODIFY.RELEASE" | translate }}</span>
         </button>
         <ng-template #releaseBlock>
             <button mat-menu-item (click)="takeOnChargeOrRelease(1)">
                 <i class="bi bi-person-raised-hand me-2"></i>
-            <span>{{"TICKET.MODIFY.TAKEONCHARGE" | translate }}</span>
+                <span>{{"TICKET.MODIFY.TAKEONCHARGE" | translate }}</span>
             </button>
         </ng-template>
         <button *ngIf="!isNewMessage" mat-menu-item (click)="newMessage()">

@@ -426,6 +426,7 @@
       "BATTERY": "Batteria"
     },
     "TICKETLIST": {
+      "NOFILTERACTIVE": "Nessun filtro attivo",
       "OPEN": "Aperto",
       "CLOSED": "Chiuso",
       "YES": "Si",
@@ -467,6 +468,7 @@
       "MANDATORYFIELDS": "Compilare tutti i campi obbligatori"
     },
     "TICKETMODIFY": {
+      "NOMESSAGES": "Nessun messaggio ancora presente, per aggiungerne uno apri il menù e seleziona la voce 'Aggiungi Messaggio'",
       "DELETETICKET": "Elimina Ticket",
       "DELETETICKETTXT": "Sei sicuro di voler eliminare questo ticket? Tutti i davi verranno persi e l'azione non sarà reversibile",
       "TAKEINCHARGE": "Prendi in Carico",

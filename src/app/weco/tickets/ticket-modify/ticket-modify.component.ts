@@ -208,15 +208,6 @@ export class TicketModifyComponent {
     console.log(this.messages.getRawValue())
   }
 
-  // createAttachmentsList(attachments: Image[]) {
-  //   attachments.forEach((file) => {
-  //     formArrayEl.push(this.fb.group({
-  //       id: [file.id]
-  //     }))
-  //   })
-  //   return this.fb.array(formArrayEl);
-  // }
-
   createInverter(inverter: any) {
     return this.fb.group({
       id: [inverter.id],

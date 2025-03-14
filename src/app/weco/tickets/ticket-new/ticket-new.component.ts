@@ -20,6 +20,7 @@ import { ApiResponse } from '../../interfaces/api-response';
     CommonModule,
     TranslateModule,
     ReactiveFormsModule,
+    QuillModule
   ],
   templateUrl: './ticket-new.component.html',
   styleUrl: './ticket-new.component.scss'
@@ -47,9 +48,9 @@ export class TicketNewComponent {
     this.newTicketForm = this.fb.group({
       public: [false],
       idticket: [{ value: 0, disabled: true }],
-      idsystem: [{ value: this.idsystem, disabled: true }, [Validators.required]],
+      idsystem: [{ value: this.idsystem, disabled: true }, Validators.required],
       systemName: [{value: null, disabled: true}],
-      description: [null, [Validators.required]],
+      description: [null, Validators.required],
       note: [null],
       inverterList: this.fb.array([]),
       batteryList: this.fb.array([])
