@@ -81,7 +81,7 @@ export class TicketTableComponent {
       this.ticket_closed = event.selected ? 1 : 0;
     }
     if (index == 2) {
-      this.ticket_opened = event.val ? 1 : 0;
+      this.ticket_opened = event.selected ? 1 : 0;
     }
 
     this.getTicketList();
