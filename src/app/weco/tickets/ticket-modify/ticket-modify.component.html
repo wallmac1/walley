@@ -242,12 +242,14 @@
                         <div class="row justify-content-center">
                             <div *ngFor="let img of ticketInfo?.attachments; let i = index" class="col-auto"
                                 style="position: relative;">
-                                <img *ngIf="img.id == 0; else serverImg"
+                                <img *ngIf="img.id == 0; else serverImg" (click)="viewImage(img)"
                                     style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                    [src]="img.src" [title]="img.src" class="imgThumb">
+                                    [src]="img.src" [title]="img.title" class="imgThumb" 
+                                    onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
                                 <ng-template #serverImg>
                                     <img style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                        [src]="urlMultimedia+img.src" [title]="img.src" class="imgThumb">
+                                        [src]="urlMultimedia+img.src" [title]="img.title" class="imgThumb" (click)="viewImage(img)"
+                                        onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
                                 </ng-template>
 
                                 <button class="btn btn-danger btn-zoom p-0"
@@ -362,16 +364,15 @@
                                             <span class="form-label">
                                                 {{"SYSTEM.TICKETMODIFY.MESSAGE" | translate}}
                                             </span><br>
-                                            <span>
-                                                {{message.get('description')?.value}}
-                                            </span>
+                                            <div [innerHTML]="message.get('description')?.value">
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="row justify-content-center mt-2 mb-1">
                                         <div *ngFor="let file of message.get('attachments')?.value" class="col-auto">
-                                            <img class="imgThumb" [src]="urlMultimedia+file.src" [title]="file.src"
-                                                (click)="viewImage(file)">
+                                            <img class="imgThumb" [src]="urlMultimedia+file.src" [title]="file.title"
+                                                (click)="viewImage(file)" onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
                                         </div>
                                     </div>
                                 </div>
@@ -468,12 +469,12 @@
                                     <div class="row justify-content-center">
                                         <div *ngFor="let img of message.get('attachments')?.value; let j = index"
                                             class="col-auto" style="position: relative;">
-                                            <img *ngIf="img.id == 0" class="imgThumb"
+                                            <img *ngIf="img.id == 0" class="imgThumb" onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';"
                                                 style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                                [src]="img.src" [title]="img.src">
-                                            <img *ngIf="img.id > 0" class="imgThumb"
+                                                [src]="img.src" [title]="img.title" (click)="viewImage(img)">
+                                            <img *ngIf="img.id > 0" class="imgThumb" onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';"
                                                 style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                                [src]="urlMultimedia+img.src" [title]="img.src">
+                                                [src]="urlMultimedia+img.src" [title]="img.title" (click)="viewImage(img)">
                                             <button *ngIf="visualizeAll == true" class="btn btn-danger btn-zoom p-0"
                                                 style="position: absolute; right: 8px; top: -4px"
                                                 (click)="deleteFileOldMessage(j, i)">
@@ -551,7 +552,7 @@
 
         <!-- NUOVO MESSAGGIO -->
         <div [formGroup]="newMessageForm" *ngIf="isNewMessage"
-            class="row ps-3 pe-3 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5 pb-5 mb-4">
+            class="row ps-2 pe-2 ps-xl-3 pe-xl-3 ps-xxl-5 pe-xxl-5 pb-5 mb-4">
             <!-- TIMELINE -->
             <div class="col-1 d-none d-lg-inline ps-0 pe-0"
                 style="border-right: 4px solid #002D5D; position: relative; max-width: 110px;">
@@ -643,8 +644,8 @@
                                     <ng-container formArrayName="attachments">
                                         <div *ngFor="let item of newAttachments.controls; let i = index"
                                             class="col-auto" [formGroupName]="i" style="position: relative;">
-                                            <img class="imgThumb" [src]="item.get('src')?.value"
-                                                (click)="viewImage(item.getRawValue())">
+                                            <img class="imgThumb" [src]="item.get('src')?.value" 
+                                                (click)="viewImage(item.getRawValue())" onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
                                             <button class="btn btn-danger btn-zoom p-0"
                                                 style="position: absolute; right: 8px; top: -4px"
                                                 (click)="deleteFileNewMessage(i)">
