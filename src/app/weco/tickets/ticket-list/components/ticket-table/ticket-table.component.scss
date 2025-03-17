@@ -3,6 +3,11 @@ th {
     border-right: 1px solid lightgray;
 }
 
+td {
+    height: 3rem;
+    vertical-align: middle;
+}
+
 thead {
     background-color: whitesmoke;
 }
@@ -38,4 +43,29 @@ thead {
     white-space: normal;
     max-height: 4.5em;
     line-height: 1.5em;
+    padding-top: 0.3rem;
+
+    /* Rimuove il bordo indesiderato */
+    outline: none;
+    border: none;
+    background-color: transparent;
+    /* Assicura che lo sfondo sia trasparente */
+
+    /* Evita eventuali stili di focus indesiderati */
+    &:focus,
+    &:active {
+        outline: none;
+        border: none;
+    }
+}
+
+.rowHover {
+    background-color: white;
+    transition: scale 0.3s ease-in, background-color 0.3s ease-in;
+}
+
+.rowHover:hover {
+    scale: 1.03;
+    background-color: lightgray;
+    cursor: pointer;
 }

@@ -220,7 +220,7 @@ export class TicketModifyComponent {
     return this.fb.group({
       id: [battery.id],
       sn: [battery.sn],
-      selected: [battery.sn],
+      selected: [battery.selected],
     })
   }
 

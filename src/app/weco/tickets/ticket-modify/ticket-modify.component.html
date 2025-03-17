@@ -72,7 +72,10 @@
                 <div class="row justify-content-center mt-2">
                     <div class="col-6 col-lg-4 text-start mt-1">
                         <span class="ticketInfoTitle">
-                            {{"SYSTEM.TICKETMODIFY.SYSTEMINFO" | translate}}
+                            {{"SYSTEM.TICKETMODIFY.SYSTEMINFO" | translate}}:
+                        </span>
+                        <span class="ms-1 truncate-text">
+                            {{ticketInfo?.system_title}}
                         </span>
                         <button class="btn btn-sm btn-outline-dark ms-2" (click)="systemInfoPopup()">
                             <i class="bi bi-card-text"></i>
@@ -520,7 +523,8 @@
                                                 <input type="checkbox" class="form-check-input" role="switch"
                                                     id="public-{{i}}" formControlName="public">
                                             </div>
-                                            <button class="btn btn-outline-dark" (click)="saveTicketOldMessage(i)">
+                                            <button *ngIf="message.dirty || (fileListOldMessages[i] && fileListOldMessages[i].files.length > 0)" 
+                                                class="btn btn-outline-dark" (click)="saveTicketOldMessage(i)">
                                                 {{"SYSTEM.TICKETMODIFY.UPDATE" | translate}}
                                             </button>
                                         </div>

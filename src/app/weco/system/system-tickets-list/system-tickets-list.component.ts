@@ -52,12 +52,20 @@ export class SystemTicketsListComponent {
   }
 
   sortData(sort: Sort) {
+    console.log(sort)
     if (sort.active === 'status') {
       const isAsc = sort.direction === 'asc';
       this.dataSource.data = [...this.ticketList].sort((a, b) => {
         return this.compare(a.ticketStatus.name, b.ticketStatus.name, isAsc);
       });
-    } else {
+    }
+    else if (sort.active == 'num_date') {
+      const isAsc = sort.direction === 'asc';
+      this.dataSource.data = [...this.ticketList].sort((a, b) => {
+        return this.compare(a.ticket_date, b.ticket_date, isAsc);
+      });
+    }
+    else {
       // Reimposta i dati originali se non è ordinamento per "status"
       this.dataSource.data = [...this.ticketList];
     }

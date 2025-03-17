@@ -10,6 +10,7 @@ export interface TicketInfo {
     requestType: number | null;
     email: string | null;
     note: string;
+    system_title: string;
     attachments: {id: number, src: string | SafeUrl, ext: string, title: string}[];
     inverterList: {id: number, sn: string, selected_inverter: number}[];
     batteryList: {id: number, sn: string, selected_battery: number}[];

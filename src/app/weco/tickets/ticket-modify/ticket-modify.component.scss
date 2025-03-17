@@ -253,3 +253,12 @@ input, textarea {
 .lightTxt {
     font-weight: 150;
 }
+
+.truncate-text {
+    display: inline-block; 
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}

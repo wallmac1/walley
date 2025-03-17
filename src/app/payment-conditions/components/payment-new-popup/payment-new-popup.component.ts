@@ -51,7 +51,9 @@ export class PaymentNewPopupComponent {
     this.paymentConditionsForm.get('bank_type')?.setValue(data.element.bank_type?.id || null);
     this.paymentConditionsForm.get('deadline_type')?.setValue(data.element.deadline_type?.id || null);
     this.paymentConditionsForm.get('xml_code')?.setValue(data.element.xml_code?.id || null);
-    this.paymentConditionsForm.get('exact_day')?.setValue(data.element.exact_day.toString() || null);
+    if(data.element.exact_day) {
+      this.paymentConditionsForm.get('exact_day')?.setValue(data.element.exact_day.toString());
+    }
     this.xml_codes = data.xml_codes;
     this.bankList = data.bankList;
     this.deadlineList = data.deadlineList;
