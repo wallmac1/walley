@@ -205,7 +205,7 @@ export class TicketModifyComponent {
       this.submittedOldMessage.push(false);
       i += 1;
     })
-    console.log(this.messages.getRawValue())
+    //console.log(this.messages.getRawValue())
   }
 
   createInverter(inverter: any) {
@@ -232,7 +232,7 @@ export class TicketModifyComponent {
   }
 
   createBatteryList(batteryList: any[]) {
-    console.log(this.batteryList.controls)
+    //console.log(this.batteryList.controls)
     this.batteryList.reset();
     batteryList.forEach((battery) => {
       this.batteryList.push(this.createBattery(battery));
@@ -259,7 +259,7 @@ export class TicketModifyComponent {
   }
 
   viewImage(img: Image) {
-    console.log(img)
+    //console.log(img)
     if (img.ext != 'pdf' && this.acceptedExt.includes(img.ext || '')) {
       const dialogRef = this.dialog.open(ImageViewerComponent, {
         maxWidth: '800px',
@@ -277,8 +277,13 @@ export class TicketModifyComponent {
     //   });
     // }
     else {
-      const urlString = this.sanitizer.sanitize(SecurityContext.URL, img.src);
-      const newTab = window.open(urlString!, "_blank");
+      if(img.id > 0) {
+        const urlString = this.sanitizer.sanitize(SecurityContext.URL, img.src);
+        const newTab = window.open(this.urlMultimedia+urlString!, "_blank");
+      }
+      else {
+        const newTab = window.open(img.src.toString(), '_blank');
+      }
     }
   }
 
@@ -370,6 +375,7 @@ export class TicketModifyComponent {
           if (val.data) {
             this.getTicketInfo();
             this.removedFilesInfo = [];
+            this.fileListInfo = [];
           }
         })
     }
@@ -500,7 +506,7 @@ export class TicketModifyComponent {
         }
       });
       // Reset Input
-      console.log("files", input.value);
+      //console.log("files", input.value);
       input.value = '';
     }
   }
@@ -551,7 +557,7 @@ export class TicketModifyComponent {
       const files = Array.from(input.files);
 
       // Verifica il numero massimo di file
-      console.log("Files:", files.length, "FilesNewMessagesImg:", this.fileListNewMessage.length);
+      //console.log("Files:", files.length, "FilesNewMessagesImg:", this.fileListNewMessage.length);
       if (files.length + this.fileListNewMessage.length > this.maxFiles) {
         alert(`Puoi caricare al massimo ${this.maxFiles} file.`);
         return;
@@ -580,7 +586,7 @@ export class TicketModifyComponent {
         }
       });
       // Reset Input
-      console.log("files", input.value);
+      //console.log("files", input.value);
       input.value = '';
     }
   }
@@ -688,6 +694,8 @@ export class TicketModifyComponent {
     this.batteryList.controls.forEach(battery => {
       battery.get('selected')?.setValue(battery.get('selected')?.value ? 1 : 0);
     });
+
+    this.ticketInfoForm.get('public')?.setValue(this.ticketInfoForm.get('public')?.value ? 1 : 0);
   }
 
 }
