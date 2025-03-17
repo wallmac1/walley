@@ -26,7 +26,7 @@ import { ApiResponse } from '../../interfaces/api-response';
 })
 export class SystemTicketsListComponent {
 
-  idsystem: number = 97;
+  idsystem: number = 95;
   displayedColumns: string[] = ['id', 'num_date', 'status', 'message', 'user_created', 'incharge', 'public'];
   dataSource = new MatTableDataSource<TicketTable>([]);
   ticketList: TicketTable[] = [];
