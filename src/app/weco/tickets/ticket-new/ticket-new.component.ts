@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { Component } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { InViewportDirective } from '../../../directives/in-viewport.directive';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { ActivatedRoute, Route, Router } from '@angular/router';
