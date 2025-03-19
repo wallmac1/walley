@@ -47,7 +47,7 @@ export class TicketListComponent {
   }
 
   getStatusList() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketStatusList', {})
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/ticketStatusList', {})
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
           this.statusList = val.data.statuses;

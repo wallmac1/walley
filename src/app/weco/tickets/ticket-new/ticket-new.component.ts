@@ -110,7 +110,7 @@ export class TicketNewComponent {
   }
 
   getSystemInfo() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/devicesList', { idsystem: this.idsystem })
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/devicesList', { idsystem: this.idsystem })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
           this.createInverterList(val.data.inverterList);
@@ -118,7 +118,7 @@ export class TicketNewComponent {
         }
       })
 
-      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/systemInfo', {idsystem: this.idsystem})
+      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/systemInfo', {idsystem: this.idsystem})
         .subscribe((val: ApiResponse<any>) => {
           if(val.data) {
             this.newTicketForm.get('systemName')?.setValue(val.data.systemInfo.title);
@@ -217,7 +217,7 @@ export class TicketNewComponent {
       // Aggiungi ID del sistema e del ticket
       formData.append('idsystem', this.idsystem.toString());
 
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'systems/saveTicket', formData)
         .subscribe((val: ApiResponse<any>) => {
           if (val.data) {
             //this.popupDialogService.alertElement(val);

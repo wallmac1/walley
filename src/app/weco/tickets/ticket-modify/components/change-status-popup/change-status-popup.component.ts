@@ -41,7 +41,7 @@ export class ChangeStatusPopupComponent {
   }
 
   getStatusList() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketStatusList', {})
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/ticketStatusList', {})
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
           this.statusList = val.data.statuses;
@@ -52,7 +52,7 @@ export class ChangeStatusPopupComponent {
   save() {
     this.submitted = true;
     if (this.changeStatusForm.valid) {
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/changeTicketStatus',
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'systems/changeTicketStatus',
         { idticket: this.idticket, idstatus: this.changeStatusForm.get('idstatus')?.value })
         .subscribe((val: ApiResponse<any>) => {
           if (val.data) {
