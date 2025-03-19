@@ -468,8 +468,7 @@
       "MANDATORYFIELDS": "Compilare tutti i campi obbligatori"
     },
     "TICKETMODIFY": {
-      "NOMESSAGES": "Nessun messaggio ancora presente, per aggiungerne uno apri il menù e seleziona la voce 'Aggiungi Messaggio'",
-      "DELETETICKET": "Elimina Ticket",
+     "DELETETICKET": "Elimina Ticket",
       "DELETETICKETTXT": "Sei sicuro di voler eliminare questo ticket? Tutti i davi verranno persi e l'azione non sarà reversibile",
       "TAKEINCHARGE": "Prendi in Carico",
       "RELEASE": "Rilascia",
@@ -659,6 +658,7 @@
       "CANCEL": "Annulla"
     },
     "MODIFY": {
+      "INTERNALMESSAGE": "Messaggio Interno",
       "CUSTOMER": "Cliente",
       "INTERNAL": "Interno",
       "STATUS": "Stato",
@@ -669,7 +669,10 @@
       "ADDARTICLE": "Aggiungi Articolo",
       "ADDMESSAGE": "Aggiungi Messaggio",
       "CHANGESTATUS": "Cambia Stato",
-      "RELEASE": "Rilascia Ticket"
+      "RELEASE": "Rilascia Ticket",
+      "ADDMESSAGEPUBLIC": "Messaggio Pubblico",
+      "ADDMESSAGEPRIVATE": "Commento Privato",
+      "NOMESSAGES": "Nessun messaggio ancora presente, per aggiungerne uno apri il menù e seleziona la voce 'Aggiungi Messaggio' nel menù in basso a destra"
     },
     "ARTICLE": {
       "ARTICLE": "Articolo",

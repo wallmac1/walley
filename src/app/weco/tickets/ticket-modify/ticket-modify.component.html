@@ -5,7 +5,7 @@
 </div>
 
 <div class="container-fluid ps-1 pe-1 ps-md-2 pe-md-2 ps-lg-3 pe-lg-3 ps-xl-4 pe-xl-4 ps-xxl-5 pe-xxl-5 pb-5"
-    style="background-color: white; min-height: 90vh; min-width: 350px; max-width: 1600px;">
+    style="background-color: white; min-height: 90vh; min-width: 350px; max-width: 1600px; overflow-x: hidden;">
 
     <!-- FIRST CARD -->
     <div [formGroup]="ticketInfoForm" class="row justify-content-center card-width mb-2"
@@ -38,7 +38,8 @@
                         <span class="lightTxt ms-1">
                             {{ticketInfo?.ticketStatus?.name}} -
                         </span>
-                        <span class="ms-1 lightTxt" *ngIf="ticketInfo?.ticketStatus?.type_status == 1; else closedBlock">
+                        <span class="ms-1 lightTxt"
+                            *ngIf="ticketInfo?.ticketStatus?.type_status == 1; else closedBlock">
                             {{"SYSTEM.TICKETMODIFY.OPENED" | translate}}
                         </span>
                         <ng-template #closedBlock>
@@ -247,11 +248,12 @@
                                 style="position: relative;">
                                 <img *ngIf="img.id == 0; else serverImg" (click)="viewImage(img)"
                                     style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                    [src]="img.src" [title]="img.title" class="imgThumb" 
+                                    [src]="img.src" [title]="img.title" class="imgThumb"
                                     onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
                                 <ng-template #serverImg>
                                     <img style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                        [src]="urlMultimedia+img.src" [title]="img.title" class="imgThumb" (click)="viewImage(img)"
+                                        [src]="urlMultimedia+img.src" [title]="img.title" class="imgThumb"
+                                        (click)="viewImage(img)"
                                         onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
                                 </ng-template>
 
@@ -308,7 +310,7 @@
         </div>
     </div>
 
-    <div class="row justify-content-center ps-3 pe-3 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5">
+    <!-- <div class="row justify-content-center ps-3 pe-3 ps-lg-3 pe-lg-3 ps-xxl-5 pe-xxl-5">
         <div class="col-12 text-end p-0 mt-2 me-lg-5">
             <button class="btn btn-dark btnHover" (click)="changeVisualization()" style="border-radius: 20px;">
                 <span *ngIf="visualizeAll; else visualizePublicBlock">
@@ -319,7 +321,7 @@
                 </ng-template>
             </button>
         </div>
-    </div>
+    </div> -->
 
     <ng-container *ngIf="messages.controls.length > 0 || isNewMessage; else noMessageBlock">
         <form [formGroup]="oldMessagesForm">
@@ -375,7 +377,8 @@
                                     <div class="row justify-content-center mt-2 mb-1">
                                         <div *ngFor="let file of message.get('attachments')?.value" class="col-auto">
                                             <img class="imgThumb" [src]="urlMultimedia+file.src" [title]="file.title"
-                                                (click)="viewImage(file)" onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
+                                                (click)="viewImage(file)"
+                                                onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
                                         </div>
                                     </div>
                                 </div>
@@ -384,12 +387,17 @@
                             <!-- WECO TECHNICIAN -->
                             <div *ngIf="message.get('portal')?.value == 0" class="row justify-content-end">
                                 <div class="col-11 col-md-10 mt-4 cardElement customPanel ticketPanel"
-                                    style="max-width: 1200px; background-color: #edf5fe" appInViewport>
+                                    style="max-width: 1200px; background-color: #edf5fe" appInViewport
+                                    [ngStyle]="{'background-color': message.get('public')?.value == 1 ? '#faede1': '#edf5fe'}">
                                     <div class="row justify-content-center">
                                         <div class="col-6 text-start">
                                             <img src="assets/img/wecoW.jpg" class="profile-image">
                                             <span *ngIf="!isSmallScreen" class="panelTitle">
                                                 {{"SYSTEM.TICKETMODIFY.WECOTECHNICIAN" | translate}}
+                                            </span>
+                                            <span *ngIf="!isSmallScreen && message.get('public')?.value == 0"
+                                                style="font-size: small;">
+                                                ({{"TICKET.MODIFY.INTERNALMESSAGE" | translate}})
                                             </span>
                                         </div>
                                         <div class="col-6 text-end">
@@ -472,12 +480,15 @@
                                     <div class="row justify-content-center">
                                         <div *ngFor="let img of message.get('attachments')?.value; let j = index"
                                             class="col-auto" style="position: relative;">
-                                            <img *ngIf="img.id == 0" class="imgThumb" onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';"
+                                            <img *ngIf="img.id == 0" class="imgThumb"
+                                                onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';"
                                                 style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
                                                 [src]="img.src" [title]="img.title" (click)="viewImage(img)">
-                                            <img *ngIf="img.id > 0" class="imgThumb" onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';"
+                                            <img *ngIf="img.id > 0" class="imgThumb"
+                                                onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';"
                                                 style="height: 50px; width: 40px; border: 1px solid lightgray; object-fit: cover;"
-                                                [src]="urlMultimedia+img.src" [title]="img.title" (click)="viewImage(img)">
+                                                [src]="urlMultimedia+img.src" [title]="img.title"
+                                                (click)="viewImage(img)">
                                             <button *ngIf="visualizeAll == true" class="btn btn-danger btn-zoom p-0"
                                                 style="position: absolute; right: 8px; top: -4px"
                                                 (click)="deleteFileOldMessage(j, i)">
@@ -514,7 +525,7 @@
                                             </button>
                                         </div>
                                         <div class="col-6 text-end" style="position: relative;">
-                                            <div class="form-check form-switch"
+                                            <!-- <div class="form-check form-switch"
                                                 style="height: 38px; align-content: center; position: absolute; right: 120px;">
                                                 <label for="public-{{i}}" class="form-check-label"
                                                     style="font-weight: bold;">
@@ -522,8 +533,9 @@
                                                 </label>
                                                 <input type="checkbox" class="form-check-input" role="switch"
                                                     id="public-{{i}}" formControlName="public">
-                                            </div>
-                                            <button *ngIf="message.dirty || (fileListOldMessages[i] && fileListOldMessages[i].files.length > 0)" 
+                                            </div> -->
+                                            <button
+                                                *ngIf="message.dirty || (fileListOldMessages[i] && fileListOldMessages[i].files.length > 0)"
                                                 class="btn btn-outline-dark" (click)="saveTicketOldMessage(i)">
                                                 {{"SYSTEM.TICKETMODIFY.UPDATE" | translate}}
                                             </button>
@@ -571,13 +583,18 @@
 
             <div class="col-12 col-lg-11">
                 <div class="row justify-content-end">
-                    <div class="col-11 col-md-10 mt-4 cardElement customPanel ticketPanel"
-                        style="max-width: 1200px; background-color: #edf5fe;" appInViewport>
+                    <div class="col-11 col-md-10 mt-4 cardElement customPanel ticketPanel" style="max-width: 1200px;"
+                        appInViewport
+                        [ngStyle]="{'background-color': newMessageForm.get('public')?.value == 1 ? '#faede1': '#edf5fe'}">
                         <div class="row justify-content-center">
                             <div class="col-6 text-start">
                                 <img src="assets/img/wecoW.jpg" class="profile-image">
                                 <span *ngIf="!isSmallScreen" class="panelTitle">
                                     {{"SYSTEM.TICKETMODIFY.WECOTECHNICIAN" | translate}}
+                                </span>
+                                <span *ngIf="!isSmallScreen && newMessageForm.get('public')?.value == 0"
+                                    style="font-size: small;">
+                                    ({{"TICKET.MODIFY.INTERNALMESSAGE" | translate}})
                                 </span>
                             </div>
                             <div class="col-6 text-end">
@@ -648,8 +665,9 @@
                                     <ng-container formArrayName="attachments">
                                         <div *ngFor="let item of newAttachments.controls; let i = index"
                                             class="col-auto" [formGroupName]="i" style="position: relative;">
-                                            <img class="imgThumb" [src]="item.get('src')?.value" 
-                                                (click)="viewImage(item.getRawValue())" onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
+                                            <img class="imgThumb" [src]="item.get('src')?.value"
+                                                (click)="viewImage(item.getRawValue())"
+                                                onerror="this.onerror=null; this.src='assets/img/thumbImg.svg';">
                                             <button class="btn btn-danger btn-zoom p-0"
                                                 style="position: absolute; right: 8px; top: -4px"
                                                 (click)="deleteFileNewMessage(i)">
@@ -679,21 +697,16 @@
                             </div>
                         </div>
 
-                        <div class="row justify-content-end pt-2 mt-2" style="border-top: 1px solid lightgray;">
-                            <!-- PUBLIC -->
-                            <div class="col-auto" style="max-width: 150px;">
-                                <div class="form-check form-switch"
-                                    style="height: 38px; align-content: center; width: 150px;">
-                                    <label for="public" class="form-check-label" style="font-weight: bold;">
-                                        {{"SYSTEM.TICKETNEW.PUBLIC" | translate}}
-                                    </label>
-                                    <input type="checkbox" class="form-check-input" role="switch" id="public"
-                                        formControlName="public">
-                                </div>
+                        <div class="row justify-content-center pt-2 mt-2" style="border-top: 1px solid lightgray;">
+                            <!-- DELETE -->
+                            <div class="col-6 text-start">
+                                <button class="btn btn-outline-danger" (click)="deleteNewMessage()">
+                                    {{"SYSTEM.TICKETMODIFY.DELETE" | translate}}
+                                </button>
                             </div>
 
                             <!-- SAVE -->
-                            <div class="col-auto">
+                            <div class="col-6 text-end">
                                 <button class="btn btn-outline-dark" (click)="saveTicketNewMessage()">
                                     {{"SYSTEM.TICKETMODIFY.SEND" | translate}}
                                 </button>
@@ -705,10 +718,10 @@
         </div>
     </ng-container>
     <ng-template #noMessageBlock>
-        <div class="row align-items-center mt-2 p-4">
+        <div class="row align-items-center mt-5 p-4">
             <div class="col-12 text-center">
                 <span style="color: gray; font-style: italic;">
-                    {{"SYSTEM.TICKETMODIFY.NOMESSAGES" | translate}}
+                    {{"TICKET.MODIFY.NOMESSAGES" | translate}}
                 </span>
             </div>
         </div>
@@ -729,9 +742,13 @@
                 <span>{{"TICKET.MODIFY.TAKEONCHARGE" | translate }}</span>
             </button>
         </ng-template>
-        <button *ngIf="!isNewMessage" mat-menu-item (click)="newMessage()">
+        <button *ngIf="!isNewMessage" mat-menu-item (click)="newMessagePublic()">
+            <i class="bi bi-send-plus me-2"></i>
+            <span>{{"TICKET.MODIFY.ADDMESSAGEPUBLIC" | translate }}</span>
+        </button>
+        <button *ngIf="!isNewMessage" mat-menu-item (click)="newMessagePrivate()">
             <i class="bi bi-chat-right-text me-2"></i>
-            <span>{{"TICKET.MODIFY.ADDMESSAGE" | translate }}</span>
+            <span>{{"TICKET.MODIFY.ADDMESSAGEPRIVATE" | translate }}</span>
         </button>
         <button mat-menu-item (click)="changeStatus()">
             <i class="bi bi-arrow-clockwise me-2"></i>

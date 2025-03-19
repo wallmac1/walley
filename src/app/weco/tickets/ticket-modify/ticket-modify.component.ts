@@ -69,7 +69,6 @@ export class TicketModifyComponent {
   fileListOldMessages: { files: File[] }[] = [];
   removedFilesOldMessages: { index: number, id: number[] }[] = [];
   fileListNewMessage: File[] = [];
-  newAttachedFiles: any[] = [];
   urlMultimedia: string = Connect.urlServerLaraFile;
 
   newMessageForm!: FormGroup;
@@ -243,7 +242,7 @@ export class TicketModifyComponent {
     this.visualizeAll = !this.visualizeAll;
   }
 
-  newMessage(): void {
+  newMessagePublic(): void {
     this.isNewMessage = true;
     const now = new Date();
     const dateStr = now.toISOString().split('T')[0]; // "YYYY-MM-DD"
@@ -251,6 +250,23 @@ export class TicketModifyComponent {
     this.newMessageForm.patchValue({
       date: dateStr,
       time: timeStr,
+      public: 1,
+    });
+    this.panelComponent.close();
+    setTimeout(() => {
+      this.bottomAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  }
+
+  newMessagePrivate(): void {
+    this.isNewMessage = true;
+    const now = new Date();
+    const dateStr = now.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    const timeStr = now.toTimeString().split(' ')[0]; // "HH:MM:SS"
+    this.newMessageForm.patchValue({
+      date: dateStr,
+      time: timeStr,
+      public: 0,
     });
     this.panelComponent.close();
     setTimeout(() => {
@@ -315,7 +331,7 @@ export class TicketModifyComponent {
   }
 
   getTicketInfo() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketDetail', { idticket: this.idticket })
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/ticketDetail', { idticket: this.idticket })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
           this.ticketInfo = val.data.ticketInfo;
@@ -331,7 +347,7 @@ export class TicketModifyComponent {
   }
 
   getTicketLines() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketLines', { idticket: this.idticket })
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/ticketLines', { idticket: this.idticket })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data.lines) {
           this.createMessageList(val.data.lines);
@@ -370,7 +386,7 @@ export class TicketModifyComponent {
       formData.append('idticket', this.idticket.toString());
       formData.append('idsystem', this.idsystem.toString());
 
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'systems/saveTicket', formData)
         .subscribe((val: ApiResponse<any>) => {
           if (val.data) {
             this.getTicketInfo();
@@ -411,7 +427,7 @@ export class TicketModifyComponent {
       formData.append('idticketline', "0");
       formData.append('idsystem', this.idsystem.toString());
 
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicketLine', formData)
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'systems/saveTicketLine', formData)
         .subscribe((val: ApiResponse<any>) => {
           if (val.data) {
             this.getTicketLines();
@@ -458,7 +474,7 @@ export class TicketModifyComponent {
       formData.append('idticket', this.idticket.toString());
       formData.append('idsystem', this.idsystem.toString());
 
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicketLine', formData)
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'systems/saveTicketLine', formData)
         .subscribe((val: ApiResponse<any>) => {
           if (val.data) {
             this.fileListOldMessages = [];
@@ -650,6 +666,13 @@ export class TicketModifyComponent {
         this.ticketInfo!.ticketStatus = result.ticketStatus;
       }
     });
+  }
+
+  deleteNewMessage() {
+    this.newMessageForm.reset();
+    this.newAttachments.clear();
+    this.isNewMessage = false;
+    this.fileListNewMessage = [];
   }
 
   deleteMessage(idticketline: number) {
