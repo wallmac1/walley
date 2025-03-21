@@ -1,0 +1,29 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"MONITORING.DELETEIDENTIFIER" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-2">
+    <div class="row justify-content-center align-items-center p-1 mt-2">
+        <div class="col-12 text-center">
+            <span>
+                {{"MONITORING.AREYOUSURE" | translate}}
+            </span><br>
+            {{value?.identifier}} 
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-6 text-start">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"MONITORING.CLOSE" | translate }}
+            </button>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-outline-danger me-2" style="width: 100px;" (click)="deleteIdentifier()">
+                {{"MONITORING.DELETE" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>

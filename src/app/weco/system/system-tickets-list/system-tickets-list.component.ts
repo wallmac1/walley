@@ -42,7 +42,7 @@ export class SystemTicketsListComponent {
   }
 
   getTicketList() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketsListForSystem', { idsystem: this.idsystem })
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/ticketsListForSystem', { idsystem: this.idsystem })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
           this.ticketList = val.data.tickets;

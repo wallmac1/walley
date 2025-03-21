@@ -35,7 +35,7 @@ export class DeleteTicketPopupComponent {
   }
 
   deleteMessage() {
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/deleteTicket',
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'systems/deleteTicket',
       { idticket: this.idticket })
       .subscribe((val: ApiResponse<any>) => {
         if (val) {

@@ -219,10 +219,9 @@ quill-editor-toolbar {
 }
 
 .btnSticky {
-    position: sticky;
-    bottom: 70px;
-    right: 0px;
-    margin-left: auto;
+    position: fixed;
+    bottom: 50px;
+    right: 40px;
     z-index: 1000;
     padding: 10px 20px;
     border-radius: 50px;

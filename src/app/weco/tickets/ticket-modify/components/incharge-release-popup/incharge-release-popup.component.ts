@@ -33,7 +33,7 @@ export class InchargeReleasePopupComponent {
   }
 
   takeInChargeOrRelease() {
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/takeTicketInCharge',
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'systems/takeTicketInCharge',
       { idticket: this.idticket, request_type: this.request_type })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {

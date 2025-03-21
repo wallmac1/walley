@@ -59,7 +59,7 @@ export class TicketTableComponent {
   }
 
   getTicketList() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/ticketsList',
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/ticketsList',
       {
         orderby_ticketdate: this.order_by, idstatus: this.filters.status, system_name: this.filters.system,
         installer_companyname: this.filters.technician, owner_denomination: this.filters.owner,

@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { Component } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { InViewportDirective } from '../../../directives/in-viewport.directive';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { ActivatedRoute, Route, Router } from '@angular/router';
@@ -110,7 +108,7 @@ export class TicketNewComponent {
   }
 
   getSystemInfo() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/devicesList', { idsystem: this.idsystem })
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/devicesList', { idsystem: this.idsystem })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
           this.createInverterList(val.data.inverterList);
@@ -118,7 +116,7 @@ export class TicketNewComponent {
         }
       })
 
-      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'lavorazioni/systemInfo', {idsystem: this.idsystem})
+      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'systems/systemInfo', {idsystem: this.idsystem})
         .subscribe((val: ApiResponse<any>) => {
           if(val.data) {
             this.newTicketForm.get('systemName')?.setValue(val.data.systemInfo.title);
@@ -217,7 +215,7 @@ export class TicketNewComponent {
       // Aggiungi ID del sistema e del ticket
       formData.append('idsystem', this.idsystem.toString());
 
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'lavorazioni/saveTicket', formData)
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'systems/saveTicket', formData)
         .subscribe((val: ApiResponse<any>) => {
           if (val.data) {
             //this.popupDialogService.alertElement(val);

@@ -468,8 +468,7 @@
       "MANDATORYFIELDS": "Compilare tutti i campi obbligatori"
     },
     "TICKETMODIFY": {
-      "NOMESSAGES": "Nessun messaggio ancora presente, per aggiungerne uno apri il menù e seleziona la voce 'Aggiungi Messaggio'",
-      "DELETETICKET": "Elimina Ticket",
+     "DELETETICKET": "Elimina Ticket",
       "DELETETICKETTXT": "Sei sicuro di voler eliminare questo ticket? Tutti i davi verranno persi e l'azione non sarà reversibile",
       "TAKEINCHARGE": "Prendi in Carico",
       "RELEASE": "Rilascia",
@@ -659,6 +658,7 @@
       "CANCEL": "Annulla"
     },
     "MODIFY": {
+      "INTERNALMESSAGE": "Messaggio Interno",
       "CUSTOMER": "Cliente",
       "INTERNAL": "Interno",
       "STATUS": "Stato",
@@ -669,7 +669,10 @@
       "ADDARTICLE": "Aggiungi Articolo",
       "ADDMESSAGE": "Aggiungi Messaggio",
       "CHANGESTATUS": "Cambia Stato",
-      "RELEASE": "Rilascia Ticket"
+      "RELEASE": "Rilascia Ticket",
+      "ADDMESSAGEPUBLIC": "Messaggio Pubblico",
+      "ADDMESSAGEPRIVATE": "Commento Privato",
+      "NOMESSAGES": "Nessun messaggio ancora presente, per aggiungerne uno apri il menù e seleziona la voce 'Aggiungi Messaggio' nel menù in basso a destra"
     },
     "ARTICLE": {
       "ARTICLE": "Articolo",
@@ -949,6 +952,20 @@
     "INSTITUTE": "Istituto",
     "ABIERROR": "Il codice ABI fornito non risulta corrispondere ad alcuna banca. Controllare la correttezza dell'IBAN prima di procedere con il salvataggio dati.",
     "CABERROR": "Il codice CAB fornito non risulta corrispondere ad alcuna banca. Controllare la correttezza dell'IBAN prima di procedere con il salvataggio dati."
+  },
+  "MONITORING": {
+    "IDENTIFIERREQUIRED": "È richiesto un valore tra Vat, Codice Fiscale e License Number per poter inserire un elemento",
+    "ADDIDENTIFIER": "Aggiungi Identificatore",
+    "SEARCH": "Ricerca Testuale",
+    "IDENTIFIERLIST": "Lista Identificatori",
+    "ACTIONS": "Azioni",
+    "DELETEIDENTIFIER": "Elimina Identificatore",
+    "AREYOUSURE": "Sei sicuro di voler eliminare l'identificatore dalla lista?",
+    "VATFISCALCODELICENSE": "VAT / Codice Fiscale / License Number",
+    "VATORFISCALCODEORLICENSE": "VAT o Codice Fiscale o License Number",
+    "ADD": "Aggiungi",
+    "CLOSE": "Chiudi",
+    "DELETE": "Elimina"
   },
   "CUSTOMER": {
     "SAMECODETOOLTIP": "Attenzione: il codice fiscale presenta una omocodia",
