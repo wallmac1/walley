@@ -64,6 +64,7 @@ export const routes: Routes = [
     { path: "eventList", component: EventsListComponent },
     { path: "paymentConditions", component: PaymentConditionsComponent },
     { path: "invoice/readonly/:id", component: InvoiceReadonlyComponent },
+    // copiato
     { path: "systemTicketList/:id", component: SystemTicketsListComponent },
     // { path: "ticketWecoList", component: SystemReviewComponent },
     // { path: "ticketListWeco", component: TicketListComponent },
