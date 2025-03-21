@@ -7,7 +7,7 @@ import { NewPasswordComponent } from './new-password/new-password.component';
 import { DeleteComponent } from './settings/menu/delete/delete.component';
 import { AuthorizationsComponent } from './weco/authorizations/authorizations.component';
 import { SystemsListComponent } from './weco/system/systems-list/systems-list.component';
-import { AssistanceComponent } from './weco/assistance/assistance.component';
+import { AssistanceComponent } from './OLD/assistance/assistance.component';
 import { SystemReviewComponent } from './weco/system/system-review/system-review.component';
 import { VoucherInfoComponent } from './voucher/voucher-info/voucher-info.component';
 import { VoucherListComponent } from './voucher/voucher-list/voucher-list.component';
@@ -33,6 +33,7 @@ import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.compone
 // import { TicketListComponent } from './weco/tickets/ticket-list/ticket-list.component';
 // import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.component';
 import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modify.component';
+import { VatListMonitoringComponent } from './weco/vat-list-monitoring/vat-list-monitoring.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -46,7 +47,7 @@ export const routes: Routes = [
     { path: "menu/delete", component: DeleteComponent },
     { path: "authorizations", component: AuthorizationsComponent },
     { path: "systemsList", component: SystemsListComponent },
-    { path: "assistance", component: AssistanceComponent },
+    //{ path: "assistance", component: AssistanceComponent },
     { path: "systemReview/:id", component: SystemReviewComponent },
     { path: "voucher/:id", component: VoucherInfoComponent },
     { path: "voucherList", component: VoucherListComponent },
@@ -65,6 +66,7 @@ export const routes: Routes = [
     { path: "paymentConditions", component: PaymentConditionsComponent },
     { path: "invoice/readonly/:id", component: InvoiceReadonlyComponent },
     { path: "systemTicketList/:id", component: SystemTicketsListComponent },
+    { path: "vatListMonitoring", component: VatListMonitoringComponent },
     // { path: "ticketWecoList", component: SystemReviewComponent },
     // { path: "ticketListWeco", component: TicketListComponent },
     // { path: "ticketNewWeco", component: TicketNewComponent },

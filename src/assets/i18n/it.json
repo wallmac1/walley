@@ -953,6 +953,20 @@
     "ABIERROR": "Il codice ABI fornito non risulta corrispondere ad alcuna banca. Controllare la correttezza dell'IBAN prima di procedere con il salvataggio dati.",
     "CABERROR": "Il codice CAB fornito non risulta corrispondere ad alcuna banca. Controllare la correttezza dell'IBAN prima di procedere con il salvataggio dati."
   },
+  "MONITORING": {
+    "IDENTIFIERREQUIRED": "È richiesto un valore tra Vat, Codice Fiscale e License Number per poter inserire un elemento",
+    "ADDIDENTIFIER": "Aggiungi Identificatore",
+    "SEARCH": "Ricerca Testuale",
+    "IDENTIFIERLIST": "Lista Identificatori",
+    "ACTIONS": "Azioni",
+    "DELETEIDENTIFIER": "Elimina Identificatore",
+    "AREYOUSURE": "Sei sicuro di voler eliminare l'identificatore dalla lista?",
+    "VATFISCALCODELICENSE": "VAT / Codice Fiscale / License Number",
+    "VATORFISCALCODEORLICENSE": "VAT o Codice Fiscale o License Number",
+    "ADD": "Aggiungi",
+    "CLOSE": "Chiudi",
+    "DELETE": "Elimina"
+  },
   "CUSTOMER": {
     "SAMECODETOOLTIP": "Attenzione: il codice fiscale presenta una omocodia",
     "RECORDS": "Anagrafica",

@@ -1,0 +1,82 @@
+.titleColumn {
+    background-color: #002D5D;
+    border-radius: 10px;
+}
+
+.title {
+    color: white;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.btn-link {
+    transform: scale(1);
+    transition: all 0.5s ease;
+}
+
+.btn-link:hover {
+    transform: scale(1.4);
+}
+
+.btn-primary {
+    background-color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-primary:hover {
+    background-color: white;
+    color: #002D5D;
+}
+
+.searchColumn {
+    max-width: 300px;
+
+    @media screen and (min-width: 600px) {
+        max-width: 400px;
+    }
+}
+
+.fixedBtn {
+    position: fixed;
+    top: 21.5%;
+    left: 88%;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+    padding: 0;
+    transform: scale(1);
+    transition: all 0.5s ease;
+
+    @media screen and (min-width: 700px) {
+        left: 80%;
+    }
+
+    @media screen and (min-width: 800px) {
+        left: 76%;
+    }
+
+    @media screen and (min-width: 1000px) {
+        left: 74%;
+    }
+
+    @media screen and (min-width: 1200px) {
+        left:70%;
+    }
+
+    @media screen and (min-width: 1400px) {
+        left: 66%;
+    }
+
+    @media screen and (min-width: 1800px) {
+        left: 64%;
+    }
+}
+
+.fixedBtn:hover {
+    transform: scale(1.2);
+}
+
+.form-label {
+    font-weight: bold;
+    margin-bottom: 0;
+}

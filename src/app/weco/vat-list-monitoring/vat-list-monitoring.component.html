@@ -1,0 +1,57 @@
+<div class="container-fluid" style="min-width: 375px;">
+    <div class="row justify-content-center align-items-center pt-4" style="position: relative;">
+        <div class="col-auto ps-3 pe-3 pt-1 pb-1 titleColumn">
+            <span class="title">
+                {{"MONITORING.IDENTIFIERLIST" | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div [formGroup]="filterForm" class="row justify-content-center mt-4">
+        <div class="col-12 text-center searchColumn">
+            <label class="form-label" for="search">
+                {{"MONITORING.SEARCH" | translate}}
+            </label>
+            <input class="form-control" type="text" id="search" formControlName="search">
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div style="max-width: 800px;" class="col-12 p-0 mat-elevation-z8 mb-2">
+            <table mat-table [dataSource]="dataSource" matSort #sort="matSort" matSortActive="identifier"
+                matSortDirection="desc" matSortDisableClear (matSortChange)="sortIdentifier($event)">
+
+                <!-- Identifier Column -->
+                <ng-container matColumnDef="identifier">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+                        {{"MONITORING.VATFISCALCODELICENSE" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.identifier }}
+                    </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"MONITORING.ACTIONS" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button class="btn btn-link" (click)="deleteIdentifier(element)">
+                            <i class="bi bi-trash" style="color: red;"></i>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover">
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <button class="btn btn-primary fixedBtn" (click)="addIdentifier()">
+        <i class="bi bi-plus-lg"></i>
+    </button>
+</div>

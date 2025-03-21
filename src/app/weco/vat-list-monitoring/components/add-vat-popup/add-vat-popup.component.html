@@ -1,0 +1,37 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"MONITORING.ADDIDENTIFIER" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content class="pb-2">
+    <form [formGroup]="newIdentifierForm">
+        <div class="row justify-content-center align-items-center p-1 mt-2">
+            <div class="col-12">
+                <label class="form-label" for="identifier">
+                    {{"MONITORING.VATORFISCALCODEORLICENSE" | translate}}
+                </label>
+                <input class="form-control" type="text" id="identifier" formControlName="identifier"
+                    [class.is-invalid]="newIdentifierForm.invalid && submitted">
+            </div>
+            <div *ngIf="newIdentifierForm.invalid && submitted" class="col-12 text-center">
+                <span style="font-size: small; color: red;">
+                    {{"MONITORING.IDENTIFIERREQUIRED" | translate}}
+                </span>
+            </div>
+        </div>
+    </form>
+
+    <div class="row justify-content-center mt-2 pt-2" style="border-top: 1px solid lightgray;">
+        <div class="col-6 text-start">
+            <button class="btn btn-outline-dark me-2" style="width: 100px;" (click)="close()">
+                {{"MONITORING.CLOSE" | translate }}
+            </button>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-outline-success me-2" style="width: 100px;" (click)="confirm()">
+                {{"MONITORING.ADD" | translate }}
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>
