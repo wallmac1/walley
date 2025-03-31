@@ -66,7 +66,9 @@ export const routes: Routes = [
     { path: "eventList", component: EventsListComponent },
     { path: "paymentConditions", component: PaymentConditionsComponent },
     { path: "invoice/readonly/:id", component: InvoiceReadonlyComponent },
+    // Wallnet -> copiato
     { path: "systemTicketList/:id", component: SystemTicketsListComponent },
+    // Wallnet -> copiato
     { path: "vatListMonitoring", component: VatListMonitoringComponent },
     { path: "calendar", component: CalendarContainerComponent },
     // { path: "ticketWecoList", component: SystemReviewComponent },
