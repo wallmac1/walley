@@ -1296,5 +1296,44 @@
       "NBHISTORICIZE": "Storicizza: Modifica i valori per tutti le successive compilazioni, lasciando inalterati tutti i file già prodotti",
       "NBUPDATE": "Aggiorna: Modifica i valori anche sui file prodotti in precedenza"
     }
+  },
+  "CALENDAR": {
+    "POPUP": {
+      "TITLE": "Titolo",
+      "DESCRIPTION": "Descrizione",
+      "CLOSE": "Chiudi",
+      "SAVE": "Salva",
+      "ADDEVENT": "Aggiungi Evento",
+      "EVENTTYPE": "Tipologia Evento",
+      "EVENT": "Evento",
+      "COURSE": "Corso",
+      "OTHER": "Altro",
+      "MEMO": "Promemoria",
+      "MEMOSM": "Memo",
+      "ROOM": "Sala",
+      "MEMOINFO": "Promemoria Giornaliero",
+      "INTERNAL": "Interno",
+      "EXTERNAL": "Esterno",
+      "NOTSPECIFIED": "Non Specificato",
+      "STARTDATE": "Data Inizio",
+      "ENDDATE": "Data Fine",
+      "GENERALINFO": "Info Generali",
+      "SCHEDULEINFO": "Programmazione",
+      "ALLDAY": "Tutto il Giorno",
+      "STARTTIME": "Orario Inizio",
+      "ENDTIME": "Orario Fine",
+      "STARTTIMESM": "Inizio",
+      "ENDTIMESM": "Fine",
+      "RECIPIENT": "Destinatario",
+      "CUSTOMER": "Cliente",
+      "HEADQUARTER": "Sede",
+      "CONTACT": "Contatto",
+      "INTERNALPERSON": "Persona di Riferimento",
+      "INTERESTEDUSER": "Utente Interessati",
+      "MISSINGFIELDS": "Compilare i campi obbligatori",
+      "CUSTOMERERROR": "Il cliente deve essere selezionato dal menù a tendina che compare dopo aver digitato la prima lettera",
+      "DATEERROR": "La data di fine non può essere antecedente a quella di inizio",
+      "TIMEERROR": "L'orario di fine non può essere antecedente a quello di inizio"
+    }
   }
 }

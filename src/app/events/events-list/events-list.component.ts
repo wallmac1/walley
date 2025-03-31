@@ -10,6 +10,8 @@ import { Student } from '../../customer/interfaces/student';
 import { Customer } from '../../customer/interfaces/customer';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { EventAddPopupComponent } from '../../calendar/components/event-add-popup/event-add-popup.component';
 
 @Component({
   selector: 'app-events-list',
@@ -61,6 +63,8 @@ export class EventsListComponent {
     course_type: new FormControl<number | null>(null),
     notEnded: new FormControl<number>(0),
   })
+
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getEvents();
@@ -242,6 +246,21 @@ export class EventsListComponent {
     }
   }
 
+  addEvent() {
+    const dialogRef = this.dialog.open(EventAddPopupComponent, {
+      maxWidth: '900px',
+      minWidth: '350px',
+      maxHeight: '500px',
+      width: '90%',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != null) {
+        // Ricarica la pagina
+      }
+    });
+  }
+
   private getCustomers(val: string): Observable<Customer[]> {
     // CHIAMATA AL SERVER
     // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
@@ -278,7 +297,7 @@ export class EventsListComponent {
         doctor: "Dr. Bianchi",
         specialist: "Cardiologo",
         sdi: "ABCDE12345",
-        health_cf: {value: 1, description: "Descrizione"}
+        health_cf: { value: 1, description: "Descrizione" }
       },
       {
         idregistry: 2,
@@ -306,7 +325,7 @@ export class EventsListComponent {
         doctor: null,
         specialist: null,
         sdi: "FGHIJ67890",
-        health_cf: {value: 1, description: "Descrizione"}
+        health_cf: { value: 1, description: "Descrizione" }
       },
       {
         idregistry: 3,
@@ -328,13 +347,13 @@ export class EventsListComponent {
         gender: 2,
         birth_country: 12,
         birth_city: "Milano",
-        birth_city_it: { id: 2, name: "Milano",idprovince: 1, province_acronym: "RM", province_name: "Milano", idregion: 2, region_name: "Lombardia", cadastral_code: "0000"},
+        birth_city_it: { id: 2, name: "Milano", idprovince: 1, province_acronym: "RM", province_name: "Milano", idregion: 2, region_name: "Lombardia", cadastral_code: "0000" },
         birthday: "1985-03-10",
         job: "Avvocato",
         doctor: "Dr. Verdi",
         specialist: "Penalista",
         sdi: "KLMNO11223",
-        health_cf: {value: 1, description: "Descrizione"}
+        health_cf: { value: 1, description: "Descrizione" }
       }
     ];
 

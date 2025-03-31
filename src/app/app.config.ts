@@ -13,6 +13,9 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 // import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from '../environments/environment';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 // required for AoT
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,7 +36,10 @@ export const appConfig: ApplicationConfig = {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })),
+    }), CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),),
     // importProvidersFrom(RecaptchaV3Module),  // Importa il modulo V3
     // {
     //   provide: RECAPTCHA_V3_SITE_KEY,

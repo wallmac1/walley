@@ -34,6 +34,7 @@ import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.compone
 // import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.component';
 import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modify.component';
 import { VatListMonitoringComponent } from './weco/vat-list-monitoring/vat-list-monitoring.component';
+import { CalendarContainerComponent } from './calendar/calendar-container/calendar-container.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -67,6 +68,7 @@ export const routes: Routes = [
     { path: "invoice/readonly/:id", component: InvoiceReadonlyComponent },
     { path: "systemTicketList/:id", component: SystemTicketsListComponent },
     { path: "vatListMonitoring", component: VatListMonitoringComponent },
+    { path: "calendar", component: CalendarContainerComponent },
     // { path: "ticketWecoList", component: SystemReviewComponent },
     // { path: "ticketListWeco", component: TicketListComponent },
     // { path: "ticketNewWeco", component: TicketNewComponent },

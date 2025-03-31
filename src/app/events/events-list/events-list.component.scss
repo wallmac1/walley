@@ -188,3 +188,36 @@ td {
     border-bottom: 1px solid lightgray;
     padding-bottom: 0.4rem;
 }
+
+.btn-sticky {
+    position: absolute;
+    top: 28px;
+    left: 84%;
+
+    @media screen and (min-width: 700px) {
+        left: 80%;
+    }
+
+    @media screen and (min-width: 900px) {
+        left: 70%;
+    }
+
+    @media screen and (min-width: 1200px) {
+        left: 60%;
+    }
+}
+
+.btn-circle {
+    border: 1px solid #002D5D;
+    background-color: #002D5D;
+    border-radius: 50%;
+    color: white;
+    width: 50px;
+    height: 50px;
+    transform: scale(1);
+    transition: all 0.4s ease;
+}
+
+.btn-circle:hover {
+    transform: scale(1.2);
+}
