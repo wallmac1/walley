@@ -1,0 +1,79 @@
+<div class="container-fluid" style="position: relative; min-width: 350px;">
+    <div class="row justify-content-center align-items-center pt-4" style="position: relative;">
+        <div class="col-auto text-center ps-3 pe-3 pt-1 pb-1 titleColumn">
+            <span class="title">
+                {{"COURSES.LIST.COURSESLIST" | translate}}
+            </span>
+        </div>
+
+        <button class="btn btn-circle btn-sticky" (click)="editOrCreateCoursePopup()">
+            <i class="bi bi-plus-lg"></i>
+        </button>
+    </div>
+
+    <div class="row justify-content-center m-2">
+        <div [formGroup]="filterForm" class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+            <!-- COURSE FILTER -->
+            <label class="subtitle form-label" for="course" style="margin-bottom: 0.1rem !important;">
+                {{"COURSES.LIST.COURSE" | translate}}
+            </label>
+            <input type="text" class="form-control" id="course" (input)="applyFilter()"
+                placeholder="{{'COURSES.LIST.COURSEPLACEHOLDER' | translate}}" formControlName="course">
+        </div>
+
+        <!-- TABLE -->
+        <div class="col-12 mt-4" style="max-width: 1200px;">
+            <div class="mat-elevation-z8 mb-2">
+
+                <table mat-table [dataSource]="dataSource" class="mat-table mb-5" matSort
+                    style="border-top: 1px solid lightgray;" matSortActive="name" matSortDirection="desc"
+                    matSortDisableClear>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef style="width: 200px;">
+                            {{"COURSES.LIST.NAME" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span style="width: 200px;" [style]="{'color': element.color}">
+                                {{ element.name }}
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Note Column -->
+                    <ng-container matColumnDef="note">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-md-table-cell">
+                            {{"COURSES.LIST.NOTE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-md-table-cell">
+                            {{element.note}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Active Column -->
+                    <ng-container matColumnDef="active">
+                        <th mat-header-cell *matHeaderCellDef style="width: 200px;" class="text-center">
+                            {{"COURSES.LIST.ACTIVE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="width: 200px;" class="text-center">
+                            <ng-container *ngIf="element.active == 1 || element.active == true; else notActiveBlock">
+                                <i class="bi bi-check-circle-fill" style="color: green;"></i>
+                            </ng-container>
+                            <ng-template #notActiveBlock>
+                                <i class="bi bi-x-circle-fill" style="color: gray;"></i>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+
+                    <!-- Header and Row Definitions -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="rowHeader"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover"
+                        (click)="editOrCreateCoursePopup(row)">
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

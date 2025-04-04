@@ -6,7 +6,7 @@
             </span>
         </div>
 
-        <button class="btn btn-circle btn-sticky" (click)="addEvent()">
+        <button class="btn btn-circle btn-sticky" (click)="editOrCreateEventPopup()">
             <i class="bi bi-plus-lg"></i>
         </button>
     </div>
@@ -261,7 +261,7 @@
                             {{"EVENT.LIST.DATE" | translate}}
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            <span class="clickableElement" style="width: 120px;">
+                            <span style="width: 120px;">
                                 {{ element.date }}
                             </span>
                         </td>
@@ -308,8 +308,9 @@
                     </ng-container>
 
                     <!-- Header and Row Definitions -->
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover">
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="rowHeader"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="rowHover"
+                        (click)="openEventPopup(row.id)">
                     </tr>
                 </table>
 
@@ -332,7 +333,8 @@
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumnsSmall" class="d-none"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumnsSmall;" class="rowHoverSm">
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsSmall;" class="rowHoverSm"
+                            (click)="openEventPopup(row.id)">
                         </tr>
                     </table>
                 </ng-template>

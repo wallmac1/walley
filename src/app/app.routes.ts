@@ -35,6 +35,7 @@ import { TicketNewComponent } from './weco/tickets/ticket-new/ticket-new.compone
 import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modify.component';
 import { VatListMonitoringComponent } from './weco/vat-list-monitoring/vat-list-monitoring.component';
 import { CalendarContainerComponent } from './calendar/calendar-container/calendar-container.component';
+import { CoursesListComponent } from './courses/courses-list/courses-list.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -71,6 +72,7 @@ export const routes: Routes = [
     // Wallnet -> copiato
     { path: "vatListMonitoring", component: VatListMonitoringComponent },
     { path: "calendar", component: CalendarContainerComponent },
+    { path: "courses", component: CoursesListComponent },
     // { path: "ticketWecoList", component: SystemReviewComponent },
     // { path: "ticketListWeco", component: TicketListComponent },
     // { path: "ticketNewWeco", component: TicketNewComponent },

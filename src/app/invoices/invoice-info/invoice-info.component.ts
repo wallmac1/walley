@@ -134,6 +134,7 @@ export class InvoiceInfoComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        console.log()
         this.customer = result;
       }
     });

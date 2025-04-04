@@ -1,0 +1,39 @@
+.btn-outline-primary {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-primary:hover {
+    background-color: #002D5D;
+    border-color: #002D5D;
+    color: white;
+}
+
+.btn-check:checked+.btn {
+    background-color: #002D5D;
+    border-color: #002D5D;
+}
+
+.divider {
+    font-size: large;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.divider::after {
+    flex: 1;
+    content: '';
+    padding: 1px;
+    background-color: lightgray;
+    margin: 5px;
+}
+
+p {
+    padding-left: 1rem;
+    margin-bottom: 0;
+}
+
+.subtitle {
+    font-weight: bold;
+}

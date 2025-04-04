@@ -5,45 +5,46 @@
 <mat-dialog-content>
     <div [formGroup]="eventForm" class="row justify-content-center align-items-center p-sm-1">
         <div class="col-12 mt-2 mb- ps-0 pe-0 ps-sm-1 pe-sm-1 ps-md-2 pe-md-2">
-            <div class="row justify-content-center align-items-center mt-1">
-                <div class="col-12">
+            <div class="divider" style="color: #002D5D !important;">
+                {{"CALENDAR.POPUP.TYPE" | translate}}
+            </div>
+            <div class="row justify-content-center align-items-center ps-1 pe-1 ps-md-2 pe-md-2 ps-lg-3 pe-lg-3 mt-1">
+                <div class="col-12 ">
                     <div class="btn-group" role="group">
-                        <input type="radio" class="btn-check" id="event_type1" autocomplete="off"
-                            formControlName="event_type" [value]="0">
-                        <label class="btn btn-outline-primary" for="event_type1">
-                            <span *ngIf="!isSmall; else memoSmBlock">
-                                {{"CALENDAR.POPUP.MEMO" | translate}}
-                            </span>
-                            <ng-template #memoSmBlock>
-                                {{"CALENDAR.POPUP.MEMOSM" | translate}}
-                            </ng-template>
-                            <i *ngIf="!isSmall" class="bi bi-info-circle ms-2"
-                                matTooltip="{{'CALENDAR.POPUP.MEMOINFO' | translate}}">
-                            </i>
-                        </label>
+                        <ng-container *ngIf="popupType == 0">
+                            <input type="radio" class="btn-check" id="event_type1" autocomplete="off"
+                                formControlName="event_type" [value]="0">
+                            <label class="btn btn-outline-primary" for="event_type1">
+                                <span *ngIf="!isSmall; else memoSmBlock">
+                                    {{"CALENDAR.POPUP.MEMO" | translate}}
+                                </span>
+                                <ng-template #memoSmBlock>
+                                    {{"CALENDAR.POPUP.MEMOSM" | translate}}
+                                </ng-template>
+                                <i *ngIf="!isSmall" class="bi bi-info-circle ms-2"
+                                    matTooltip="{{'CALENDAR.POPUP.MEMOINFO' | translate}}">
+                                </i>
+                            </label>
+                        </ng-container>
 
                         <input type="radio" class="btn-check" id="event_type2" autocomplete="off"
                             formControlName="event_type" [value]="1">
                         <label class="btn btn-outline-primary" for="event_type2">
-                            {{"CALENDAR.POPUP.EVENT" | translate}}
+                            {{"CALENDAR.POPUP.GENERIC" | translate}}
                         </label>
 
-                        <input type="radio" class="btn-check" id="event_type3" autocomplete="off"
-                            formControlName="event_type" [value]="2">
-                        <label class="btn btn-outline-primary" for="event_type3">
-                            {{"CALENDAR.POPUP.ROOM" | translate}}
-                        </label>
+                        <ng-container *ngIf="popupType == 0">
+                            <input type="radio" class="btn-check" id="event_type3" autocomplete="off"
+                                formControlName="event_type" [value]="2">
+                            <label class="btn btn-outline-primary" for="event_type3">
+                                {{"CALENDAR.POPUP.ROOM" | translate}}
+                            </label>
+                        </ng-container>
 
                         <input type="radio" class="btn-check" id="event_type4" autocomplete="off"
                             formControlName="event_type" [value]="3">
                         <label class="btn btn-outline-primary" for="event_type4">
                             {{"CALENDAR.POPUP.COURSE" | translate}}
-                        </label>
-
-                        <input type="radio" class="btn-check" id="event_type5" autocomplete="off"
-                            formControlName="event_type" [value]="4">
-                        <label class="btn btn-outline-primary" for="event_type5">
-                            {{"CALENDAR.POPUP.OTHER" | translate}}
                         </label>
                     </div>
                 </div>

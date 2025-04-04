@@ -11,7 +11,8 @@ import { Customer } from '../../customer/interfaces/customer';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { EventAddPopupComponent } from '../../calendar/components/event-add-popup/event-add-popup.component';
+import { EventManagePopupComponent } from '../../calendar/components/event-manage-popup/event-manage-popup.component';
+import { EventInfoPopupComponent } from '../../calendar/components/event-info-popup/event-info-popup.component';
 
 @Component({
   selector: 'app-events-list',
@@ -246,17 +247,34 @@ export class EventsListComponent {
     }
   }
 
-  addEvent() {
-    const dialogRef = this.dialog.open(EventAddPopupComponent, {
+  editOrCreateEventPopup(idevent: number = 0) {
+    const dialogRef = this.dialog.open(EventManagePopupComponent, {
       maxWidth: '900px',
       minWidth: '350px',
-      maxHeight: '500px',
+      maxHeight: '800px',
       width: '90%',
+      data: {type: 1, idevent: idevent}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if(result != null) {
         // Ricarica la pagina
+      }
+    });
+  }
+
+  openEventPopup(id: number) {
+    const dialogRef = this.dialog.open(EventInfoPopupComponent, {
+      maxWidth: '900px',
+      minWidth: '350px',
+      maxHeight: '800px',
+      width: '90%',
+      data: {id: 1}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != null) {
+        this.editOrCreateEventPopup(result);
       }
     });
   }

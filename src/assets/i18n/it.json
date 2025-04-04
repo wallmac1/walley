@@ -1298,7 +1298,12 @@
     }
   },
   "CALENDAR": {
+    "MONTH": "Mese",
+    "WEEK": "Settimana",
+    "DAY": "Giorno",
+    "TODAY": "Oggi",
     "POPUP": {
+      "MODIFY": "Modifica",
       "TITLE": "Titolo",
       "DESCRIPTION": "Descrizione",
       "CLOSE": "Chiudi",
@@ -1306,11 +1311,14 @@
       "ADDEVENT": "Aggiungi Evento",
       "EVENTTYPE": "Tipologia Evento",
       "EVENT": "Evento",
+      "GENERIC": "Generico",
       "COURSE": "Corso",
       "OTHER": "Altro",
       "MEMO": "Promemoria",
       "MEMOSM": "Memo",
       "ROOM": "Sala",
+      "DATE": "Data",
+      "TYPE": "Tipologia Evento",
       "MEMOINFO": "Promemoria Giornaliero",
       "INTERNAL": "Interno",
       "EXTERNAL": "Esterno",
@@ -1334,6 +1342,27 @@
       "CUSTOMERERROR": "Il cliente deve essere selezionato dal menù a tendina che compare dopo aver digitato la prima lettera",
       "DATEERROR": "La data di fine non può essere antecedente a quella di inizio",
       "TIMEERROR": "L'orario di fine non può essere antecedente a quello di inizio"
+    }
+  },
+  "COURSES": {
+    "LIST": {
+      "COURSESLIST": "Lista Corsi",
+      "COURSE": "Corso",
+      "COURSEPLACEHOLDER": "Filtra per nome",
+      "NAME": "Nome",
+      "NOTE": "Note",
+      "ACTIVE": "Attivo / Non Attivo",
+      "MANAGECOURSE": "Gestisci Corso"
+    },
+    "POPUP": {
+      "NAME": "Nome",
+      "NOTE": "Note",
+      "COLOR": "Colore",
+      "ACTIVE": "Attivo",
+      "DATEOBSOLETE": "Data Obsolescenza",
+      "COLORERROR": "Il colore deve essere un codice esadecimale valido che inizia con #",
+      "MISSINGFIELDS": "Compilare i campi obbligatori",
+      "MANAGECOURSE": "Gestisci Corso"
     }
   }
 }

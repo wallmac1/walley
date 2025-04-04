@@ -14,7 +14,7 @@ import { sub } from 'date-fns';
 import { customerValidator, isCustomer } from '../validators/customer-validator';
 
 @Component({
-  selector: 'app-event-add-popup',
+  selector: 'app-event-manage-popup',
   standalone: true,
   imports: [
     CommonModule,
@@ -24,15 +24,16 @@ import { customerValidator, isCustomer } from '../validators/customer-validator'
     MatTooltipModule,
     MatSelectModule
   ],
-  templateUrl: './event-add-popup.component.html',
-  styleUrl: './event-add-popup.component.scss'
+  templateUrl: './event-manage-popup.component.html',
+  styleUrl: './event-manage-popup.component.scss'
 })
-export class EventAddPopupComponent {
+export class EventManagePopupComponent {
 
   submitted: boolean = false;
   isSmall: boolean = false;
+  popupType: number = 0;
 
-  courseList: {id: number, name: string}[] = [];
+  courseList: { id: number, name: string }[] = [];
   roomList: { id: number, name: string }[] = [];
   headquarterList: { id: number; name: string }[] = [];
   contactList: { id: number; name: string }[] = [];
@@ -43,7 +44,8 @@ export class EventAddPopupComponent {
   ];
 
   eventForm = new FormGroup({
-    event_type: new FormControl<number>(0), // 0 MEMO, 1 EVENT, 2 SALA, 3 COURSE, 4 OTHER
+    idevent: new FormControl<number>(0),
+    event_type: new FormControl<number>(0), // 0 MEMO, 1 GENERIC, 2 SALA, 3 COURSE
     idcourse: new FormControl<number | null>(null, Validators.required),
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null),
@@ -51,7 +53,7 @@ export class EventAddPopupComponent {
     date_start: new FormControl<string | null>(null, Validators.required),
     date_end: new FormControl<string | null>(null, Validators.required),
     idroom: new FormControl<number | null>(null, Validators.required),
-    isallday: new FormControl<number>(0),
+    isallday: new FormControl<number>(1),
     time_start: new FormControl<string | null>(null),
     time_end: new FormControl<string | null>(null),
     customer: new FormControl<Customer | null>(null, [Validators.required, customerValidator()]),
@@ -64,15 +66,25 @@ export class EventAddPopupComponent {
     validators: [dateRangeValidator(), timeRangeValidator()]
   })
 
-  constructor(public dialogRef: MatDialogRef<EventAddPopupComponent>,
+  constructor(public dialogRef: MatDialogRef<EventManagePopupComponent>,
     private connectServerService: ConnectServerService,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.popupType = data.type;
+    this.eventForm.get('idevent')?.setValue(data.idevent);
+
+    if(this.popupType == 1) {
+      this.eventForm.get('event_type')?.setValue(1);
+    }
+  }
 
   ngOnInit(): void {
+    if(this.eventForm.get('idevent')?.value! > 0) {
+      // CHIAMATA AL SERVER PER OTTENERE I DATI DELL'EVENTO POI PATCHVALUE
+    }
     this.updateWindowDimensions();
-    this.initForm();
     this.getHeadquarters();
     this.getContacts();
+    this.initForm();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -90,8 +102,8 @@ export class EventAddPopupComponent {
   }
 
   initForm() {
-    this.eventTypeLogic(0);
-    this.dateTypeLogic(0);
+    this.eventTypeLogic(this.popupType);
+    this.dateTypeLogic(this.popupType);
     this.isAllDayLogic(1);
     this.internalLogic(1);
 
@@ -114,12 +126,12 @@ export class EventAddPopupComponent {
   }
 
   internalLogic(result: any) {
-    if(result == 0) {
+    if (result == 0) {
       this.eventForm.get('customer')?.enable();
       this.eventForm.get('internal_headquarter')?.disable();
       this.eventForm.get('internal_headquarter')?.setValue(null);
     }
-    else if(result == 1) {
+    else if (result == 1) {
       this.eventForm.get('customer')?.disable();
       this.eventForm.get('customer')?.setValue(null);
       this.eventForm.get('internal_headquarter')?.enable();
@@ -128,7 +140,7 @@ export class EventAddPopupComponent {
       this.eventForm.get('idcontact')?.disable();
       this.eventForm.get('idcontact')?.setValue(null);
     }
-    else if(result == 2) {
+    else if (result == 2) {
       this.eventForm.get('customer')?.disable();
       this.eventForm.get('customer')?.setValue(null);
       this.eventForm.get('customer_headquarter')?.setValue(null);
@@ -151,21 +163,21 @@ export class EventAddPopupComponent {
   }
 
   eventTypeLogic(result: any) {
-    if(result != 2 && result != 3) {
+    if (result != 2 && result != 3) {
       this.eventForm.get('idcourse')?.disable();
       this.eventForm.get('idcourse')?.setValue(null);
       this.eventForm.get('idroom')?.disable();
       this.eventForm.get('idroom')?.setValue(null);
       this.eventForm.get('title')?.enable();
     }
-    else if(result == 2) {
+    else if (result == 2) {
       this.eventForm.get('idcourse')?.disable();
       this.eventForm.get('idcourse')?.setValue(null);
       this.eventForm.get('title')?.disable();
       this.eventForm.get('title')?.setValue(null);
       this.eventForm.get('idroom')?.enable();
     }
-    else if(result == 3) {
+    else if (result == 3) {
       this.eventForm.get('title')?.disable();
       this.eventForm.get('title')?.setValue(null);
       this.eventForm.get('idroom')?.disable();
@@ -185,7 +197,7 @@ export class EventAddPopupComponent {
   }
 
   dateLogic(result: any) {
-    if(this.eventForm.get('date_start')?.value && this.eventForm.get('date_end')?.value == null) {
+    if (this.eventForm.get('date_start')?.value && this.eventForm.get('date_end')?.value == null) {
       this.eventForm.get('date_end')?.setValue(result);
     }
   }
@@ -214,13 +226,16 @@ export class EventAddPopupComponent {
   close() {
     this.dialogRef.close();
   }
-
-  save() { 
+ 
+  save() {
     this.submitted = true;
-    console.log(this.eventForm.getRawValue());
 
-    if(this.eventForm.valid) {
-      this.dialogRef.close({event: this.eventForm.getRawValue()});
+    if (this.eventForm.valid) {
+      // CHIAMATA AL SERVER PER IL SALVATAGGIO ED AGGIUNTA DELL'ID RESTITUITO
+      const action = this.eventForm.get('idevent')?.value! > 0 ? 'modify' : 'add';
+      // IMPOSTA L'ID AL VALORE RICEVUTO DAL SERVER SE EVENTO ERA NUOVO
+      this.eventForm.get('idevent')?.setValue(5);
+      this.dialogRef.close({ event: this.eventForm.getRawValue(), action: action });
     }
   }
 

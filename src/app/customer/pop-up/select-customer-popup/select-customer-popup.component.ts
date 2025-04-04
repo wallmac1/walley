@@ -9,6 +9,9 @@ import { ConnectServerService } from '../../../services/connect-server.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Customer } from '../../../tickets/interfaces/customer';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { Connect } from '../../../classes/connect';
+import { ApiResponse } from '../../../weco/interfaces/api-response';
+import { AutocompleteCustomer } from '../../interfaces/autocomplete-customer';
 
 @Component({
   selector: 'app-select-customer-popup',
@@ -27,11 +30,11 @@ import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 
 })
 export class SelectCustomerPopupComponent {
 
-  filteredCustomer$!: Observable<Customer[]>;
+  filteredCustomer$!: Observable<AutocompleteCustomer[]>;
   submitted: boolean = false;
 
   customerForm = new FormGroup({
-    customer: new FormControl<Customer | null>(null, this.customerValidator())
+    customer: new FormControl<AutocompleteCustomer | null>(null, this.customerValidator())
   })
 
   constructor(public dialogRef: MatDialogRef<SelectCustomerPopupComponent>,
@@ -47,7 +50,8 @@ export class SelectCustomerPopupComponent {
       const value = control.value;
 
       if(value && typeof value === 'object' &&
-        'id' in value && typeof value.id === 'number') {
+        'fiscalcode' in value && typeof value.fiscalcode === 'string' &&
+        'denomination' in value && typeof value.denomination === 'string') {
           return null;
       }
       else {
@@ -56,16 +60,9 @@ export class SelectCustomerPopupComponent {
     };
   }
 
-  displayCustomerName(customer?: Customer): string {
-    return customer ? customer.denominazione! : '';
+  displayCustomerName(customer?: AutocompleteCustomer): string {
+    return customer ? customer.denomination! : '';
   }
-
-  // private filterLines(lines: Lines[]) {
-  //   if(lines.length > 0) {
-  //     this.works = lines.filter(line => line.type_line === 1); // Lavori
-  //     this.articles = lines.filter(line => line.type_line === 2); // Articoli
-  //   }
-  // }
 
   private searchCustomer() {
     const customer_field = this.customerForm.get('customer');
@@ -73,7 +70,7 @@ export class SelectCustomerPopupComponent {
       this.filteredCustomer$ = customer_field.valueChanges
         .pipe(
           startWith(''),
-          map(value => typeof value === 'string' ? value : value?.denominazione?.toLowerCase() || ''),
+          map(value => typeof value === 'string' ? value : value?.denomination?.toLowerCase() || ''),
           filter(value => value.length > 0),
           debounceTime(400),
           switchMap((value: string) =>
@@ -82,64 +79,12 @@ export class SelectCustomerPopupComponent {
     }
   }
 
-  private getCustomers(val: string): Observable<Customer[]> {
-    // CHIAMATA AL SERVER
-    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
-    //   {
-    //     query: val
-    //   }).pipe(
-    //     map(response => response.data.cities)
-    //   );
-    // Esempio di una lista di tre clienti
-    const customers: Customer[] = [
+  private getCustomers(val: string): Observable<AutocompleteCustomer[]> {
+    return this.connectServerService.getRequest<ApiResponse<any>>(Connect.urlServerLaraApi, 'customer/searchCustomer',
       {
-        rifidanacliforprodati: 12345,
-        id: 1,
-        denominazione: "Pippo Poppo",
-        codicefiscale: "123A",
-        cognome: "Rossi",
-        data_nascita: "1985-05-20",
-        email: "mario.rossi@example.com",
-        nome: "Mario",
-        piva: "IT98765432109",
-        telefono: "+39 055 123456",
-        type: "Azienda",
-        address: "Via Roma",
-        pec: "info@wallnet.it",
-        sdi: "ABC1234",
-        cap: "50100",
-        city: "Firenze",
-        house_number: "25A",
-        country: 12,
-        region: "Firenze"
-      },
-      {
-        rifidanacliforprodati: 12345,
-        id: 1,
-        denominazione: "Wallnet snc di Banchi Leonardo e Andrea Margheri",
-        codicefiscale: "123A",
-        cognome: "Rossi",
-        data_nascita: "1985-05-20",
-        email: "mario.rossi@example.com",
-        nome: "Mario",
-        piva: "IT98765432109",
-        telefono: "+39 055 123456",
-        type: "Azienda",
-        address: "Via Roma",
-        pec: "info@wallnet.it",
-        sdi: "ABC1234",
-        cap: "50100",
-        city: "Firenze",
-        house_number: "25A",
-        country: 12,
-        region: "Firenze"
-      }
-    ];
-
-    // Restituisce la lista come Observable
-    return of(customers.filter(customer =>
-      customer.denominazione?.toLowerCase().includes(val.toLowerCase())
-    ));
+        type: 0,
+        query: val
+      })
   }
 
   confirm() {

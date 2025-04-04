@@ -1,0 +1,45 @@
+.btn-outline-primary {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-primary:hover {
+    background-color: #002D5D;
+    border-color: #002D5D;
+    color: white;
+}
+
+.btn-check:checked+.btn {
+    background-color: #002D5D;
+    border-color: #002D5D;
+}
+
+.form-label {
+    margin-top: 0.6rem;
+}
+
+.form-label,
+.form-check-label {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.divider {
+    font-size: large;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.divider::after {
+    flex: 1;
+    content: '';
+    padding: 1px;
+    background-color: lightgray;
+    margin: 5px;
+}
+
+.errorTxt {
+    font-size: small;
+    color: red;
+}

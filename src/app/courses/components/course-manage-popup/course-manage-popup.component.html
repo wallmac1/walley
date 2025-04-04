@@ -1,0 +1,89 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">{{"COURSES.POPUP.MANAGECOURSE" | translate
+        }}</span>
+</h2>
+
+<mat-dialog-content>
+    <div [formGroup]="courseForm" class="row justify-content-center align-items-center p-sm-1">
+        <div class="col-12 mt-2 mb- ps-0 pe-0 ps-sm-1 pe-sm-1 ps-md-2 pe-md-2">
+
+            <div class="row ps-1 pe-1 ps-md-2 pe-md-2 ps-lg-3 pe-lg-3 align-items-center">
+                <!-- NAME -->
+                <div class="col-12 col-sm-8">
+                    <label class="form-label" for="name">
+                        {{"COURSES.POPUP.NAME" | translate}}
+                    </label>
+                    <input class="form-control" type="text" formControlName="name" id="name"
+                        [class.is-invalid]="courseForm.get('name')?.invalid && submitted">
+                </div>
+
+                <!-- COLOR -->
+                <div class="col-12 col-sm-4">
+                    <label class="form-label" for="color">
+                        {{"COURSES.POPUP.COLOR" | translate}}
+                    </label>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <!-- Input HEX manuale -->
+                        <input class="form-control" type="text" formControlName="color" id="color"
+                            [class.is-invalid]="courseForm.get('color')?.invalid && submitted" placeholder="#FFFFFF">
+
+                        <!-- Input palette visuale -->
+                        <input type="color" [value]="courseForm.get('color')?.value"
+                            (input)="setColor($event)"
+                            style="width: 30px; height: 30px; padding: 0; border: none;">
+                    </div>
+                </div>
+
+                <!-- NOTE -->
+                <div class="col-12">
+                    <label class="form-label" for="note">
+                        {{"CALENDAR.POPUP.DESCRIPTION" | translate}}
+                    </label>
+                    <textarea class="form-control" formControlName="note" id="note"
+                        [class.is-invalid]="courseForm.get('note')?.invalid && submitted">
+                    </textarea>
+                </div>
+
+                <!-- ACTIVE -->
+                <div class="col-auto mt-2">
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="active">
+                            {{"COURSES.POPUP.ACTIVE" | translate}}
+                        </label>
+                        <input class="form-check-input" type="checkbox" role="switch" formControlName="active"
+                            id="active">
+                    </div>
+                </div>
+
+                <!-- DATE OBSOLETE -->
+                <div *ngIf="courseForm.get('active')?.value == 0 || courseForm.get('active')?.value == false"
+                    class="col-12 col-sm-6 col-md-4">
+                    <label class="form-label" for="obsolete_date">
+                        {{"COURSES.POPUP.DATEOBSOLETE" | translate}}
+                    </label>
+                    <input class="form-control" type="date" formControlName="obsolete_date" id="obsolete_date">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2 errorTxt">
+        <div *ngIf="courseForm.get('color')?.hasError('invalidColor')" class="col-12 text-center">
+            {{"COURSES.POPUP.COLORERROR" | translate}}
+        </div>
+        <div *ngIf="courseForm.invalid && submitted && !courseForm.get('color')?.hasError('invalidColor')"
+            class="col-12 text-center">
+            {{"COURSES.POPUP.MISSINGFIELDS" | translate}}
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button class="btn btn-outline-primary me-2" style="width: 80px;" (click)="close()">
+        {{"CALENDAR.POPUP.CLOSE" | translate }}
+    </button>
+    <button class="btn btn-outline-success me-2" style="width: 80px;" (click)="save()">
+        {{"CALENDAR.POPUP.SAVE" | translate }}
+    </button>
+</mat-dialog-actions>
