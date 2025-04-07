@@ -34,6 +34,9 @@
                             <i class="bi bi-clock-history"></i>
                         </button>
                         <input id="code" name="code" class="form-control" formControlName="code">
+                        <button class="btn btn-outline-dark" [matTooltip]="'Modifica Codice'">
+                            <i class="bi bi-pencil"></i>
+                        </button>
                     </div>
                 </div>
                 <!-- UNITA' DI MISURA -->
@@ -48,7 +51,8 @@
                             </span>
                         </ng-template>
                     </label>
-                    <select name="refidum" id="refidum" class="form-select quantityClass unitMeasurement" formControlName="refidum">
+                    <select name="refidum" id="refidum" class="form-select quantityClass unitMeasurement"
+                        formControlName="refidum">
                         <option [value]="null">--</option>
                         <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">{{unit.acronym}}</option>
                     </select>
@@ -57,9 +61,9 @@
                 <div *ngIf="articleForm.get('manage_qnt')?.value == true"
                     class="col-4 col-md-6 d-none d-sm-flex d-lg-none"></div>
 
-                <!-- UNITA' -->
+                <!-- UNITA' DISPONIBILI -->
                 <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
-                    <label class="form-label" for="available_unt">
+                    <label class="form-label" for="available_unit">
                         <span *ngIf="!isSmall; else smallBlockUD">
                             Unità Disponibili
                         </span>
@@ -69,12 +73,18 @@
                             </span>
                         </ng-template>
                     </label>
-                    <input id="available_unt" name="available_unt" class="form-control quantityClass"
-                        formControlName="available_unt"
-                        [class.is-invalid]="articleForm.get('available_unt')?.invalid && submitted">
+                    <div class="input-group">
+                        <input id="available_unit" name="available_unit" class="form-control quantityClass"
+                            formControlName="available_unit"
+                            [class.is-invalid]="articleForm.get('available_unit')?.invalid && submitted">
+                        <button class="btn btn-outline-dark">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
                 </div>
+                <!-- UNITA' MAGAZZINO -->
                 <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
-                    <label class="form-label" for="storage_unt">
+                    <label class="form-label" for="storage_unit">
                         <span *ngIf="!isSmall; else smallBlockUM">
                             Unità Magazzino
                         </span>
@@ -84,13 +94,18 @@
                             </span>
                         </ng-template>
                     </label>
-                    <input id="storage_unt" name="storage_unt" class="form-control quantityClass"
-                        formControlName="storage_unt"
-                        [class.is-invalid]="articleForm.get('storage_unt')?.invalid && submitted">
+                    <div class="input-group">
+                        <input id="storage_unit" name="storage_unit" class="form-control quantityClass"
+                            formControlName="storage_unit"
+                            [class.is-invalid]="articleForm.get('storage_unit')?.invalid && submitted">
+                        <button class="btn btn-outline-dark">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- QUANTITA' -->
                 <ng-container *ngIf="articleForm.get('manage_qnt')?.value == true">
+                    <!-- QUANTITA' DISPONIBILI -->
                     <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
                         <label class="form-label" for="available_qnt">
                             <span *ngIf="!isSmall; else smallBlockD">
@@ -102,10 +117,16 @@
                                 </span>
                             </ng-template>
                         </label>
-                        <input id="available_qnt" name="available_qnt" class="form-control quantityClass"
-                            formControlName="available_qnt"
-                            [class.is-invalid]="articleForm.get('available_qnt')?.invalid && submitted">
+                        <div class="input-group">
+                            <input id="available_qnt" name="available_qnt" class="form-control quantityClass"
+                                formControlName="available_qnt"
+                                [class.is-invalid]="articleForm.get('available_qnt')?.invalid && submitted">
+                            <button class="btn btn-outline-dark">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </div>
                     </div>
+                    <!-- QUANTITA' MAGAZZINO -->
                     <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
                         <label class="form-label" for="storage_qnt">
                             <span *ngIf="!isSmall; else smallBlockM">
@@ -117,9 +138,14 @@
                                 </span>
                             </ng-template>
                         </label>
-                        <input id="storage_qnt" name="storage_qnt" class="form-control quantityClass"
-                            formControlName="storage_qnt"
-                            [class.is-invalid]="articleForm.get('storage_qnt')?.invalid && submitted">
+                        <div class="input-group">
+                            <input id="storage_qnt" name="storage_qnt" class="form-control quantityClass"
+                                formControlName="storage_qnt"
+                                [class.is-invalid]="articleForm.get('storage_qnt')?.invalid && submitted">
+                            <button class="btn btn-outline-dark">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </div>
                     </div>
                 </ng-container>
 
@@ -147,10 +173,11 @@
                 <div class="col-12 col-md-4 p-0">
                     <!-- NOTE -->
                     <div class="col-12 mt-2 pb-0 pt-0 elementPadding">
-                        <label class="form-label" for="notes">
+                        <label class="form-label" for="note">
                             Note
                         </label>
-                        <textarea id="notes" name="notes" class="form-control" formControlName="notes" [rows]="notesHeight">
+                        <textarea id="note" name="note" class="form-control" formControlName="note"
+                            [rows]="notesHeight">
                         </textarea>
                     </div>
                 </div>
@@ -212,8 +239,12 @@
                         <i class="bi bi-building titleIcon"></i>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-storage-line *ngIf="manage_qnt == false && manage_sn == false" 
-                        [idarticle]="idarticle"></app-storage-line>
+                        <app-storage-line *ngIf="manage_qnt == false && manage_sn == false"
+                            [idarticle]="idarticle"></app-storage-line>
+                        <app-storage-line-sn *ngIf="manage_qnt == false && manage_sn == true"
+                            [idarticle]="idarticle"></app-storage-line-sn>
+                        <app-storage-line-sn-qnt *ngIf="manage_qnt == true && manage_sn == true"
+                            [idarticle]="idarticle"></app-storage-line-sn-qnt>
                     </ng-template>
                 </mat-tab>
 

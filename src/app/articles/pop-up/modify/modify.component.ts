@@ -21,13 +21,18 @@ export class ModifyComponent {
 
   isSmall: boolean = false;
 
+  management_type: number | null = null; // 0 = no SN no QNT, 1 = si SN no QNT, 2 = si SN si QNT
+
   modifyForm = new FormGroup({
+    unit_available: new FormControl<number | null>(null, Validators.required),
     quantity: new FormControl<string | null>(null, Validators.required),
     serialnumber: new FormControl<string | null>(null, Validators.required),
-    taxablepurchase: new FormControl<string | null>(null),
+    unit_taxablepurchase: new FormControl<string | null>(null),
     vatpurchase: new FormControl<string | null>(null),
-    taxablerecommended: new FormControl<string | null>(null),
-    vatrecommended: new FormControl<string | null>(null)
+    unit_taxablerecommended: new FormControl<string | null>(null),
+    vatrecommended: new FormControl<string | null>(null),
+    pricerecommended: new FormControl<string | null>(null),
+    pricepurchase: new FormControl<string | null>(null)
   })
 
   @HostListener('window:resize', ['$event'])
@@ -39,6 +44,7 @@ export class ModifyComponent {
     private connectServerService: ConnectServerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     // Inizializza il form con i dati passati al dialog
+    this.management_type = data.management_type;
     this.modifyForm.patchValue(data.article);
   }
 

@@ -1,139 +1,17 @@
-.form-check-input {
-    height: 24px;
-    width: 24px;
+.mat-table {
+    border: 1px solid lightgray;
 }
 
-.form-label {
-    font-weight: bold;
-    margin-bottom: 0.1rem;
-    margin-top: 0.5rem;
-    font-size: small;
-
-    @media screen and (min-width: 700px) {
-        font-size: small;
-    }
-
-    @media screen and (min-width: 1300px) {
-        font-size: medium;
-    }
+td, th {
+    border-right: 1px solid lightgray;
 }
 
-.bi:hover {
+.actionIcon {
+    font-size: medium;
+    transition: all 0.4s ease;
+}
+
+.actionIcon:hover {
     cursor: pointer;
+    font-size: x-large;
 }
-
-.articleColumn {
-    padding-left: 0.4rem;
-    padding-right: 0.4rem;
-
-    @media screen and (min-width: 1000px) {
-        padding-left: 0.4rem;
-        padding-right: 0.4rem;
-    }
-
-    @media screen and (min-width: 1200px) {
-        padding-left: 0.6rem;
-        padding-right: 0.6rem;
-    }
-
-    @media screen and (min-width: 1300px) {
-        padding-left: 0.36rem;
-        padding-right: 0.36rem;
-    }
-
-    @media screen and (min-width: 1400px) {
-        padding-left: 0.2rem;
-        padding-right: 0.2rem;
-    }
-
-    // @media screen and (min-width: 1500px) {
-    //     padding-left: 1rem;
-    //     padding-right: 1rem;
-    // }
-}
-
-.vatPadding {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-
-    @media screen and (min-width: 992px) {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
-}
-
-.iconMargin {
-    margin-left: 0.2rem;
-    margin-right: 0.2rem;
-
-    @media screen and (min-width: 820px) {
-        margin-right: 0.5rem;
-    }
-
-    @media screen and (min-width: 900px) {
-        margin-left: 0.2rem;
-        margin-right: 0.8rem;
-    }
-
-    @media screen and (min-width: 1200px) {
-        margin-left: 0.6rem;
-        margin-right: 1rem;
-    }
-
-    @media screen and (min-width: 1450px) {
-        margin-left: 1rem;
-        margin-right: 1rem;
-    }
-}
-
-.iconSize {
-    font-size: 20px;
-    margin-left: 8px;
-    margin-right: 8px;
-}
-
-.iconSize:hover {
-    cursor: pointer;
-}
-
-.checkboxPadding {
-    padding-left: 0.4rem;
-    padding-right: 0;
-
-    @media screen and (min-width: 400px) {
-        padding-left: 0.6rem;
-    }
-}
-
-.iconAbsoluteP {
-    z-index: 100;
-    position: absolute;
-    top: 24%;
-    left: 24%;
-    font-size: 20px;
-}
-
-.iconAbsoluteF {
-    z-index: 100;
-    position: absolute;
-    top: 48%;
-    left: 24%;
-    font-size: 20px;
-}
-
-.iconAbsoluteT {
-    z-index: 100;
-    position: absolute;
-    top: 74%;
-    left: 24%;
-    font-size: 20px;
-}
-
-.displayIcons {
-    display: none;
-    
-    @media screen and (min-width: 768px) {
-        display: flex;
-    }
-}
-

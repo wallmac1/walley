@@ -17,6 +17,8 @@ import { ConfirmComponent } from '../pop-up/confirm/confirm.component';
 import { UpdateQuantityComponent } from '../pop-up/update-quantity/update-quantity.component';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { StorageLineComponent } from '../article-storage/storage-line/storage-line.component';
+import { StorageLineSnComponent } from "../article-storage/storage-line-sn/storage-line-sn.component";
+import { StorageLineSnQntComponent } from "../article-storage/storage-line-sn-qnt/storage-line-sn-qnt.component";
 
 @Component({
   selector: 'app-article-modify',
@@ -29,8 +31,10 @@ import { StorageLineComponent } from '../article-storage/storage-line/storage-li
     MatTabsModule,
     StorageLineComponent,
     ArticleTaxableComponent,
-    ArticleHistoryComponent
-  ],
+    ArticleHistoryComponent,
+    StorageLineSnComponent,
+    StorageLineSnQntComponent
+],
   templateUrl: './article-modify.component.html',
   styleUrl: './article-modify.component.scss'
 })
@@ -55,9 +59,9 @@ export class ArticleModifyComponent {
     //quantity: new FormControl<string | null>(null, [Validators.required, this.numberWithCommaValidator()]),
     available_qnt: new FormControl<string | null>(null),
     storage_qnt: new FormControl<string | null>(null),
-    available_unt: new FormControl<number>(0),
-    storage_unt: new FormControl<number>(0),
-    notes: new FormControl<string | null>(null)
+    available_unit: new FormControl<number>(0),
+    storage_unit: new FormControl<number>(0),
+    note: new FormControl<string | null>(null)
   });
 
   @HostListener('window:resize', ['$event'])
@@ -111,10 +115,10 @@ export class ArticleModifyComponent {
           this.articleForm.get('code')?.setValue(val.data.code);
           this.articleForm.get('title')?.setValue(val.data.title);
           this.articleForm.get('refidum')?.setValue(val.data.refidum);
-          this.articleForm.get('available_unt')?.setValue(val.data.quantity); // Da modificare
-          this.articleForm.get('storage_unt')?.setValue(val.data.quantity); // Da modificare
+          this.articleForm.get('available_unit')?.setValue(val.data.quantity); // Da modificare
+          this.articleForm.get('storage_unit')?.setValue(val.data.quantity); // Da modificare
           this.articleForm.get('description')?.setValue(val.data.description);
-          this.articleForm.get('notes')?.setValue(val.data.notes);
+          this.articleForm.get('note')?.setValue(val.data.note);
 
           if(val.data.manage_qnt == 1) {
             this.articleForm.get('available_qnt')?.setValue(val.data.quantity); // Da modificare
@@ -132,6 +136,10 @@ export class ArticleModifyComponent {
   private initForm() {
     this.articleForm.get('code')?.disable();
     this.articleForm.get('quantity')?.disable();
+    this.articleForm.get('available_qnt')?.disable();
+    this.articleForm.get('storage_qnt')?.disable();
+    this.articleForm.get('available_unit')?.disable();
+    this.articleForm.get('storage_unit')?.disable();
   }
 
   numberWithCommaValidator(): ValidatorFn {
@@ -206,7 +214,7 @@ export class ArticleModifyComponent {
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
-      data: { articleid: this.article?.id }
+      data: { articleid: this.article?.idarticle }
     });
 
     dialogRef.afterClosed().subscribe(result => {
