@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmComponent } from './confirm.component';
+import { DeleteStorageRowComponent } from './delete.storage.row';
 
-describe('ConfirmComponent', () => {
-  let component: ConfirmComponent;
-  let fixture: ComponentFixture<ConfirmComponent>;
+describe('DeleteStorageRowComponent', () => {
+  let component: DeleteStorageRowComponent;
+  let fixture: ComponentFixture<DeleteStorageRowComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmComponent]
+      imports: [DeleteStorageRowComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ConfirmComponent);
+    fixture = TestBed.createComponent(DeleteStorageRowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ArticleTaxableComponent } from './article-taxable.component';
+import { AddQntUntComponent } from './add-qnt-unt.component';
 
-describe('ArticleTaxableComponent', () => {
-  let component: ArticleTaxableComponent;
-  let fixture: ComponentFixture<ArticleTaxableComponent>;
+describe('AddQntUntComponent', () => {
+  let component: AddQntUntComponent;
+  let fixture: ComponentFixture<AddQntUntComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ArticleTaxableComponent]
+      imports: [AddQntUntComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ArticleTaxableComponent);
+    fixture = TestBed.createComponent(AddQntUntComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

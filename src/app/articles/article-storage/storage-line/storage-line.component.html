@@ -1,71 +1,75 @@
-<!-- NO SERIAL NUMBER, NO QUANTITY -->
 <div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 1000px; max-width: 1800px;">
-    <table mat-table [dataSource]="dataSource" class="mat-table" style="width: 100%;">
+    <div class="row">
+        <div class="col-12">
+            <table mat-table [dataSource]="dataSource" class="mat-table" style="width: 100%;">
 
-        <!-- Unità Magazzino -->
-        <ng-container matColumnDef="unit_storage">
-            <th mat-header-cell *matHeaderCellDef>Unt. Magaz.</th>
-            <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_storage }}</td>
-        </ng-container>
+                <!-- Unità Magazzino -->
+                <ng-container matColumnDef="unit_storage">
+                    <th mat-header-cell *matHeaderCellDef>Unt. Magaz.</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_storage }}</td>
+                </ng-container>
 
-        <!-- Unità Disponibile -->
-        <ng-container matColumnDef="unit_available">
-            <th mat-header-cell *matHeaderCellDef>Unt. Disp.</th>
-            <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_available }}</td>
-        </ng-container>
+                <!-- Unità Disponibile -->
+                <ng-container matColumnDef="unit_available">
+                    <th mat-header-cell *matHeaderCellDef>Unt. Disp.</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_available }}</td>
+                </ng-container>
 
-        <!-- Imponibile Acquisto -->
-        <ng-container matColumnDef="unit_taxablepurchase">
-            <th mat-header-cell *matHeaderCellDef>Imp. Acq.</th>
-            <td mat-cell *matCellDef="let element">{{ element.unit_taxablepurchase }} €</td>
-        </ng-container>
+                <!-- Imponibile Acquisto -->
+                <ng-container matColumnDef="unit_taxablepurchase">
+                    <th mat-header-cell *matHeaderCellDef>Imp. Acq.</th>
+                    <td mat-cell *matCellDef="let element">{{ element.unit_taxablepurchase }} €</td>
+                </ng-container>
 
-        <!-- IVA Acquisto -->
-        <ng-container matColumnDef="vatpurchase">
-            <th mat-header-cell *matHeaderCellDef>IVA</th>
-            <td mat-cell *matCellDef="let element">{{ element.vatpurchase }} %</td>
-        </ng-container>
+                <!-- IVA Acquisto -->
+                <ng-container matColumnDef="vatpurchase">
+                    <th mat-header-cell *matHeaderCellDef>IVA</th>
+                    <td mat-cell *matCellDef="let element">{{ element.vatpurchase }} %</td>
+                </ng-container>
 
-        <!-- Prezzo Acquisto -->
-        <ng-container matColumnDef="pricepurchase">
-            <th mat-header-cell *matHeaderCellDef>Prz. Acq.</th>
-            <td mat-cell *matCellDef="let element">{{ element.pricepurchase }} €</td>
-        </ng-container>
+                <!-- Prezzo Acquisto -->
+                <ng-container matColumnDef="pricepurchase">
+                    <th mat-header-cell *matHeaderCellDef>Prz. Acq.</th>
+                    <td mat-cell *matCellDef="let element">{{ element.pricepurchase }} €</td>
+                </ng-container>
 
-        <!-- Imponibile Consigliato -->
-        <ng-container matColumnDef="unit_taxablerecommended">
-            <th mat-header-cell *matHeaderCellDef>Imp. Cons.</th>
-            <td mat-cell *matCellDef="let element">{{ element.unit_taxablerecommended }} €</td>
-        </ng-container>
+                <!-- Imponibile Consigliato -->
+                <ng-container matColumnDef="unit_taxablerecommended">
+                    <th mat-header-cell *matHeaderCellDef>Imp. Cons.</th>
+                    <td mat-cell *matCellDef="let element">{{ element.unit_taxablerecommended }} €</td>
+                </ng-container>
 
-        <!-- IVA Consigliata -->
-        <ng-container matColumnDef="vatrecommended">
-            <th mat-header-cell *matHeaderCellDef>IVA</th>
-            <td mat-cell *matCellDef="let element">{{ element.vatrecommended }} %</td>
-        </ng-container>
+                <!-- IVA Consigliata -->
+                <ng-container matColumnDef="vatrecommended">
+                    <th mat-header-cell *matHeaderCellDef>IVA</th>
+                    <td mat-cell *matCellDef="let element">{{ element.vatrecommended }} %</td>
+                </ng-container>
 
-        <!-- Prezzo Consigliato -->
-        <ng-container matColumnDef="pricerecommended">
-            <th mat-header-cell *matHeaderCellDef>Prz. Cons.</th>
-            <td mat-cell *matCellDef="let element">{{ element.pricerecommended }} €</td>
-        </ng-container>
+                <!-- Prezzo Consigliato -->
+                <ng-container matColumnDef="pricerecommended">
+                    <th mat-header-cell *matHeaderCellDef>Prz. Cons.</th>
+                    <td mat-cell *matCellDef="let element">{{ element.pricerecommended }} €</td>
+                </ng-container>
 
-        <!-- Azioni -->
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">Azioni</th>
-            <td mat-cell *matCellDef="let element">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col-6 text-center">
-                        <i class="bi bi-pencil actionIcon" (click)="modifyPopUp(element)"></i>
-                    </div>
-                    <div class="col-6 text-center">
-                        <i class="bi bi-trash actionIcon" style="color: red;" (click)="deletePopUp(element)"></i>
-                    </div>
-                </div>
-            </td>
-        </ng-container>
+                <!-- Azioni -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">Azioni</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-6 text-center">
+                                <i class="bi bi-pencil actionIcon" (click)="modifyPopUp(element)"></i>
+                            </div>
+                            <div class="col-6 text-center">
+                                <i class="bi bi-trash actionIcon" style="color: red;"
+                                    (click)="deletePopUp(element)"></i>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
 </div>

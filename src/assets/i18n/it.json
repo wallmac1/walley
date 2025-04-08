@@ -726,12 +726,17 @@
   },
   "ARTICLE": {
     "MODAL": {
+      "UPDATEUNITSTORAGE": "Aggiorna Unità Magazzino",
+      "UPDATEQUANTITYSTORAGE": "Aggiorna Quantità Magazzino",
+      "UPDATEUNITAVAILABLE": "Aggiorna Unità Disponibili",
+      "UPDATEQUANTITYAVAILABLE": "Aggiorna Quantità Disponibili",
+      "UPDATECODE": "Aggiorna Codice",
       "HISTORY": "Storico Articolo",
       "CLOSE": "Chiudi",
       "MEASUREMENTUNIT": "Unità di Misura",
       "UPDATEORVARY": "Aggiornare o Variare",
-      "UPDATETEXT": "Se si sceglie 'Aggiorna' i cambiamenti verranno effettuati solo sugli articoli venduti a partire da questo istante.",
-      "VARYTEXT": "Se si sceglie 'Varia' i cambiamenti vengono applicati anche a tutte le versioni precedenti dell'articolo",
+      "UPDATETEXT": "Se si sceglie 'Storicizza' i cambiamenti verranno effettuati solo sugli articoli venduti a partire da questo istante.",
+      "VARYTEXT": "Se si sceglie 'Aggiorna' i cambiamenti vengono applicati anche a tutte le versioni precedenti dell'articolo",
       "UPDATE": "Aggiorna",
       "VARY": "Varia",
       "DELETEARTICLES": "Elimina Articoli",
@@ -739,7 +744,9 @@
       "DELETE": "Elimina",
       "MODIFYARTICLE": "Modifica Articolo",
       "CONFIRM": "Conferma",
-      "UPDATEQUANTITY": "Aggiorna Quantità"
+      "UPDATEQUANTITY": "Aggiorna Quantità",
+      "DELETEUNITS": "Elimina Unità",
+      "INSERTUNITS": "Inserisci Unità"
     }
   },
   "INVOICE": {

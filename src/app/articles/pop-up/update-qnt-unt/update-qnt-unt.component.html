@@ -4,20 +4,28 @@
     </span>
 </h2>
 
-<mat-dialog-content style="overflow-y: auto; overflow-x: hidden;">
+<mat-dialog-content style="overflow-y: auto; overflow-x: hidden; min-width: 350px;" class="pt-2">
     <form [formGroup]="modifyForm">
         <div class="row justify-content-center">
 
             <!-- UNIT AVAILABLE OR SERIAL NUMBER -->
-            <div class="col-12 col-md-2 p-0">
-                <div *ngIf="management_type == 0; else snBlock" class="col-12 p-1">
-                    <label class="form-label" for="unit_available">
-                        Unità
-                    </label>
-                    <input class="form-control" type="number" id="unit_available" formControlName="unit_available">
-                </div>
-                <ng-template #snBlock>
-                    <div class="col-12 p-1">
+            <div class="col-12 col-md-4" [ngStyle]="{'border-right': !isSmall ? '1px solid lightgray' : 'none'}">
+                <div class="row">
+                    <div class="col-3 col-md-6 p-1">
+                        <label class="form-label" for="unit_available">
+                            Unità
+                        </label>
+                        <input class="form-control" type="number" min="0" id="unit_available" formControlName="unit_available"
+                            (keydown)="blockInvalidInput($event)">
+                    </div>
+                    <div *ngIf="management_type == 2" class="col-3 col-md-6 p-1">
+                        <label class="form-label" for="qnt_available">
+                            Quantità
+                        </label>
+                        <input class="form-control" type="number" min="0" id="qnt_available" formControlName="qnt_available"
+                            (keydown)="blockInvalidInput($event)">
+                    </div>
+                    <div *ngIf="management_type != 0" class="col-6 col-md-12 p-1">
                         <label class="form-label" for="serialnumber">
                             <span *ngIf="!isSmall; else smallBlockS">
                                 Serial Number
@@ -30,16 +38,10 @@
                         </label>
                         <input class="form-control" type="text" id="serialnumber" formControlName="serialnumber">
                     </div>
-                </ng-template>
-                <div *ngIf="management_type == 2" class="col-12 p-1">
-                    <label class="form-label" for="qnt_available">
-                        Quantità
-                    </label>
-                    <input class="form-control" type="number" id="qnt_available" formControlName="qnt_available">
                 </div>
             </div>
 
-            <div class="col-12 col-md-10 p-0">
+            <div class="col-12 col-md-8 p-0">
                 <div class="row justify-content-center m-0 p-0">
                     <!-- UNIT TAXABLE PURCHASE -->
                     <div class="col-4 p-1">

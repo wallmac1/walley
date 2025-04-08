@@ -1,0 +1,17 @@
+.mat-table {
+    border: 1px solid lightgray;
+}
+
+td, th {
+    border-right: 1px solid lightgray;
+}
+
+.actionIcon {
+    font-size: medium;
+    transition: all 0.4s ease;
+}
+
+.actionIcon:hover {
+    cursor: pointer;
+    font-size: x-large;
+}

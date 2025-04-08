@@ -5,9 +5,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ArticleStorage } from '../../interfaces/article';
 
 @Component({
-  selector: 'app-delete',
+  selector: 'app-delete-storage-row',
   standalone: true,
   imports: [
     CommonModule,
@@ -16,34 +17,19 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule,
     MatDialogModule
   ],
-  templateUrl: './delete.component.html',
-  styleUrl: './delete.component.scss'
+  templateUrl: './delete.storage.row.html',
+  styleUrl: './delete.storage.row.scss'
 })
-export class DeleteComponent {
+export class DeleteStorageRowComponent {
 
-  totalQuantity: number | null = null;
+  management_type: number | null = null;
+  article: ArticleStorage | null = null;
 
-  articles: { action: boolean, id: number, quantity: string,
-  serialnumber: string | null, taxablepurchase: string, pricesale: string, pricerecommended: string,
-  taxablerecommended: string, vatpurchase: string, vatrecommended: string }[] = [];
-
-  constructor(public dialogRef: MatDialogRef<DeleteComponent>,
+  constructor(public dialogRef: MatDialogRef<DeleteStorageRowComponent>,
     private connectServerService: ConnectServerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-    if(Array.isArray(data.articles)) {
-      this.articles = data.articles;
-    }
-    else {
-      this.articles.push(data.articles);
-    }
-    console.log(this.articles)
-    if(this.articles.length > 1) {
-      let quantity = 0;
-      this.articles.forEach((element) => {
-        quantity += parseFloat(element.quantity);
-      })
-      this.totalQuantity = quantity;
-    }
+    this.article = data.article;
+    this.management_type = data.management_type;
   }
 
   deleteArticle() {

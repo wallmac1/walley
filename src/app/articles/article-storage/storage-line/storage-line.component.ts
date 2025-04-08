@@ -1,6 +1,6 @@
 import { Component, HostListener, Input } from '@angular/core';
-import { ModifyComponent } from '../../pop-up/modify/modify.component';
-import { DeleteComponent } from '../../pop-up/delete/delete.component';
+import { UpdateQntUntComponent } from '../../pop-up/update-qnt-unt/update-qnt-unt.component';
+import { DeleteStorageRowComponent } from '../../pop-up/delete-storage-row/delete.storage.row';
 import { Article, ArticleStorage } from '../../interfaces/article';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ApiResponse } from '../../../weco/interfaces/api-response';
@@ -33,8 +33,6 @@ export class StorageLineComponent {
   displayedColumns = ['unit_available', 'unit_storage', 'unit_taxablepurchase', 'vatpurchase', 
     'pricepurchase', 'unit_taxablerecommended', 'vatrecommended', 'pricerecommended', 'actions'];
 
-  //checkboxGroup = document.querySelector('#groupAction') as HTMLElement;
-  //storageForm: FormGroup;
   isSmall: boolean = false;
 
   @Input() idarticle: number = 0;
@@ -44,11 +42,7 @@ export class StorageLineComponent {
     this.updateWindowDimensions();
   }
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private connectServerService: ConnectServerService) {
-    // this.storageForm = this.fb.group({
-    //   articles: this.fb.array([])
-    // })
-  }
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private connectServerService: ConnectServerService) {}
 
   ngOnInit(): void {
     this.getArticles();
@@ -64,42 +58,6 @@ export class StorageLineComponent {
     }
   }
 
-  // formLogicGroup() {
-  //   let articleSelected: number[] = [];
-  //   this.articles.controls.forEach((element, index) => {
-  //     if (element.get('action')?.value == 1) {
-  //       articleSelected.push(index);
-  //     }
-  //   });
-
-  //   if (articleSelected.length == 0) {
-  //     this.articles.controls.forEach((element) => {
-  //       element.get('action')?.setValue(true);
-  //     });
-  //   }
-  //   else {
-  //     this.articles.controls.forEach((element) => {
-  //       element.get('action')?.setValue(false);
-  //     });
-  //   }
-  // }
-
-  // formLogic() {
-  //   let articleSelected: number[] = [];
-  //   this.articles.controls.forEach((element, index) => {
-  //     if (element.get('action')?.value == 1) {
-  //       articleSelected.push(index);
-  //     }
-  //   });
-
-  //   if (this.storageForm.get('groupAction')?.value == false && articleSelected.length > 0) {
-  //     this.storageForm.get('groupAction')?.setValue(true);
-  //   }
-  //   else if (this.storageForm.get('groupAction')?.value == true && articleSelected.length == 0) {
-  //     this.storageForm.get('groupAction')?.setValue(false);
-  //   }
-  // }
-
   getArticles() {
     // CHIAMATA AL SERVER PER OTTENERE GLI ARTICOLI E CREARE I FORM ARRAY NEL SUBSCRIBE
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'articles/articlePricesList', { idarticle: this.idarticle })
@@ -111,53 +69,10 @@ export class StorageLineComponent {
     console.log(this.dataSource.data)
   }
 
-  // get articles(): FormArray {
-  //   return this.storageForm.get('articles') as FormArray;
-  // }
-
-  // createArticlesForm(articles: Article[]) {
-  //   this.dataSource.data = articles;
-  //   articles.forEach((article: Article) => {
-  //     this.articles.push(this.createArticle(article));
-  //   });
-  // }
-
-  // createArticle(article: Article) {
-  //   const group = this.fb.group({
-  //     id: [article.id],
-  //     unit: [article.unit],
-  //     serialnumber: [article.article_price.serialnumber],
-  //     taxablepurchase: [article.article_price.taxablepurchase],
-  //     pricesale: [article.article_price.taxablesale], // DA CAMBIARE QUANDO FINITA INTERFACCIA
-  //     pricerecommended: [article.article_price.taxablesale], // DA CAMBIARE QUANDO FINITA INTERFACCIA
-  //     taxablerecommended: [article.article_price.taxablerecommended],
-  //     vatpurchase: [article.article_price.vatpurchase],
-  //     vatrecommended: [article.article_price.vatrecommended],
-  //     stored_qnt: [50],
-  //     available_qnt: [40]
-  //   })
-
-  //   Object.keys(group.controls).forEach(controlName => {
-  //     if (controlName !== 'action') {
-  //       group.get(controlName)?.disable();
-  //     }
-  //   });
-
-  //   return group;
-  // }
-
   documentsPopup() { }
 
   deletePopUp(article: Article) {
-    // let data = articles;
-    // if (Array.isArray(data)) {
-    //   this.articles.controls.forEach((element) => {
-    //     if (element.get('action')?.value == true) {
-    //       data.push(element.getRawValue());
-    //     }
-    //   })
-    // }
-    this.dialog.open(DeleteComponent, {
+    this.dialog.open(DeleteStorageRowComponent, {
       maxWidth: '700px',
       maxHeight: '500px',
       width: '94%',
@@ -166,8 +81,8 @@ export class StorageLineComponent {
   }
 
   modifyPopUp(article: any) {
-    this.dialog.open(ModifyComponent, {
-      maxWidth: '800px',
+    this.dialog.open(UpdateQntUntComponent, {
+      maxWidth: '900px',
       maxHeight: '500px',
       width: '94%',
       data: { article: article, management_type: 0 }

@@ -4,7 +4,7 @@
     margin-top: 0.5rem;
     font-size: x-small;
 
-    @media screen and (min-width: 750px) {
+    @media screen and (min-width: 500px) {
         font-size: small;
     }
 
@@ -25,16 +25,20 @@
 }
 
 .vatPadding {
-    padding-left: 0.1rem;
-    padding-right: 0.1rem;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
 
-    @media screen and (min-width: 500px) {
+    @media screen and (min-width: 576px) {
         padding-left: 0.4rem;
         padding-right: 0.4rem;
     }
+}
 
-    @media screen and (min-width: 600px) {
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-    }
+.form-control {
+    max-width: 200px;
+}
+
+.errorTxt{
+    color: red;
+    font-size: small;
 }

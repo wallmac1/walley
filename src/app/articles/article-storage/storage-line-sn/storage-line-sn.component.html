@@ -1,0 +1,137 @@
+<div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 1000px; max-width: 1800px;">
+    <div class="row justify-content-center mb-3">
+        <div [formGroup]="filterForm" class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 text-center">
+            <label class="form-label" for="serialnumber">
+                Ricerca Serial Number
+            </label>
+            <div class="input-group">
+                <input class="form-control" type="text" id="serialnumber" formControlName="serialnumber"
+                    [class.is-invalid]="filterForm.invalid && submitted">
+                <button class="btn btn-outline-dark" (click)="filter()">
+                    Filtra
+                </button>
+            </div>
+        </div>
+        <div *ngIf="filterForm.invalid && submitted" class="col-12 text-center mt-1">
+            <span style="font-size: small; color: red;">
+                Inserire un Serial Number Valido
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <!-- PAGINATOR -->
+            <div class="row justify-content-center p-3" style="border: 1px solid lightgray; background-color: white;">
+                <div class="d-none d-md-inline col-4 text-start">
+                    <span style="font-size: small;">
+                        Risultati Totali:
+                        {{totalResults}}
+                    </span>
+                </div>
+
+                <div class="d-none d-md-inline col-4 text-center">
+                    <span style="font-size: small;">
+                        Risultati per Pagina:
+                        {{itemsPerPage}}
+                    </span>
+                </div>
+
+                <div class="col-12 col-md-4 text-end">
+                    <span>
+                        <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
+                            <i class="bi bi-caret-left"></i>
+                        </button>
+                        <span style="font-size: small;">
+                            Pagina {{currentPage}} di {{totalPages}}
+                        </span>
+                        <button [disabled]="currentPage == totalPages" class="btn btn-link ms-2 p-0"
+                            (click)="nextPage()">
+                            <i class="bi bi-caret-right"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12 p-0">
+                    <table mat-table [dataSource]="dataSource" class="mat-table" style="width: 100%;">
+
+                        <!-- Serial Number -->
+                        <ng-container matColumnDef="serialnumber">
+                            <th mat-header-cell *matHeaderCellDef>Serial Number</th>
+                            <td mat-cell *matCellDef="let element" class="text-center">{{ element.serialnumber }}</td>
+                        </ng-container>
+
+                        <!-- Unità Magazzino -->
+                        <ng-container matColumnDef="unit_storage">
+                            <th mat-header-cell *matHeaderCellDef>Unt. Magaz.</th>
+                            <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_storage }}</td>
+                        </ng-container>
+
+                        <!-- Unità Disponibile -->
+                        <ng-container matColumnDef="unit_available">
+                            <th mat-header-cell *matHeaderCellDef>Unt. Disp.</th>
+                            <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_available }}</td>
+                        </ng-container>
+
+                        <!-- Imponibile Acquisto -->
+                        <ng-container matColumnDef="unit_taxablepurchase">
+                            <th mat-header-cell *matHeaderCellDef>Imp. Acq.</th>
+                            <td mat-cell *matCellDef="let element">{{ element.unit_taxablepurchase }} €</td>
+                        </ng-container>
+
+                        <!-- IVA Acquisto -->
+                        <ng-container matColumnDef="vatpurchase">
+                            <th mat-header-cell *matHeaderCellDef>IVA</th>
+                            <td mat-cell *matCellDef="let element">{{ element.vatpurchase }} %</td>
+                        </ng-container>
+
+                        <!-- Prezzo Acquisto -->
+                        <ng-container matColumnDef="pricepurchase">
+                            <th mat-header-cell *matHeaderCellDef>Prz. Acq.</th>
+                            <td mat-cell *matCellDef="let element">{{ element.pricepurchase }} €</td>
+                        </ng-container>
+
+                        <!-- Imponibile Consigliato -->
+                        <ng-container matColumnDef="unit_taxablerecommended">
+                            <th mat-header-cell *matHeaderCellDef>Imp. Cons.</th>
+                            <td mat-cell *matCellDef="let element">{{ element.unit_taxablerecommended }} €</td>
+                        </ng-container>
+
+                        <!-- IVA Consigliata -->
+                        <ng-container matColumnDef="vatrecommended">
+                            <th mat-header-cell *matHeaderCellDef>IVA</th>
+                            <td mat-cell *matCellDef="let element">{{ element.vatrecommended }} %</td>
+                        </ng-container>
+
+                        <!-- Prezzo Consigliato -->
+                        <ng-container matColumnDef="pricerecommended">
+                            <th mat-header-cell *matHeaderCellDef>Prz. Cons.</th>
+                            <td mat-cell *matCellDef="let element">{{ element.pricerecommended }} €</td>
+                        </ng-container>
+
+                        <!-- Azioni -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">Azioni</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-6 text-center">
+                                        <i class="bi bi-pencil actionIcon" (click)="modifyPopUp(element)"></i>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <i class="bi bi-trash actionIcon" style="color: red;"
+                                            (click)="deletePopUp(element)"></i>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

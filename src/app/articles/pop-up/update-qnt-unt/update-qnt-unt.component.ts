@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ConnectServerService } from '../../../services/connect-server.service';
 
 @Component({
-  selector: 'app-modify',
+  selector: 'app-update-qnt-unt',
   standalone: true,
   imports: [
     CommonModule,
@@ -14,10 +14,10 @@ import { ConnectServerService } from '../../../services/connect-server.service';
     ReactiveFormsModule,
     MatDialogModule
   ],
-  templateUrl: './modify.component.html',
-  styleUrl: './modify.component.scss'
+  templateUrl: './update-qnt-unt.component.html',
+  styleUrl: './update-qnt-unt.component.scss'
 })
-export class ModifyComponent {
+export class UpdateQntUntComponent {
 
   isSmall: boolean = false;
 
@@ -25,11 +25,11 @@ export class ModifyComponent {
 
   modifyForm = new FormGroup({
     unit_available: new FormControl<number | null>(null, Validators.required),
-    quantity: new FormControl<string | null>(null, Validators.required),
+    qnt_available: new FormControl<string | null>(null, Validators.required),
     serialnumber: new FormControl<string | null>(null, Validators.required),
     unit_taxablepurchase: new FormControl<string | null>(null),
-    vatpurchase: new FormControl<string | null>(null),
     unit_taxablerecommended: new FormControl<string | null>(null),
+    vatpurchase: new FormControl<string | null>(null),
     vatrecommended: new FormControl<string | null>(null),
     pricerecommended: new FormControl<string | null>(null),
     pricepurchase: new FormControl<string | null>(null)
@@ -40,7 +40,7 @@ export class ModifyComponent {
     this.updateWindowDimensions();
   }
 
-  constructor(public dialogRef: MatDialogRef<ModifyComponent>,
+  constructor(public dialogRef: MatDialogRef<UpdateQntUntComponent>,
     private connectServerService: ConnectServerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     // Inizializza il form con i dati passati al dialog
@@ -58,6 +58,13 @@ export class ModifyComponent {
     }
     else {
       this.isSmall = false;
+    }
+  }
+
+  blockInvalidInput(event: KeyboardEvent) {
+    const invalidChars = ['e', 'E', '+', '-'];
+    if (invalidChars.includes(event.key)) {
+      event.preventDefault();
     }
   }
 

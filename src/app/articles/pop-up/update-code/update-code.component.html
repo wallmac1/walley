@@ -1,0 +1,46 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"ARTICLE.MODAL.UPDATECODE" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content style="overflow-y: auto; overflow-x: hidden;">
+    <form [formGroup]="updateForm">
+        <div class="row justify-content-center align-items-center p-1">
+
+            <div class="col-12 text-center p-1">
+                <span style="font-weight: bold; font-size: small;">
+                    NB:
+                </span>
+                <span style="font-size: small;">
+                    Inserire un nuovo codice univoco
+                </span>
+            </div>
+
+            <div class="col-12 col-md-10 col-lg-8 p-1">
+                <label class="form-label" for="code" (keydown.enter)="resetVariable()">
+                    Codice
+                </label>
+                <input class="form-control" type="text" id="code" formControlName="code">
+            </div>
+        </div>
+
+        <div *ngIf="submitted" class="row justify-content-center align-items-center p-1">
+            <div *ngIf="updateForm.invalid" class="col-12 text-center errorTxt">
+                Il campo Codice è obbligatorio
+            </div>
+            <div *ngIf="notUniqueCode" class="col-12 text-center errorTxt">
+                Il codice inserito non è univoco, inserirne uno nuovo
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+        <button class="btn btn-outline-dark me-2" (click)="close()">
+            Chiudi
+        </button>
+        <button class="btn btn-outline-success me-2" (click)="update()">
+            Aggiorna
+        </button>
+</mat-dialog-actions>

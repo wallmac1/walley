@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModifyComponent } from './modify.component';
+import { UpdateQntUntComponent } from './update-qnt-unt.component';
 
-describe('ModifyComponent', () => {
-  let component: ModifyComponent;
-  let fixture: ComponentFixture<ModifyComponent>;
+describe('UpdateQntUntComponent', () => {
+  let component: UpdateQntUntComponent;
+  let fixture: ComponentFixture<UpdateQntUntComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModifyComponent]
+      imports: [UpdateQntUntComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ModifyComponent);
+    fixture = TestBed.createComponent(UpdateQntUntComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

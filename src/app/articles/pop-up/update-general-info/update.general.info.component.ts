@@ -5,9 +5,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Connect } from '../../../classes/connect';
+import { ApiResponse } from '../../../weco/interfaces/api-response';
 
 @Component({
-  selector: 'app-confirm',
+  selector: 'app-update-general-info',
   standalone: true,
   imports: [
     CommonModule,
@@ -15,28 +16,31 @@ import { Connect } from '../../../classes/connect';
     ReactiveFormsModule,
     MatDialogModule
   ],
-  templateUrl: './confirm.component.html',
-  styleUrl: './confirm.component.scss'
+  templateUrl: './update.general.info.component.html',
+  styleUrl: './update.general.info.component.scss'
 })
-export class ConfirmComponent {
+export class UpdateGeneralInfoComponent {
 
   isBothFalse = false;
-  id: number | null = null;
+  idarticle: number | null = null;
+  article: any = null;
 
   confirmForm = new FormGroup({
     update: new FormControl<boolean>(false),
     varies: new FormControl<boolean>(false)
   })
 
-  constructor(public dialogRef: MatDialogRef<ConfirmComponent>,
+  constructor(public dialogRef: MatDialogRef<UpdateGeneralInfoComponent>,
     private connectServerService: ConnectServerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     // Inizializza il form con i dati passati al dialog
-    this.id = data.articleid;
+    this.idarticle = data.idarticle;
+    this.article = data.article;
+
   }
 
   formLogic(type: number) {
-    if(this.isBothFalse == true) {
+    if (this.isBothFalse == true) {
       this.isBothFalse = false;
     }
     if (type == 1) {
@@ -57,7 +61,18 @@ export class ConfirmComponent {
     }
   }
 
-  confirm() {
+  updateArticle(action: number) {
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'articles/storeOrUpdateArticle',
+      {
+        idarticle: this.idarticle, title: this.article.title,
+        refidum: this.article.refidum, description: this.article.description,
+        note: this.article.note, action: action
+      }).subscribe((val: ApiResponse<any>) => {
+        this.dialogRef.close();
+      })
+  }
+
+  update() {
     let type = 0;
     if (this.confirmForm.get('update')?.value == true && this.confirmForm.get('varies')?.value == false) {
       type = 1;
@@ -65,17 +80,17 @@ export class ConfirmComponent {
     else if (this.confirmForm.get('update')?.value == false && this.confirmForm.get('varies')?.value == true) {
       type = 2;
     }
-    this.close(type);
+    this.updateArticle(type);
   }
 
   close(type: number | null) {
-    if(type != null && type != 0) {
+    if (type != null && type != 0) {
       this.dialogRef.close(type);
     }
-    else if(type == 0) {
+    else if (type == 0) {
       this.isBothFalse = true;
     }
-    else if(type == null) {
+    else if (type == null) {
       this.dialogRef.close(null);
     }
   }
