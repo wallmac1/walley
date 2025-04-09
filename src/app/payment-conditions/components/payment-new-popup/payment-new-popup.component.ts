@@ -37,7 +37,7 @@ export class PaymentNewPopupComponent {
     xml_code: new FormControl<number | null>(null, Validators.required),
     installments_number: new FormControl<number>(0, this.periodicityRequiredValidator()),
     periodicity: new FormControl<string | null>(null, this.maxIntegerValidator()),
-    deadline: new FormControl<string | null>(null, this.maxIntegerValidator()),
+    deadline: new FormControl<string | null>(null, [this.maxIntegerValidator(), Validators.required]),
     deadline_type: new FormControl<number | null>(null, [Validators.required, this.exactDaySelectedValidator()]),
     exact_day: new FormControl<string | null>(null, this.maxIntegerValidator(31)),
     bank_type: new FormControl<number | null>(null),
@@ -88,19 +88,19 @@ export class PaymentNewPopupComponent {
         periodicityControl?.enable({ emitEvent: false });
         periodicityControl?.addValidators([Validators.required, this.maxIntegerValidator()]);
         periodicityControl?.updateValueAndValidity({ emitEvent: false });
-        deadlineControl?.disable({ emitEvent: false });
-        deadlineControl?.setValue(null, { emitEvent: false });
-        deadlineControl?.clearValidators();
-        deadlineControl?.updateValueAndValidity({ emitEvent: false });
+        // deadlineControl?.disable({ emitEvent: false });
+        // deadlineControl?.setValue(null, { emitEvent: false });
+        // deadlineControl?.clearValidators();
+        // deadlineControl?.updateValueAndValidity({ emitEvent: false });
       } else {
         // Se installments_number <= 1, disabilita il campo periodicity
         periodicityControl?.disable({ emitEvent: false });
         periodicityControl?.setValue(null, { emitEvent: false });
         periodicityControl?.clearValidators();
         periodicityControl?.updateValueAndValidity({ emitEvent: false });
-        deadlineControl?.enable({ emitEvent: false });
-        deadlineControl?.addValidators([Validators.required, this.maxIntegerValidator()]);
-        deadlineControl?.updateValueAndValidity({ emitEvent: false });
+        // deadlineControl?.enable({ emitEvent: false });
+        // deadlineControl?.addValidators([Validators.required, this.maxIntegerValidator()]);
+        // deadlineControl?.updateValueAndValidity({ emitEvent: false });
       }
       return null;
     };

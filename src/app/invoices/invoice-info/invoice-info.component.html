@@ -24,8 +24,8 @@
                                 <i class="bi bi-search me-3 iconField search" (click)="selectCustomer()"
                                     [matTooltip]="'INVOICE.INFO.SEARCHCUSTOMER' | translate"></i>
                                 <i *ngIf="customer" class="bi bi-file-text me-3 iconField file"
-                                    (click)="modifyCustomerData()"
-                                    [matTooltip]="'INVOICE.INFO.MODIFYCUSTOMER' | translate"></i>
+                                    (click)="goToCustomerData()"
+                                    [matTooltip]="'INVOICE.INFO.GOTOREGISTRYCUSTOMER' | translate"></i>
                                 <i *ngIf="customer" class="bi bi-x-circle me-3 iconField xCircle"
                                     (click)="removeCustomer()"
                                     [matTooltip]="'INVOICE.INFO.DELETECUSTOMERINFO' | translate"></i>
@@ -98,7 +98,7 @@
                                     {{'INVOICE.INFO.PAYMENTS' | translate}}
                                 </div>
                                 <div class="col-12 ps-0 pe-0">
-                                    <app-payments [typeList]="paymentType" [conditionsList]="paymentCondition"
+                                    <app-payments [typeList]="paymentType" [conditionsList]="paymentConditions"
                                         [paymentTotal]="paymentTotal" [paymentTypeList]="paymentTypeList" 
                                         #paymentsComponent></app-payments>
                                 </div>

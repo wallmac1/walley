@@ -36,6 +36,8 @@ import { TicketModifyComponent } from './weco/tickets/ticket-modify/ticket-modif
 import { VatListMonitoringComponent } from './weco/vat-list-monitoring/vat-list-monitoring.component';
 import { CalendarContainerComponent } from './calendar/calendar-container/calendar-container.component';
 import { CoursesListComponent } from './courses/courses-list/courses-list.component';
+import { ArticleListComponent } from './articles/article-list/article-list.component';
+import { ArticleFindComponent } from './articles/article-find/article-find.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "login", pathMatch: "full" },
@@ -55,6 +57,8 @@ export const routes: Routes = [
     { path: "voucherList", component: VoucherListComponent },
     { path: "newArticle", component: ArticleNewComponent },
     { path: "article/:id", component: ArticleModifyComponent },
+    { path: "articleList", component: ArticleListComponent },
+    { path: "articleFind", component: ArticleFindComponent },
     { path: "invoiceList", component: InvoiceListComponent },
     { path: "invoice/:id", component: InvoiceInfoComponent },
     { path: "bankModify/:id", component: BankModifyComponent },

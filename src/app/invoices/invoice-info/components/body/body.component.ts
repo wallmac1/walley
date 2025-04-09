@@ -7,7 +7,6 @@ import { InvoiceBodyLine } from '../../../interfaces/invoice-body-line';
 import { MeasurementUnit } from '../../../../interfaces/measurement-unit';
 import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { debounceTime } from 'rxjs';
-import { InViewportDirective } from '../../../../directives/in-viewport.directive';
 import { AdditionalInfoComponent } from "./components/additional-info/additional-info.component";
 
 @Component({
@@ -127,7 +126,7 @@ export class BodyComponent {
         lineVatSummary.vat.value = this.vatList.find(vat => vat.id == line.get('vat')?.value)?.value ?? 0;
         // Calcola l'imposta sul totale in base al valore di iva appena recuperato
         lineVatSummary.total.tax = this.scientificRound((lineVatSummary.vat.value * 0.01) * parseFloat(lineVatSummary.total.taxable.replace(',', '.')));
-        
+
         if (arrayVatSummary.length > 0) {
           // Se è presente almeno un elemento nell'array, controlla se l'iva dell'oggetto corrente è uguale a quella di un altro elemento
           let foundSameVat: boolean = false;
@@ -266,7 +265,19 @@ export class BodyComponent {
   }
 
   duplicateLine(index: number) {
-    const duplicateLine = this.lines.at(index);
+    const copiedLine = this.lines.at(index).getRawValue();
+    let duplicateLine = this.fb.group({
+      id: [0],
+      description: [copiedLine.description],
+      refidum: [copiedLine.refidum],
+      quantity: [copiedLine.quantity],
+      price: [copiedLine.price],
+      total: [copiedLine.total],
+      vat: [copiedLine.vat],
+      stampLine: [false],
+      isAdditionalFieldOpen: [false],
+      discounts: this.fb.array([])
+    })
     this.lines.insert(index + 1, duplicateLine);
   }
 
@@ -333,7 +344,7 @@ export class BodyComponent {
       discounts.forEach((discount) => {
         discountArray.push(this.createDiscountLine(discount));
       });
-    } 
+    }
 
     return discountArray;
   }

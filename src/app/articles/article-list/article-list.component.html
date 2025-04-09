@@ -1,0 +1,198 @@
+<div class="container-fluid" style="position: relative;">
+    <div class="row justify-content-center align-items-center pt-4">
+        <div class="col-auto text-center ps-3 pe-3 pt-1 pb-1 titleColumn">
+            <span class="title">
+                {{"ARTICLE.ARTICLELIST.ARTICLELIST" | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center p-2 mt-4">
+        <div [formGroup]="filterForm" class="col-12 cardElement" style="max-width: 900px;">
+            <div class="row">
+                <div class="col-12 pb-1" style="border-bottom: 1px solid lightgrey;">
+                    <span class="titleFilters">
+                        {{"ARTICLE.ARTICLELIST.SEARCH" | translate}}
+                    </span>
+                </div>
+
+                <!-- TITLE -->
+                <div class="col-12 col-sm-6 mt-2">
+                    <label class="form-label" for="title">
+                        {{"ARTICLE.ARTICLELIST.TITLE" | translate}}</label>
+                    <input type="text" class="form-control" id="title" formControlName="title"
+                        [class.is-invalid]="filterForm.get('title')?.invalid && submitted">
+                </div>
+
+                <!-- CODE -->
+                <div class="col-12 col-sm-6 mt-2">
+                    <label class="form-label" for="fiscalcode">
+                        {{"ARTICLE.ARTICLELIST.CODE" | translate}}</label>
+                    <input type="text" class="form-control" id="code" formControlName="code"
+                        [class.is-invalid]="filterForm.get('code')?.invalid && submitted">
+                </div>
+            </div>
+
+            <div class="row mt-3 justify-content-end">
+                <div class="col-auto">
+                    <button class="btn btn-outline-dark" (click)="textFilter()">
+                        {{"ARTICLE.ARTICLELIST.FILTER" | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-auto text-center">
+            <!-- Contenitore scrollabile -->
+            <div class="alphabet-scroll-container">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li *ngFor="let letter of alphabeth" class="page-item">
+                            <a class="page-link clickableElement" [ngClass]="{'selectedLetter': letter.isSelected }"
+                                (click)="letterFilter(letter.id)">
+
+                                <ng-container *ngIf="letter.id === 27; else noTranslationBlock">
+                                    {{ "ARTICLE.ARTICLELIST.ALL" | translate }}
+                                </ng-container>
+                                <ng-template #noTranslationBlock>
+                                    {{ letter.name }}
+                                </ng-template>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 mt-4" style="max-width: 1200px;">
+            <div class="mat-elevation-z8 mb-2">
+
+                <div class="row justify-content-center p-3" style="border-radius: 20px;">
+                    <div class="d-none d-md-inline col-4 text-start">
+                        <span style="font-size: small;">
+                            {{"ARTICLE.ARTICLELIST.TOTALRESULTS" | translate }}:
+                            {{totalResults}}
+                        </span>
+                    </div>
+
+                    <div class="d-none d-md-inline col-4 text-center">
+                        <span style="font-size: small;">
+                            {{"ARTICLE.ARTICLELIST.OBJPERPAGE" | translate }}:
+                            {{itemsPerPage}}
+                        </span>
+                    </div>
+
+                    <div class="col-6 col-sm-12 col-md-4 text-end">
+                        <span>
+                            <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
+                                <i class="bi bi-caret-left"></i>
+                            </button>
+                            <span style="font-size: small;">{{"ARTICLE.ARTICLELIST.PAGE" | translate }}
+                                {{currentPage}} di
+                                {{totalPages}}
+                            </span>
+                            <button [disabled]="currentPage == totalPages" class="btn btn-link ms-2 p-0"
+                                (click)="nextPage()">
+                                <i class="bi bi-caret-right"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <table mat-table [dataSource]="dataSource" class="mat-table mb-5" matSort
+                    style="border-top: 1px solid lightgray;" matSortActive="lastupdate" matSortDirection="desc"
+                    matSortDisableClear>
+
+                    <!-- Id Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef class="text-center"
+                            style="width: 110px;">
+                            {{"ARTICLE.ARTICLELIST.ID" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                            {{ element.idarticle }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Code Column -->
+                    <ng-container matColumnDef="code">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-sm-table-cell limitedWidth"
+                            style="width: 160px;">
+                            {{"ARTICLE.ARTICLELIST.CODE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-sm-table-cell limitedWidth">
+                            {{element.code}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Title Column -->
+                    <ng-container matColumnDef="title">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-md-table-cell">
+                            {{"ARTICLE.ARTICLELIST.TITLE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-md-table-cell text-truncate">
+                            {{element.article_data.title}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Storage Unit -->
+                    <ng-container matColumnDef="total_unitstorage">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell"
+                            style="width: 120px;">
+                            {{"ARTICLE.ARTICLELIST.STORAGEUNIT" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell text-center">
+                            {{element.total_unitstorage}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Available Unit -->
+                    <ng-container matColumnDef="total_unitavailable">
+                        <th mat-header-cell *matHeaderCellDef
+                            style="width: 120px;">
+                            {{"ARTICLE.ARTICLELIST.AVAILABLEUNIT" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                            {{element.total_unitavailable}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Storage Quantity -->
+                    <ng-container matColumnDef="total_quantitystorage">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell"
+                            style="width: 120px;">
+                            {{"ARTICLE.ARTICLELIST.STORAGEQNT" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell text-center">
+                            {{element.total_quantitystorage}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Available Quantity -->
+                    <ng-container matColumnDef="total_quantityavailable">
+                        <th mat-header-cell *matHeaderCellDef style="width: 120px;">
+                            {{"ARTICLE.ARTICLELIST.AVAILABLEQNT" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                            {{element.total_quantityavailable}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Header and Row Definitions -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                        (click)="goToArticle(row.idarticle)">
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-outline-primary stickyButton btn-circle sticky-footer ms-2" (click)="createArticle()">
+        <i class="bi bi-plus-lg"></i>
+    </button>
+</div>

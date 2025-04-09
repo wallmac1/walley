@@ -30,7 +30,7 @@ export class ModifyPaymentPopupComponent {
   installment: { paymentType: {id: number, title: string}, deadline: string, amount: string } = 
     { paymentType: {id: 0, title: '--'}, deadline: '', amount: '' };
   idPopup: number = 0;
-  paymentTypeList: { id: number, title: string }[] = [];
+  paymentTypeList: { id: number, description: string, code: string }[] = [];
   paymentTotal: string = "0,00";
   bankList: { id: number, denomination: string, iban: string, abi: string, cab: string, bic: string }[] = [];
 

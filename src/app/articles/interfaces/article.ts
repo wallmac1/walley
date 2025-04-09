@@ -9,7 +9,7 @@ export interface Article {
     total_unitavailable: number;
     total_unitstorage: number;
     article_data: ArticleData;
-    article_price: ArticleStorage[];
+    article_storage: ArticleStorage[];
     management_sn: number; // 0 o 1
     management_qnt: number; // 0 o 1
 }

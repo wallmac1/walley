@@ -20,6 +20,8 @@ import { TotalComponent } from "./components/total/total.component";
 import { PaymentsComponent } from "./components/payments/payments.component";
 import { Router } from '@angular/router';
 import { StampComponent } from "./components/stamp/stamp.component";
+import { AutocompleteCustomer } from '../../customer/interfaces/autocomplete-customer';
+import { PaymentConditions } from '../../payment-conditions/interfaces/payment-conditions';
 
 @Component({
   selector: 'app-invoice-info',
@@ -47,7 +49,7 @@ export class InvoiceInfoComponent implements OnInit {
   @ViewChild(PaymentsComponent) paymentsComponent!: PaymentsComponent;
 
   // Info of the invoice
-  customer: Customer | null = null;
+  customer: AutocompleteCustomer | null = null;
   heading: InvoiceHeading | null = null;
   vatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] = [];
   totalSummary: { taxable: string, tax: string, notTaxable: string } = { taxable: "0,00", tax: "0,00", notTaxable: "0,00" };
@@ -58,10 +60,10 @@ export class InvoiceInfoComponent implements OnInit {
   formatList: { id: number, code: string, description: string }[] = [];
   currencyList: { id: number, code: string, description: string }[] = [];
   paymentType: { id: number, title: string }[] = [];
-  paymentCondition: { id: number, title: string }[] = [];
+  paymentConditions: PaymentConditions[] = [];
   umList: MeasurementUnit[] = [];
   vatList: { id: number, name: string, value: number }[] = [];
-  paymentTypeList: { id: number, title: string }[] = [];
+  paymentTypeList: { id: number, description: string, code: string }[] = [];
   conditionsList: { id: number, title: string }[] = [];
 
   constructor(public dialog: MatDialog, private connectServerService: ConnectServerService,
@@ -73,6 +75,8 @@ export class InvoiceInfoComponent implements OnInit {
     this.getCurrencies();
     this.getSelectOptions();
     this.getInvoiceInfo();
+    this.getPaymentTypeList();
+    this.getPaymentConditions();
   }
 
   private getTipiDocumento() {
@@ -83,6 +87,7 @@ export class InvoiceInfoComponent implements OnInit {
         }
       })
   }
+
   private getFormatoTrasmissione() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/formatiTrasmissione', {})
       .subscribe((val: ApiResponse<{ formatoTrasmissione: { id: number, code: string, description: string }[] }>) => {
@@ -92,11 +97,29 @@ export class InvoiceInfoComponent implements OnInit {
       })
   }
 
+  private getPaymentConditions() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/condizioniPagamento', {})
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.paymentConditions = val.data.conditions;
+        }
+      })
+  }
+
   private getCurrencies() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/currenciesList', {})
       .subscribe((val: ApiResponse<{ currenciesList: { id: number, code: string, description: string }[] }>) => {
         if (val.data) {
           this.currencyList = val.data.currenciesList;
+        }
+      })
+  }
+
+  private getPaymentTypeList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/modalitaPagamento', {})
+      .subscribe((val: ApiResponse<any>) => {
+        if (val.data) {
+          this.paymentTypeList = val.data.modalitaPagamento;
         }
       })
   }
@@ -134,55 +157,18 @@ export class InvoiceInfoComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log()
+        console.log(result);
         this.customer = result;
       }
     });
   }
 
-  modifyCustomerData() {
-    const dialogRef = this.dialog.open(ModifyCustomerPopupComponent, {
-      maxWidth: '900px',
-      minWidth: '350px',
-      maxHeight: '500px',
-      width: '90%',
-      data: { customer: this.customer }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.customer = result;
-      }
-    });
+  goToCustomerData() {
+    this.router.navigate(['customer/edit', this.customer?.idregistry]);
   }
 
   removeCustomer() {
     this.customer = null;
-  }
-
-  getCustomerData(id: number) {
-    // CHIAMATA AL SERVER PER OTTENERE I DATI DEL CLIENTE
-    this.customer = {
-      rifidanacliforprodati: 12345,
-      id: 1,
-      denominazione: "Wallnet snc di Banchi Leonardo e Andrea Margheri",
-      codicefiscale: "123A",
-      cognome: "Rossi",
-      data_nascita: "1985-05-20",
-      email: "mario.rossi@example.com",
-      nome: "Mario",
-      piva: "IT98765432109",
-      telefono: "+39 055 123456",
-      type: "Azienda",
-      address: "Via Roma",
-      pec: "info@wallnet.it",
-      sdi: "ABC1234",
-      cap: "50100",
-      city: "Firenze",
-      house_number: "25A",
-      country: 12,
-      region: "Firenze"
-    };
   }
 
   deleteStampLine() {
@@ -243,30 +229,7 @@ export class InvoiceInfoComponent implements OnInit {
       }
     ];
 
-    this.paymentType = [{
-      id: 1,
-      title: "Completo"
-    }, {
-      id: 2,
-      title: "A rate"
-    },
-    {
-      id: 3,
-      title: "Anticipo"
-    }];
-
-    this.paymentCondition = [{
-      id: 1,
-      title: "Contanti"
-    }, {
-      id: 2,
-      title: "Assegno"
-    }, {
-      id: 3,
-      title: "Bonifico"
-    }];
-
-    this.paymentTypeList = [
+    this.paymentType = [
       {
         id: 0, title: "--"
       },

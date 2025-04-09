@@ -747,6 +747,37 @@
       "UPDATEQUANTITY": "Aggiorna Quantità",
       "DELETEUNITS": "Elimina Unità",
       "INSERTUNITS": "Inserisci Unità"
+    },
+    "ARTICLELIST": {
+      "ARTICLELIST": "LISTA ARTICOLI",
+      "SEARCH": "Ricerca Articolo",
+      "TITLE": "Titolo",
+      "CODE": "Codice",
+      "FILTER": "Filtra",
+      "ALL": "Tutti",
+      "TOTALRESULTS": "Risultati Totali",
+      "OBJPERPAGE": "Risultati per Pagina",
+      "PAGE": "Pagina",
+      "ID": "ID",
+      "STORAGEUNIT": "Unt. Magaz.",
+      "STORAGEQNT": "Qnt. Magaz.",
+      "AVAILABLEUNIT": "Unt. Disp.",
+      "AVAILABLEQNT": "Qnt. Disp."
+    },
+    "ARTICLEFIND": {
+      "SEARCHSN": "RICERCA SERIAL NUMBER",
+      "SEARCH": "Autocomplete   Ricerca",
+      "SERIALNUMBER": "Serial Number",
+      "ARTICLEINFO": "Informazioni Articolo",
+      "TITLE": "Titolo",
+      "CODE": "Codice",
+      "PROGRESSIVE": "Progressivo",
+      "MANAGESN": "Gestione dei Serial Number",
+      "MANAGEQNT": "Gestione delle quantità",
+      "ID": "ID",
+      "TYPE": "Tipo",
+      "DATE": "Data",
+      "FILE": "File"
     }
   },
   "INVOICE": {
@@ -807,10 +838,13 @@
         "COUNTRY": "Paese",
         "PHONE": "Telefono",
         "EMAIL": "Email",
-        "REGION": "Provincia",
+        "REGION": "Regione",
+        "PROVINCE": "Provincia",
         "PEC": "PEC",
         "SDI": "SDI",
-        "NUMBERSHORT": "N."
+        "NUMBERSHORT": "N.",
+        "PERSON": "Persona Fisica",
+        "COMPANY": "Azienda"
       },
       "VATCOMPONENT": {
         "VATNATURE": "IVA - Natura",
@@ -1162,7 +1196,7 @@
       "MANDATORYFIELDS": "Compilare tutti i campi obbligatori",
       "PAYMENTCONDITIONS": "Condizioni di Pagamento",
       "ADDPAYMENTCONDITIONS": "Inserisci Condizione di Pagamento",
-      "DEADLINETOOLTIP": "Campo obbligatorio se il numero di rate è pari ad 1. Valore numerico intero",
+      "DEADLINETOOLTIP": "Campo obbligatorio che indica l'offset di scadenza del primo pagamento a partire dalla data odierna. Valore numerico intero",
       "PERIODICITYTOOLTIP": "Campo obbligatorio se il numero di rate è maggiore di 1. Valore numerico intero",
       "EXACTDAYTOOLTIP": "Campo obbligatorio se il tipo di scadenza è 'giorno esatto'. Valore numerico compreso tra 1 e 31",
       "SEARCH": "Ricerca",

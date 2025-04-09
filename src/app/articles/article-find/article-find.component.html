@@ -1,0 +1,173 @@
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center pt-4">
+        <div class="col-auto text-center ps-3 pe-3 pt-1 pb-1 titleColumn">
+            <span class="title">
+                {{"ARTICLE.ARTICLEFIND.SEARCHSN" | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div class="row justify-content-center p-2 mt-4">
+        <div [formGroup]="filterForm" class="col-12 cardElement" style="max-width: 600px;">
+            <div class="row">
+                <div class="col-12 pb-1" style="border-bottom: 1px solid lightgrey;">
+                    <span class="titleFilters">
+                        {{"ARTICLE.ARTICLEFIND.SEARCH" | translate}}
+                    </span>
+                </div>
+
+                <div class="col-12 mt-2">
+                    <!-- AUTOCOMPLETE SERIALNUMBER -->
+                    <label class="form-label" for="serialnumber">
+                        {{"ARTICLE.ARTICLEFIND.SERIALNUMBER" | translate}}</label>
+                    <input type="text" matInput [matAutocomplete]="serialnumber" class="form-control" id="serialnumber"
+                        formControlName="serialnumber" [class.is-invalid]="filterForm.get('serialnumber')?.invalid">
+                    <mat-autocomplete #serialnumber="matAutocomplete" [displayWith]="displaySerialNumber">
+                        <mat-option *ngFor="let option of filteredSerialnumber$ | async" [value]="option">
+                            <div>
+                                {{option.serialnumber}}
+                                <span *ngIf="option.title" class="truncate-text">
+                                    -
+                                    {{option.title}}
+                                </span>
+                                <span *ngIf="option.code">
+                                    -
+                                    {{option.code}}
+                                </span>
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARTICLE INFO -->
+    <div *ngIf="article != null" class="row">
+        <div class="col-12 cardElement p-2" style="max-width: 1200px;">
+            <div class="row mt-1 mb-1" style="border-bottom: 1px solid lightgray;">
+                <div class="col-12">
+                    {{"ARTICLE.ARTICLEFIND.ARTICLEINFO" | translate}}
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-6">
+                    <span class="infoTitle">
+                        {{"ARTICLE.ARTICLEFIND.TITLE" | translate}}:
+                    </span>
+                    <span class="ms-2 infoBody">
+                        {{article.article_data.title}}
+                    </span>
+                </div>
+                <div class="col-12 col-sm-3">
+                    <span class="infoTitle">
+                        {{"ARTICLE.ARTICLEFIND.CODE" | translate}}:
+                    </span>
+                    <span class="ms-2 infoBody">
+                        {{article.code}}
+                    </span>
+                </div>
+                <div class="col-12 col-sm-3">
+                    <span class="infoTitle">
+                        {{"ARTICLE.ARTICLEFIND.PROGRESSIVE" | translate}}:
+                    </span>
+                    <span class="ms-2 infoBody">
+                        {{article.progressive}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <span>
+                        {{"ARTICLE.ARTICLEFIND.MANAGESN" | translate}}: 
+                        {{article.management_sn == 1 ? 'Si' : 'No'}}
+                    </span>
+                </div>
+                <div class="col-6">
+                    <span>
+                        {{"ARTICLE.ARTICLEFIND.MANAGEQNT" | translate}}: 
+                        {{article.management_qnt == 1 ? 'Si' : 'No'}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 mt-4" style="max-width: 1200px;">
+            <div class="mat-elevation-z8 mb-2">
+                <table mat-table [dataSource]="dataSource" class="mat-table mb-5" matSort
+                    style="border-top: 1px solid lightgray;" matSortActive="lastupdate" matSortDirection="desc"
+                    matSortDisableClear>
+
+                    <!-- Id Column -->
+                    <ng-container matColumnDef="iddocument">
+                        <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">
+                            {{"ARTICLE.ARTICLEFIND.ID" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                            {{ element.iddocument }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Progressive Column -->
+                    <ng-container matColumnDef="progressive">
+                        <th mat-header-cell *matHeaderCellDef style="width: 100px;" class="text-center">
+                            {{"ARTICLE.ARTICLEFIND.PROGRESSIVE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                            {{element.progressive}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Title Column -->
+                    <ng-container matColumnDef="title">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-md-table-cell">
+                            {{"ARTICLE.ARTICLEFIND.TITLE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-md-table-cell text-truncate">
+                            {{element.title}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Type Column -->
+                    <ng-container matColumnDef="type">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell" style="width: 200px;">
+                            {{"ARTICLE.ARTICLEFIND.TYPE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell text-center">
+                            {{element.total_unitstorage}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Date Column -->
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef style="width: 120px;">
+                            {{"ARTICLE.ARTICLEFIND.DATE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                            {{element.document_tade}}
+                        </td>
+                    </ng-container>
+
+                    <!-- File Column -->
+                    <ng-container matColumnDef="file">
+                        <th mat-header-cell *matHeaderCellDef class="d-none d-lg-table-cell" style="width: 100px;">
+                            {{"ARTICLE.ARTICLEFIND.FILE" | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="d-none d-lg-table-cell text-center">
+                            {{element.total_quantitystorage}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Header and Row Definitions -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

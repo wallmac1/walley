@@ -12,9 +12,14 @@
 
 .iconField {
     font-size: 20px;
-    transition: font-size 0.5s ease !important;
+    transition: all 0.5s ease !important;
     // position: absolute;
     // top: 12px;
+}
+
+.iconField:hover {
+    font-size: 22px;
+    cursor: pointer;
 }
 
 .btn-outline-dark {
@@ -62,11 +67,6 @@
 //         left: 28%;
 //     }
 // }
-
-.iconField:hover {
-    font-size: 24px;
-    cursor: pointer;
-}
 
 .selectCustomer {
     padding-top: 0.2rem;
