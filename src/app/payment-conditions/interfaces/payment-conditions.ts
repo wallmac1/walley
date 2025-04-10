@@ -8,6 +8,6 @@ export interface PaymentConditions {
     deadline: string | null;
     deadline_type: number | null;
     exact_day: string | null;
-    bank: number | null; 
+    bank_type: {id: number, type: string } | null; 
     notes: string | null;
 }

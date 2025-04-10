@@ -171,7 +171,7 @@
         </div>
 
         <div *ngIf="management_type != 0" class="row justify-content-center align-items-center mt-2 pb-2"
-            [ngStyle]="{'border-bottom': generated && management_type != 0 ? '1px solid lightgray' : 'none'}">
+            [ngStyle]="{'border-bottom': generated && management_type != 0 ? '2px solid lightgray' : 'none'}">
             <div class="col-auto">
                 <button class="btn btn-outline-dark" (click)="generateArticles()">
                     <span *ngIf="!generated">
@@ -192,7 +192,7 @@
                 <div class="col-12 col-md-4">
                     <div class="row align-items-top justify-content-end me-1">
                         <div class="col-2 mt-3">
-                            <span style="font-weight: bold; font-size: large;">
+                            <span style="font-weight: bold; font-size: large; color: black;">
                                 {{i+1}}
                             </span>
                         </div>

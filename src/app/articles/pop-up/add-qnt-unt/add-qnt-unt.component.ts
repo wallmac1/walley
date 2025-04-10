@@ -32,7 +32,7 @@ export class AddQntUntComponent {
     qnt_available: new FormControl<number | null>(null),
     unit_taxablepurchase: new FormControl<string | null>(null, this.numberWithCommaValidator()),
     unit_taxablerecommended: new FormControl<string | null>(null, this.numberWithCommaValidator()),
-    serialnumber: new FormControl<string | null>(null, this.numberWithCommaValidator()),
+    serialnumber: new FormControl<string | null>(null),
     vatrecommended: new FormControl<string | null>(null, this.integerRangeValidator()),
     vatpurchase: new FormControl<string | null>(null, this.integerRangeValidator()),
     pricerecommended: new FormControl<string | null>({ value: null, disabled: true }),
@@ -188,17 +188,23 @@ export class AddQntUntComponent {
   }
 
   addUnits() {
-    let units: any = null;
+    let lines: any[] = [];
     if (this.management_type == 0) {
-      units = this.generationForm.getRawValue();
+      lines.push(this.generationForm.getRawValue());
     }
     else {
-      units = this.serialNumberForm.get('articles')?.getRawValue();
+      lines = this.serialNumberForm.get('articles')?.getRawValue();
+    }
+    for(let i = 0; i < lines.length; i++) {
+      lines[i].unit_taxablepurchase = parseFloat(lines[0].unit_taxablepurchase?.replace(',', '.') || null);
+      lines[i].unit_taxablerecommended = parseFloat(lines[0].unit_taxablerecommended?.replace(',', '.') || null);
+      lines[i].vatrecommended = parseFloat(lines[0].vatrecommended || null);
+      lines[i].vatpurchase = parseFloat(lines[0].vatpurchase || null);
     }
     this.connectServerService.postRequest(Connect.urlServerLaraApi, 'articles/addArticlePrices',
-      { idarticle: this.idarticle, units: units })
+      { idarticle: this.idarticle, lines: lines })
       .subscribe((val: ApiResponse<any>) => {
-
+        this.dialogRef.close();
       })
   }
 

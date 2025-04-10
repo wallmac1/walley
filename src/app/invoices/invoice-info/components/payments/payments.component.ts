@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, SimpleChanges } from '@angular/core';
 import { Form, FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,6 +7,7 @@ import { InstallmentsTable } from '../../../interfaces/installments-table';
 import { MatDialog } from '@angular/material/dialog';
 import { ModifyPaymentPopupComponent } from './components/modify-payment-popup/modify-payment-popup.component';
 import { PaymentConditions } from '../../../../payment-conditions/interfaces/payment-conditions';
+import { PaymentData } from '../../../../customer/interfaces/payment-data';
 
 @Component({
   selector: 'app-payments',
@@ -30,6 +31,7 @@ export class PaymentsComponent {
   @Input() paymentTypeList: { id: number, description: string, code: string }[] = [];
   @Input() conditionsList: PaymentConditions[] = [];
   @Input() paymentTotal: string = "0,00";
+  @Input() paymentMethod: PaymentData | null = null;
   paymentForm!: FormGroup;
 
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef, private dialog: MatDialog) {
@@ -49,13 +51,23 @@ export class PaymentsComponent {
     this.checkTotal();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['paymentMethod'] && changes['paymentMethod'].currentValue !== changes['paymentMethod'].previousValue
+      && this.paymentMethod != null) {
+      const selectedCondition = this.conditionsList.find((val) => val.id == this.paymentMethod?.payment_method);
+      if (selectedCondition) {
+        this.paymentForm.get('condition')?.setValue(selectedCondition);
+      }
+    }
+  }
+
   get installments(): FormArray {
     return this.paymentForm.get('installments') as FormArray;
   }
 
   addInstallment(installment: {
     paymentType: { id: number, description: string, code: string },
-    deadline: string, amount: string, bank: { id: number; denomination: string } | null
+    deadline: string, amount: string, bank: { iban: string; abi: string; bic: string; cab: string; cc: string; denomination: string } | null
   }) {
     this.installments.push(this.fb.group({
       paymentType: [installment.paymentType],
@@ -70,54 +82,54 @@ export class PaymentsComponent {
 
   }
 
-  // ADD DAYS TO A DATE
-  private addDaysToDate(date: Date, days: number): Date {
-    let result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-  }
-
-  // TODO: TROVARE UN MODO PER PASSARE INSTALLMENTNUMBER E DAYSOFFSET
   calculateTotal() {
     const paymentTotalNumber = parseFloat(this.paymentTotal.replace(',', '.'));
     if (paymentTotalNumber != 0 && this.paymentForm.get('condition')?.value != null) {
       // A seconda delle condizioni di pagamento, calcolare il totale e le rate
       let paymentType = { id: 0, description: '--', code: '--' };
       let amount = '0,00';
-      //this.installments.clear();
       this.installments.controls.splice(0, this.installments.length);
-      console.log(this.paymentForm.get('condition')?.value);
 
       if (this.paymentForm.get('condition')?.value.installments_number == 1) {
         // COMPLETO
         amount = this.paymentTotal;
 
-        // a seconda della data di scadenza preimpostata, calcolare deadline
-        let deadline = this.calculateDeadline( new Date(), this.paymentForm.get('condition')?.value.deadline_type,
+        // A seconda della data di scadenza preimpostata, calcolare deadline
+        let deadline = this.calculateDeadline(new Date(), this.paymentForm.get('condition')?.value.deadline_type,
           this.paymentForm.get('condition')?.value.deadline, this.paymentForm.get('condition')?.value.exact_day);
 
-        // TODO: a seconda del pagamento impostato assegnare paymentType
+        // A seconda del pagamento impostato assegnare paymentType
+        paymentType = this.paymentForm.get('condition')?.value.xml_code;
 
-        this.addInstallment({ paymentType: paymentType, deadline: deadline.toISOString().split('T')[0], amount: amount, bank: null });
+        // Assegna la banca se c'è una preferita
+        let selectedBank = this.selectBank();
+
+        this.addInstallment({ paymentType: paymentType, deadline: deadline.toISOString().split('T')[0], amount: amount, bank: selectedBank });
       }
       else if (this.paymentForm.get('condition')?.value.installments_number > 1) {
         // A RATE
         const installmentNumber: number = this.paymentForm.get('condition')?.value.installments_number;
         let daysOffset: number = this.paymentForm.get('condition')?.value.deadline;
+
         // Dividi il totale in rate e fai un ciclo di inserimento di installments
         amount = (parseFloat(this.paymentTotal.replace(',', '.')) / installmentNumber).toFixed(2).replace('.', ',');
         let difference = Math.ceil((parseFloat(this.paymentTotal.replace(',', '.')) - (parseFloat(amount.replace(',', '.')) * installmentNumber)) * 100) / 100;
-        //console.log("DIFFERENCE", difference)
+
+        paymentType = this.paymentForm.get('condition')?.value.xml_code;
+
+        // Ciclo per la creazione delle rate e della deadline
         let currentBaseDate = new Date();
         for (let i = 0; i < installmentNumber; i++) {
           // Calcola la data dell'attuale pagamento
-          const dueDate = this.calculateDeadline(currentBaseDate, this.paymentForm.get('condition')?.value.deadline_type, 
+          const dueDate = this.calculateDeadline(currentBaseDate, this.paymentForm.get('condition')?.value.deadline_type,
             daysOffset, this.paymentForm.get('condition')?.value.exact_day);
+          // seleziona banca
+          const selectedBank = this.selectBank();
           if (installmentNumber - i == 1) {
             // Se è l'utima rata, aggiungi la differenza al primo pagamento
             amount = (parseFloat(amount.replace(',', '.')) + difference).toFixed(2).replace('.', ',');
           }
-          this.addInstallment({ paymentType: paymentType, deadline: dueDate.toISOString().split('T')[0], amount: amount, bank: null });
+          this.addInstallment({ paymentType: paymentType, deadline: dueDate.toISOString().split('T')[0], amount: amount, bank: selectedBank });
           currentBaseDate = dueDate;
           daysOffset = this.paymentForm.get('condition')?.value.periodicity
         }
@@ -128,11 +140,13 @@ export class PaymentsComponent {
       //this.installments.clear();
     }
     this.dataSource.data = this.installments.getRawValue();
+    this.checkTotal();
   }
 
   editOrAddPayment(index: number | null, idPopup: number) {
     // idpopup: 1 modify, 2 add
-    let installment = { paymentType: { id: 0, title: '--' }, deadline: '', amount: '' };
+    let installment = { paymentType: { id: null, title: '--' }, deadline: '', amount: '', 
+      bank: {iban: '', abi: '', bic: '', cab: '', cc: '', denomination: '' } };
     if (index != null) {
       installment = this.installments.at(index).getRawValue();
     }
@@ -150,12 +164,12 @@ export class PaymentsComponent {
 
     matDialog.afterClosed().subscribe((result: any) => {
       if (result && result.installment) {
-        console.log(this.paymentTypeList.find((type) => type.id == result.installment.paymentType))
+        //console.log(this.paymentTypeList.find((type) => type.id == result.installment.paymentType))
         const installment = {
           paymentType: this.paymentTypeList.find((type) => type.id == result.installment.paymentType)!,
           deadline: result.installment.deadline,
           amount: result.installment.amount,
-          bank: null
+          bank: result.bank,
         }
         if (idPopup == 1) {
           this.installments.at(index!).patchValue(installment);
@@ -168,10 +182,36 @@ export class PaymentsComponent {
     });
   }
 
+  selectBank() {
+    let selectedBank = null;
+    if (this.paymentMethod != null && this.paymentForm.get('condition')?.value.bank_type != null) {
+      if (this.paymentForm.get('condition')?.value.bank_type.id == 1) { // Banca Azienda
+        selectedBank = {
+          iban: this.paymentMethod.company_iban || '',
+          abi: this.paymentMethod.company_abi || '',
+          bic: this.paymentMethod.company_bic || '',
+          cab: this.paymentMethod.company_cab || '',
+          cc: this.paymentMethod.company_cc || '',
+          denomination: this.paymentMethod.company_denomination || '',
+        }
+      }
+      else if (this.paymentForm.get('condition')?.value.bank_type.id == 2) { // Banca Cliente
+        selectedBank = {
+          iban: this.paymentMethod.customer_iban || '',
+          abi: this.paymentMethod.customer_abi || '',
+          bic: this.paymentMethod.customer_bic || '',
+          cab: this.paymentMethod.customer_cab || '',
+          cc: this.paymentMethod.customer_cc || '',
+          denomination: this.paymentMethod.customer_denomination || '',
+        }
+      }
+    }
+    return selectedBank;
+  }
+
   calculateDeadline(baseDate: Date, deadline_type: { id: number, name: string }, deadline: number, exact_day: number): Date {
     let result = new Date(baseDate);
     result.setDate(result.getDate() + deadline);
-    console.log(result)
 
     switch (deadline_type.id) {
       case 1:
@@ -188,7 +228,6 @@ export class PaymentsComponent {
       case 3:
         let trialDate = new Date(result);
         trialDate.setDate(exact_day);
-        console.log(trialDate)
         if (trialDate < result || trialDate.getDate() !== exact_day) {
           // giorno già passato o non esiste in questo mese cerca il prossimo mese valido
           for (let i = 1; i <= 12; i++) {
@@ -217,10 +256,14 @@ export class PaymentsComponent {
     if (total != parseFloat(this.paymentTotal.replace(',', '.'))) {
       this.isNotCorresponding = true;
     }
+    else {
+      this.isNotCorresponding = false;
+    }
   }
 
   deletePayment(index: number) {
-    this.installments.removeAt(index);
+    this.installments.controls.splice(index, 1);
+    this.dataSource.data = this.installments.getRawValue();
   }
 
 }

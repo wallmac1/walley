@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TicketNewComponent } from './ticket-new.component';
+import { WecoTicketNewComponent } from './weco-ticket-new.component';
 
-describe('TicketNewComponent', () => {
-  let component: TicketNewComponent;
-  let fixture: ComponentFixture<TicketNewComponent>;
+describe('WecoTicketNewComponent', () => {
+  let component: WecoTicketNewComponent;
+  let fixture: ComponentFixture<WecoTicketNewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TicketNewComponent]
+      imports: [WecoTicketNewComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TicketNewComponent);
+    fixture = TestBed.createComponent(WecoTicketNewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

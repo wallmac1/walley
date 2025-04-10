@@ -5,7 +5,6 @@ import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansi
 import { TranslateModule } from '@ngx-translate/core';
 import { InViewportDirective } from '../../../directives/in-viewport.directive';
 import { TicketInfo } from '../interfaces/ticket-info';
-import { MatIcon } from '@angular/material/icon';
 import { Image } from '../../interfaces/image';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,7 +23,7 @@ import { InchargeReleasePopupComponent } from './components/incharge-release-pop
 import { DeleteTicketPopupComponent } from './components/delete-ticket-popup/delete-ticket-popup.component';
 
 @Component({
-  selector: 'app-ticket-modify',
+  selector: 'app-weco-ticket-modify',
   standalone: true,
   imports: [
     CommonModule,
@@ -35,10 +34,10 @@ import { DeleteTicketPopupComponent } from './components/delete-ticket-popup/del
     MatMenuModule,
     QuillModule
   ],
-  templateUrl: './ticket-modify.component.html',
-  styleUrl: './ticket-modify.component.scss'
+  templateUrl: './weco-ticket-modify.component.html',
+  styleUrl: './weco-ticket-modify.component.scss'
 })
-export class TicketModifyComponent {
+export class WecoTicketModifyComponent {
 
   @ViewChild('panel') panelComponent!: MatExpansionPanel;
   @ViewChild('bottomAnchor') bottomAnchor!: ElementRef;

@@ -46,7 +46,7 @@
                 <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCustomerName">
                     <mat-option *ngFor="let option of filteredCustomer$ | async" [value]="option">
                         <div>
-                            {{option.denominazione}}
+                            {{option.denomination}}
                         </div>
                     </mat-option>
                 </mat-autocomplete>
@@ -57,9 +57,18 @@
                 <label for="location" class="form-label">Location</label>
                 <select id="location" class="form-select" formControlName="location">
                     <option [ngValue]="null">--</option>
-                    <option *ngFor="let location of locations" [ngValue]="location.id">
-                        {{location.city}},
-                        {{location.address}}</option>
+                    <option *ngFor="let location of locations" [ngValue]="location.idlocation">
+                        <span *ngIf="location.country == 12; else notItalianBlock">
+                            {{location.city_it?.name}} ({{location.city_it?.province_acronym}}) -
+                        </span>
+                        <ng-template #notItalianBlock>
+                            {{location.city}} -
+                            <span *ngIf="location.province">
+                                {{location.province}} -
+                            </span>
+                        </ng-template>
+                        {{location.street}}
+                    </option>
                 </select>
             </div>
 

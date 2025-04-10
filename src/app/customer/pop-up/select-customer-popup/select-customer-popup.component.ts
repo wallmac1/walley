@@ -7,11 +7,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Customer } from '../../../tickets/interfaces/customer';
 import { debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { Connect } from '../../../classes/connect';
 import { ApiResponse } from '../../../weco/interfaces/api-response';
 import { AutocompleteCustomer } from '../../interfaces/autocomplete-customer';
+import { PaymentData } from '../../interfaces/payment-data';
 
 @Component({
   selector: 'app-select-customer-popup',
@@ -31,6 +31,7 @@ import { AutocompleteCustomer } from '../../interfaces/autocomplete-customer';
 export class SelectCustomerPopupComponent {
 
   filteredCustomer$!: Observable<AutocompleteCustomer[]>;
+  paymentMethod: PaymentData | null = null;
   submitted: boolean = false;
 
   customerForm = new FormGroup({
@@ -87,10 +88,21 @@ export class SelectCustomerPopupComponent {
       })
   }
 
+  getPaymentData() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/paymentFavorite', 
+      { idregistry: this.customerForm.get('customer')?.value?.idregistry })
+      .subscribe((val) => {
+        if (val.data) {
+          this.paymentMethod = val.data.paymentData;
+          this.dialogRef.close({customer: this.customerForm.value.customer, paymentMethod: this.paymentMethod});
+        }
+      })
+  }
+
   confirm() {
     this.submitted = true;
     if (this.customerForm.valid) {
-      this.dialogRef.close(this.customerForm.value.customer);
+      this.getPaymentData();
     }
   }
 

@@ -3,13 +3,13 @@
     <!-- COLUMN HEADING -->
     <div *ngIf="!isSmallScreen" class="row justify-content-center align-items-center"
         style="border-bottom: 1px solid lightgray;">
-        <div class="col-4 columnTitle">
+        <div class="col-5 columnTitle">
             {{'INVOICE.INFO.VATCOMPONENT.VATNATURE' | translate}}
         </div>
         <div class="col-3 columnElement columnTitle">
             {{'INVOICE.INFO.VATCOMPONENT.COLLECTABILITY' | translate}}
         </div>
-        <div class="col-3 columnElement columnTitle">
+        <div class="col-2 columnElement columnTitle">
             {{'INVOICE.INFO.VATCOMPONENT.TAXABLE' | translate}}
         </div>
         <div class="col-2 columnElement columnTitle">
@@ -23,37 +23,48 @@
             style="border-bottom: 1px solid lightgray;">
 
             <!-- VAT - NATURE -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-5">
                 <label *ngIf="isSmallScreen" class="form-label" for="vat-{{i}}">
                     {{'INVOICE.INFO.VATCOMPONENT.VATNATURE' | translate}}
                 </label>
                 <span id="vat-{{i}}">
-                    {{lines.at(i).get('vat')?.value}}
+                    <span style="vertical-align: middle;">
+                        {{lines.at(i).get('vat')?.value.code_internal}}
+                    </span>
+                    <span *ngIf="!startsWithNumber(lines.at(i).get('vat')?.value.code_internal)" style="vertical-align: middle;">
+                        - {{lines.at(i).get('vat')?.value.code}}
+                    </span>
+                    <span *ngIf="lines.at(i).get('vat')?.value.description" class="truncate-description"
+                        [matTooltip]="lines.at(i).get('vat')?.value.description">
+                        - {{lines.at(i).get('vat')?.value.description}}
+                    </span>
                 </span>
             </div>
 
             <!-- COLLECTABILITY -->
             <div class="col-12 col-sm-6 col-lg-3">
-                <label *ngIf="isSmallScreen" class="form-label" for="collectability-{{i}}">
-                    {{'INVOICE.INFO.VATCOMPONENT.COLLECTABILITY' | translate}}
-                </label>
-                <select class="form-select" formControlName="collectability" id="collectability-{{i}}"
-                    [class.is-invalid]="vatForm.get('collectability')?.invalid && submitted">
-                    <option [ngValue]="null">
-                        <span class="optionText">
-                            --
-                        </span>
-                    </option>
-                    <option *ngFor="let collect of collectabilityList" [ngValue]="collect.id">
-                        <span class="optionText">
-                            {{collect.name}}
-                        </span>
-                    </option>
-                </select>
+                <ng-container *ngIf="lines.at(i).get('vat')?.value.value == 0">
+                    <label *ngIf="isSmallScreen" class="form-label" for="collectability-{{i}}">
+                        {{'INVOICE.INFO.VATCOMPONENT.COLLECTABILITY' | translate}}
+                    </label>
+                    <select class="form-select" formControlName="collectability" id="collectability-{{i}}"
+                        [class.is-invalid]="vatForm.get('collectability')?.invalid && submitted">
+                        <option [ngValue]="null">
+                            <span class="optionText">
+                                --
+                            </span>
+                        </option>
+                        <option *ngFor="let collect of collectabilityList" [ngValue]="collect.id">
+                            <span class="optionText">
+                                {{collect.name}}
+                            </span>
+                        </option>
+                    </select>
+                </ng-container>
             </div>
 
             <!-- TAXABLE -->
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-2">
                 <label *ngIf="isSmallScreen" class="form-label" for="taxable-{{i}}">
                     {{'INVOICE.INFO.VATCOMPONENT.TAXABLE' | translate}}
                 </label>

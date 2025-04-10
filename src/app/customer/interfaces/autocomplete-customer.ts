@@ -1,5 +1,6 @@
 export interface AutocompleteCustomer {
     idregistry: number;
+    idregistrydata?: number;
     denomination: string;
     fiscalcode: string;
     vat: string;

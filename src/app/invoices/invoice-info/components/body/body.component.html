@@ -118,7 +118,7 @@
                 </div>
 
                 <!-- VAT -->
-                <div class="col-4 col-sm-3 col-md-2 col-xl-1 vatElement" style="padding-right: 0.75rem;">
+                <div class="col-4 col-sm-3 col-md-2 col-xl-1 vatElement">
                     <label *ngIf="isSmallScreen" class="form-label" for="vat-{{i}}">
                         {{'INVOICE.INFO.BODYCOMPONENT.VAT' | translate}}
                     </label>
@@ -129,9 +129,15 @@
                                 --
                             </span>
                         </option>
-                        <option *ngFor="let vat of vatList" [ngValue]="vat.id">
+                        <option *ngFor="let vat of vatList" [ngValue]="vat">
                             <span class="optionText">
-                                {{vat.name}}
+                                {{vat.code_internal}}
+                                <span *ngIf="!startsWithNumber(vat.code)">
+                                    - {{vat.code}}
+                                </span>
+                                <span *ngIf="vat.description != null && vat.id != lines.at(i).get('vat')?.value.id">
+                                    - {{vat.description}}
+                                </span>
                             </span>
                         </option>
                     </select>

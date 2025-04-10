@@ -24,7 +24,8 @@ export class VatComponent {
   isSmallScreen: Boolean = false;
 
   @Input() collectabilityList: { id: number, name: string }[] = []
-  @Input() vatSummary: { total: {taxable: string, tax: string}, vat: { id: number, value: number } }[] = [];
+  @Input() vatSummary: { total: {taxable: string, tax: string}, 
+    vat: { id: number, value: number, description: string | null, code: string; code_internal: string } }[] = [];
 
   constructor(private fb: FormBuilder) {
     this.vatForm = this.fb.group({
@@ -61,13 +62,18 @@ export class VatComponent {
     return this.vatForm.get('lines') as FormArray
   }
 
-  createLine(line: { total: {taxable: string, tax: string}, vat: { id: number, value: number } }) {
+  createLine(line: { total: {taxable: string, tax: string}, 
+      vat: { id: number, value: number, code: string, code_internal: string, description: string | null } }) {
     return this.fb.group({
-      vat: [line.vat.id],
+      vat: [line.vat],
       collectability: [null],
       taxable: [line.total.taxable],
       tax: [line.total.tax]
     })
+  }
+
+  startsWithNumber(value: string | null): boolean {
+    return !!value && /^[0-9]/.test(value);
   }
 
 }

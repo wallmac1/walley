@@ -12,7 +12,7 @@ import { Image } from '../../interfaces/image';
 import { ApiResponse } from '../../interfaces/api-response';
 
 @Component({
-  selector: 'app-ticket-new',
+  selector: 'app-weco-ticket-new',
   standalone: true,
   imports: [
     CommonModule,
@@ -20,10 +20,10 @@ import { ApiResponse } from '../../interfaces/api-response';
     ReactiveFormsModule,
     QuillModule
   ],
-  templateUrl: './ticket-new.component.html',
-  styleUrl: './ticket-new.component.scss'
+  templateUrl: './weco-ticket-new.component.html',
+  styleUrl: './weco-ticket-new.component.scss'
 })
-export class TicketNewComponent {
+export class WecoTicketNewComponent {
 
   submitted: boolean = false;
   newTicketForm!: FormGroup;

@@ -19,6 +19,9 @@
             </label>
             <select class="form-select" id="paymentType" formControlName="paymentType"
                 [class.is-invalid]="installmentForm.get('paymentType')?.invalid && submitted">
+                <option [value]="null">
+                    --
+                </option>
                 <option *ngFor="let type of paymentTypeList" [value]="type.id">
                     {{type.description}}
                 </option>

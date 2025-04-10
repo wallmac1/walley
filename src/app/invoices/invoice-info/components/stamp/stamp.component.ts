@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -11,7 +12,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     ReactiveFormsModule,
     MatTooltipModule,
-    TranslateModule
+    TranslateModule,
+    MatSelectModule
   ],
   templateUrl: './stamp.component.html',
   styleUrl: './stamp.component.scss'
@@ -21,7 +23,7 @@ export class StampComponent {
   isSmallScreen: boolean = false;
   description: string = "Bollo virtuale";
 
-  @Input() vatList: { id: number, name: string, value: number }[] = [];
+  @Input() vatList: { id: number, code: string, code_internal: string, description: string, value: number }[] = [];
   @Output() addStampLine = new EventEmitter<{total: string, vat: number, description: string}>();
   @Output() changeStampLine = new EventEmitter<{total: string, vat: number, description: string}>();
   @Output() deleteStampLine = new EventEmitter<null>();
@@ -87,6 +89,10 @@ export class StampComponent {
 
       return isValid ? null : { invalidNumber: true }; // Restituisci l'errore se non valido
     };
+  }
+
+  startsWithNumber(value: string | null): boolean {
+    return !!value && /^[0-9]/.test(value);
   }
 
 }

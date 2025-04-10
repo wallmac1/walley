@@ -11,7 +11,7 @@ import { Connect } from '../../../../../classes/connect';
 import { ApiResponse } from '../../../../interfaces/api-response';
 
 @Component({
-  selector: 'app-ticket-table',
+  selector: 'app-weco-ticket-table',
   standalone: true,
   imports: [
     CommonModule,
@@ -20,10 +20,10 @@ import { ApiResponse } from '../../../../interfaces/api-response';
     MatChipsModule,
     MatSortModule
   ],
-  templateUrl: './ticket-table.component.html',
-  styleUrl: './ticket-table.component.scss'
+  templateUrl: './weco-ticket-table.component.html',
+  styleUrl: './weco-ticket-table.component.scss'
 })
-export class TicketTableComponent {
+export class WecoTicketTableComponent {
 
   displayedColumns: string[] = ['idticket', 'progressive', 'ticket_date', 'description', 'ticketStatus', 'incharge', 'public'];
   dataSource = new MatTableDataSource<TicketTable>([]);

@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { StampComponent } from "./components/stamp/stamp.component";
 import { AutocompleteCustomer } from '../../customer/interfaces/autocomplete-customer';
 import { PaymentConditions } from '../../payment-conditions/interfaces/payment-conditions';
+import { PaymentData } from '../../customer/interfaces/payment-data';
 
 @Component({
   selector: 'app-invoice-info',
@@ -50,8 +51,10 @@ export class InvoiceInfoComponent implements OnInit {
 
   // Info of the invoice
   customer: AutocompleteCustomer | null = null;
+  paymentMehod: PaymentData | null = null;
   heading: InvoiceHeading | null = null;
-  vatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] = [];
+  vatSummary: { total: { taxable: string, tax: string }, 
+    vat: { id: number, value: number; code: string; code_internal: string, description: string | null } }[] = [];
   totalSummary: { taxable: string, tax: string, notTaxable: string } = { taxable: "0,00", tax: "0,00", notTaxable: "0,00" };
   paymentTotal: string = "0,00";
 
@@ -62,7 +65,8 @@ export class InvoiceInfoComponent implements OnInit {
   paymentType: { id: number, title: string }[] = [];
   paymentConditions: PaymentConditions[] = [];
   umList: MeasurementUnit[] = [];
-  vatList: { id: number, name: string, value: number }[] = [];
+  vatList: { id: number, code: string, code_internal: string, description: string, value: number }[] = [];
+  vatStampList: { id: number, code: string, code_internal: string, description: string, value: number }[] = [];
   paymentTypeList: { id: number, description: string, code: string }[] = [];
   conditionsList: { id: number, title: string }[] = [];
 
@@ -70,13 +74,8 @@ export class InvoiceInfoComponent implements OnInit {
     private cdr: ChangeDetectorRef, private router: Router) { }
 
   ngOnInit(): void {
-    this.getTipiDocumento();
-    this.getFormatoTrasmissione();
-    this.getCurrencies();
     this.getSelectOptions();
     this.getInvoiceInfo();
-    this.getPaymentTypeList();
-    this.getPaymentConditions();
   }
 
   private getTipiDocumento() {
@@ -124,6 +123,33 @@ export class InvoiceInfoComponent implements OnInit {
       })
   }
 
+  private getMeasurmentUnits() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/unitOfMeasurements', {})
+      .subscribe((val: ApiResponse<{ unitOfMeasurements: MeasurementUnit[] }>) => {
+        if (val) {
+          this.umList = val.data.unitOfMeasurements;
+        }
+      })
+  }
+
+  private getVatList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/naturaIvaPreferite', {})
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          this.vatList = val.data.vatList;
+        }
+      })
+  }
+
+  private getVatStampList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'invoice/bolloNaturaIva', {})
+      .subscribe((val: ApiResponse<any>) => {
+        if (val) {
+          this.vatStampList = val.data.vatStampList;
+        }
+      })
+  }
+
   changedTotal(event: string) {
     //console.log("COMPONENTE PADRE", event)
     this.paymentTotal = event;
@@ -131,8 +157,8 @@ export class InvoiceInfoComponent implements OnInit {
     this.paymentsComponent.calculateTotal();
   }
 
-  changedVatSummary(event: { vatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] }) {
-    //console.log("COMPONENTE PADRE", event)
+  changedVatSummary(event: { vatSummary: { total: { taxable: string, tax: string }, 
+      vat: { id: number, value: number, code: string, code_internal: string, description: string | null } }[] }) {
     this.vatSummary = event.vatSummary;
     this.cdr.detectChanges();
   }
@@ -157,8 +183,8 @@ export class InvoiceInfoComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
-        this.customer = result;
+        this.customer = result.customer;
+        this.paymentMehod = result.paymentMethod;
       }
     });
   }
@@ -201,61 +227,25 @@ export class InvoiceInfoComponent implements OnInit {
     };
   }
 
-  private getMeasurmentUnits() {
-    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'infogeneral/unitOfMeasurements', {})
-      .subscribe((val: ApiResponse<{ unitOfMeasurements: MeasurementUnit[] }>) => {
-        if (val) {
-          this.umList = val.data.unitOfMeasurements;
-        }
-      })
-  }
-
   getSelectOptions() {
     this.getMeasurmentUnits();
+    this.getPaymentTypeList();
+    this.getPaymentConditions();
+    this.getTipiDocumento();
+    this.getFormatoTrasmissione();
+    this.getCurrencies();
+    this.getVatList();
+    this.getVatStampList();
 
-    this.vatList = [
-      {
-        id: 1,
-        name: "22%",
-        value: 22
-      }, {
-        id: 2,
-        name: "55%",
-        value: 55
-      }, {
-        id: 3,
-        name: "N2.2",
-        value: 0
-      }
-    ];
 
     this.paymentType = [
       {
-        id: 0, title: "--"
+        id: 1, title: "Completo"
       },
       {
-        id: 1, title: "Bonifico"
-      },
-      {
-        id: 2, title: "Assegno"
+        id: 2, title: "A Rate"
       },
     ]
-
-    // this.currencyList = [{
-    //   id: 1,
-    //   name: "Euro"
-    // }, {
-    //   id: 2,
-    //   name: "Dollaro"
-    // }];
-
-    // this.formatList = [{
-    //   id: 1,
-    //   name: "Elettronica"
-    // }, {
-    //   id: 2,
-    //   name: "Cartacea"
-    // }];
   }
 
 }

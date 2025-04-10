@@ -6,6 +6,6 @@ export interface InvoiceBodyLine {
     price: string | null;
     discounts: {isDiscount: number, value: string}[] | null;
     total: string | null;
-    vat: number | null;
+    vat: {id: number; code: string; code_internal: string; value: number; description: string};
     stampLine: boolean;
 }

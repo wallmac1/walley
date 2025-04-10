@@ -35,7 +35,7 @@ import { ArticleInputOutputReservedComponent } from "../article-input-output-res
     StorageLineSnQntComponent,
     ArticleAveragePriceComponent,
     ArticleInputOutputReservedComponent
-],
+  ],
   templateUrl: './article-modify.component.html',
   styleUrl: './article-modify.component.scss'
 })
@@ -113,15 +113,10 @@ export class ArticleModifyComponent {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'articles/articleData', { idarticle: this.idarticle })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
-          this.articleForm.patchValue(val.data.article);
+          this.articleForm.patchValue(val.data.articleData);
 
-          if (val.data.article.management_qnt == 1) {
-            this.manage_qnt = true; // Da inserire valore reale
-          }
-
-          if (val.data.article.management_sn == 1) {
-            this.manage_sn = true; // Da inserire valore reale
-          }
+          this.manage_qnt = val.data.articleData.management_qnt == 1 ? true : false;
+          this.manage_sn = val.data.articleData.management_sn == 1 ? true : false;
         }
       })
   }
@@ -161,10 +156,10 @@ export class ArticleModifyComponent {
 
   insertQuantityPopUp() {
     let management_type = 0;
-    if(this.manage_qnt && this.manage_sn) {
+    if (this.manage_qnt && this.manage_sn) {
       management_type = 2;
     }
-    else if(this.manage_sn) {
+    else if (this.manage_sn) {
       management_type = 1;
     }
     const dialogRef = this.dialog.open(AddQntUntComponent, {
@@ -198,7 +193,7 @@ export class ArticleModifyComponent {
         minWidth: '350px',
         maxHeight: '500px',
         width: '90%',
-        data: { articleid: this.article?.idarticle, articleForm: this.articleForm.getRawValue() }
+        data: { idarticle: this.idarticle, article: this.articleForm.getRawValue() }
       });
     }
     else {

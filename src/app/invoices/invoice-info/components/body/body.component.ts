@@ -31,10 +31,11 @@ export class BodyComponent {
 
   // LISTE PER SELECT EREDITATE DA INVOICE-INFO
   @Input() umList: MeasurementUnit[] = [];
-  @Input() vatList: { id: number, name: string, value: number }[] = [];
+  @Input() vatList: { id: number, code: string, code_internal: string, description: string | null, value: number }[] = [];
 
   // EVENTI DI MODIFICA IVA E TOTALE DELLE LINEE, INVIATI AL COMPONENTE "INVOICE-INFO"
-  @Output() vatSummary = new EventEmitter<{ vatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] }>();
+  @Output() vatSummary = new EventEmitter<{ vatSummary: { total: { taxable: string, tax: string }, 
+    vat: { id: number, value: number, code: string, code_internal: string, description: string } }[] }>();
   @Output() totalSummary = new EventEmitter<{ totalSummary: { taxable: string, tax: string, notTaxable: string } }>()
 
   constructor(private fb: FormBuilder) {
@@ -100,26 +101,28 @@ export class BodyComponent {
     this.lines.controls.forEach((group, index) => {
       group.get('quantity')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.calculateTotal(index));
       group.get('price')?.valueChanges.pipe(debounceTime(300)).subscribe(() => this.calculateTotal(index));
-      group.get('vat')?.valueChanges.pipe(debounceTime(300)).subscribe(() => { this.calculateVatSummary(); this.calculateTotalSummary() });
+      group.get('vat')?.valueChanges.pipe(debounceTime(300)).subscribe(() => { this.calculateVatSummary(); this.calculateTotalSummary(); });
     });
   }
 
   // CALCOLA UN RESOCONTO IVA PER IL COMPONENTE "VAT"
   calculateVatSummary() {
     // Crea un array orientato all'interfaccia richiesta dal componente "vat"
-    let arrayVatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } }[] = [];
+    let arrayVatSummary: { total: { taxable: string, tax: string }, 
+      vat: { id: number, value: number, description: string, code: string, code_internal: string } }[] = [];
 
     this.lines.controls.forEach((line) => {
       // Crea un oggetto che rappresenta un singolo elemento del precedente array, inizializzato a 0.
-      let lineVatSummary: { total: { taxable: string, tax: string }, vat: { id: number, value: number } } =
+      let lineVatSummary: { total: { taxable: string, tax: string }, 
+        vat: { id: number, value: number, description: string, code: string, code_internal: string } } =
       {
         total: { taxable: '0,0000', tax: '0,0000' },
-        vat: { id: 0, value: 0 }
+        vat: { id: 0, value: 0, code: '', code_internal: '', description: '' }
       };
 
       // Assegna all'oggetto appena creato il valore del totale e l'id dell'iva selezionata
       lineVatSummary.total.taxable = line.get('total')?.value;
-      lineVatSummary.vat.id = line.get('vat')?.value;
+      lineVatSummary.vat = line.get('vat')?.value;
 
       if (lineVatSummary.vat.id && lineVatSummary.vat.id != 0) {
         // Se l'iva è stata assegnata, recupera il valore effettivo dell'iva selezionata
@@ -316,7 +319,7 @@ export class BodyComponent {
       quantity: ["1,00", this.numberWithCommaValidator(2)],
       price: ["0,0000", this.numberWithCommaValidator(4)],
       total: [{ value: "0,0000", disabled: true }],
-      vat: [null],
+      vat: [{id: 0, value: 0, code: '', code_internal: '', description: ''}],
       stampLine: [false],
       isAdditionalFieldOpen: [false],
       discounts: this.fb.array([])
@@ -383,6 +386,10 @@ export class BodyComponent {
 
       return isValid ? null : { invalidNumber: true }; // Restituisci l'errore se non valido
     };
+  }
+
+  startsWithNumber(value: string | null): boolean {
+    return !!value && /^[0-9]/.test(value);
   }
 
   saveBody() { }

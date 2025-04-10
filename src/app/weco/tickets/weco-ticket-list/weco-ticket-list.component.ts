@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
 import { InViewportDirective } from '../../../directives/in-viewport.directive';
-import { TicketTableComponent } from "./components/ticket-table/ticket-table.component";
+import { WecoTicketTableComponent } from "./components/weco-ticket-table/weco-ticket-table.component";
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConnectServerService } from '../../../services/connect-server.service';
 import { Router } from '@angular/router';
@@ -12,21 +12,21 @@ import { ApiResponse } from '../../interfaces/api-response';
 import { TicketStatus } from '../interfaces/ticket-status';
 
 @Component({
-  selector: 'app-ticket-list',
+  selector: 'app-weco-ticket-list',
   standalone: true,
   imports: [
     CommonModule,
     MatExpansionModule,
     TranslateModule,
-    TicketTableComponent,
+    WecoTicketTableComponent,
     ReactiveFormsModule
   ],
-  templateUrl: './ticket-list.component.html',
-  styleUrl: './ticket-list.component.scss'
+  templateUrl: './weco-ticket-list.component.html',
+  styleUrl: './weco-ticket-list.component.scss'
 })
-export class TicketListComponent {
+export class WecoTicketListComponent {
 
-  @ViewChild('ticketTable') ticketTable!: TicketTableComponent;
+  @ViewChild('ticketTable') ticketTable!: WecoTicketTableComponent;
 
   submitted: boolean = false;
   statusList: TicketStatus[] = [];
