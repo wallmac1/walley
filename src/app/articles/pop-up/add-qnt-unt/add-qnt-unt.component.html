@@ -13,15 +13,15 @@
                 <div class="row">
                     <div class="col-3 col-md-6 p-1">
                         <label class="form-label" for="unit_available">
-                            Unità
+                            {{"ARTICLE.MODAL.UNIT" | translate}}
                         </label>
                         <input class="form-control" type="number" min="1" id="unit_available"
                             formControlName="unit_available" (keydown)="blockInvalidInput($event)"
-                            [class.is-invalid]="generationForm.get('unit_available')?.invalid && submitted">
+                            [class.is-invalid]="generationForm.get('unit_available')?.invalid && submitted1">
                     </div>
                     <div *ngIf="management_type == 2" class="col-3 col-md-6 p-1">
                         <label class="form-label" for="qnt_available">
-                            Quantità
+                            {{"ARTICLE.MODAL.QUANTITY" | translate}}
                         </label>
                         <input class="form-control" type="number" min="1" id="qnt_available"
                             formControlName="qnt_available" (keydown)="blockInvalidInput($event)">
@@ -29,11 +29,11 @@
                     <div *ngIf="management_type != 0" class="col-6 col-md-12 p-1">
                         <label class="form-label" for="serialnumber">
                             <span *ngIf="!isSmall; else smallBlockS">
-                                Serial Number
+                                {{"ARTICLE.MODAL.SERIALNUMBER" | translate}}
                             </span>
                             <ng-template #smallBlockS>
                                 <span>
-                                    SN
+                                    {{"ARTICLE.MODAL.SN" | translate}}
                                 </span>
                             </ng-template>
                         </label>
@@ -48,10 +48,10 @@
                     <div class="col-4 p-1">
                         <label class="form-label" for="unit_taxablepurchase">
                             <ng-container *ngIf="!isSmall; else smallBlockA">
-                                Imponibile Acquisto
+                                {{"ARTICLE.MODAL.TAXABLEPURCHASE" | translate}}
                             </ng-container>
                             <ng-template #smallBlockA>
-                                Imp. Acq.
+                                {{"ARTICLE.MODAL.TAXABLEPURCHASESM" | translate}}
                             </ng-template>
                         </label>
                         <div class="input-group">
@@ -64,7 +64,7 @@
                     <!-- VAT PURCHASE -->
                     <div class="col-4 col-lg-2 p-1">
                         <label class="form-label" for="vatpurchase">
-                            IVA
+                            {{"ARTICLE.MODAL.VAT" | translate}}
                         </label>
                         <div class="input-group">
                             <input class="form-control vatPadding" type="text" id="vatpurchase"
@@ -77,11 +77,11 @@
                     <div class="col-4 p-1">
                         <label class="form-label" for="pricepurchase">
                             <span *ngIf="!isSmall; else smallBlockA">
-                                Prezzo Acquisto
+                                {{"ARTICLE.MODAL.PRICEPURCHASE" | translate}}
                             </span>
                             <ng-template #smallBlockA>
                                 <span>
-                                    Prz. Acq.
+                                    {{"ARTICLE.MODAL.PRICEPURCHASESM" | translate}}
                                 </span>
                             </ng-template>
                         </label>
@@ -96,11 +96,11 @@
                     <div class="col-4 p-1">
                         <label class="form-label" for="unit_taxablerecommended">
                             <span *ngIf="!isSmall; else smallBlockC">
-                                Imponibile Consigliato
+                                {{"ARTICLE.MODAL.TAXABLERECOMMENDED" | translate}}
                             </span>
                             <ng-template #smallBlockC>
                                 <span>
-                                    Imp. Cons.
+                                    {{"ARTICLE.MODAL.TAXABLERECOMMENDEDSM" | translate}}
                                 </span>
                             </ng-template>
                         </label>
@@ -114,7 +114,7 @@
                     <!-- VAT RECOMMENDED -->
                     <div class="col-4 col-lg-2 p-1">
                         <label class="form-label" for="vatrecommended">
-                            IVA
+                            {{"ARTICLE.MODAL.VAT" | translate}}
                         </label>
                         <div class="input-group">
                             <input class="form-control vatPadding" type="text" id="vatrecommended"
@@ -127,11 +127,11 @@
                     <div class="col-4 p-1">
                         <label class="form-label" for="pricerecommended">
                             <span *ngIf="!isSmall; else smallBlockC">
-                                Prezzo Consigliato
+                                {{"ARTICLE.MODAL.PRICERECOMMENDED" | translate}}
                             </span>
                             <ng-template #smallBlockC>
                                 <span>
-                                    Prz. Cons.
+                                    {{"ARTICLE.MODAL.PRICERECOMMENDEDSM" | translate}}
                                 </span>
                             </ng-template>
                         </label>
@@ -149,8 +149,7 @@
             generationForm.get('unit_taxablerecommended')?.hasError('invalidNumber')" class="row mt-1">
             <div class="col-12 text-center">
                 <span class="errorTxt">
-                    I campi relativi all'imponibile possono contenere solo valori numerici con al più due decimali dopo
-                    la virgola
+                    {{"ARTICLE.MODAL.TAXABLEINFO" | translate}}
                 </span>
             </div>
         </div>
@@ -158,14 +157,14 @@
             generationForm.get('vatpurchase')?.hasError('integerRangeInvalid')" class="row mt-1">
             <div class="col-12 text-center">
                 <span class="errorTxt">
-                    I campi relativi all'Iva possono contenere solo valori numerici compresi tra 0 e 100
+                    {{"ARTICLE.MODAL.VATINFO" | translate}}
                 </span>
             </div>
         </div>
-        <div *ngIf="submitted && generationForm.invalid" class="row mt-1">
+        <div *ngIf="submitted1 && generationForm.invalid" class="row mt-1">
             <div class="col-12 text-center">
                 <span class="errorTxt">
-                    Compilare correttamente i campi obbligatori
+                    {{"ARTICLE.MODAL.MANDATORYFIELDS" | translate}}
                 </span>
             </div>
         </div>
@@ -175,10 +174,10 @@
             <div class="col-auto">
                 <button class="btn btn-outline-dark" (click)="generateArticles()">
                     <span *ngIf="!generated">
-                        Genera
+                        {{"ARTICLE.MODAL.GENERATE" | translate}}
                     </span>
                     <span *ngIf="generated">
-                        Rigenera
+                        {{"ARTICLE.MODAL.REGENERATE" | translate}}
                     </span>
                 </button>
             </div>
@@ -200,21 +199,22 @@
                         <div class="col-10 p-1">
                             <label class="form-label" for="serialnumber-{{i}}">
                                 <span *ngIf="!isSmall; else smallBlockS">
-                                    Serial Number
+                                    {{"ARTICLE.MODAL.SERIALMNUMBER" | translate}}
                                 </span>
                                 <ng-template #smallBlockS>
                                     <span>
-                                        SN
+                                        {{"ARTICLE.MODAL.SN" | translate}}
                                     </span>
                                 </ng-template>
                             </label>
                             <input class="form-control vatPadding" type="text" id="serialnumber-{{i}}"
-                                formControlName="serialnumber">
+                                formControlName="serialnumber"
+                                [class.is-invalid]="item.get('serialnumber')?.invalid && submitted2">
                         </div>
                         <!-- QUANTITA' -->
                         <div *ngIf="management_type == 2" class="col-10 p-1">
                             <label class="form-label" for="qnt_available-{{i}}">
-                                Quantità
+                                {{"ARTICLE.MODAL.QUANTITY" | translate}}
                             </label>
                             <input class="form-control" type="number" min="1" id="qnt_available-{{i}}"
                                 formControlName="qnt_available" (keydown)="blockInvalidInput($event)">
@@ -229,10 +229,10 @@
                         <div class="col-4 p-1">
                             <label class="form-label" for="unit_taxablepurchase-{{i}}">
                                 <ng-container *ngIf="!isSmall; else smallBlockA">
-                                    Imponibile Acquisto
+                                    {{"ARTICLE.MODAL.TAXABLEPURCHASE" | translate}}
                                 </ng-container>
                                 <ng-template #smallBlockA>
-                                    Imp. Acq.
+                                    {{"ARTICLE.MODAL.TAXABLEPURCHASESM" | translate}}
                                 </ng-template>
                             </label>
                             <div class="input-group">
@@ -245,7 +245,7 @@
                         <!-- VAT PURCHASE -->
                         <div class="col-4 col-lg-2 p-1">
                             <label class="form-label" for="vatpurchase-{{i}}">
-                                IVA
+                                {{"ARTICLE.MODAL.VAT" | translate}}
                             </label>
                             <div class="input-group">
                                 <input class="form-control vatPadding" type="text" id="vatpurchase-{{i}}"
@@ -257,11 +257,11 @@
                         <div class="col-4 p-1">
                             <label class="form-label" for="pricepurchase-{{i}}">
                                 <span *ngIf="!isSmall; else smallBlockA">
-                                    Prezzo Acquisto
+                                    {{"ARTICLE.MODAL.PRICEPURCHASE" | translate}}
                                 </span>
                                 <ng-template #smallBlockA>
                                     <span>
-                                        Prz. Acq.
+                                        {{"ARTICLE.MODAL.PRICEPURCHASESM" | translate}}
                                     </span>
                                 </ng-template>
                             </label>
@@ -276,11 +276,11 @@
                         <div class="col-4 p-1">
                             <label class="form-label" for="unit_taxablerecommended-{{i}}">
                                 <span *ngIf="!isSmall; else smallBlockC">
-                                    Imponibile Consigliato
+                                    {{"ARTICLE.MODAL.TAXABLERECOMMENDED" | translate}}
                                 </span>
                                 <ng-template #smallBlockC>
                                     <span>
-                                        Imp. Cons.
+                                        {{"ARTICLE.MODAL.TAXABLERECOMMENDEDSM" | translate}}
                                     </span>
                                 </ng-template>
                             </label>
@@ -294,7 +294,7 @@
                         <!-- VAT RECOMMENDED -->
                         <div class="col-4 col-lg-2 p-1">
                             <label class="form-label" for="vatrecommended-{{i}}">
-                                IVA
+                                {{"ARTICLE.MODAL.VAT" | translate}}
                             </label>
                             <div class="input-group">
                                 <input class="form-control vatPadding" type="text" id="vatrecommended-{{i}}"
@@ -307,11 +307,11 @@
                         <div class="col-4 p-1">
                             <label class="form-label" for="pricerecommended-{{i}}">
                                 <span *ngIf="!isSmall; else smallBlockC">
-                                    Prezzo Consigliato
+                                    {{"ARTICLE.MODAL.PRICERECOMMENDED" | translate}}
                                 </span>
                                 <ng-template #smallBlockC>
                                     <span>
-                                        Prz. Cons.
+                                        {{"ARTICLE.MODAL.PRICERECOMMENDEDSM" | translate}}
                                     </span>
                                 </ng-template>
                             </label>
@@ -327,14 +327,13 @@
                 <div *ngIf="item.get('unit_taxablepurchase')?.hasError('invalidNumber') || 
                     item.get('unit_taxablerecommended')?.hasError('invalidNumber')" class="col-12 text-center">
                     <span class="errorTxt">
-                        I campi relativi all'imponibile possono contenere solo valori numerici con al più due decimali
-                        dopo la virgola
+                        {{"ARTICLE.MODAL.TAXABLEINFO" | translate}}
                     </span>
                 </div>
                 <div *ngIf="item.get('vatrecommended')?.hasError('integerRangeInvalid') || 
                     item.get('vatpurchase')?.hasError('integerRangeInvalid')" class="col-12 text-center">
                     <span class="errorTxt">
-                        I campi relativi all'Iva possono contenere solo valori numerici compresi tra 0 e 100
+                        {{"ARTICLE.MODAL.VATINFO" | translate}}
                     </span>
                 </div>
             </div>
@@ -344,12 +343,12 @@
 
 <mat-dialog-actions *ngIf="generated || management_type == 0" align="end" style="border-top: 1px solid lightgray;">
     <button class="btn btn-outline-dark me-2" (click)="close()">
-        Chiudi
+        {{"ARTICLE.MODAL.CLOSE" | translate}}
     </button>
     <button *ngIf="management_type != 0" class="btn btn-outline-success me-2" (click)="addUnits()">
-        Aggiungi
+        {{"ARTICLE.MODAL.ADD" | translate}}
     </button>
     <button *ngIf="management_type == 0" class="btn btn-outline-success me-2" (click)="generateArticles()">
-        Aggiungi
+        {{"ARTICLE.MODAL.ADD" | translate}}
     </button>
 </mat-dialog-actions>

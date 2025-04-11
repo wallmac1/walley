@@ -1,0 +1,39 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"ARTICLE.MODAL.DELETEUNITS" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content>
+    <div class="row justify-content-center align-items-center p-1">
+        <div class="col-12 text-center p-1">
+            <span>
+                Sei sicuro di voler cancellare l'articolo? Questa azione comporta la perdita di tutti i dati relativi
+                allo stesso e sarà irreversibile.
+            </span>
+        </div>
+        <div class="col-12 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Id Articolo:<br>
+            </span>
+            {{idarticle}}
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6 text-start">
+                <button class="btn btn-outline-dark" style="width: 80px;" (click)="close()">
+                    {{"ARTICLE.MODAL.CANCEL" | translate }}
+                </button>
+            </div>
+            <div class="col-6 text-end">
+                <button class="btn btn-outline-danger" style="width: 80px;" (click)="deleteArticle()">
+                    {{"ARTICLE.MODAL.DELETE" | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-dialog-actions>

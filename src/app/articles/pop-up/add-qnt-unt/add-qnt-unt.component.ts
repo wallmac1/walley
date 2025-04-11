@@ -21,7 +21,8 @@ import { ApiResponse } from '../../../weco/interfaces/api-response';
 })
 export class AddQntUntComponent {
 
-  submitted: boolean = false;
+  submitted1: boolean = false;
+  submitted2: boolean = false;
   generated: boolean = false;
   isSmall: boolean = false;
   idarticle: number = 0;
@@ -162,7 +163,7 @@ export class AddQntUntComponent {
 
   createArticle(article?: any) {
     return this.fb.group({
-      serialnumber: [article.serialnumber || null],
+      serialnumber: [article.serialnumber || null, Validators.required],
       qnt_available: [article.qnt_available || null],
       unit_taxablepurchase: [article.unit_taxablepurchase || null, this.numberWithCommaValidator()],
       unit_taxablerecommended: [article.unit_taxablerecommended || null, this.numberWithCommaValidator()],
@@ -174,7 +175,7 @@ export class AddQntUntComponent {
   }
 
   generateArticles() {
-    this.submitted = true;
+    this.submitted1 = true;
     if (this.generationForm.valid) {
       this.generated = true;
       if (this.management_type != 0) {
@@ -188,24 +189,27 @@ export class AddQntUntComponent {
   }
 
   addUnits() {
+    this.submitted2 = true;
     let lines: any[] = [];
     if (this.management_type == 0) {
       lines.push(this.generationForm.getRawValue());
     }
-    else {
+    else if(this.serialNumberForm.valid) {
       lines = this.serialNumberForm.get('articles')?.getRawValue();
     }
-    for(let i = 0; i < lines.length; i++) {
-      lines[i].unit_taxablepurchase = parseFloat(lines[0].unit_taxablepurchase?.replace(',', '.') || null);
-      lines[i].unit_taxablerecommended = parseFloat(lines[0].unit_taxablerecommended?.replace(',', '.') || null);
-      lines[i].vatrecommended = parseFloat(lines[0].vatrecommended || null);
-      lines[i].vatpurchase = parseFloat(lines[0].vatpurchase || null);
+    for (let i = 0; i < lines.length; i++) {
+      lines[i].unit_taxablepurchase = parseFloat(lines[i].unit_taxablepurchase?.replace(',', '.') || "0");
+      lines[i].unit_taxablerecommended = parseFloat(lines[i].unit_taxablerecommended?.replace(',', '.') || "0");
+      lines[i].vatrecommended = parseFloat(lines[i].vatrecommended || null);
+      lines[i].vatpurchase = parseFloat(lines[i].vatpurchase || null);
     }
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'articles/addArticlePrices',
-      { idarticle: this.idarticle, lines: lines })
-      .subscribe((val: ApiResponse<any>) => {
-        this.dialogRef.close();
-      })
+    if (lines.length > 0) {
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'articles/addArticlePrices',
+        { idarticle: this.idarticle, lines: lines })
+        .subscribe((val: ApiResponse<any>) => {
+          this.dialogRef.close();
+        })
+    }
   }
 
   calculateTotal(formControl: FormControl, vatControl: FormControl, resultControl: FormControl) {

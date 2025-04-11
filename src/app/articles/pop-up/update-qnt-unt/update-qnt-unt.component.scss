@@ -29,16 +29,16 @@
     padding-right: 0.2rem;
 
     @media screen and (min-width: 576px) {
-        padding-left: 0.6rem;
-        padding-right: 0.6rem;
-    }
-
-    @media screen and (min-width: 700px) {
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
+        padding-left: 0.4rem;
+        padding-right: 0.4rem;
     }
 }
 
 .form-control {
     max-width: 200px;
+}
+
+.errorTxt{
+    color: red;
+    font-size: small;
 }

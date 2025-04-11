@@ -18,4 +18,4 @@ export interface AutocompleteCustomer {
         street?: string | null;
         region?: string | null;
     }
-}
+}  

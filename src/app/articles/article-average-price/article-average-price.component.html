@@ -2,26 +2,26 @@
     <div class="row justify-content-center align-items-center p-1">
         <div class="col-12 text-center mb-1">
             <span style="font-style: italic; color: gray;">
-                Andamento medio del prezzo a partire dal caricamento della prima unità di questo articolo
+                {{"ARTICLE.ARTICLEAVGPRICE.MEDIUMPRICE" | translate}}
             </span>
         </div>
         <div class="col-12 col-sm-auto text-center">
             <label class="form-label" for="avgTaxable">
-                Imponibile Acquisto Medio
+                {{"ARTICLE.ARTICLEAVGPRICE.TAXABLEAVGPURCHASE" | translate}}
             </label>
             <input class="form-control" type="text" id="avgTaxable" 
                 [value]="averagePrice.avgTaxable" disabled>
         </div>
         <div class="col-12 col-sm-auto text-center">
             <label class="form-label" for="avgTaxableRecommended">
-                Imponibile Consigliato Medio
+                {{"ARTICLE.ARTICLEAVGPRICE.TAXABLEAVGRECOMMENDED" | translate}}
             </label>
             <input class="form-control" type="text" id="avgTaxableRecommended" 
                 [value]="averagePrice.avgTaxableRecommended" disabled>
         </div>
         <div class="col-12 col-sm-auto text-center">
             <label class="form-label" for="avgTaxableSold">
-                Imponibile Vendita Medio
+                {{"ARTICLE.ARTICLEAVGPRICE.TAXABLEAVHSELL" | translate}}
             </label>
             <input class="form-control" type="text" id="avgTaxableSold" 
                 [value]="averagePrice.avgTaxableSold" disabled>

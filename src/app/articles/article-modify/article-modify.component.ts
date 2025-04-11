@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MeasurementUnit } from '../../tickets/interfaces/article';
 import { ConnectServerService } from '../../services/connect-server.service';
@@ -20,6 +20,7 @@ import { StorageLineSnQntComponent } from "../article-storage/storage-line-sn-qn
 import { UpdateCodeComponent } from '../pop-up/update-code/update-code.component';
 import { ArticleAveragePriceComponent } from "../article-average-price/article-average-price.component";
 import { ArticleInputOutputReservedComponent } from "../article-input-output-reserved/article-input-output-reserved.component";
+import { DeleteArticleComponent } from '../pop-up/delete-article/delete-article.component';
 
 @Component({
   selector: 'app-article-modify',
@@ -41,6 +42,11 @@ import { ArticleInputOutputReservedComponent } from "../article-input-output-res
 })
 export class ArticleModifyComponent {
 
+  @ViewChild('storageLineComponent') storageLineComponent!: StorageLineComponent;
+  @ViewChild('storageLineSnComponent') storageLineSnComponent!: StorageLineSnComponent;
+  @ViewChild('storageLineSnQntComponent') storageLineSnQntComponent!: StorageLineSnQntComponent;
+
+
   submitted: boolean = false;
   measurmentUnit: MeasurementUnit[] = [];
   article: Article | null = null;
@@ -50,7 +56,7 @@ export class ArticleModifyComponent {
   isSmallUm: boolean = false;
   notesHeight: number = 6;
   manage_sn: boolean = false;
-  manage_qnt: boolean = false;
+  manage_qnt: boolean = true;
 
   articleForm = new FormGroup({
     code: new FormControl<string | null>(null, Validators.required),
@@ -109,12 +115,12 @@ export class ArticleModifyComponent {
     }
   }
 
-  private getArticle() {
+  getArticle() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'articles/articleData', { idarticle: this.idarticle })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
+          this.article = val.data.articleData;
           this.articleForm.patchValue(val.data.articleData);
-
           this.manage_qnt = val.data.articleData.management_qnt == 1 ? true : false;
           this.manage_sn = val.data.articleData.management_sn == 1 ? true : false;
         }
@@ -171,7 +177,18 @@ export class ArticleModifyComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      this.getArticle();
+      if(this.selectedTabIndex == 0) {
+        if(this.manage_qnt == false && this.manage_sn == false) {
+          this.storageLineComponent.getArticles();
+        }
+        else if(this.manage_qnt == false && this.manage_sn == true) {
+          this.storageLineSnComponent.getArticles();
+        }
+        else if(this.manage_qnt == true && this.manage_sn == true) {
+          this.storageLineSnQntComponent.getArticles();
+        }
+      }
     });
   }
 
@@ -201,17 +218,26 @@ export class ArticleModifyComponent {
     }
   }
 
+  deleteArticlePopup() {
+    const dialogRef = this.dialog.open(DeleteArticleComponent, {
+      maxWidth: '700px',
+      minWidth: '350px',
+      maxHeight: '500px',
+      width: '90%',
+      data: { idarticle: this.idarticle }
+    });
+  }
+
   modifyCodePopup() {
     const dialogRef = this.dialog.open(UpdateCodeComponent, {
       maxWidth: '700px',
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
-      data: { articleid: this.article?.idarticle, code: this.articleForm.get('code')?.value }
+      data: { idarticle: this.idarticle, code: this.articleForm.get('code')?.value }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result != null) {
         this.articleForm.get('code')?.setValue(result.code);
       }

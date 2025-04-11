@@ -7,6 +7,7 @@ import { Connect } from '../../classes/connect';
 import { ApiResponse } from '../../weco/interfaces/api-response';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-article-new',
@@ -14,7 +15,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    TranslateModule
   ],
   templateUrl: './article-new.component.html',
   styleUrl: './article-new.component.scss'

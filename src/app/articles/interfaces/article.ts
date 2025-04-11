@@ -12,15 +12,6 @@ export interface Article {
     article_storage: ArticleStorage[];
     management_sn: number; // 0 o 1
     management_qnt: number; // 0 o 1
-}
-
-export interface ArticleData {
-    idarticledata: number
-    title: string;
-    description: string | null;
-    note: string | null;
-    um: MeasurementUnit | null;
-    date_snapshot: string | null; // Data Variazione
     user_created: {
         id: number;
         nickname: string;
@@ -33,8 +24,18 @@ export interface ArticleData {
     };
 }
 
+export interface ArticleData {
+    idarticledata: number
+    title: string;
+    description: string | null;
+    note: string | null;
+    um: MeasurementUnit | null;
+    date_snapshot: string | null; // Data Variazione
+}
+
 export interface ArticleStorage {
     idarticlestorage: number;
+    idddt: number;
     serialnumber?: string;
     unit_taxablepurchase: string | null; // Imponibile Acquisto Unità
     unit_taxablerecommended: string | null; // Imponibile Consigliato Unità

@@ -71,11 +71,11 @@
                                 </select>
                             </div>
                             <div class="col-6 col-md-3 mt-2">
-                                <label class="subtitle form-label" for="quantity">
-                                    {{"TICKET.ARTICLE.QUANTITY" | translate}}
+                                <label class="subtitle form-label" for="unit">
+                                    {{"TICKET.ARTICLE.UNIT" | translate}}
                                 </label>
-                                <input type="text" class="form-control" formControlName="quantity" id="quantity"
-                                    [class.is-invalid]="articleForm.get('quantity')?.invalid && (articleForm.get('quantity')?.dirty || submitted)">
+                                <input type="text" class="form-control" formControlName="unit" id="unit"
+                                    [class.is-invalid]="articleForm.get('unit')?.invalid && (articleForm.get('unit')?.dirty || submitted)">
                             </div>
                             <div class="col-6 col-md-3 mt-2">
                                 <label class="subtitle form-label" for="taxablepurchase">
@@ -152,7 +152,9 @@
 
                         <div class="row align-items-center mt-1">
                             <div class="col-12 col-md-6 additionalInfo" (click)="openInformation()">
-                                <span style="color: gray;">Informazioni aggiuntive</span>
+                                <span style="color: gray;">
+                                    {{"TICKET.ARTICLE.ADDITIONALINFO" | translate}}
+                                </span>
                                 <i *ngIf="!isOpenInformations; else minusBlock" class="bi bi-plus"
                                     style="color: gray;"></i>
                                 <ng-template #minusBlock>
@@ -162,11 +164,19 @@
                         </div>
                         <div class="row serialnumberRow mt-1"
                             [ngClass]="{ 'visible': isOpenInformations, 'hidden': !isOpenInformations }">
-                            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mb-1">
+                            <div class="col-12 col-sm-6 col-lg-4 mb-1">
                                 <label for="serialnumber">
                                     {{"TICKET.ARTICLE.SN" | translate}}
                                 </label>
                                 <input type="text" formControlName="serialnumber" class="form-control">
+                            </div>
+                            <div *ngIf="article.management_qnt && article.management_qnt == 1" 
+                                class="col-12 col-sm-6 col-md-3 mb-1">
+                                <label class="subtitle form-label" for="quantity">
+                                    {{"TICKET.ARTICLE.QUANTITY" | translate}}
+                                </label>
+                                <input type="text" class="form-control" formControlName="quantity" id="quantity"
+                                    [class.is-invalid]="articleForm.get('quantity')?.invalid && (articleForm.get('quantity')?.dirty || submitted)">
                             </div>
                         </div>
                     </ng-container>

@@ -1,9 +1,12 @@
 import { Component, Input } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-article-average-price',
   standalone: true,
-  imports: [],
+  imports: [
+    TranslateModule
+  ],
   templateUrl: './article-average-price.component.html',
   styleUrl: './article-average-price.component.scss'
 })

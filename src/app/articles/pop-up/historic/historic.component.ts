@@ -27,7 +27,7 @@ import { ApiResponse } from '../../../weco/interfaces/api-response';
 })
 export class HistoricComponent {
   
-  articles: ArticleData[] = [];
+  articles: Article[] = [];
   id: number | null = null;
 
   constructor(public dialogRef: MatDialogRef<HistoricComponent>,

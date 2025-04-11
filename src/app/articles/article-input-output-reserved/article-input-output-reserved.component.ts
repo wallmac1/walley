@@ -3,13 +3,15 @@ import { ArticleInputOutput } from '../interfaces/article-input-output';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { ConnectServerService } from '../../services/connect-server.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-article-input-output-reserved',
   standalone: true,
   imports: [
     CommonModule,
-    MatTableModule
+    MatTableModule,
+    TranslateModule
   ],
   templateUrl: './article-input-output-reserved.component.html',
   styleUrl: './article-input-output-reserved.component.scss'

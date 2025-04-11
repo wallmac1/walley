@@ -5,55 +5,73 @@
 
                 <!-- Unità Magazzino -->
                 <ng-container matColumnDef="unit_storage">
-                    <th mat-header-cell *matHeaderCellDef>Unt. Magaz.</th>
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.STORAGEUNIT" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_storage }}</td>
                 </ng-container>
 
                 <!-- Unità Disponibile -->
                 <ng-container matColumnDef="unit_available">
-                    <th mat-header-cell *matHeaderCellDef>Unt. Disp.</th>
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.AVAILABLEUNIT" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_available }}</td>
                 </ng-container>
 
                 <!-- Imponibile Acquisto -->
                 <ng-container matColumnDef="unit_taxablepurchase">
-                    <th mat-header-cell *matHeaderCellDef>Imp. Acq.</th>
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.TAXABLEPURCHASE" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element">{{ element.unit_taxablepurchase }} €</td>
                 </ng-container>
 
                 <!-- IVA Acquisto -->
                 <ng-container matColumnDef="vatpurchase">
-                    <th mat-header-cell *matHeaderCellDef>IVA</th>
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.VAT" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element">{{ element.vatpurchase }} %</td>
                 </ng-container>
 
                 <!-- Prezzo Acquisto -->
                 <ng-container matColumnDef="pricepurchase">
-                    <th mat-header-cell *matHeaderCellDef>Prz. Acq.</th>
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.PRICEPURCHASE" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element">{{ element.pricepurchase }} €</td>
                 </ng-container>
 
                 <!-- Imponibile Consigliato -->
                 <ng-container matColumnDef="unit_taxablerecommended">
-                    <th mat-header-cell *matHeaderCellDef>Imp. Cons.</th>
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.TAXABLERECOMMENDED" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element">{{ element.unit_taxablerecommended }} €</td>
                 </ng-container>
 
                 <!-- IVA Consigliata -->
                 <ng-container matColumnDef="vatrecommended">
-                    <th mat-header-cell *matHeaderCellDef>IVA</th>
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.VAT" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element">{{ element.vatrecommended }} %</td>
                 </ng-container>
 
                 <!-- Prezzo Consigliato -->
                 <ng-container matColumnDef="pricerecommended">
-                    <th mat-header-cell *matHeaderCellDef>Prz. Cons.</th>
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.PRICERECOMMENDED" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element">{{ element.pricerecommended }} €</td>
                 </ng-container>
 
                 <!-- Azioni -->
                 <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">Azioni</th>
+                    <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">
+                        {{"ARTICLE.ARTICLESTORAGE.ACTIONS" | translate}}
+                    </th>
                     <td mat-cell *matCellDef="let element">
                         <div class="row justify-content-center align-items-center">
                             <div class="col-6 text-center">

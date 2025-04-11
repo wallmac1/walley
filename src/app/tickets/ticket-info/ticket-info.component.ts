@@ -19,6 +19,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { async, debounceTime, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiResponse } from '../../weco/interfaces/api-response';
+import { AutocompleteCustomer } from '../../customer/interfaces/autocomplete-customer';
+import { isCustomer } from '../../calendar/components/validators/customer-validator';
+import { Address } from '../../invoices/interfaces/address';
 
 @Component({
   selector: 'app-ticket-info',
@@ -39,7 +42,7 @@ import { ApiResponse } from '../../weco/interfaces/api-response';
 })
 export class TicketInfoComponent {
 
-  filteredCustomer$!: Observable<Customer[]>;
+  filteredCustomer$!: Observable<AutocompleteCustomer[]>;
   submitted: boolean = false;
 
   @Input() ticketInfo!: TicketInfo;
@@ -51,8 +54,8 @@ export class TicketInfoComponent {
     status: new FormControl<Status | number | null>(null),
     internal: new FormControl<number>(0, Validators.required),
     ticket_date: new FormControl<string>(''), //Non modificabile
-    customer: new FormControl<Customer | null>(null, this.customerValidator()),
-    location: new FormControl<Location | null>(null),
+    customer: new FormControl<AutocompleteCustomer | null>(null, this.customerValidator()),
+    location: new FormControl<Location | null>({ value: null, disabled: true }),
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null),
     departments: new FormControl<Department[] | number[] | null>(null),
@@ -64,16 +67,17 @@ export class TicketInfoComponent {
 
   users: User[] = [];
   departments: Department[] = [];
-  locations: Location[] = [];
+  locations: Address[] = [];
 
   constructor(private route: ActivatedRoute, public ticketInfoService: TicketsInfoService,
     private connectServerService: ConnectServerService, private router: Router) { }
 
   ngOnInit(): void {
+    this.formLogic();
     this.searchCustomer();
     this.getUsers();
     this.getDepartments();
-    this.getLocations();
+    this.getAddressList();
     this.ticketInfoForm.get('ticket_date')?.disable();
     this.ticketInfoForm.get('progressive')?.disable();
     if (this.ticketId > 0) {
@@ -89,21 +93,46 @@ export class TicketInfoComponent {
     }
   }
 
+  formLogic() {
+    this.ticketInfoForm.get('customer')?.valueChanges.subscribe((val) => {
+      if (this.isCustomer(val)) {
+        this.getAddressList();
+        this.ticketInfoForm.get('location')?.enable();
+      }
+      else {
+        this.ticketInfoForm.get('location')?.disable();
+        this.ticketInfoForm.get('location')?.setValue(null);
+      }
+    })
+  }
+
+  isCustomer(obj: any): obj is Customer {
+    return (
+      obj &&
+      typeof obj === 'object' &&
+      typeof obj.idregistry === 'number' &&
+      typeof obj.denomination === 'string'
+    );
+  }
+
   customerValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const customer = control.value;
-
-      // Condizione unica combinata
-      if (!customer || typeof customer === 'string' || !(customer.id > 0)) {
-        return { invalidCustomer: true }; // Errore generico
+      const value = control.value;
+      if (
+        value &&
+        typeof value === 'object' &&
+        typeof value.idregistry === 'number' &&
+        typeof value.denomination === 'string'
+      ) {
+        return null; // valido
       }
 
-      return null; // Valido
+      return { invalidCustomer: true };
     };
   }
 
-  displayCustomerName(customer?: Customer): string {
-    return customer ? customer.denominazione! : '';
+  displayCustomerName(customer?: AutocompleteCustomer): string {
+    return customer ? customer.denomination! : '';
   }
 
   private searchCustomer() {
@@ -112,7 +141,7 @@ export class TicketInfoComponent {
       this.filteredCustomer$ = customer_field.valueChanges
         .pipe(
           startWith(''),
-          map(value => typeof value === 'string' ? value : value?.denominazione || ''),
+          map(value => typeof value === 'string' ? value : value?.denomination || ''),
           filter(value => value.length > 0),
           debounceTime(400),
           switchMap((value: string) =>
@@ -121,35 +150,14 @@ export class TicketInfoComponent {
     }
   }
 
-  private getCustomers(val: string): Observable<Customer[]> {
-    // CHIAMATA AL SERVER
-    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
-    //   {
-    //     query: val
-    //   }).pipe(
-    //     map(response => response.data.cities)
-    //   );
-    // Esempio di una lista di tre clienti
-    const customers: Customer[] = [
-      {
-        rifidanacliforprodati: 39,
-        id: 88,
-        denominazione: 'Pippo Poppo',
-        codicefiscale: "23323NLDSKNSDNKL",
-        cognome: "poppo",
-        data_nascita: null,
-        email: null,
-        nome: "Pippo",
-        piva: null,
-        telefono: null
-      },
-    ];
-
-    // Restituisce la lista come Observable
-    return of(customers).pipe(
-      map(items => items.filter(customer =>
-        customer.denominazione!.toLowerCase().includes(val.toLowerCase())
-      )));
+  private getCustomers(val: string): Observable<AutocompleteCustomer[]> {
+    return this.connectServerService.getRequest<ApiResponse<{ customer: AutocompleteCustomer[] }>>
+      (Connect.urlServerLaraApi, 'customer/searchCustomer',
+        {
+          // 0: Nome Cognome o Ragione Sociale, 1: CF o P. IVA
+          type: 0,
+          query: val
+        });
   }
 
   trackById(index: number, item: any): number {
@@ -157,7 +165,7 @@ export class TicketInfoComponent {
   }
 
   get clientDenomination(): string | null {
-    return this.ticketInfoForm.get('customer')?.value?.denominazione || null;
+    return this.ticketInfoForm.get('customer')?.value?.denomination || null;
   }
 
   print() {
@@ -184,12 +192,17 @@ export class TicketInfoComponent {
     });
   }
 
-  private getLocations() {
-    //CHIAMATA AL SERVER
-    this.locations = [
-      { id: 1, address: '123 Main St', number: '1A', city: 'City A' },
-      { id: 2, address: '456 Elm St', number: '2B', city: 'City B' }
-    ];
+  private getAddressList() {
+    if (this.isCustomer(this.ticketInfoForm.get('customer')?.value)) {
+      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/locationsList',
+        { idregistry: this.ticketInfoForm.get('customer')?.value?.idregistry })
+        .subscribe((val) => {
+          if (val.data) {
+            this.locations = val.data.locationsList;
+            //console.log(this.locations)
+          }
+        })
+    }
   }
 
   save() {
@@ -206,11 +219,12 @@ export class TicketInfoComponent {
         notes: formValues.notes,
         keepinformed: formValues.keepinformed,
         progressive: formValues.progressive,
-        refidregcussuppro: formValues.customer?.id || null,
-        refidregcussupprodata: formValues.customer?.rifidanacliforprodati || null,
-        refidcussupprolocation: null //TODO: DA CAMBIARE CON VALORE REALE
+        refidregcussuppro: formValues.customer?.idregistry || null,
+        refidregcussupprodata: formValues.customer?.idregistrydata || null,
+        refidcussupprolocation: formValues.location?.id || null
       };
-      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicket', { obj_infoticket: obj_infoticket, idticket: this.ticketId }).
+      this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicket', 
+        { obj_infoticket: obj_infoticket, idticket: this.ticketId }).
         subscribe((val: any) => {
           if (val) {
             this.getTicketInfo();
@@ -227,7 +241,7 @@ export class TicketInfoComponent {
   }
 
   deleteTicket() {
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/deleteTicket', {idticket: this.ticketId})
+    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/deleteTicket', { idticket: this.ticketId })
       .subscribe((val: ApiResponse<any>) => {
         if (val) {
           this.router.navigate(['ticketsList']);
@@ -240,7 +254,7 @@ export class TicketInfoComponent {
       if (val) {
         this.ticketInfo = val.data.ticketInfo;
         this.ticketInfoForm.patchValue(this.ticketInfo);
-        if(this.ticketInfoForm.get('internal')?.value == 0) {
+        if (this.ticketInfoForm.get('internal')?.value == 0) {
           this.ticketInfoForm.get('customer')?.enable();
           this.ticketInfoForm.get('location')?.enable();
         }
@@ -271,7 +285,9 @@ export class TicketInfoComponent {
     }
     else {
       this.ticketInfoForm.get("customer")?.enable();
-      this.ticketInfoForm.get("location")?.enable();
+      if (this.isCustomer(this.ticketInfoForm.get('customer')?.value)) {
+        this.ticketInfoForm.get("location")?.enable();
+      }
     }
   }
 

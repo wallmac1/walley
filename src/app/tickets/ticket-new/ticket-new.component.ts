@@ -189,7 +189,7 @@ export class TicketNewComponent {
       .subscribe((val) => {
         if (val.data) {
           this.locations = val.data.locationsList;
-          console.log(this.locations)
+          //console.log(this.locations)
         }
       })
   }

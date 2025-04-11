@@ -3,6 +3,7 @@ import { Department } from "./department";
 import { Location } from "./location";
 import { User } from "./user";
 import { Status } from "./status";
+import { AutocompleteCustomer } from "../../customer/interfaces/autocomplete-customer";
 
 export interface TicketInfo {
     id: number;
@@ -11,7 +12,7 @@ export interface TicketInfo {
     title: string;
     description: string;
     ticket_date: string;
-    customer: Customer | null;
+    customer: AutocompleteCustomer | null;
     location: Location | null;
     departments: Department[] | number[] | null;
     incharge: User | null;
