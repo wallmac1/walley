@@ -4,7 +4,6 @@ import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@ang
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours, add } from 'date-fns';
 import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { EventManagePopupComponent } from '../components/event-manage-popup/event-manage-popup.component';
@@ -118,7 +117,7 @@ export class CalendarContainerComponent {
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal, private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) { }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
