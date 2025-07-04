@@ -36,6 +36,7 @@ import { CalendarContainerComponent } from './calendar/calendar-container/calend
 import { CoursesListComponent } from './courses/courses-list/courses-list.component';
 import { ArticleListComponent } from './articles/article-list/article-list.component';
 import { ArticleFindComponent } from './articles/article-find/article-find.component';
+import { ListYearsComponent } from './proloco/members/list-years/list-years.component';
 
 export const routes: Routes = [
   { path: "", redirectTo: "login", pathMatch: "full" },
@@ -83,5 +84,9 @@ export const routes: Routes = [
   { path: "ticketListWeco", component: WecoTicketListComponent },
   { path: "ticketNewWeco", component: WecoTicketNewComponent },
   { path: "ticketModifyWeco/:id", component: WecoTicketModifyComponent },
+   //etto
+  {path:'member/listYears', component: ListYearsComponent},
+
+
   { path: '**', redirectTo: '/login' },
 ];

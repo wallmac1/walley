@@ -1,0 +1,26 @@
+@use '@angular/material' as mat;
+table {
+  width: 100%;
+}
+
+.mdc-data-table__cell, .mat-mdc-header-cell {
+  text-align: center;
+}
+
+.mat-mdc-row {
+  overflow: hidden; /* ensures scaled content stays inside */
+}
+
+.mat-mdc-row:hover {
+  background-color: rgba(0, 45, 93, 0.2);
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
