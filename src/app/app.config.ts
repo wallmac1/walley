@@ -15,7 +15,6 @@ import { environment } from '../environments/environment';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 // required for AoT
 export function HttpLoaderFactory(http: HttpClient) {
