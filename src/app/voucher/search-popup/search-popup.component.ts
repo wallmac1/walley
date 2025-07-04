@@ -8,6 +8,9 @@ import { debounceTime, filter, map, merge, Observable, of, startWith, switchMap 
 import { Article } from '../interfaces/article';
 import { Title } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { ApiResponse } from '../../weco/interfaces/api-response';
+import { Connect } from '../../classes/connect';
+import { ConnectServerService } from '../../services/connect-server.service';
 
 @Component({
   selector: 'app-search-popup',
@@ -31,8 +34,8 @@ export class SearchPopupComponent {
   articleForm!: FormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { text: string },
-    public dialogRef: MatDialogRef<SearchPopupComponent>) {
-  }
+    public dialogRef: MatDialogRef<SearchPopupComponent>,
+    private connectServerService: ConnectServerService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -40,7 +43,7 @@ export class SearchPopupComponent {
 
   initForm() {
     this.articleForm = new FormGroup({
-      article: new FormControl<string>(this.data.text)
+      article: new FormControl<Article | null>(null)
     })
     this.searchArticle();
   }
@@ -49,57 +52,42 @@ export class SearchPopupComponent {
     this.dialogRef.close();
   }
 
-  displayArticleName(article?: any): string {
-    return article;
-  }
-
-  print() {
-    console.log("PRINT", this.articleForm.get('article')?.value)
+  displayArticleName(article?: Article): string {
+    console.log(article)
+    let returnString = '';
+    if (article) {
+      if (article.serialnumber) {
+        returnString = article.code + ' - ' + article.title + ' - ' + article.serialnumber;
+      }
+      else {
+        returnString = article.code + ' - ' + article.title;
+      }
+    }
+    return returnString;
   }
 
   private searchArticle() {
-    this.filteredArticles$ = this.articleForm.get('article')!.valueChanges.pipe(
-      startWith(this.articleForm.get('article')?.value || ''),
-      filter(value => value.length > 0),
-      debounceTime(300),
-      switchMap((value: string) => this.getArticles(value))
-    );
+    const article_field = this.articleForm.get('article');
+    if (article_field) {
+      this.filteredArticles$ = article_field.valueChanges
+      .pipe(
+        startWith(this.articleForm.get('article')?.value || ''),
+        map(value => typeof value === 'string' ? value : value?.title || value.serialnumber || value.code || ''),
+        filter(value => value.length > 0),
+        debounceTime(300),
+        switchMap((value: string) => 
+          value ? this.getArticles(value) : [])
+      );
+    }
   }
 
   private getArticles(val: string): Observable<Article[]> {
-    // CHIAMATA AL SERVER
-    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
-    //   {
-    //     query: val
-    //   }).pipe(
-    //     map(response => response.data.cities)
-    //   );
-    // Esempio di una lista di tre clienti
-    const articles: Article[] = [
+    return this.connectServerService.getRequest<ApiResponse<{ article: Article[] }>>(Connect.urlServerLaraApi, 'articles/searchArticles',
       {
-        id: 6,
-        code: "8745",
-        article_data: {
-          id: 48,
-          title: "Prodotto D",
-          description: "Descrizione del prodotto D.",
-          refidum: 4,
-        },
-        article_price: {
-          id: 5,
-          taxablepurchase: 400.25,
-          taxablesale: 450.75,
-          serialnumber: "35467", 
-        }
-      }
-    ];
-
-    // Restituisce la lista come Observable
-    return of(articles).pipe(
-      map(items => items.filter(article =>
-        article.article_data.title.toLowerCase().includes(val.toLowerCase())
-      ))
-    );
+        query: val
+      }).pipe(
+        map(response => response.data.cities)
+      );
   }
 
   save(option: any) {

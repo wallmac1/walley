@@ -9,20 +9,20 @@
                 <mat-expansion-panel-header style="max-height: 50px; background-color: rgb(242, 242, 242);">
                     <mat-panel-title class="panel-title">
                         <span style="font-weight: bold;">
-                            {{article.date_snapshot}}
+                            {{article.article_data.date_snapshot}}
                         </span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
                 <div class="row justify-content-center align-items-center mt-1">
                     <div class="col-12">
-                        {{article.title}}
+                        {{article.article_data.title}}
                     </div>
                     <div class="col-12">
-                        {{"ARTICLE.MODAL.MEASUREMENTUNIT" | translate }}: {{article.um?.acronym}}
+                        {{"ARTICLE.MODAL.MEASUREMENTUNIT" | translate }}: {{article.article_data.um?.acronym}}
                     </div>
                     <div class="col-12">
-                        {{article.description}}
+                        {{article.article_data.description}}
                     </div>
                 </div>
 

@@ -33,9 +33,9 @@
                         --
                     </span>
                 </option>
-                <option *ngFor="let condition of conditionsList" [ngValue]="condition.id">
+                <option *ngFor="let condition of conditionsList" [ngValue]="condition">
                     <span class="optionText">
-                        {{condition.title}}
+                        {{condition.description}}
                     </span>
                 </option>
             </select>
@@ -50,14 +50,14 @@
 
                  <!-- Action Column -->
                  <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef style="width: 90px;">
+                    <th mat-header-cell *matHeaderCellDef style="width: 70px;" class="text-center">
                         {{'INVOICE.INFO.PAYMENTCOMPONENT.ACTIONS' | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index" class="ps-2 pe-2">
                         <button class="btn btn-link p-1" (click)="editOrAddPayment(index, 1)">
                             <i class="bi bi-pencil" style="color: black;"></i>
                         </button>
-                        <button *ngIf="dataSource.data.length > 1 && index > 0" class="btn btn-link p-1" (click)="deletePayment(index)">
+                        <button class="btn btn-link p-1" (click)="deletePayment(index)">
                             <i class="bi bi-trash" style="color: red;"></i>
                         </button>
                     </td>
@@ -69,13 +69,15 @@
                         {{'INVOICE.INFO.PAYMENTCOMPONENT.TYPE' | translate}}
                     </th>
                     <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
-                        {{ installments.at(index).get('paymentType')?.value.title }}
+                        {{ installments.at(index).get('paymentType')?.value.description }} - 
+                        {{ installments.at(index).get('bank')?.value?.denomination }}
                     </td>
                 </ng-container>
 
                 <!-- Deadline Column -->
                 <ng-container matColumnDef="deadline">
-                    <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-sm-table-cell">
+                    <th mat-header-cell *matHeaderCellDef class="limitedWidth d-none d-sm-table-cell"
+                        style="width: 110px;">
                         {{'INVOICE.INFO.PAYMENTCOMPONENT.DEADLINE' | translate}}
                     </th>
                     <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index" 
@@ -101,8 +103,8 @@
             </table>
         </div>
 
-        <div class="col-12 mt-1 text-center">
-            <span *ngIf="isNotCorresponding" style="font-size: small; color: red;">
+        <div *ngIf="isNotCorresponding" class="col-12 mt-1 text-center">
+            <span style="font-size: small; color: red;">
                 {{'INVOICE.INFO.PAYMENTCOMPONENT.NOTCORRESPONDINGTOTAL' | translate}}
             </span>
         </div>

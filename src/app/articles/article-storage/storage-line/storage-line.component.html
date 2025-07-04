@@ -1,188 +1,93 @@
-<!-- NO SERIAL NUMBER, NO QUANTITY -->
-<div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 375px; max-width: 1800px;">
-    <form [formGroup]="storageForm">
-        <ng-container formArrayName="articles">
-            <div *ngFor="let item of articles.controls; let i = index" [formGroupName]="i"
-                class="row justify-content-center align-items-group mt-2 pb-2"
-                style="border-bottom: 1px solid lightgray; position: relative;">
+<div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 1000px; max-width: 1800px;">
+    <div class="row">
+        <div class="col-12">
+            <table mat-table [dataSource]="dataSource" class="mat-table" style="width: 100%;">
 
-                <!-- BREAK COLUMN -->
-                <div class="col-2 d-none d-lg-inline d-xl-none"></div>
-
-                <!-- UNITA' -->
-                <div class="articleColumn col-4 col-sm-3 col-lg-2 col-xl-1 pe-md-5 pe-lg-3">
-                    <label class="form-label" for="quantity-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockUM">
-                            Unità Magazzino
-                        </span>
-                        <ng-template #smallBlockUM>
-                            <span>
-                                Unt. Mag.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <input name="quantity-{{i}}" id="quantity-{{i}}" class="form-control" formControlName="quantity">
-                </div>
-
-                <!-- UNITA' DISPONIBILE SM/XS/XL/XXL -->
-                <div class="articleColumn col-4 col-sm-3 col-md-2 col-xl-1 d-md-none d-xl-inline">
-                    <label class="form-label" for="available_qnt-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockUD">
-                            Unità Disponibile
-                        </span>
-                        <ng-template #smallBlockUD>
-                            <span>
-                                Unt. Disp.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="available_qnt-{{i}}" id="available_qnt-{{i}}"
-                            formControlName="available_qnt">
-                    </div>
-                </div>
-
-                <!-- MODIFY & DELETE -->
-                <div class="articleColumn col-4 d-md-none" style="margin-top: 2rem;">
-                    <i class="bi bi-pencil iconMargin iconSize" (click)="modifyPopUp(item.getRawValue())"></i>
-                    <i class="bi bi-file-earmark-text iconSize" (click)="documentsPopup()"></i>
-                    <i class="bi bi-trash iconSize" style="color: red;" (click)="deletePopUp(item.getRawValue())"></i>
-                </div>
-                <ng-container>
-                    <i class="bi bi-pencil iconMargin iconAbsoluteP displayIcons" (click)="modifyPopUp(item.getRawValue())"></i>
-                    <i class="bi bi-file-earmark-text iconAbsoluteF displayIcons" (click)="documentsPopup()"></i>
-                    <i class="bi bi-trash iconAbsoluteT displayIcons" style="color: red;" (click)="deletePopUp(item.getRawValue())"></i>
+                <!-- Unità Magazzino -->
+                <ng-container matColumnDef="unit_storage">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.STORAGEUNIT" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_storage }}</td>
                 </ng-container>
 
-                <!-- TAXABLE PURCHASE -->
-                <div class="articleColumn col-5 col-sm-4 col-md-3 col-lg-2 col-xxl-1 pe-1">
-                    <label class="form-label" for="taxablepurchase-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockA">
-                            Imponibile Acquisto
-                        </span>
-                        <ng-template #smallBlockA>
-                            <span>
-                                Imp. Acq.
-                            </span>
-                        </ng-template>
-                        <i class="bi bi-info-circle" matTooltip="Imponibile di acquisto relativo alla singola unità"
-                            style="font-size: small;"></i>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="taxablepurchase-{{i}}" id="taxablepurchase-{{i}}"
-                            formControlName="taxablepurchase">
-                        <span class="input-group-text" id="taxablepurchase-{{i}}">€</span>
-                    </div>
-                </div>
+                <!-- Unità Disponibile -->
+                <ng-container matColumnDef="unit_available">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.AVAILABLEUNIT" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_available }}</td>
+                </ng-container>
 
-                <!-- VAT PURCHASE -->
-                <div class="articleColumn col-3 col-sm-2 col-lg-1 ps-0">
-                    <label class="form-label" for="vatpurchase-{{i}}">
-                        IVA
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control vatPadding" type="text" name="vatpurchase-{{i}}"
-                            id="vatpurchase-{{i}}" formControlName="vatpurchase">
-                        <span class="input-group-text vatPadding" id="vatpurchase-{{i}}">%</span>
-                    </div>
-                </div>
+                <!-- Imponibile Acquisto -->
+                <ng-container matColumnDef="unit_taxablepurchase">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.TAXABLEPURCHASE" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.unit_taxablepurchase }} €</td>
+                </ng-container>
 
-                <!-- PURCHASE PRICE -->
-                <div class="articleColumn col-4 col-md-3 col-lg-2 col-xxl-1">
-                    <label class="form-label" for="pricesale-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockPA">
-                            Prezzo Acquisto
-                        </span>
-                        <ng-template #smallBlockPA>
-                            <span>
-                                Prz. Acq.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="pricesale-{{i}}" id="pricesale-{{i}}"
-                            formControlName="pricesale">
-                        <span class="input-group-text" id="pricesale-{{i}}">€</span>
-                    </div>
-                </div>
+                <!-- IVA Acquisto -->
+                <ng-container matColumnDef="vatpurchase">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.VAT" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.vatpurchase }} %</td>
+                </ng-container>
 
-                <!-- BREAK COLUMN -->
-                <div class="col-2 d-none d-lg-inline d-xl-none"></div>
-                <div class="col-2 d-none d-lg-inline d-xl-none"></div>
+                <!-- Prezzo Acquisto -->
+                <ng-container matColumnDef="pricepurchase">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.PRICEPURCHASE" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.pricepurchase }} €</td>
+                </ng-container>
 
-                <!-- UNITA' DISPONIBILE MD/LG -->
-                <div class="articleColumn col-4 col-sm-3 col-lg-2 d-none d-md-inline d-xl-none pe-5 pe-lg-3">
-                    <label class="form-label" for="available_qnt-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockUD">
-                            Unità Disponibile
-                        </span>
-                        <ng-template #smallBlockUD>
-                            <span>
-                                Unt. Disp.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="available_qnt-{{i}}" id="available_qnt-{{i}}"
-                            formControlName="available_qnt">
-                    </div>
-                </div>
+                <!-- Imponibile Consigliato -->
+                <ng-container matColumnDef="unit_taxablerecommended">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.TAXABLERECOMMENDED" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.unit_taxablerecommended }} €</td>
+                </ng-container>
 
-                <!-- TAXABLE RECOMMENDED -->
-                <div class="articleColumn col-5 col-sm-4 col-md-3 col-lg-2 col-xxl-1 pe-1">
-                    <label class="form-label" for="taxablerecommended-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockC">
-                            Imponibile Consigliato
-                        </span>
-                        <ng-template #smallBlockC>
-                            <span>
-                                Imp. Cons.
-                            </span>
-                        </ng-template>
-                        <i class="bi bi-info-circle" matTooltip="Imponibile consigliato relativo alla singola unità"
-                            style="font-size: small;"></i>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="taxablerecommended-{{i}}"
-                            id="taxablerecommended-{{i}}" formControlName="taxablerecommended">
-                        <span class="input-group-text" id="taxablerecommended-{{i}}">€</span>
-                    </div>
-                </div>
+                <!-- IVA Consigliata -->
+                <ng-container matColumnDef="vatrecommended">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.VAT" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.vatrecommended }} %</td>
+                </ng-container>
 
-                <!-- VAT RECOMMENDED -->
-                <div class="articleColumn col-3 col-sm-2 col-lg-1 ps-0">
-                    <label class="form-label" for="vatrecommended-{{i}}">
-                        IVA
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control vatPadding" type="text" name="vatrecommended-{{i}}"
-                            id="vatrecommended-{{i}}" formControlName="vatrecommended">
-                        <span class="input-group-text vatPadding" id="vatrecommended-{{i}}">%</span>
-                    </div>
-                </div>
+                <!-- Prezzo Consigliato -->
+                <ng-container matColumnDef="pricerecommended">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{"ARTICLE.ARTICLESTORAGE.PRICERECOMMENDED" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.pricerecommended }} €</td>
+                </ng-container>
 
-                <!-- PRICE RECOMMENDED -->
-                <div class="articleColumn col-4 col-md-3 col-lg-2 col-xxl-1">
-                    <label class="form-label" for="pricerecommended-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockPC">
-                            Prezzo Consigliato
-                        </span>
-                        <ng-template #smallBlockPC>
-                            <span>
-                                Prz. Cons.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="pricerecommended-{{i}}"
-                            id="pricerecommended-{{i}}" formControlName="pricerecommended">
-                        <span class="input-group-text d-xxl-none" id="pricerecommended-{{i}}">€</span>
-                    </div>
-                </div>
+                <!-- Azioni -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">
+                        {{"ARTICLE.ARTICLESTORAGE.ACTIONS" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-6 text-center">
+                                <i class="bi bi-pencil actionIcon" (click)="modifyPopUp(element)"></i>
+                            </div>
+                            <div class="col-6 text-center">
+                                <i class="bi bi-trash actionIcon" style="color: red;"
+                                    (click)="deletePopUp(element)"></i>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
 
-                <div class="col-2 d-none d-lg-inline d-xl-none"></div>
-            </div>
-        </ng-container>
-
-    </form>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
 </div>

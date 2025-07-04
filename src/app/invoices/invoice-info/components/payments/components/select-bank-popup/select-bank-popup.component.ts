@@ -18,7 +18,8 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class SelectBankPopupComponent {
 
-  bankList: { id: number, denomination: string, iban: string, abi: string, cab: string, bic: string }[] = [];
+  bankList: { id: number, denomination: string, iban: string, abi: {code: string, description: string} 
+    cab: {code: string, description: string}, bic: string }[] = [];
 
   constructor(public dialogRef: MatDialogRef<SelectBankPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -26,8 +27,17 @@ export class SelectBankPopupComponent {
     this.bankList = data.bankList
   }
 
-  selectedBank(bank: { id: number, denomination: string, iban: string, abi: string, cab: string, bic: string }) {
-    this.dialogRef.close(bank);
+  selectedBank(bank: { id: number, denomination: string, iban: string, abi: {code: string, description: string}, 
+      cab: {code: string, description: string}, bic: string }) {
+    let selectedBank = {
+      id: bank.id,
+      denomination: bank.denomination,
+      iban: bank.iban,
+      abi: bank.abi.code,
+      cab: bank.cab.code,
+      bic: bank.bic
+    }
+    this.dialogRef.close(selectedBank);
   }
 
   close() {

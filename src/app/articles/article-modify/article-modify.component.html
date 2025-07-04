@@ -5,18 +5,18 @@
             <div class="row justify-content-center mt-2 mb-2" style="position: relative;">
                 <div class="col-12 mb-1 text-center">
                     <span style="font-size: xx-large; font-weight: bold;">
-                        SCHEDA ARTICOLO
+                        {{"ARTICLE.ARTICLEMODIFY.ARTICLECARD" | translate}}
                     </span>
                 </div>
 
                 <div class="col-12 text-center col-sm-6 col-md-4">
                     <span style="color: gray; font-style: italic; font-size: small;">
-                        Gestione serial number: {{articleForm.get('manage_sn')?.value ? 'Si' : 'No'}}
+                        {{"ARTICLE.ARTICLEMODIFY.MANAGESN" | translate}}: {{manage_sn ? 'Si' : 'No'}}
                     </span>
                 </div>
                 <div class="col-12 text-center col-sm-6 col-md-4">
                     <span style="color: gray; font-style: italic; font-size: small;">
-                        Gestione quantità: {{articleForm.get('manage_qnt')?.value ? 'Si' : 'No'}}
+                        {{"ARTICLE.ARTICLEMODIFY.MANAGEQNT" | translate}}: {{manage_qnt ? 'Si' : 'No'}}
                     </span>
                 </div>
 
@@ -27,20 +27,24 @@
                 <!-- CODICE -->
                 <div class="col-8 col-sm-4 col-md-3 col-xl-3 mt-2 elementPadding">
                     <label class="form-label" for="code">
-                        Codice Articolo<sup>*</sup>
+                        {{"ARTICLE.ARTICLEMODIFY.ARTICLECODE" | translate}}<sup>*</sup>
                     </label>
                     <div class="input-group">
                         <button class="btn btn-outline-dark" [matTooltip]="'Storico Articolo'" (click)="historyPopUp()">
                             <i class="bi bi-clock-history"></i>
                         </button>
                         <input id="code" name="code" class="form-control" formControlName="code">
+                        <button class="btn btn-outline-dark" [matTooltip]="'Modifica Codice'"
+                            (click)="modifyCodePopup()">
+                            <i class="bi bi-pencil"></i>
+                        </button>
                     </div>
                 </div>
                 <!-- UNITA' DI MISURA -->
                 <div class="col-4 col-sm-2 col-lg-1 col-xl-1 mt-2 elementPadding">
                     <label class="form-label" for="refidum">
                         <span *ngIf="!isSmallUm; else smallBlockU">
-                            Unità di Misura
+                            {{"ARTICLE.ARTICLEMODIFY.MEASUREMENTUNIT" | translate}}
                         </span>
                         <ng-template #smallBlockU>
                             <span>
@@ -48,7 +52,8 @@
                             </span>
                         </ng-template>
                     </label>
-                    <select name="refidum" id="refidum" class="form-select quantityClass unitMeasurement" formControlName="refidum">
+                    <select name="refidum" id="refidum" class="form-select quantityClass unitMeasurement"
+                        formControlName="refidum">
                         <option [value]="null">--</option>
                         <option *ngFor="let unit of measurmentUnit" [ngValue]="unit.id">{{unit.acronym}}</option>
                     </select>
@@ -57,69 +62,79 @@
                 <div *ngIf="articleForm.get('manage_qnt')?.value == true"
                     class="col-4 col-md-6 d-none d-sm-flex d-lg-none"></div>
 
-                <!-- UNITA' -->
-                <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
-                    <label class="form-label" for="available_unt">
-                        <span *ngIf="!isSmall; else smallBlockUD">
-                            Unità Disponibili
-                        </span>
-                        <ng-template #smallBlockUD>
-                            <span>
-                                Unt. Disp.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <input id="available_unt" name="available_unt" class="form-control quantityClass"
-                        formControlName="available_unt"
-                        [class.is-invalid]="articleForm.get('available_unt')?.invalid && submitted">
-                </div>
-                <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
-                    <label class="form-label" for="storage_unt">
+                <!-- UNITA' MAGAZZINO -->
+                <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding" style="position: relative;">
+                    <label class="form-label" for="total_unitstorage">
                         <span *ngIf="!isSmall; else smallBlockUM">
-                            Unità Magazzino
+                            {{"ARTICLE.ARTICLEMODIFY.STORAGEUNIT" | translate}}
                         </span>
                         <ng-template #smallBlockUM>
                             <span>
-                                Unt. Mag.
+                                {{"ARTICLE.ARTICLEMODIFY.STORAGEUNITSM" | translate}}
                             </span>
                         </ng-template>
                     </label>
-                    <input id="storage_unt" name="storage_unt" class="form-control quantityClass"
-                        formControlName="storage_unt"
-                        [class.is-invalid]="articleForm.get('storage_unt')?.invalid && submitted">
+                    <input id="total_unitstorage" name="total_unitstorage" class="form-control quantityClass"
+                        formControlName="total_unitstorage"
+                        [class.is-invalid]="articleForm.get('total_unitstorage')?.invalid && submitted">
+                    <i class="bi bi-info-circle" style="position: absolute; right: 10px; top: 36px;"
+                        matTooltip="Unità totali presenti in magazzino"></i>
+                </div>
+                <!-- UNITA' DISPONIBILI -->
+                <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding" style="position: relative;">
+                    <label class="form-label" for="total_unitavailable">
+                        <span *ngIf="!isSmall; else smallBlockUD">
+                            {{"ARTICLE.ARTICLEMODIFY.AVAILABLEUNIT" | translate}}
+                        </span>
+                        <ng-template #smallBlockUD>
+                            <span>
+                                {{"ARTICLE.ARTICLEMODIFY.AVAILABLEUNITSM" | translate}}
+                            </span>
+                        </ng-template>
+                    </label>
+                    <input id="total_unitavailable" name="total_unitavailable" class="form-control quantityClass"
+                        formControlName="total_unitavailable"
+                        [class.is-invalid]="articleForm.get('total_unitavailable')?.invalid && submitted">
+                    <i class="bi bi-info-circle" style="position: absolute; right: 10px; top: 36px;"
+                        matTooltip="Unità totali disponibili alla vendita"></i>
                 </div>
 
-                <!-- QUANTITA' -->
-                <ng-container *ngIf="articleForm.get('manage_qnt')?.value == true">
-                    <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
-                        <label class="form-label" for="available_qnt">
-                            <span *ngIf="!isSmall; else smallBlockD">
-                                Quantità Disponibile
-                            </span>
-                            <ng-template #smallBlockD>
-                                <span>
-                                    Qnt. Disp.
-                                </span>
-                            </ng-template>
-                        </label>
-                        <input id="available_qnt" name="available_qnt" class="form-control quantityClass"
-                            formControlName="available_qnt"
-                            [class.is-invalid]="articleForm.get('available_qnt')?.invalid && submitted">
-                    </div>
-                    <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding">
-                        <label class="form-label" for="storage_qnt">
+                <ng-container *ngIf="manage_qnt == true">
+                    <!-- QUANTITA' MAGAZZINO -->
+                    <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding" style="position: relative;">
+                        <label class="form-label" for="total_quantitystorage">
                             <span *ngIf="!isSmall; else smallBlockM">
-                                Quantità Magazzino
+                                {{"ARTICLE.ARTICLEMODIFY.STORAGEQNT" | translate}}
                             </span>
                             <ng-template #smallBlockM>
                                 <span>
-                                    Qnt. Mag.
+                                    {{"ARTICLE.ARTICLEMODIFY.STORAGEQNTSM" | translate}}
                                 </span>
                             </ng-template>
                         </label>
-                        <input id="storage_qnt" name="storage_qnt" class="form-control quantityClass"
-                            formControlName="storage_qnt"
-                            [class.is-invalid]="articleForm.get('storage_qnt')?.invalid && submitted">
+                        <input id="total_quantitystorage" name="total_quantitystorage" class="form-control quantityClass"
+                            formControlName="total_quantitystorage"
+                            [class.is-invalid]="articleForm.get('total_quantitystorage')?.invalid && submitted">
+                        <i class="bi bi-info-circle" style="position: absolute; right: 10px; top: 36px;"
+                            matTooltip="Quantità totale presente in magazizno"></i>
+                    </div>
+                    <!-- QUANTITA' DISPONIBILI -->
+                    <div class="col-6 col-sm-3 col-lg-2 mt-2 elementPadding" style="position: relative;">
+                        <label class="form-label" for="total_quantityavailable">
+                            <span *ngIf="!isSmall; else smallBlockD">
+                                {{"ARTICLE.ARTICLEMODIFY.AVAILABLEQNT" | translate}}
+                            </span>
+                            <ng-template #smallBlockD>
+                                <span>
+                                    {{"ARTICLE.ARTICLEMODIFY.AVAILABLEQNTSM" | translate}}
+                                </span>
+                            </ng-template>
+                        </label>
+                        <input id="total_quantityavailable" name="total_quantityavailable" class="form-control quantityClass"
+                            formControlName="total_quantityavailable"
+                            [class.is-invalid]="articleForm.get('total_quantityavailable')?.invalid && submitted">
+                        <i class="bi bi-info-circle" style="position: absolute; right: 10px; top: 36px;"
+                            matTooltip="Quantità disponibile alla vendita"></i>
                     </div>
                 </ng-container>
 
@@ -127,7 +142,7 @@
                     <!-- TITOLO -->
                     <div class="col-12 mt-2 elementPadding">
                         <label class="form-label" for="title">
-                            Titolo<sup>*</sup>
+                            {{"ARTICLE.ARTICLEMODIFY.TITLE" | translate}}<sup>*</sup>
                         </label>
                         <input id="title" name="title" class="form-control" formControlName="title"
                             [class.is-invalid]="articleForm.get('title')?.invalid && submitted">
@@ -136,7 +151,7 @@
                     <!-- DESCRIZIONE -->
                     <div class="col-12 elementPadding">
                         <label class="form-label" for="description">
-                            Descrizione
+                            {{"ARTICLE.ARTICLEMODIFY.DESCRIPTION" | translate}}
                         </label>
                         <textarea id="description" name="description" class="form-control" formControlName="description"
                             rows="3">
@@ -147,10 +162,11 @@
                 <div class="col-12 col-md-4 p-0">
                     <!-- NOTE -->
                     <div class="col-12 mt-2 pb-0 pt-0 elementPadding">
-                        <label class="form-label" for="notes">
-                            Note
+                        <label class="form-label" for="note">
+                            {{"ARTICLE.ARTICLEMODIFY.NOTES" | translate}}
                         </label>
-                        <textarea id="notes" name="notes" class="form-control" formControlName="notes" [rows]="notesHeight">
+                        <textarea id="note" name="note" class="form-control" formControlName="note"
+                            [rows]="notesHeight">
                         </textarea>
                     </div>
                 </div>
@@ -158,44 +174,50 @@
 
                 <div *ngIf="articleForm.get('title')?.invalid && submitted" class="col-12 mt-1 text-center">
                     <span style="color: red; font-size: small;">
-                        Inserire un titolo valido
+                        {{"ARTICLE.ARTICLEMODIFY.INVALIDTITLE" | translate}}
                     </span>
                 </div>
 
-                <div class="row d-none d-md-flex justify-content-center align-items-center mt-1">
-                    <div class="col-5 col-lg-4 text-start">
-                        <span *ngIf="article?.article_data?.user_created" class="userInfo">
+                <div class="row d-none d-md-flex justify-content-center align-items-center mt-1 pe-0 ps-4">
+                    <div class="col-6 p-0 text-start">
+                        <span *ngIf="article?.user_created" class="userInfo">
                             {{"TICKET.DATETIMELOG.CREATED" | translate}}:
-                            {{article?.article_data?.user_created?.nickname}} -
-                            {{article?.article_data?.user_created?.datetime}}
+                            {{article?.user_created?.nickname}} -
+                            {{article?.user_created?.datetime}}
                         </span>
                     </div>
-                    <div class="col-5 col-lg-4 text-end">
-                        <span *ngIf="article?.article_data?.user_updated != null" class="userInfo">
+                    <div class="col-6 p-0 text-end">
+                        <span *ngIf="article?.user_updated != null" class="userInfo">
                             {{"TICKET.DATETIMELOG.UPDATED" | translate}}:
-                            {{article?.article_data?.user_updated?.nickname}} -
-                            {{article?.article_data?.user_updated?.datetime}}
+                            {{article?.user_updated?.nickname}} -
+                            {{article?.user_updated?.datetime}}
                         </span>
                     </div>
                 </div>
                 <div class="row d-md-none justify-content-center mt-1">
                     <div class="col-12 text-start">
                         <i class="bi bi-info-circle"
-                            matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: {{article?.article_data?.user_created?.nickname}} - {{article?.article_data?.user_created?.datetime}}, &#10;
-                        {{'TICKET.DATETIMELOG.UPDATED' | translate}}: {{article?.article_data?.user_updated?.nickname}} - {{article?.article_data?.user_updated?.datetime}}"></i>
+                            matTooltip="{{'TICKET.DATETIMELOG.CREATED' | translate}}: 
+                            {{article?.user_created?.nickname}} - {{article?.user_created?.datetime}}, &#10;
+                            {{'TICKET.DATETIMELOG.UPDATED' | translate}}: {{article?.user_updated?.nickname}} - 
+                            {{article?.user_updated?.datetime}}"></i>
                     </div>
                 </div>
 
-
                 <div class="row justify-content-center align-items-center mt-4 mb-2">
-                    <div class="col-6 col-sm-5 col-md-4 text-center">
-                        <button class="btn btn-outline-dark" (click)="updateQuantityPopUp()">
-                            Aggiungi
+                    <div class="col-12 col-md-4 text-center order-3 order-md-1">
+                        <button class="btn btn-outline-danger" (click)="deleteArticlePopup()">
+                            {{"ARTICLE.ARTICLEMODIFY.DELETE" | translate}}
                         </button>
                     </div>
-                    <div class="col-6 col-sm-5 col-md-4 text-center">
+                    <div class="col-6 col-md-4 order-1 order-md-2 text-center">
+                        <button class="btn btn-outline-dark" (click)="insertQuantityPopUp()">
+                            {{"ARTICLE.ARTICLEMODIFY.ADD" | translate}}
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-4 order-2 order-md-3 text-center">
                         <button class="btn btn-outline-dark" (click)="updateArticlePopup()">
-                            Aggiorna
+                            {{"ARTICLE.ARTICLEMODIFY.UPDATE" | translate}}
                         </button>
                     </div>
                 </div>
@@ -212,28 +234,60 @@
                         <i class="bi bi-building titleIcon"></i>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-storage-line *ngIf="manage_qnt == false && manage_sn == false" 
-                        [idarticle]="idarticle"></app-storage-line>
+                        <app-storage-line *ngIf="manage_qnt == false && manage_sn == false"
+                            [idarticle]="idarticle" (refreshArticle)="getArticle()" #storageLineComponent></app-storage-line>
+                        <app-storage-line-sn *ngIf="manage_qnt == false && manage_sn == true"
+                            [idarticle]="idarticle" (refreshArticle)="getArticle()" #storageLineSnComponent></app-storage-line-sn>
+                        <app-storage-line-sn-qnt *ngIf="manage_qnt == true && manage_sn == true"
+                            [idarticle]="idarticle" (refreshArticle)="getArticle()" #storageLineSnQntComponent></app-storage-line-sn-qnt>
                     </ng-template>
                 </mat-tab>
 
                 <mat-tab>
                     <ng-template mat-tab-label>
-                        <span class="title">Imponibile</span>
+                        <span class="title">
+                            {{"ARTICLE.ARTICLEMODIFY.MEDIUMPRICE" | translate}}
+                        </span>
                         <i class="bi bi-cash titleIcon"></i>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-article-taxable></app-article-taxable>
+                        <app-article-average-price [idarticle]="idarticle"></app-article-average-price>
                     </ng-template>
                 </mat-tab>
 
                 <mat-tab>
                     <ng-template mat-tab-label>
-                        <span class="title">Storico</span>
+                        <span class="title">
+                            {{"ARTICLE.ARTICLEMODIFY.RESERVEDARTICLES" | translate}}
+                        </span>
+                        <i class="bi bi-truck titleIcon"></i>
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <app-article-input-output-reserved [idarticle]="idarticle" [type]="0"></app-article-input-output-reserved>
+                    </ng-template>
+                </mat-tab>
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <span class="title">
+                            {{"ARTICLE.ARTICLEMODIFY.HISTORICINPUT" | translate}}
+                        </span>
                         <i class="bi bi-clock-history titleIcon"></i>
                     </ng-template>
                     <ng-template matTabContent>
-                        <app-article-history></app-article-history>
+                        <app-article-input-output-reserved [idarticle]="idarticle" [type]="1"></app-article-input-output-reserved>
+                    </ng-template>
+                </mat-tab>
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <span class="title">
+                            {{"ARTICLE.ARTICLEMODIFY.HISTORICOUTPUT" | translate}}
+                        </span>
+                        <i class="bi bi-clock-history titleIcon"></i>
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <app-article-input-output-reserved [idarticle]="idarticle" [type]="2"></app-article-input-output-reserved>
                     </ng-template>
                 </mat-tab>
             </mat-tab-group>

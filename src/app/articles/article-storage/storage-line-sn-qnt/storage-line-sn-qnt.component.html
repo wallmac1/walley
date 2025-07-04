@@ -1,235 +1,174 @@
-<div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 375px; max-width: 1800px;">
-
-    <div *ngIf="manage_sn == false" class="row justify-content-center align-items-center">
-        <div class="col-12 text-center">
-            <span style="color: gray; font-size: small;">
-                I valori di imponibile e prezzo presenti in ogni riga sono relativi alla singola unità del prodotto
+<div class="container-fluid p-2 p-md-3 p-lg-4" style="min-width: 1200px; max-width: 2000px;">
+    <div class="row justify-content-center mb-3">
+        <div [formGroup]="filterForm" class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 text-center">
+            <label class="form-label" for="serialnumber">
+                {{"ARTICLE.ARTICLESTORAGE.SEARCHSERIALNUMBER" | translate}}
+            </label>
+            <div class="input-group">
+                <input class="form-control" type="text" id="serialnumber" formControlName="serialnumber"
+                    [class.is-invalid]="filterForm.invalid && submitted">
+                <button class="btn btn-outline-dark" (click)="filter()">
+                    {{"ARTICLE.ARTICLESTORAGE.FILTER" | translate}}
+                </button>
+            </div>
+        </div>
+        <div *ngIf="filterForm.invalid && submitted" class="col-12 text-center mt-1">
+            <span style="font-size: small; color: red;">
+                {{"ARTICLE.ARTICLESTORAGE.INVALIDSERIALNUMBER" | translate}}
             </span>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <!-- PAGINATOR -->
+            <div class="row justify-content-center p-3" style="border: 1px solid lightgray; background-color: white;">
+                <div class="d-none d-md-inline col-4 text-start">
+                    <span style="font-size: small;">
+                        {{"ARTICLE.ARTICLESTORAGE.TOTALRESULTS" | translate}}:
+                        {{totalResults}}
+                    </span>
+                </div>
 
-    <form [formGroup]="storageForm">
-        <!-- <div class="row justify-content-center align-items-center mb-2">
-            <div class="col-12 text-center">
-                <span style="font-size: x-large; font-weight: bold;">
-                    MAGAZZINO ARTICOLO
-                </span>
+                <div class="d-none d-md-inline col-4 text-center">
+                    <span style="font-size: small;">
+                        {{"ARTICLE.ARTICLESTORAGE.RESULTPERPAGE" | translate}}:
+                        {{itemsPerPage}}
+                    </span>
+                </div>
+
+                <div class="col-12 col-md-4 text-end">
+                    <span>
+                        <button [disabled]="currentPage == 1" class="btn btn-link me-2 p-0" (click)="prevPage()">
+                            <i class="bi bi-caret-left"></i>
+                        </button>
+                        <span style="font-size: small;">
+                            {{"ARTICLE.ARTICLESTORAGE.PAGE" | translate}} {{currentPage}} 
+                            {{"ARTICLE.ARTICLESTORAGE.OF" | translate}} {{totalPages}}
+                        </span>
+                        <button [disabled]="currentPage == totalPages" class="btn btn-link ms-2 p-0"
+                            (click)="nextPage()">
+                            <i class="bi bi-caret-right"></i>
+                        </button>
+                    </span>
+                </div>
             </div>
-        </div> -->
 
-        <!-- GROUP ACTION
-        <div class="row justify-content-center align-items-center pb-2" style="border-bottom: 1px solid lightgray;">
-             CHECKBOX 
-            <div class="checkboxPadding col-auto me-2 me-md-4">
-                <div class="form-check">
-                    <input class="form-check-input group-checkbox" type="checkbox" formControlName="groupAction"
-                        id="groupAction" (change)="formLogicGroup()">
+
+            <div class="row">
+                <div class="col-12 p-0">
+                    <table mat-table [dataSource]="dataSource" class="mat-table" style="width: 100%;">
+
+                        <!-- Serial Number -->
+                        <ng-container matColumnDef="serialnumber">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.SERIALNUMBER" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-center">{{ element.serialnumber }}</td>
+                        </ng-container>
+
+                        <!-- Unità Magazzino -->
+                        <ng-container matColumnDef="unit_storage">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.STORAGEUNIT" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_storage }}</td>
+                        </ng-container>
+
+                        <!-- Unità Disponibile -->
+                        <ng-container matColumnDef="unit_available">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.AVAILABLEUNIT" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-center">{{ element.unit_available }}</td>
+                        </ng-container>
+
+                        <!-- Quantità Magazzino -->
+                        <ng-container matColumnDef="qnt_storage">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.STORAGEQNT" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-center">{{ element.qnt_storage }}</td>
+                        </ng-container>
+
+                        <!-- Quantità Disponibile -->
+                        <ng-container matColumnDef="qnt_available">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.AVAILABLEQNT" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-center">{{ element.qnt_available }}</td>
+                        </ng-container>
+
+                        <!-- Imponibile Acquisto Unità -->
+                        <ng-container matColumnDef="unit_taxablepurchase">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.TAXABLEPURCHASEUNIT" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.unit_taxablepurchase }} €</td>
+                        </ng-container>
+
+                        <!-- Imponibile Consigliato Unità -->
+                        <ng-container matColumnDef="unit_taxablerecommended">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.TAXABLERECOMMENDEDUNIT" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.unit_taxablerecommended }} €</td>
+                        </ng-container>
+
+                        <!-- Imponibile Acquisto Quantità -->
+                        <ng-container matColumnDef="qnt_taxablepurchase">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.TAXABLEPURCHASEQNT" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.qnt_taxablepurchase }} €</td>
+                        </ng-container>
+
+                        <!-- Imponibile Consigliato Quantità -->
+                        <ng-container matColumnDef="qnt_taxablerecommended">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.TAXABLERECOMMENDEDQNT" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.qnt_taxablerecommended }} €</td>
+                        </ng-container>
+
+                        <!-- IVA Acquisto -->
+                        <ng-container matColumnDef="vatpurchase">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.VATPURCHASE" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.vatpurchase }} %</td>
+                        </ng-container>
+
+                        <!-- IVA Consigliata -->
+                        <ng-container matColumnDef="vatrecommended">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{"ARTICLE.ARTICLESTORAGE.VATRECOMMENDED" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.vatrecommended }} %</td>
+                        </ng-container>
+
+                        <!-- Azioni -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">
+                                {{"ARTICLE.ARTICLESTORAGE.ACTIONS" | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-6 text-center">
+                                        <i class="bi bi-pencil actionIcon" (click)="modifyPopUp(element)"></i>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <i class="bi bi-trash actionIcon" style="color: red;"
+                                            (click)="deletePopUp(element)"></i>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
                 </div>
             </div>
-
-            <div class="articleColumn col-10 col-sm-11">
-                <span class="me-2" style="font-weight: bold;">
-                    Azione di Gruppo
-                </span>
-                <i class="me-2 me-md-4 bi bi-info-circle"
-                    matTooltip="L'azione di gruppo è da considerarsi su tutti gli articoli selezionati singolarmente"></i>
-                <button class="btn btn-sm btn-outline-danger" (click)="deletePopUp([])">
-                    Elimina
-                </button>
-            </div>
-        </div> -->
-
-        <!-- ARTICLES -->
-        <ng-container formArrayName="articles">
-            <div *ngFor="let item of articles.controls; let i = index" [formGroupName]="i"
-                class="row justify-content-center align-items-group mt-2 pb-2"
-                style="border-bottom: 1px solid lightgray;">
-                <!-- CHECKBOX -->
-                <!-- <div class="checkboxPadding col-auto me-2 me-md-4">
-                    <div class="form-check" style="margin-top: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" formControlName="action" id="action-{{i}}"
-                            (change)="formLogic()">
-                    </div>
-                </div>
-
-                <div class="col-10 col-sm-11">
-                    <div class="row justify-content-start align-items-center"> -->
-
-                <!-- UNITA' -->
-                <div class="articleColumn col-3 col-sm-2 col-lg-1">
-                    <label class="form-label" for="quantity-{{i}}">
-                        Unità
-                    </label>
-                    <input name="quantity-{{i}}" id="quantity-{{i}}" class="form-control" formControlName="quantity">
-                </div>
-
-                <div class="articleColumn col-3 col-sm-2 col-md-1" style="margin-top: 1.6rem;">
-                    <i class="bi bi-pencil iconMargin iconSize" (click)="modifyPopUp(item.getRawValue())"></i>
-                    <i class="bi bi-trash iconSize" style="color: red;" (click)="deletePopUp(item.getRawValue())"></i>
-                </div>
-
-                <!-- SERIAL NUMBER ON SMALL SCREEN -->
-                <div class="col-6 d-md-none articleColumn">
-                    <label class="form-label" for="serialnumber-{{i}}">
-                        SN
-                    </label>
-                    <input class="form-control" type="text" name="serialnumber-{{i}}" id="serialnumber-{{i}}"
-                        formControlName="serialnumber">
-                </div>
-
-                <div class="articleColumn col-5 col-sm-4 col-xl-2 pe-1">
-                    <label class="form-label" for="taxablepurchase-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockA">
-                            Imponibile Acquisto
-                        </span>
-                        <ng-template #smallBlockA>
-                            <span>
-                                Imp. Acq.
-                            </span>
-                        </ng-template>
-                        <i class="bi bi-info-circle" matTooltip="Imponibile di acquisto relativo alla singola unità"
-                            style="font-size: small;"></i>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="taxablepurchase-{{i}}" id="taxablepurchase-{{i}}"
-                            formControlName="taxablepurchase">
-                        <span class="input-group-text" id="taxablepurchase-{{i}}">€</span>
-                    </div>
-                </div>
-
-                <div class="articleColumn col-3 col-sm-2 col-xl-1 ps-0">
-                    <label class="form-label" for="vatpurchase-{{i}}">
-                        IVA
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control vatPadding" type="text" name="vatpurchase-{{i}}"
-                            id="vatpurchase-{{i}}" formControlName="vatpurchase">
-                        <span class="input-group-text vatPadding" id="vatpurchase-{{i}}">%</span>
-                    </div>
-                </div>
-
-
-                <div class="articleColumn col-4 col-md-3 col-lg-2">
-                    <label class="form-label" for="pricesale-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockPA">
-                            Prezzo Acquisto
-                        </span>
-                        <ng-template #smallBlockPA>
-                            <span>
-                                Prz. Acq.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="pricesale-{{i}}" id="pricesale-{{i}}"
-                            formControlName="pricesale">
-                        <span class="input-group-text" id="pricesale-{{i}}">€</span>
-                    </div>
-                </div>
-
-                <div class="articleColumn col-4 col-md-3 col-lg-2">
-                    <label class="form-label" for="stored_qnt-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockPA">
-                            Quantità Magazzino
-                        </span>
-                        <ng-template #smallBlockPA>
-                            <span>
-                                Qnt. Mag.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="stored_qnt-{{i}}" id="stored_qnt-{{i}}"
-                            formControlName="stored_qnt">
-                        <span class="input-group-text" id="stored_qnt-{{i}}">€</span>
-                    </div>
-                </div>
-
-                <!-- BREAK COLUMN -->
-                <div *ngIf="manage_qnt && manage_sn" class="col-12"></div>
-
-                <!-- SERIAL NUMBER MD SCREEN -->
-                <div class="articleColumn col-5 col-md-3 col-lg-2 d-none d-md-inline">
-                    <label class="form-label" for="serialnumber-{{i}}">
-                        SN
-                    </label>
-                    <input class="form-control" type="text" name="serialnumber-{{i}}" id="serialnumber-{{i}}"
-                        formControlName="serialnumber">
-                </div>
-
-                <!-- TAXABLE RECOMMENDED -->
-                <div class="articleColumn col-5 col-sm-4 col-xl-2 pe-1">
-                    <label class="form-label" for="taxablerecommended-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockC">
-                            Imponibile Consigliato
-                        </span>
-                        <ng-template #smallBlockC>
-                            <span>
-                                Imp. Cons.
-                            </span>
-                        </ng-template>
-                        <i class="bi bi-info-circle" matTooltip="Imponibile consigliato relativo alla singola unità"
-                            style="font-size: small;"></i>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="taxablerecommended-{{i}}"
-                            id="taxablerecommended-{{i}}" formControlName="taxablerecommended">
-                        <span class="input-group-text" id="taxablerecommended-{{i}}">€</span>
-                    </div>
-                </div>
-
-                <!-- VAT RECOMMENDED -->
-                <div class="articleColumn col-3 col-sm-2 col-xl-1 ps-0">
-                    <label class="form-label" for="vatrecommended-{{i}}">
-                        IVA
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control vatPadding" type="text" name="vatrecommended-{{i}}"
-                            id="vatrecommended-{{i}}" formControlName="vatrecommended">
-                        <span class="input-group-text vatPadding" id="vatrecommended-{{i}}">%</span>
-                    </div>
-                </div>
-
-                <!-- PRICE RECOMMENDED -->
-                <div class="articleColumn col-4 col-md-3 col-lg-2">
-                    <label class="form-label" for="pricerecommended-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockPC">
-                            Prezzo Consigliato
-                        </span>
-                        <ng-template #smallBlockPC>
-                            <span>
-                                Prz. Cons.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="pricerecommended-{{i}}"
-                            id="pricerecommended-{{i}}" formControlName="pricerecommended">
-                        <span class="input-group-text" id="pricerecommended-{{i}}">€</span>
-                    </div>
-                </div>
-
-                <div class="articleColumn col-4 col-md-3 col-lg-2">
-                    <label class="form-label" for="available_qnt-{{i}}">
-                        <span *ngIf="!isSmall; else smallBlockPA">
-                            Quantità Disponibile
-                        </span>
-                        <ng-template #smallBlockPA>
-                            <span>
-                                Qnt. Disp.
-                            </span>
-                        </ng-template>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" name="available_qnt-{{i}}" id="available_qnt-{{i}}"
-                            formControlName="available_qnt">
-                        <span class="input-group-text" id="available_qnt-{{i}}">€</span>
-                    </div>
-                </div>
-                <!-- </div>
-                </div> -->
-            </div>
-        </ng-container>
-
-    </form>
+        </div>
+    </div>
 </div>

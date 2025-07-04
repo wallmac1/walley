@@ -1,0 +1,75 @@
+.mat-row {
+    background-color: white !important;
+}
+
+.mat-header-row {
+    background-color: #f5f5f5;
+}
+
+.container-fluid {
+    min-width: 350px;
+    min-height: 90vh;
+    position: relative;
+}
+
+.btn-outline-dark {
+    color: #002D5D;
+    border-color: #002D5D;
+}
+
+.btn-outline-dark:hover {
+    color: white;
+    background-color: #002D5D;
+}
+
+.filesIcon {
+    font-size: 20px;
+}
+
+.filesIcon:hover {
+    cursor: pointer;
+}
+
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+}
+
+.title {
+    font-size: xx-large;
+    font-weight: bold;
+    color: white;
+}
+
+.titleColumn {
+    background-color: #002D5D;
+    border-radius: 18px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.cardElement {
+    border: 1px solid lightgray;
+    border-radius: 20px;
+    padding: 1.2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.titleFilters {
+    font-size: large;
+    font-weight: bold;
+}
+
+.form-label,
+.form-check-label {
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 0.3rem;
+    margin-bottom: 0rem;
+}
+
+th,
+td {
+    border-right: 1px solid lightgray;
+}

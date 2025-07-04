@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Customer } from '../interfaces/customer';
 import { Department } from '../interfaces/department';
 import { User } from '../interfaces/user';
@@ -17,6 +17,9 @@ import { TicketsInfoService } from '../services/tickets-info.service';
 import { ConnectServerService } from '../../services/connect-server.service';
 import { Connect } from '../../classes/connect';
 import { TranslateModule } from '@ngx-translate/core';
+import { ApiResponse } from '../../weco/interfaces/api-response';
+import { AutocompleteCustomer } from '../../customer/interfaces/autocomplete-customer';
+import { Address } from '../../invoices/interfaces/address';
 
 @Component({
   selector: 'app-ticket-new',
@@ -36,13 +39,13 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class TicketNewComponent {
 
-  filteredCustomer$!: Observable<Customer[]>;
+  filteredCustomer$!: Observable<AutocompleteCustomer[]>;
   submitted: boolean = false;
   today: Date = new Date();
   formattedDate: string = this.today.toISOString().split('T')[0];
   departments: Department[] = [];
   users: User[] = [];
-  locations: Location[] = [];
+  locations: Address[] = [];
 
   @ViewChild('select1') select1!: MatSelect;
   @ViewChild('select2') select2!: MatSelect;
@@ -50,26 +53,24 @@ export class TicketNewComponent {
   ticketForm = new FormGroup({
     internal: new FormControl<number>(0, Validators.required),
     ticket_date: new FormControl<string>(this.formattedDate), //Non modificabile
-    customer: new FormControl<Customer | null>(null, Validators.required),
-    location: new FormControl<Location | null>(null),
+    customer: new FormControl<AutocompleteCustomer | null>(null, this.customerValidator()),
+    location: new FormControl<Address | null>({ value: null, disabled: true }),
     title: new FormControl<string | null>(null, Validators.required),
     description: new FormControl<string | null>(null),
-    notes: new FormControl <string | null>(null),
+    notes: new FormControl<string | null>(null),
     departments: new FormControl<number[] | null>(null),
     keepinformed: new FormControl<User[] | null>(null),
     progressive: new FormControl<number | null>(null),
   })
 
-  //inputClient = new FormControl<string>('');
-
   constructor(private router: Router, public ticketInfoService: TicketsInfoService,
-    private connectServerService: ConnectServerService) {}
+    private connectServerService: ConnectServerService) { }
 
   ngOnInit(): void {
+    this.formLogic();
     this.searchCustomer();
     this.getUsers();
     this.getDepartments();
-    this.getLocations();
     this.ticketForm.get("ticket_date")?.disable();
     this.ticketForm.get("progressive")?.disable();
   }
@@ -99,16 +100,47 @@ export class TicketNewComponent {
     }
   }
 
-  displayCustomerName(customer?: Customer): string {
-    return customer ? customer.denominazione! : '';
+  formLogic() {
+    this.ticketForm.get('customer')?.valueChanges.subscribe((val) => {
+      if (this.isCustomer(val)) {
+        this.getAddressList();
+        this.ticketForm.get('location')?.enable();
+      }
+      else {
+        this.ticketForm.get('location')?.disable();
+        this.ticketForm.get('location')?.setValue(null);
+      }
+    })
   }
 
-  // private filterLines(lines: Lines[]) {
-  //   if(lines.length > 0) {
-  //     this.works = lines.filter(line => line.type_line === 1); // Lavori
-  //     this.articles = lines.filter(line => line.type_line === 2); // Articoli
-  //   }
-  // }
+  isCustomer(obj: any): obj is Customer {
+    return (
+      obj &&
+      typeof obj === 'object' &&
+      typeof obj.idregistry === 'number' &&
+      typeof obj.denomination === 'string'
+    );
+  }
+
+  customerValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (
+        value &&
+        typeof value === 'object' &&
+        typeof value.idregistry === 'number' &&
+        typeof value.denomination === 'string'
+      ) {
+        return null; // valido
+      }
+
+      return { invalidCustomer: true };
+    };
+  }
+
+  displayCustomerName(customer?: AutocompleteCustomer): string {
+    return customer ? customer.denomination! : '';
+  }
 
   private searchCustomer() {
     const customer_field = this.ticketForm.get('customer');
@@ -116,7 +148,7 @@ export class TicketNewComponent {
       this.filteredCustomer$ = customer_field.valueChanges
         .pipe(
           startWith(''),
-          map(value => typeof value === 'string' ? value : value?.denominazione || ''),
+          map(value => typeof value === 'string' ? value : value?.denomination || ''),
           filter(value => value.length > 0),
           debounceTime(400),
           switchMap((value: string) =>
@@ -125,41 +157,20 @@ export class TicketNewComponent {
     }
   }
 
-  private getCustomers(val: string): Observable<Customer[]> {
-    // CHIAMATA AL SERVER
-    // return this.connectServerService.getRequest<ApiResponse<{ city: Customer[] }>>(Connect.urlServerLaraApi, 'cities',
-    //   {
-    //     query: val
-    //   }).pipe(
-    //     map(response => response.data.cities)
-    //   );
-    // Esempio di una lista di tre clienti
-    const customers: Customer[] = [
-      {
-        rifidanacliforprodati: 39,
-        id: 88,
-        denominazione: 'Pippo Poppo',
-        codicefiscale: "23323NLDSKNSDNKL",
-        cognome: "poppo",
-        data_nascita: null,
-        email: null,
-        nome: "Pippo",
-        piva: null,
-        telefono: null
-      },
-    ];
-
-    // Restituisce la lista come Observable
-    return of(customers).pipe(
-      map(items => items.filter(customer =>
-        customer.denominazione!.toLowerCase().includes(val.toLowerCase())
-      )));
+  private getCustomers(val: string): Observable<AutocompleteCustomer[]> {
+    return this.connectServerService.getRequest<ApiResponse<{ customer: AutocompleteCustomer[] }>>
+      (Connect.urlServerLaraApi, 'customer/searchCustomer',
+        {
+          // 0: Nome Cognome o Ragione Sociale, 1: CF o P. IVA
+          type: 0,
+          query: val
+        });
   }
 
   private getUsers() {
     this.connectServerService.getRequest(Connect.urlServerLara, "user/usersListNoAdmin", {}).subscribe((val: any) => {
       if (val) {
-        this.users = val ;
+        this.users = val;
       }
     });
   }
@@ -172,12 +183,15 @@ export class TicketNewComponent {
     });
   }
 
-  private getLocations() {
-    //CHIAMATA AL SERVER
-    this.locations = [
-      { id: 1, address: '123 Main St', number: '1A', city: 'City A' },
-      { id: 2, address: '456 Elm St', number: '2B', city: 'City B' }
-    ];
+  getAddressList() {
+    this.connectServerService.getRequest(Connect.urlServerLaraApi, 'customer/locationsList',
+      { idregistry: this.ticketForm.get('customer')?.value?.idregistry })
+      .subscribe((val) => {
+        if (val.data) {
+          this.locations = val.data.locationsList;
+          //console.log(this.locations)
+        }
+      })
   }
 
   save() {
@@ -194,9 +208,9 @@ export class TicketNewComponent {
         notes: formValues.notes,
         keepinformed: formValues.keepinformed,
         progressive: formValues.progressive,
-        refidregcussuppro: formValues.customer!.id!,
-        refidregcussupprodata: formValues.customer!.rifidanacliforprodati!,
-        refidcussupprolocation: null //TODO: DA CAMBIARE CON VALORE REALE
+        refidregcussuppro: formValues.customer!.idregistry!,
+        refidregcussupprodata: formValues.customer!.idregistrydata!,
+        refidcussupprolocation: formValues.location?.idlocation
       };
       this.connectServerService.postRequest(Connect.urlServerLaraApi, 'ticket/saveTicket', { obj_infoticket: obj_infoticket, idticket: 0 }).
         subscribe((val: any) => {

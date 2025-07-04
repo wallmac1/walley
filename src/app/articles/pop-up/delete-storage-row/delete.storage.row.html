@@ -1,0 +1,76 @@
+<h2 mat-dialog-title align="center" class="justify-content-center" style="background-color: #002D5D;">
+    <span style="color: white; font-weight: bold; font-size: x-large;">
+        {{"ARTICLE.MODAL.DELETEUNITS" | translate}}
+    </span>
+</h2>
+
+<mat-dialog-content>
+    <div *ngIf="management_type == 0" class="row justify-content-center align-items-center p-1">
+        <div class="col-12 text-center p-1">
+            <span>
+                Sei sicuro di voler cancellare tutte le seguenti unità dell'articolo?
+            </span>
+        </div>
+        <div class="col-12 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Unità:<br>
+            </span>
+            {{article?.unit_available}}
+        </div>
+    </div>
+
+    <div *ngIf="management_type == 1" class="row justify-content-center align-items-center p-1">
+        <div class="col-12 text-center p-1">
+            <span>
+                Sei sicuro di voler cancellare questa unità dell'articolo?
+            </span>
+        </div>
+        <div class="col-6 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Serial Number:<br>
+            </span>
+            {{article?.serialnumber || '-'}}
+        </div>
+        <div class="col-6 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Unità:<br>
+            </span>
+            {{article?.unit_available}}
+        </div>
+    </div>
+
+    <div *ngIf="management_type == 2" class="row justify-content-center align-items-center p-1">
+        <div class="col-12 text-center p-1">
+            <span>
+                Sei sicuro di voler cancellare tutte le quantità dell'articolo?
+            </span>
+        </div>
+        <div class="col-4 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Serial Number:<br>
+            </span>
+            {{article?.serialnumber || '-'}}
+        </div>
+        <div class="col-4 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Unità:<br>
+            </span>
+            {{article?.unit_available}}
+        </div>
+        <div class="col-4 text-center p-1">
+            <span style="font-weight: bold; font-size: small;">
+                Quantità:<br>
+            </span>
+            {{article?.qnt_available}}
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button class="btn btn-outline-dark me-2" style="width: 80px;" (click)="close()">
+        {{"ARTICLE.MODAL.CANCEL" | translate }}
+    </button>
+    <button class="btn btn-outline-danger me-2" style="width: 80px;" (click)="deleteArticle()">
+        {{"ARTICLE.MODAL.DELETE" | translate }}
+    </button>
+</mat-dialog-actions>

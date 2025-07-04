@@ -19,8 +19,11 @@
             </label>
             <select class="form-select" id="paymentType" formControlName="paymentType"
                 [class.is-invalid]="installmentForm.get('paymentType')?.invalid && submitted">
+                <option [value]="null">
+                    --
+                </option>
                 <option *ngFor="let type of paymentTypeList" [value]="type.id">
-                    {{type.title}}
+                    {{type.description}}
                 </option>
             </select>
         </div>
@@ -72,7 +75,7 @@
                         <i class="bi bi-bank me-3"></i>
                         {{"INVOICE.INFO.PAYMENTCOMPONENT.FINANCIARYINSTITUTE" | translate }}
                     </mat-panel-title>
-                    <i *ngIf="financialForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                    <i *ngIf="financialForm.invalid && submitted" class="bi bi-exclamation-circle"
                         style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
                 </mat-expansion-panel-header>
                 <div class="row align-items-end">
@@ -127,7 +130,7 @@
                         <i class="bi bi-person me-3"></i>
                         {{"INVOICE.INFO.PAYMENTCOMPONENT.QUIETANZANTE" | translate }}
                     </mat-panel-title>
-                    <i *ngIf="quietanzanteForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                    <i *ngIf="quietanzanteForm.invalid && submitted" class="bi bi-exclamation-circle"
                         style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
                 </mat-expansion-panel-header>
 
@@ -171,7 +174,7 @@
                         <i class="bi bi-hourglass-top me-3"></i>
                         {{"INVOICE.INFO.PAYMENTCOMPONENT.ANTICIPATEDPAYMENT" | translate }}
                     </mat-panel-title>
-                    <i *ngIf="anticipatedPaymentForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                    <i *ngIf="anticipatedPaymentForm.invalid && submitted" class="bi bi-exclamation-circle"
                         style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
                 </mat-expansion-panel-header>
 
@@ -193,7 +196,8 @@
 
                 <div class="row mt-1">
                     <div class="col-12 text-center">
-                        <span class="errorTxt" *ngIf="anticipatedPaymentForm.get('discount')?.hasError('invalidNumber')">
+                        <span class="errorTxt"
+                            *ngIf="anticipatedPaymentForm.get('discount')?.hasError('invalidNumber')">
                             {{"INVOICE.INFO.PAYMENTCOMPONENT.DISCOUNTERROR" | translate }}
                         </span>
                     </div>
@@ -208,7 +212,7 @@
                         <i class="bi bi-hourglass-bottom me-3"></i>
                         {{"INVOICE.INFO.PAYMENTCOMPONENT.DELAYEDPAYMENT" | translate }}
                     </mat-panel-title>
-                    <i *ngIf="delayedPaymentForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                    <i *ngIf="delayedPaymentForm.invalid && submitted" class="bi bi-exclamation-circle"
                         style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
                 </mat-expansion-panel-header>
 
@@ -245,7 +249,7 @@
                         <i class="bi bi-hourglass-bottom me-3"></i>
                         {{"INVOICE.INFO.PAYMENTCOMPONENT.OTHERFIELDS" | translate }}
                     </mat-panel-title>
-                    <i *ngIf="otherFieldsForm.invalid && submitted" class="bi bi-exclamation-circle" 
+                    <i *ngIf="otherFieldsForm.invalid && submitted" class="bi bi-exclamation-circle"
                         style="color: red; position: absolute; top: 12px; right: 50px; font-size: large;"></i>
                 </mat-expansion-panel-header>
 
@@ -303,25 +307,18 @@
             </span>
         </div>
     </div>
-
-    <!-- ACTIONS -->
-    <div class="row pt-2 mt-2" style="border-top: 1px solid lightgray;">
-        <div *ngIf="idPopup == 1" class="col-8 text-start">
-            <button class="btn btn-outline-success me-2" (click)="confirm()">
-                {{"INVOICE.INFO.PAYMENTCOMPONENT.CONFIRM" | translate }}
-            </button>
-        </div>
-
-        <div *ngIf="idPopup == 2" class="col-8 text-start">
-            <button class="btn btn-outline-success me-2" (click)="add()">
-                {{"INVOICE.INFO.PAYMENTCOMPONENT.ADD" | translate }}
-            </button>
-        </div>
-
-        <div class="col-4 text-end">
-            <button class="btn btn-outline-dark me-2" (click)="close()">
-                {{"INVOICE.INFO.PAYMENTCOMPONENT.CANCEL" | translate }}
-            </button>
-        </div>
-    </div>
 </mat-dialog-content>
+
+<mat-dialog-actions align="end" style="border-top: 1px solid lightgray;">
+    <button *ngIf="idPopup == 1" class="btn btn-outline-success me-2" (click)="confirm()">
+        {{"INVOICE.INFO.PAYMENTCOMPONENT.CONFIRM" | translate }}
+    </button>
+
+    <button *ngIf="idPopup == 2" class="btn btn-outline-success me-2" (click)="add()">
+        {{"INVOICE.INFO.PAYMENTCOMPONENT.ADD" | translate }}
+    </button>
+
+    <button class="btn btn-outline-dark me-2" (click)="close()">
+        {{"INVOICE.INFO.PAYMENTCOMPONENT.CANCEL" | translate }}
+    </button>
+</mat-dialog-actions>

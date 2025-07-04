@@ -1,0 +1,30 @@
+<div class="container-fluid mt-2 mt-sm-3 mt-md-4 mt-lg-5">
+    <div class="row justify-content-center align-items-center p-1">
+        <div class="col-12 text-center mb-1">
+            <span style="font-style: italic; color: gray;">
+                {{"ARTICLE.ARTICLEAVGPRICE.MEDIUMPRICE" | translate}}
+            </span>
+        </div>
+        <div class="col-12 col-sm-auto text-center">
+            <label class="form-label" for="avgTaxable">
+                {{"ARTICLE.ARTICLEAVGPRICE.TAXABLEAVGPURCHASE" | translate}}
+            </label>
+            <input class="form-control" type="text" id="avgTaxable" 
+                [value]="averagePrice.avgTaxable" disabled>
+        </div>
+        <div class="col-12 col-sm-auto text-center">
+            <label class="form-label" for="avgTaxableRecommended">
+                {{"ARTICLE.ARTICLEAVGPRICE.TAXABLEAVGRECOMMENDED" | translate}}
+            </label>
+            <input class="form-control" type="text" id="avgTaxableRecommended" 
+                [value]="averagePrice.avgTaxableRecommended" disabled>
+        </div>
+        <div class="col-12 col-sm-auto text-center">
+            <label class="form-label" for="avgTaxableSold">
+                {{"ARTICLE.ARTICLEAVGPRICE.TAXABLEAVHSELL" | translate}}
+            </label>
+            <input class="form-control" type="text" id="avgTaxableSold" 
+                [value]="averagePrice.avgTaxableSold" disabled>
+        </div>
+    </div>
+</div>

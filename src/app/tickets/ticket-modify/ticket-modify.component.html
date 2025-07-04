@@ -13,8 +13,9 @@
                             {{"TICKET.MODIFY.INTERNAL" | translate}}
                         </span>
                         <ng-template #externalBlock>
-                            <span style="font-weight: bold;" class="nowrap-text" #customerElement [matTooltip]="isEllipsisActiveCustomer ? ticketInfo?.customer?.denominazione! : ''">
-                                {{ticketInfo?.customer?.denominazione}}
+                            <span style="font-weight: bold;" class="nowrap-text" 
+                                #customerElement [matTooltip]="isEllipsisActiveCustomer ? ticketInfo?.customer?.denomination! : ''">
+                                {{ticketInfo?.customer?.denomination}}
                             </span><br>
                         </ng-template>
                         <span *ngIf="ticketInfo?.location" class="nowrap-text" [matTooltip]="isEllipsisActiveCustomer ? ticketInfo?.location?.address! : ''">{{ticketInfo?.location}}</span>
@@ -110,7 +111,8 @@
                 <i class="bi bi-info-circle titleIcon"></i>
             </ng-template>
             <ng-template matTabContent>
-                <app-ticket-info [ticketInfo]="ticketInfo!" [ticketId]="ticketId"></app-ticket-info>
+                <app-ticket-info [ticketInfo]="ticketInfo!" [ticketId]="ticketId"
+                    #ticketInfoComponent></app-ticket-info>
             </ng-template>
         </mat-tab>
 

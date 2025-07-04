@@ -8,11 +8,14 @@
             <mat-dialog-content [formGroup]="articleForm">
                 <label for="article">{{"VOUCHER.POPUP.NAME" | translate}}</label>
                 <input type="text" matInput [matAutocomplete]="article" class="form-control" id="article"
-                    formControlName="article" [class.is-invalid]="article && submitted" (input)="print()">
+                    formControlName="article" [class.is-invalid]="article && submitted">
                 <mat-autocomplete #article="matAutocomplete" [displayWith]="displayArticleName">
                     <mat-option *ngFor="let option of filteredArticles$ | async" [value]="option" (onSelectionChange)="save(option)">
                         <div>
-                            {{option.article_data.title}}
+                            {{option.code}} - {{option.title}} 
+                            <span *ngIf="option.serialnumber">
+                                {{option.serialnumber}}
+                            </span>
                         </div>
                     </mat-option>
                 </mat-autocomplete>

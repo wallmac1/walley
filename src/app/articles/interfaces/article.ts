@@ -1,21 +1,17 @@
 import { MeasurementUnit } from "../../interfaces/measurement-unit";
 
 export interface Article {
-    id: number;
+    idarticle: number;
     code: string;
     progressive: number;
-    quantity?: string;
-    unit?: number;
+    total_quantityavailable?: number; // Disponibile
+    total_quantitystorage?: number; // Magazzino
+    total_unitavailable: number;
+    total_unitstorage: number;
     article_data: ArticleData;
-    article_price: ArticlePrice;
-}
-
-export interface ArticleData {
-    title: string;
-    description: string | null;
-    refidarticle: number;
-    um: MeasurementUnit | null;
-    date_snapshot: string | null; // Data Variazione
+    article_storage: ArticleStorage[];
+    management_sn: number; // 0 o 1
+    management_qnt: number; // 0 o 1
     user_created: {
         id: number;
         nickname: string;
@@ -28,15 +24,31 @@ export interface ArticleData {
     };
 }
 
-export interface ArticlePrice {
-    refidarticle: number;
-    serialnumber: string;
-    taxablepurchase: string | null;
-    taxablesale: string | null;
-    taxablerecommended: string | null;
-    vatpurchase: string | null;
-    vatsale: string | null;
-    vatrecommended: string | null;
+export interface ArticleData {
+    idarticledata: number
+    title: string;
+    description: string | null;
+    note: string | null;
+    um: MeasurementUnit | null;
+    date_snapshot: string | null; // Data Variazione
+}
+
+export interface ArticleStorage {
+    idarticlestorage: number;
+    idddt: number;
+    serialnumber?: string;
+    unit_taxablepurchase: string | null; // Imponibile Acquisto Unità
+    unit_taxablerecommended: string | null; // Imponibile Consigliato Unità
+    unit_storage: number;
+    unit_available: number;
+    qnt_taxablepurchase?: string | null; // Imponibile Acquisto Quantità
+    qnt_taxablerecommended?: string | null; // Imponibile Consigliato Quantità
+    qnt_storage?: number;
+    qnt_available?: number; 
+    vatpurchase: string | null; // Iva Acquisto
+    vatrecommended: string | null; // Iva Consigliata
+    pricepurchase: string | null; // Prezzo Acquisto
+    pricerecommended: string | null; // Prezzo Consigliato
     user_created: {
         id: number;
         nickname: string;
@@ -47,4 +59,12 @@ export interface ArticlePrice {
         nickname: string;
         datetime: string;      
     }; 
+}
+
+export interface ArticleDocumentTable {
+    iddocument: number;
+    document_title: string | null;
+    document_type: string | null;
+    serialnumber?: string | null;
+    path: string | null;
 }

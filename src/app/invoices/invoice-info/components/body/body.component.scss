@@ -42,7 +42,7 @@ select {
 
 .vatElement {
     padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-right: 0.5rem;
 
     @media screen and (min-width: 768px) {
         padding-left: 0.1rem;
@@ -62,7 +62,7 @@ select {
     }
 
     @media screen and (min-width: 1200px) {
-        padding-left: 0.5rem;
+        padding-left: 0.3rem;
     }
 }
 

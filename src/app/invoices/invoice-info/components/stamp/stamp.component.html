@@ -3,7 +3,8 @@
 
     <div class="row justify-content-center align-items-center">
         <div class="checkboxPosition">
-            <input class="form-check-input checkboxDimension" type="checkbox" value="" id="isStamp" formControlName="isStamp">
+            <input class="form-check-input checkboxDimension" type="checkbox" value="" id="isStamp"
+                formControlName="isStamp">
         </div>
 
         <ng-container *ngIf="stampForm.get('isStamp')?.value">
@@ -11,8 +12,8 @@
                 <label class="form-label" for="supplierPays">
                     {{"INVOICE.INFO.STAMPCOMPONENT.SUPPLIERPAYS" | translate}}
                 </label>
-                <input class="form-check-input" type="checkbox" role="switch" 
-                    id="supplierPays" formControlName="supplierPays">
+                <input class="form-check-input" type="checkbox" role="switch" id="supplierPays"
+                    formControlName="supplierPays">
             </div>
 
             <div class="col-12 col-sm-6 col-md-4 col-lg-6">
@@ -23,14 +24,20 @@
             </div>
 
             <!-- VAT -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-6">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-6 ps-0">
                 <label class="form-label" for="vat">
                     {{"INVOICE.INFO.STAMPCOMPONENT.VATNATURE" | translate}}
                 </label>
                 <select class="form-select vatField" formControlName="vat" id="vat">
                     <option *ngFor="let vat of vatList" [ngValue]="vat.id">
                         <span class="optionText">
-                            {{vat.name}}
+                            {{vat.code_internal}} 
+                            <span *ngIf="!startsWithNumber(vat.code)">
+                                - {{vat.code}}
+                            </span>
+                            <span *ngIf="vat.description != null && vat.id != stampForm.get('vat')?.value">
+                                - {{vat.description}}
+                            </span>
                         </span>
                     </option>
                 </select>

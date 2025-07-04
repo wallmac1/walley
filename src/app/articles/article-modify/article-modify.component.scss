@@ -15,7 +15,7 @@
 
 .userInfo {
     color: gray;
-    font-size: x-small;
+    font-size: small;
     font-style: italic;
 }
 
@@ -47,10 +47,6 @@
     }
 }
 
-// .quantityClass {
-//     max-width: 200px;
-// }
-
 .elementPadding {
     padding: 0.2rem;
 }
@@ -69,5 +65,9 @@
         top: 50px; 
         left: 48%;
     }
-     
+}
+
+.errorTxt {
+    color: red;
+    font-size: small;
 }

@@ -166,10 +166,10 @@
                 <div *ngIf="customerRecordsForm.get('birth_country')?.value == 12; else notItalianBlock"
                     class="col-12 col-sm-6 col-md-5 col-lg-5">
                     <label class="form-label" for="birth_city_it">{{"CUSTOMER.BIRTHCITY" | translate }}</label>
-                    <input type="text" matInput [matAutocomplete]="customer" class="form-control" id="birth_city_it"
+                    <input type="text" matInput [matAutocomplete]="city" class="form-control" id="birth_city_it"
                         formControlName="birth_city_it"
                         [class.is-invalid]="customerRecordsForm.get('birth_city_it')?.invalid && submitted">
-                    <mat-autocomplete #customer="matAutocomplete" [displayWith]="displayCityName">
+                    <mat-autocomplete #city="matAutocomplete" [displayWith]="displayCityName">
                         <mat-option *ngFor="let option of filteredCities$ | async" [value]="option">
                             <div>
                                 {{option.name}}

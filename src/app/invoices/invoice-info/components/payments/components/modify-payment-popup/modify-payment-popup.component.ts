@@ -8,6 +8,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { SelectBankPopupComponent } from '../select-bank-popup/select-bank-popup.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
+import { Connect } from '../../../../../../classes/connect';
+import { ApiResponse } from '../../../../../../weco/interfaces/api-response';
+import { BankTable } from '../../../../../../bank/interfaces/bank-table';
 
 @Component({
   selector: 'app-modify-payment-popup',
@@ -27,15 +30,19 @@ import { MatIconModule } from '@angular/material/icon';
 export class ModifyPaymentPopupComponent {
 
   submitted: boolean = false;
-  installment: { paymentType: {id: number, title: string}, deadline: string, amount: string } = 
-    { paymentType: {id: 0, title: '--'}, deadline: '', amount: '' };
+  installment: { paymentType: {id: number | null, title: string}, deadline: string, amount: string, 
+    bank: {iban: string, abi: string, bic: string, cab: string, cc: string, denomination: string }} = {
+      paymentType: {id: null, title: ''}, deadline: '', amount: '', bank: {
+        iban: '', abi: '', bic: '', cab: '', cc: '', denomination: ''
+      }}; 
   idPopup: number = 0;
-  paymentTypeList: { id: number, title: string }[] = [];
+  paymentTypeList: { id: number, description: string, code: string }[] = [];
   paymentTotal: string = "0,00";
-  bankList: { id: number, denomination: string, iban: string, abi: string, cab: string, bic: string }[] = [];
+  bankList: { id: number, denomination: string, iban: string, abi: {code: string, description: string}, 
+    cab: {code: string, description: string}, bic: string }[] = [];
 
   installmentForm = new FormGroup({
-    paymentType: new FormControl<number>(0, [Validators.required]),
+    paymentType: new FormControl<number | null>(null, [Validators.required]),
     deadline: new FormControl<string | null>(null, [Validators.required]),
     amount: new FormControl<string | null>(null, [Validators.required, 
       this.numberWithCommaValidator(), this.maximumValueValidator()]),
@@ -93,9 +100,11 @@ export class ModifyPaymentPopupComponent {
     this.installment = data.installment;
     this.paymentTypeList = data.paymentTypeList;
     this.paymentTotal = data.paymentTotal;
-    this.installmentForm.get('amount')?.patchValue(this.installment.amount);
-    this.installmentForm.get('deadline')?.patchValue(this.installment.deadline);
-    this.installmentForm.get('paymentType')?.patchValue(this.installment.paymentType.id);
+    this.installmentForm.get('amount')?.patchValue(this.installment!.amount);
+    this.installmentForm.get('deadline')?.patchValue(this.installment!.deadline);
+    this.installmentForm.get('paymentType')?.patchValue(this.installment!.paymentType.id);
+    this.financialForm.patchValue(this.installment?.bank);
+    console.log(this.installment.paymentType)
   }
 
   ngOnInit(): void {
@@ -170,54 +179,13 @@ export class ModifyPaymentPopupComponent {
   }
 
   getBankList() {
-    this.bankList = [{
-      id: 1,
-      denomination: 'Intesa San Paolo - Titolo molto lungo per testare truncate',
-      iban: 'IT00A0000000000000000000000',
-      abi: '00000',
-      cab: '00000',
-      bic: 'BIC00000'
-    }, {
-      id: 2,
-      denomination: 'Banca 2',
-      iban: 'IT00A0000000000000000000000',
-      abi: '00000',
-      cab: '00000',
-      bic: 'BIC00000'
-    },
-    {
-      id: 2,
-      denomination: 'Banca 2',
-      iban: 'IT00A0000000000000000000000',
-      abi: '00000',
-      cab: '00000',
-      bic: 'BIC00000'
-    },
-    {
-      id: 1,
-      denomination: 'Intesa San Paolo - Titolo molto lungo per testare truncate',
-      iban: 'IT00A0000000000000000000000',
-      abi: '00000',
-      cab: '00000',
-      bic: 'BIC00000'
-    }, {
-      id: 2,
-      denomination: 'Banca 2',
-      iban: 'IT00A0000000000000000000000',
-      abi: '00000',
-      cab: '00000',
-      bic: 'BIC00000'
-    },
-    {
-      id: 2,
-      denomination: 'Banca 2',
-      iban: 'IT00A0000000000000000000000',
-      abi: '00000',
-      cab: '00000',
-      bic: 'BIC00000'
+      this.connectServerService.getRequest(Connect.urlServerLaraApi, 'bank/activeBanksList', {})
+        .subscribe((val: ApiResponse<any>) => {
+          if (val.data) {
+            this.bankList = val.data.bankList;
+          }
+        })
     }
-    ]
-  }
 
   add() {
     this.submitted = true;
@@ -226,7 +194,7 @@ export class ModifyPaymentPopupComponent {
         // CHIAMATA AL SERVER PER IL SALVATAGGIO DEI DATI PRESENTI
         // CHIUSURA DEL POPUP CON IL RITORNO DEI DATI
       this.installmentForm.get('amount')?.setValue(this.formatToTwoDecimals(this.installmentForm.get('amount')?.value || '0'));
-      this.dialogRef.close({ installment: this.installmentForm.getRawValue() });
+      this.dialogRef.close({ installment: this.installmentForm.getRawValue(), bank: this.financialForm.getRawValue()  });
     }
   }
 
@@ -237,7 +205,7 @@ export class ModifyPaymentPopupComponent {
         // CHIAMATA AL SERVER PER IL SALVATAGGIO DEI DATI PRESENTI
         // CHIUSURA DEL POPUP CON IL RITORNO DEI DATI
       this.installmentForm.get('amount')?.setValue(this.formatToTwoDecimals(this.installmentForm.get('amount')?.value || '0'));
-      this.dialogRef.close({ installment: this.installmentForm.getRawValue() });
+      this.dialogRef.close({ installment: this.installmentForm.getRawValue(), bank: this.financialForm.getRawValue() });
     }
   }
 

@@ -3,6 +3,7 @@ import { Customer } from '../../../../tickets/interfaces/customer';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AutocompleteCustomer } from '../../../../customer/interfaces/autocomplete-customer';
 
 @Component({
   selector: 'app-customer-data',
@@ -19,7 +20,7 @@ export class CustomerDataComponent {
 
   isSmallScreen: boolean = false;
 
-  @Input() customer: Customer | null = null;
+  @Input() customer: AutocompleteCustomer | null = null;
 
   ngOnInit(): void {
     this.updateWindowDimensions();

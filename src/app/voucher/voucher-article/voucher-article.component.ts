@@ -150,18 +150,18 @@ export class VoucherArticleComponent {
     dialogRef.afterClosed().subscribe((result: Article | null) => {
       console.log(result)
       if (result) {
-        this.lineForm.get('title')?.setValue(result.article_data.title);
+        this.lineForm.get('title')?.setValue(result.title);
         this.lineForm.get('title')?.disable();
-        this.lineForm.get('refidum')?.setValue(result.article_data.refidum);
+        this.lineForm.get('refidum')?.setValue(result.refidum);
         this.lineForm.get('code')?.setValue(result.code);
-        this.lineForm.get('description')?.setValue(result.article_data.description);
-        this.lineForm.get('id')?.setValue(result.id);
-        this.lineForm.get('taxablepurchase')?.setValue(result.article_price.taxablepurchase?.toString().replace('.', ','));
-        this.lineForm.get('taxablesale')?.setValue(result.article_price.taxablesale?.toString().replace('.', ','));
-        this.lineForm.get('refidarticle')?.setValue(result.id);
-        this.lineForm.get('refidarticledata')?.setValue(result.article_data.id);
-        this.lineForm.get('refidarticleprice')?.setValue(result.article_price.id);
-        this.lineForm.get('serialnumber')?.setValue(result.article_price.serialnumber);
+        this.lineForm.get('description')?.setValue(result.description);
+        this.lineForm.get('id')?.setValue(result.idarticle);
+        this.lineForm.get('taxablepurchase')?.setValue(result.unit_taxablepurchase?.toString().replace('.', ','));
+        this.lineForm.get('taxablesale')?.setValue(result.unit_taxablerecommended?.toString().replace('.', ','));
+        // this.lineForm.get('refidarticle')?.setValue(result.id);
+        // this.lineForm.get('refidarticledata')?.setValue(result.article_data.id);
+        // this.lineForm.get('refidarticleprice')?.setValue(result.article_price.id);
+        // this.lineForm.get('serialnumber')?.setValue(result.article_price.serialnumber);
         this.lineForm.get('quantity')?.setValue('1,00');
         this.isProductSelected = true;
         this.lineForm.markAsDirty();

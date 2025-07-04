@@ -25,6 +25,8 @@ export interface TicketLine {
     substatus?: string;
     incharge?: User | null;
     color?: string; 
+    management_sn?: number;
+    management_qnt?: number;
     user_created?: {
         id: number;
         nickname: string;

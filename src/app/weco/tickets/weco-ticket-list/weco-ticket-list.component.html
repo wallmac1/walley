@@ -1,0 +1,113 @@
+<div class="container-fluid ps-2 pe-2 ps-md-3 pe-md-3 ps-lg-4 pe-lg-4 ps-xl-5 pe-xl-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-12 text-center mt-4">
+            <span style="font-size: xx-large; font-weight: bold;">
+                {{"SYSTEM.TICKETLIST.TICKETLIST" | translate}}
+            </span>
+        </div>
+    </div>
+
+    <div [formGroup]="filterForm" class="row justify-content-center ms-1 me-1 mt-4">
+        <div class="col-12 cardElement p-1 p-sm-2 p-lg-3" style="max-width: 1000px;">
+            <div class="row">
+                <!-- <div class="col-12 text-center">
+                    <span style="font-weight: bold;">
+                        <span style="font-weight: bold; font-size: x-large;">
+                            {{"SYSTEM.TICKETLIST.FILTERS" | translate}}
+                        </span>
+                    </span>
+                </div> -->
+
+                <div class="col-12 col-sm-6">
+                    <label class="form-label" for="status">
+                        {{"SYSTEM.TICKETLIST.STATUS" | translate}}
+                    </label>
+                    <select class="form-select" id="status" formControlName="status">
+                        <option [value]="null">
+                            --
+                        </option>
+                        <option *ngFor="let status of statusList" [ngValue]="status.id">
+                            {{status.name}}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                    <label class="form-label" for="owner">
+                        {{"SYSTEM.TICKETLIST.OWNERNAME" | translate}}
+                    </label>
+                    <input class="form-control" id="owner" formControlName="owner">
+                </div>
+
+                <div class="col-12 col-sm-6 mt-2">
+                    <label class="form-label" for="technician">
+                        {{"SYSTEM.TICKETLIST.TECHNICIANNAME" | translate}}
+                    </label>
+                    <input class="form-control" id="technician" formControlName="technician">
+                </div>
+
+                <div class="col-12 col-sm-6 mt-2">
+                    <label class="form-label" for="system">
+                        {{"SYSTEM.TICKETLIST.SYSTEMNAME" | translate}}
+                    </label>
+                    <input class="form-control" id="system" formControlName="system">
+                </div>
+            </div>
+
+            <div class="row mt-4 justify-content-center">
+                <div class="col-12" style="border-top: 1px solid lightgray; width: 94%;"></div>
+                <div class="col-12 text-end mt-2">
+                    <button class="btn btn-outline-dark" (click)="filter()">
+                        {{"SYSTEM.TICKETLIST.FILTER" | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-12 text-center" style="font-size: large; font-weight: bold;">
+            {{"SYSTEM.TICKETLIST.ACTIVEFILTERS" | translate}}:
+        </div>
+        <div *ngIf="lastFilterSearch.status != null" class="col-auto p-0">
+            <span class="filterElement">
+                <span class="me-1" style="font-weight: bold;">
+                    {{"SYSTEM.TICKETLIST.STATUS" | translate}}:
+                </span>
+                {{lastFilterSearch.status}},
+            </span>
+        </div>
+        <div *ngIf="lastFilterSearch.owner != null" class="col-auto p-0">
+            <span class="filterElement">
+                <span class="me-1" style="font-weight: bold;">
+                    {{"SYSTEM.TICKETLIST.OWNERNAME" | translate}}:
+                </span>
+                {{lastFilterSearch.owner}},
+            </span>
+        </div>
+        <div *ngIf="lastFilterSearch.technician != null" class="col-auto p-0">
+            <span class="filterElement">
+                <span class="me-1" style="font-weight: bold;">
+                    {{"SYSTEM.TICKETLIST.TECHNICIANNAME" | translate}}:
+                </span>
+                {{lastFilterSearch.technician}},
+            </span>
+        </div>
+        <div *ngIf="lastFilterSearch.system != null" class="col-auto p-0">
+            <span class="filterElement">
+                <span class="me-1" style="font-weight: bold;">
+                    {{"SYSTEM.TICKETLIST.SYSTEMNAME" | translate}}:
+                </span>
+                {{lastFilterSearch.system}}
+            </span>
+        </div>
+        <div *ngIf="lastFilterSearch.system == null && lastFilterSearch.technician == null && 
+            lastFilterSearch.status == null && lastFilterSearch.owner == null" class="col-auto">
+            {{"SYSTEM.TICKETLIST.NOFILTERACTIVE" | translate}}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <app-weco-ticket-table #ticketTable></app-weco-ticket-table>
+    </div>
+</div>

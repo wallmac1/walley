@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MeasurementUnit } from '../../tickets/interfaces/article';
 import { ConnectServerService } from '../../services/connect-server.service';
@@ -9,14 +9,18 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Article } from '../interfaces/article';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ArticleTaxableComponent } from "../article-taxable/article-taxable.component";
-import { ArticleHistoryComponent } from "../article-history/article-history.component";
 import { MatDialog } from '@angular/material/dialog';
 import { HistoricComponent } from '../pop-up/historic/historic.component';
-import { ConfirmComponent } from '../pop-up/confirm/confirm.component';
-import { UpdateQuantityComponent } from '../pop-up/update-quantity/update-quantity.component';
+import { UpdateGeneralInfoComponent } from '../pop-up/update-general-info/update.general.info.component';
+import { AddQntUntComponent } from '../pop-up/add-qnt-unt/add-qnt-unt.component';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { StorageLineComponent } from '../article-storage/storage-line/storage-line.component';
+import { StorageLineSnComponent } from "../article-storage/storage-line-sn/storage-line-sn.component";
+import { StorageLineSnQntComponent } from "../article-storage/storage-line-sn-qnt/storage-line-sn-qnt.component";
+import { UpdateCodeComponent } from '../pop-up/update-code/update-code.component';
+import { ArticleAveragePriceComponent } from "../article-average-price/article-average-price.component";
+import { ArticleInputOutputReservedComponent } from "../article-input-output-reserved/article-input-output-reserved.component";
+import { DeleteArticleComponent } from '../pop-up/delete-article/delete-article.component';
 
 @Component({
   selector: 'app-article-modify',
@@ -28,13 +32,20 @@ import { StorageLineComponent } from '../article-storage/storage-line/storage-li
     TranslateModule,
     MatTabsModule,
     StorageLineComponent,
-    ArticleTaxableComponent,
-    ArticleHistoryComponent
+    StorageLineSnComponent,
+    StorageLineSnQntComponent,
+    ArticleAveragePriceComponent,
+    ArticleInputOutputReservedComponent
   ],
   templateUrl: './article-modify.component.html',
   styleUrl: './article-modify.component.scss'
 })
 export class ArticleModifyComponent {
+
+  @ViewChild('storageLineComponent') storageLineComponent!: StorageLineComponent;
+  @ViewChild('storageLineSnComponent') storageLineSnComponent!: StorageLineSnComponent;
+  @ViewChild('storageLineSnQntComponent') storageLineSnQntComponent!: StorageLineSnQntComponent;
+
 
   submitted: boolean = false;
   measurmentUnit: MeasurementUnit[] = [];
@@ -45,7 +56,7 @@ export class ArticleModifyComponent {
   isSmallUm: boolean = false;
   notesHeight: number = 6;
   manage_sn: boolean = false;
-  manage_qnt: boolean = false;
+  manage_qnt: boolean = true;
 
   articleForm = new FormGroup({
     code: new FormControl<string | null>(null, Validators.required),
@@ -53,11 +64,11 @@ export class ArticleModifyComponent {
     refidum: new FormControl<number | null>(null),
     description: new FormControl<string | null>(null),
     //quantity: new FormControl<string | null>(null, [Validators.required, this.numberWithCommaValidator()]),
-    available_qnt: new FormControl<string | null>(null),
-    storage_qnt: new FormControl<string | null>(null),
-    available_unt: new FormControl<number>(0),
-    storage_unt: new FormControl<number>(0),
-    notes: new FormControl<string | null>(null)
+    total_quantityavailable: new FormControl<number>(0),
+    total_quantitystorage: new FormControl<number>(0),
+    total_unitavailable: new FormControl<number>(0),
+    total_unitstorage: new FormControl<number>(0),
+    note: new FormControl<string | null>(null)
   });
 
   @HostListener('window:resize', ['$event'])
@@ -82,21 +93,21 @@ export class ArticleModifyComponent {
   }
 
   updateWindowDimensions() {
-    if(window.innerWidth < 1200 && window.innerWidth > 575) {
+    if (window.innerWidth < 1200 && window.innerWidth > 575) {
       this.isSmall = true;
     }
     else {
       this.isSmall = false;
     }
 
-    if(window.innerWidth > 976) {
+    if (window.innerWidth > 976) {
       this.isSmallUm = true;
     }
     else {
       this.isSmallUm = false;
     }
 
-    if(window.innerWidth < 768) {
+    if (window.innerWidth < 768) {
       this.notesHeight = 2;
     }
     else {
@@ -104,34 +115,24 @@ export class ArticleModifyComponent {
     }
   }
 
-  private getArticle() {
+  getArticle() {
     this.connectServerService.getRequest(Connect.urlServerLaraApi, 'articles/articleData', { idarticle: this.idarticle })
       .subscribe((val: ApiResponse<any>) => {
         if (val.data) {
-          this.articleForm.get('code')?.setValue(val.data.code);
-          this.articleForm.get('title')?.setValue(val.data.title);
-          this.articleForm.get('refidum')?.setValue(val.data.refidum);
-          this.articleForm.get('available_unt')?.setValue(val.data.quantity); // Da modificare
-          this.articleForm.get('storage_unt')?.setValue(val.data.quantity); // Da modificare
-          this.articleForm.get('description')?.setValue(val.data.description);
-          this.articleForm.get('notes')?.setValue(val.data.notes);
-
-          if(val.data.manage_qnt == 1) {
-            this.articleForm.get('available_qnt')?.setValue(val.data.quantity); // Da modificare
-            this.articleForm.get('storage_qnt')?.setValue(val.data.quantity); // Da modificare
-            this.manage_qnt = true; // Da inserire valore reale
-          }
-
-          if(val.data.manage_sn == 1) {
-            this.manage_sn = true; // Da inserire valore reale
-          }
+          this.article = val.data.articleData;
+          this.articleForm.patchValue(val.data.articleData);
+          this.manage_qnt = val.data.articleData.management_qnt == 1 ? true : false;
+          this.manage_sn = val.data.articleData.management_sn == 1 ? true : false;
         }
       })
   }
 
   private initForm() {
     this.articleForm.get('code')?.disable();
-    this.articleForm.get('quantity')?.disable();
+    this.articleForm.get('total_quantityavailable')?.disable();
+    this.articleForm.get('total_quantitystorage')?.disable();
+    this.articleForm.get('total_unitavailable')?.disable();
+    this.articleForm.get('total_unitstorage')?.disable();
   }
 
   numberWithCommaValidator(): ValidatorFn {
@@ -159,30 +160,35 @@ export class ArticleModifyComponent {
       })
   }
 
-  updateArticle(action: number) {
-    this.connectServerService.postRequest(Connect.urlServerLaraApi, 'articles/storeOrUpdateArticle',
-      {
-        idarticle: this.idarticle, title: this.articleForm.get('title')?.value,
-        refidum: this.articleForm.get('refidum')?.value, description: this.articleForm.get('description')?.value,
-        code: this.articleForm.get('code')?.value, action: action
-      }).subscribe((val: ApiResponse<any>) => {
-        if (val.data) {
-          this.getArticle();
-        }
-      })
-  }
-
-  updateQuantityPopUp() {
-    const dialogRef = this.dialog.open(UpdateQuantityComponent, {
-      maxWidth: '800px',
+  insertQuantityPopUp() {
+    let management_type = 0;
+    if (this.manage_qnt && this.manage_sn) {
+      management_type = 2;
+    }
+    else if (this.manage_sn) {
+      management_type = 1;
+    }
+    const dialogRef = this.dialog.open(AddQntUntComponent, {
+      maxWidth: '900px',
       minWidth: '350px',
-      maxHeight: '500px',
+      maxHeight: '800px',
       width: '90%',
-      data: { idarticle: this.idarticle }
+      data: { idarticle: this.idarticle, management_type: management_type }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      this.getArticle();
+      if(this.selectedTabIndex == 0) {
+        if(this.manage_qnt == false && this.manage_sn == false) {
+          this.storageLineComponent.getArticles();
+        }
+        else if(this.manage_qnt == false && this.manage_sn == true) {
+          this.storageLineSnComponent.getArticles();
+        }
+        else if(this.manage_qnt == true && this.manage_sn == true) {
+          this.storageLineSnQntComponent.getArticles();
+        }
+      }
     });
   }
 
@@ -194,25 +200,46 @@ export class ArticleModifyComponent {
       width: '90%',
       data: { articleid: this.idarticle }
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-
-    });
   }
 
   updateArticlePopup() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    if (this.articleForm.valid) {
+      this.submitted = false;
+      const dialogRef = this.dialog.open(UpdateGeneralInfoComponent, {
+        maxWidth: '700px',
+        minWidth: '350px',
+        maxHeight: '500px',
+        width: '90%',
+        data: { idarticle: this.idarticle, article: this.articleForm.getRawValue() }
+      });
+    }
+    else {
+      this.submitted = true;
+    }
+  }
+
+  deleteArticlePopup() {
+    const dialogRef = this.dialog.open(DeleteArticleComponent, {
       maxWidth: '700px',
       minWidth: '350px',
       maxHeight: '500px',
       width: '90%',
-      data: { articleid: this.article?.id }
+      data: { idarticle: this.idarticle }
+    });
+  }
+
+  modifyCodePopup() {
+    const dialogRef = this.dialog.open(UpdateCodeComponent, {
+      maxWidth: '700px',
+      minWidth: '350px',
+      maxHeight: '500px',
+      width: '90%',
+      data: { idarticle: this.idarticle, code: this.articleForm.get('code')?.value }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result != null) {
-        this.updateArticle(result);
+        this.articleForm.get('code')?.setValue(result.code);
       }
     });
   }

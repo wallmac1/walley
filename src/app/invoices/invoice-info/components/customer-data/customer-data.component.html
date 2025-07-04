@@ -5,7 +5,12 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.TYPE' | translate}}:
             </span>
             <span class="content">
-                {{customer.type}}
+                <ng-container *ngIf="customer.naturalPerson == 1">
+                    {{'INVOICE.INFO.CUSTOMERCOMPONENT.PERSON' | translate}}
+                </ng-container>
+                <ng-container *ngIf="customer.naturalPerson == 0">
+                    {{'INVOICE.INFO.CUSTOMERCOMPONENT.COMPANY' | translate}}
+                </ng-container>
             </span>
         </div>
 
@@ -14,7 +19,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.NAME' | translate}}:
             </span>
             <span class="content">
-                {{customer.denominazione}}
+                {{customer.denomination}}
             </span>
         </div>
 
@@ -23,7 +28,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.FISCALCODE' | translate}}:
             </span>
             <span class="content">
-                {{customer.codicefiscale}}
+                {{customer.fiscalcode}}
             </span>
         </div>
 
@@ -32,7 +37,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.VAT' | translate}}:
             </span>
             <span class="content">
-                {{customer.piva}}
+                {{customer.vat}}
             </span>
         </div>
 
@@ -41,11 +46,11 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.ADDRESS' | translate}}:
             </span>
             <span class="content">
-                {{customer.address}}
+                {{customer.obj_location?.street}}
             </span>
         </div>
 
-        <div class="col-12 col-sm-4 col-md-6">
+        <div class="col-12 col-sm-4 col-md-3">
             <span *ngIf="!isSmallScreen; else numberBlock" class="title me-2">
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.NUMBER' | translate}}:
             </span>
@@ -56,16 +61,16 @@
             </ng-template>
             
             <span class="content">
-                {{customer.codicefiscale}}
+                {{customer.obj_location?.street_number}}
             </span>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-md-3">
             <span class="title me-2">
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.POSTALCODE' | translate}}:
             </span>
             <span class="content">
-                {{customer.cap}}
+                {{customer.obj_location?.postalcode}}
             </span>
         </div>
 
@@ -74,16 +79,26 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.CITY' | translate}}:
             </span>
             <span class="content">
-                {{customer.city}}
+                {{customer.obj_location?.city || customer.obj_location?.city_it?.name}}
             </span>
         </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <span class="title me-2">
+                {{'INVOICE.INFO.CUSTOMERCOMPONENT.PROVINCE' | translate}}:
+            </span>
+            <span class="content">
+                {{customer.obj_location?.city_it?.province_name}}
+            </span>
+        </div>
+
 
         <div class="col-12 col-sm-6 col-lg-3">
             <span class="title me-2">
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.REGION' | translate}}:
             </span>
             <span class="content">
-                {{customer.region}}
+                {{customer.obj_location?.city || customer.obj_location?.city_it?.name}}
             </span>
         </div>
 
@@ -92,7 +107,7 @@
                 {{'INVOICE.INFO.CUSTOMERCOMPONENT.COUNTRY' | translate}}:
             </span>
             <span class="content">
-                {{customer.country}}
+                {{customer.obj_location?.country?.name}}
             </span>
         </div>
 

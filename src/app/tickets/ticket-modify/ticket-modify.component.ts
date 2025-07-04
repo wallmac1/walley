@@ -41,6 +41,7 @@ export class TicketModifyComponent {
 
   @ViewChild('titleElement') textElement!: ElementRef;
   @ViewChild('customerElement') customerElement!: ElementRef;
+  @ViewChild('ticketInfoComponent') ticketInfoComponent!: TicketInfoComponent;
   isEllipsisActive: boolean = false;
   isEllipsisActiveCustomer: boolean = false;
 
@@ -141,12 +142,15 @@ export class TicketModifyComponent {
         this.ticketGeneralForm.get('description')?.setValue(val.data.ticketInfo.description);
         this.ticketStatus = val.data.ticketStatus;
         this.lines = val.data.ticketInfoLines;
+        // this.ticketInfoComponent.ticketInfoForm.patchValue(this.ticketInfo!);
+        // this.ticketInfoComponent.internalExternalLogic();
+        // this.ticketInfoComponent.formLogic();
       }
     });
   }
 
   goBack() {
-    this.router.navigate(['ticketsList']);
+    this.router.navigate(['ticketList']);
   }
 
   goToWorksAndMessages() {

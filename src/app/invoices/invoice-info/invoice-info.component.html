@@ -1,5 +1,5 @@
 <div style="min-width: 100%; min-height: 100vh; background-color: whitesmoke;">
-    <div class="container-fluid" style="max-width: 1300px; min-width: 350px; padding-bottom: 10rem;">
+    <div class="container-fluid" style="max-width: 1360px; min-width: 350px; padding-bottom: 10rem;">
         <div class="row justify-content-center align-items-center mt-2 mb-4" style="position: relative;">
             <div class="col-auto ps-3 pe-3 pt-1 pb-1 text-center titleColumn">
                 <span class="title">
@@ -24,8 +24,8 @@
                                 <i class="bi bi-search me-3 iconField search" (click)="selectCustomer()"
                                     [matTooltip]="'INVOICE.INFO.SEARCHCUSTOMER' | translate"></i>
                                 <i *ngIf="customer" class="bi bi-file-text me-3 iconField file"
-                                    (click)="modifyCustomerData()"
-                                    [matTooltip]="'INVOICE.INFO.MODIFYCUSTOMER' | translate"></i>
+                                    (click)="goToCustomerData()"
+                                    [matTooltip]="'INVOICE.INFO.GOTOREGISTRYCUSTOMER' | translate"></i>
                                 <i *ngIf="customer" class="bi bi-x-circle me-3 iconField xCircle"
                                     (click)="removeCustomer()"
                                     [matTooltip]="'INVOICE.INFO.DELETECUSTOMERINFO' | translate"></i>
@@ -98,9 +98,9 @@
                                     {{'INVOICE.INFO.PAYMENTS' | translate}}
                                 </div>
                                 <div class="col-12 ps-0 pe-0">
-                                    <app-payments [typeList]="paymentType" [conditionsList]="paymentCondition"
+                                    <app-payments [typeList]="paymentType" [conditionsList]="paymentConditions"
                                         [paymentTotal]="paymentTotal" [paymentTypeList]="paymentTypeList" 
-                                        #paymentsComponent></app-payments>
+                                        [paymentMethod]="paymentMehod" #paymentsComponent></app-payments>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
                                     {{'INVOICE.INFO.STAMP' | translate}}
                                 </div>
                                 <div class="col-12 ps-0 pe-0">
-                                    <app-stamp [vatList]="vatList" (deleteStampLine)="deleteStampLine()" 
+                                    <app-stamp [vatList]="vatStampList" (deleteStampLine)="deleteStampLine()" 
                                         (addStampLine)="addStampLine($event)" (changeStampLine)="changeStampLine($event)"></app-stamp>
                                 </div>
                             </div>
